@@ -16,7 +16,41 @@
   <link rel="icon" href="{{ asset('images/favicon.jpg') }}" type="image/jpeg">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom CSS dari app.css (ditulis manual) */
+    @keyframes gradient {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .animate-gradient { animation: gradient 8s ease infinite; background-size: 200% 200%; }
+    .animate-float { animation: float 6s ease-in-out infinite; }
+    
+    /* Component classes */
+    .nav-link { @apply text-sm font-semibold text-gray-900 px-3 py-2 rounded-lg transition-colors hover:text-blue-700 hover:bg-blue-50; }
+    .btn-primary { @apply inline-flex items-center gap-2 px-5 py-2.5 bg-blue-700 text-white font-bold text-sm rounded-full transition-all hover:bg-blue-800 hover:shadow-lg hover:-translate-y-0.5; }
+    .btn-outline { @apply inline-flex items-center gap-2 px-5 py-2.5 bg-transparent text-white font-semibold text-sm rounded-full border-2 border-white/40 transition-all hover:bg-white/10 hover:border-white; }
+    .service-card { @apply bg-white rounded-2xl border border-gray-200 p-6 text-center transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-100 hover:border-blue-200; }
+    .service-icon { @apply w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center text-xl text-blue-700 mx-auto mb-4 transition-all; }
+    .service-card:hover .service-icon { @apply bg-blue-700 text-white; }
+    .dest-card { @apply bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-100; }
+    .pkg-card { @apply bg-white rounded-2xl border border-gray-200 overflow-hidden transition-all hover:-translate-y-2 hover:shadow-2xl hover:shadow-blue-200; }
+    .pkg-badge { @apply absolute top-3 left-3 bg-white/95 text-blue-700 text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-full z-10; }
+    .wa-float { @apply fixed bottom-6 right-6 w-14 h-14 bg-green-500 text-white rounded-full flex items-center justify-center text-2xl z-50 shadow-lg hover:bg-green-600 hover:scale-110 transition-all; }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #2563EB; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #1D4ED8; }
+    
+    html { scroll-behavior: smooth; }
+  </style>
 </head>
 <body class="font-sans text-brand-text bg-brand-bg overflow-x-hidden">
 
