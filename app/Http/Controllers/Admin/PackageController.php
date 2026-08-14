@@ -18,18 +18,31 @@ class PackageController extends Controller
 
     public function create()
     {
-        return view('admin.packages.form', ['package' => new Package(), 'categories' => $this->categories()]);
+        return view('admin.packages.form', [
+            'package' => new Package(),
+            'serviceTypes' => $this->serviceTypes(),
+            'destinations' => $this->destinations(),
+        ]);
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'       => ['required','string','max:255'],
-            'category'    => ['required','in:'.implode(',', $this->categories())],
-            'description' => ['required','string'],
-            'price'       => ['required','integer','min:0'],
-            'image'       => ['nullable','image','mimes:jpg,jpeg,png,webp','max:5120'],
-            'is_active'   => ['boolean'],
+            'title'            => ['required','string','max:255'],
+            'category'         => ['required','in:'.implode(',', $this->categories())],
+            'service_type'     => ['required','in:'.implode(',', $this->serviceTypes())],
+            'destination'      => ['nullable','string','max:255'],
+            'description'      => ['required','string'],
+            'price'            => ['required','integer','min:0'],
+            'includes'         => ['nullable','array'],
+            'excludes'         => ['nullable','array'],
+            'duration_days'    => ['nullable','integer','min:1','max:30'],
+            'min_pax'          => ['nullable','integer','min:1'],
+            'max_pax'          => ['nullable','integer','min:1'],
+            'image'            => ['nullable','image','mimes:jpg,jpeg,png,webp','max:5120'],
+            'is_active'        => ['boolean'],
+            'meta_title'       => ['nullable','string','max:255'],
+            'meta_description' => ['nullable','string'],
         ]);
 
         if ($request->hasFile('image')) {
@@ -45,18 +58,31 @@ class PackageController extends Controller
 
     public function edit(Package $package)
     {
-        return view('admin.packages.form', ['package' => $package, 'categories' => $this->categories()]);
+        return view('admin.packages.form', [
+            'package' => $package,
+            'serviceTypes' => $this->serviceTypes(),
+            'destinations' => $this->destinations(),
+        ]);
     }
 
     public function update(Request $request, Package $package)
     {
         $data = $request->validate([
-            'title'       => ['required','string','max:255'],
-            'category'    => ['required','in:'.implode(',', $this->categories())],
-            'description' => ['required','string'],
-            'price'       => ['required','integer','min:0'],
-            'image'       => ['nullable','image','mimes:jpg,jpeg,png,webp','max:5120'],
-            'is_active'   => ['boolean'],
+            'title'            => ['required','string','max:255'],
+            'category'         => ['required','in:'.implode(',', $this->categories())],
+            'service_type'     => ['required','in:'.implode(',', $this->serviceTypes())],
+            'destination'      => ['nullable','string','max:255'],
+            'description'      => ['required','string'],
+            'price'            => ['required','integer','min:0'],
+            'includes'         => ['nullable','array'],
+            'excludes'         => ['nullable','array'],
+            'duration_days'    => ['nullable','integer','min:1','max:30'],
+            'min_pax'          => ['nullable','integer','min:1'],
+            'max_pax'          => ['nullable','integer','min:1'],
+            'image'            => ['nullable','image','mimes:jpg,jpeg,png,webp','max:5120'],
+            'is_active'        => ['boolean'],
+            'meta_title'       => ['nullable','string','max:255'],
+            'meta_description' => ['nullable','string'],
         ]);
 
         if ($request->hasFile('image')) {
@@ -93,6 +119,45 @@ class PackageController extends Controller
             'Tour Bromo',
             'Tour Bali',
             'Drop-off / Pick-up Bandara',
+        ];
+    }
+
+    private function serviceTypes(): array
+    {
+        return [
+            'Rental Mobil',
+            'Charter Drop',
+            'City Tour',
+            'Open Trip',
+            'Tour Paket',
+            'Custom/Door-to-Door',
+        ];
+    }
+
+    private function destinations(): array
+    {
+        return [
+            'Lembang',
+            'Ciwidey',
+            'Bandung',
+            'Pangandaran',
+            'Jogja',
+            'Bromo',
+            'Bali',
+            'Jakarta',
+            'Bogor',
+            'Garut',
+            'Purwakarta',
+            'Cilegon',
+            'Padalarang',
+            'Cimahi',
+            'Bandara Soetta',
+            'Stasiun KCIC Padalarang',
+            'Bandung - Bali',
+            'Bandung - Jogja',
+            'Bandung - Bromo',
+            'Bandung - Pangandaran',
+            'Cimahi - Pangandaran',
         ];
     }
 }
