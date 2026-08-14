@@ -10,13 +10,25 @@ class Package extends Model
     protected $fillable = [
         'title', 
         'slug', 
-        'category', 
+        'category',
+        'service_type',
+        'destination',
         'description', 
         'price', 
         'image_path', 
         'is_active', 
         'meta_title', 
-        'meta_description'
+        'meta_description',
+        'includes',
+        'excludes',
+        'duration_days',
+        'min_pax',
+        'max_pax'
+    ];
+
+    protected $casts = [
+        'includes' => 'array',
+        'excludes' => 'array',
     ];
 
     protected static function booted()

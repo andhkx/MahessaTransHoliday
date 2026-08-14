@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('slug')->unique();
             $table->enum('category', [
                 'Rental Mobil',
                 'Charter Drop',
@@ -29,6 +30,8 @@ return new class extends Migration
             $table->unsignedBigInteger('price');
             $table->string('image_path')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->string('meta_title')->nullable();
+            $table->text('meta_description')->nullable();
             $table->timestamps();
         });
     }
