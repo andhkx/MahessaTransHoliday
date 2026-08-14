@@ -23,6 +23,22 @@ Route::get('/packages/filter', [FrontendController::class, 'filter'])->name('pac
 Route::get('/paket-wisata/{slug}', [FrontendController::class, 'show'])->name('package.show');
 
 // ========================================================
+// SEO Landing Pages - Priority: Cimahi, Bandung, Padalarang
+// ========================================================
+Route::get('/sewa-mobil-cimahi', [FrontendController::class, 'cimahi'])->name('landing.cimahi');
+Route::get('/sewa-mobil-bandung', [FrontendController::class, 'bandung'])->name('landing.bandung');
+Route::get('/sewa-mobil-padalarang', [FrontendController::class, 'padalarang'])->name('landing.padalarang');
+Route::get('/tour-lembang', [FrontendController::class, 'lembang'])->name('landing.lembang');
+Route::get('/tour-ciwidey', [FrontendController::class, 'ciwidey'])->name('landing.ciwidey');
+Route::get('/paket-bandung-bali', [FrontendController::class, 'bandungBali'])->name('landing.bandung-bali');
+Route::get('/paket-bandung-jogja', [FrontendController::class, 'bandungJogja'])->name('landing.bandung-jogja');
+Route::get('/paket-bandung-bromo', [FrontendController::class, 'bandungBromo'])->name('landing.bandung-bromo');
+Route::get('/paket-bandung-pangandaran', [FrontendController::class, 'bandungPangandaran'])->name('landing.bandung-pangandaran');
+Route::get('/paket-cimahi-pangandaran', [FrontendController::class, 'cimahiPangandaran'])->name('landing.cimahi-pangandaran');
+Route::get('/charter-drop-bandara-soetta', [FrontendController::class, 'soetta'])->name('landing.soetta');
+Route::get('/rental-innova-reborn', [FrontendController::class, 'innovaReborn'])->name('landing.innova-reborn');
+
+// ========================================================
 // Rute Pintar /admin 
 // ========================================================
 Route::get('/admin', function () {
