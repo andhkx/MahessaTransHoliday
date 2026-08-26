@@ -3,154 +3,120 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/cn";
+import { useState } from "react";
+import { motion, useMotionValueEvent, useScroll } from "motion/react";
+import { Menu, MessageCircle, X } from "lucide-react";
 import { NAV_LINKS } from "@/lib/constants";
 import { waGeneralLink } from "@/lib/whatsapp";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { scrollY } = useScroll();
 
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [open]);
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setScrolled(latest > 24);
+  });
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
     <>
-      <header className="sticky top-0 z-[1000] border-b border-line bg-white/90 backdrop-blur-md">
-        <nav className="container-site flex h-16 items-center justify-between lg:h-[72px]">
+      <motion.header
+        initial={{ y: -72, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+        data-scrolled={scrolled}
+        className="fixed inset-x-0 top-0 z-50 border-b border-line bg-white/80 backdrop-blur-xl transition-shadow duration-500 data-[scrolled=true]:shadow-[0_10px_30px_-12px_rgba(35,51,45,0.18)]"
+      >
+        <nav className="mx-auto flex h-16 max-w-[1300px] items-center justify-between px-5 sm:px-8 md:px-12">
           <Link
             href="/"
+            className="flex items-center transition-opacity hover:opacity-90"
             aria-label="Mahessa Trans Holiday - Beranda"
-            onClick={() => setOpen(false)}
           >
             <Image
               src="/images/logo_mahessa.png"
-              alt="Logo Mahessa Trans Holiday"
-              width={160}
-              height={44}
+              alt="Mahessa Trans Holiday"
+              width={150}
+              height={40}
               priority
-              className="h-10 w-auto object-contain lg:h-11"
+              className="h-9 w-auto object-contain md:h-10"
             />
           </Link>
 
-          <div className="hidden items-center gap-7 lg:flex">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "text-sm font-bold tracking-[-0.2px] text-body-text transition-colors duration-150 hover:text-primary",
-                  pathname === link.href && "text-primary",
-                )}
-              >
-                {link.label}
-              </Link>
-            ))}
+          <div className="hidden items-center gap-7 md:flex">
+            {NAV_LINKS.map((link) => {
+              const active = isActive(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={`text-sm font-bold tracking-[-0.2px] transition-colors duration-300 ${
+                    active ? "text-primary" : "text-body-text hover:text-accent-hover"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="hidden md:block">
             <a
               href={waGeneralLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-primary btn-sm hidden sm:inline-flex"
+              className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2.5 text-[13px] font-extrabold text-white shadow-card transition-all hover:scale-[1.03] hover:bg-accent-hover active:scale-[0.97]"
             >
+              <MessageCircle size={14} aria-hidden="true" />
               Tanya Admin
             </a>
-            <button
-              type="button"
-              onClick={() => setOpen(true)}
-              aria-expanded={open}
-              aria-label="Buka menu navigasi"
-              className="flex h-11 w-11 items-center justify-center rounded-xl text-accent transition-colors duration-150 hover:text-primary lg:hidden"
-            >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button>
           </div>
-        </nav>
-      </header>
 
-      <div
-        className={cn(
-          "fixed inset-0 z-[1100] flex flex-col bg-white transition-opacity duration-500 [transition-timing-function:var(--ease-standard)] lg:hidden",
-          open ? "opacity-100" : "pointer-events-none opacity-0",
-        )}
-        role="dialog"
-        aria-modal="true"
-        aria-hidden={!open}
-      >
-        <div className="container-site flex h-16 items-center justify-between border-b border-line">
-          <span className="text-xs font-extrabold uppercase tracking-wide text-primary">
-            Menu
-          </span>
           <button
             type="button"
-            onClick={() => setOpen(false)}
-            aria-label="Tutup menu navigasi"
-            className="flex h-11 w-11 items-center justify-center rounded-xl text-accent transition-colors hover:text-primary"
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? "Tutup menu" : "Buka menu"}
+            aria-expanded={open}
+            className="flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-wa-surface/60 text-heading md:hidden"
           >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2.2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
+            {open ? <X size={18} /> : <Menu size={18} />}
           </button>
-        </div>
-        <nav className="container-site mt-8 flex flex-col gap-1">
-          {NAV_LINKS.map((link, i) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              style={{ transitionDelay: open ? `${60 + i * 40}ms` : "0ms" }}
-              className={cn(
-                "rounded-2xl px-4 py-4 text-2xl font-extrabold tracking-[-0.5px] transition-all duration-500 [transition-timing-function:var(--ease-standard)]",
-                open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
-                pathname === link.href ? "text-primary" : "text-accent",
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
+        </nav>
+      </motion.header>
+
+      {open && (
+        <div className="fixed inset-x-4 top-20 z-40 rounded-[20px] border border-line bg-white/95 p-3 shadow-elevated backdrop-blur-xl md:hidden">
+          {NAV_LINKS.map((link) => {
+            const active = isActive(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className={`block rounded-2xl px-4 py-3 text-sm font-bold ${
+                  active ? "bg-primary/10 text-primary" : "text-body-text"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
           <a
             href={waGeneralLink()}
             target="_blank"
             rel="noopener noreferrer"
-            style={{ transitionDelay: open ? "300ms" : "0ms" }}
-            className={cn(
-              "btn btn-primary btn-md mt-6 w-full transition-all duration-500",
-              open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
-            )}
+            className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-4 py-3 text-sm font-extrabold text-white"
           >
+            <MessageCircle size={15} aria-hidden="true" />
             Tanya Admin
           </a>
-        </nav>
-      </div>
+        </div>
+      )}
     </>
   );
 }
