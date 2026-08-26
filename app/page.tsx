@@ -8,108 +8,45 @@ import SectionHeading from "@/components/SectionHeading";
 import FaqAccordion from "@/components/FaqAccordion";
 import CtaSection from "@/components/CtaSection";
 import Reveal from "@/components/Reveal";
+import Testimonials from "@/components/Testimonials";
 import { getFeaturedVehicles } from "@/data/vehicles";
 import { getFeaturedPackages } from "@/data/packages";
 import { valueProps } from "@/data/services";
 import { faqMain } from "@/data/faq";
 import { galleryImages } from "@/lib/gallery";
-
-function FeaturedArmada() {
-  const featured = getFeaturedVehicles();
-  return (
-    <section className="bg-surface py-12 lg:py-[60px]">
-      <div className="container-site">
-        <div className="flex items-end justify-between gap-4">
-          <SectionHeading
-            align="left"
-            title="Pilih kendaraan untuk perjalananmu"
-            subtitle="Mulai dari mobil compact yang irit hingga kendaraan premium dan rombongan."
-          />
-          <Link href="/armada" className="text-link hidden shrink-0 sm:inline-flex">
-            Lihat Semua
-            <span aria-hidden="true">→</span>
-          </Link>
-        </div>
-        <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-3 lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-6 lg:overflow-visible lg:px-0">
-          {featured.map((vehicle, i) => (
-            <Reveal
-              key={vehicle.id}
-              delay={(i % 5) as 0 | 1 | 2 | 3}
-              className="min-w-[280px] snap-start lg:min-w-0"
-            >
-              <VehicleCard vehicle={vehicle} className="h-full" />
-            </Reveal>
-          ))}
-        </div>
-        <Link href="/armada" className="text-link mt-6 inline-flex sm:hidden">
-          Lihat Semua Armada
-          <span aria-hidden="true">→</span>
-        </Link>
-      </div>
-    </section>
-  );
-}
-
-function FeaturedPackages() {
-  const featured = getFeaturedPackages();
-  return (
-    <section className="bg-white py-12 lg:py-[60px]">
-      <div className="container-site">
-        <div className="flex items-end justify-between gap-4">
-          <SectionHeading
-            align="left"
-            title="Perjalanan tanpa ribet"
-            subtitle="Paket all-in Hiace: mobil, driver, BBM, tol, parkir — semua sudah termasuk."
-          />
-          <Link href="/paket" className="text-link hidden shrink-0 sm:inline-flex">
-            Lihat Semua Paket
-            <span aria-hidden="true">→</span>
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-          {featured.map((packageItem, i) => (
-            <Reveal key={packageItem.id} delay={(i % 4) as 0 | 1 | 2 | 3}>
-              <PackageCard packageItem={packageItem} className="h-full" />
-            </Reveal>
-          ))}
-        </div>
-        <Link href="/paket" className="text-link mt-6 inline-flex sm:hidden">
-          Lihat Semua Paket
-          <span aria-hidden="true">→</span>
-        </Link>
-      </div>
-    </section>
-  );
-}
+import { testimonials } from "@/lib/testimonials";
 
 function ValueProps() {
   return (
-    <section className="bg-sky py-12 lg:py-[60px]">
+    <section className="border-y border-line bg-wa-surface/40 py-12 lg:py-16">
       <div className="container-site">
-        <SectionHeading title="Kenapa pilih Mahessa?" tone="navy" />
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+        <SectionHeading
+          eyebrow="Kenapa Mahessa?"
+          title="Alasan bisnis & keluarga pilih kami."
+        />
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {valueProps.map((item, i) => (
             <Reveal key={item.id} delay={(i % 4) as 0 | 1 | 2 | 3}>
-              <div className="h-full rounded-xl bg-white p-7 text-center shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-                <span className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-sky/50 text-primary">
+              <div className="h-full rounded-[20px] bg-white p-6 shadow-card">
+                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/15 text-primary">
                   <svg
-                    className="h-7 w-7"
+                    className="h-5 w-5"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    strokeWidth={1.8}
+                    strokeWidth={2.2}
                   >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      d="M4.5 12.75l6 6 9-13.5"
                     />
                   </svg>
                 </span>
-                <h3 className="text-lg font-semibold text-navy lg:text-h5 lg:font-bold">
+                <h3 className="mt-4 text-base font-extrabold tracking-[-0.3px] text-accent">
                   {item.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-body-text">
+                <p className="mt-2 text-sm font-semibold leading-relaxed tracking-[-0.2px] text-body-text">
                   {item.text}
                 </p>
               </div>
@@ -121,14 +58,95 @@ function ValueProps() {
   );
 }
 
+function FeaturedArmada() {
+  const featured = getFeaturedVehicles();
+  return (
+    <section className="bg-white py-12 lg:py-16">
+      <div className="container-site">
+        <div className="flex items-end justify-between gap-4">
+          <SectionHeading
+            align="left"
+            eyebrow="Armada"
+            title="Kendaraan untuk perjalananmu."
+          />
+          <Link href="/armada" className="text-link hidden shrink-0 sm:inline-flex">
+            Lihat Semua
+            <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+        <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3 lg:mx-0 lg:grid lg:grid-cols-5 lg:px-0">
+          {featured.map((vehicle, i) => (
+            <Reveal
+              key={vehicle.id}
+              delay={(i % 5) as 0 | 1 | 2 | 3}
+              className="w-[260px] shrink-0 snap-start lg:w-auto"
+            >
+              <VehicleCard vehicle={vehicle} className="h-full" />
+            </Reveal>
+          ))}
+        </div>
+        <Link href="/armada" className="text-link mt-4 inline-flex sm:hidden">
+          Lihat Semua Armada →
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function FeaturedPackages() {
+  const featured = getFeaturedPackages();
+  return (
+    <section className="border-t border-line bg-wa-surface/40 py-12 lg:py-16">
+      <div className="container-site">
+        <div className="flex items-end justify-between gap-4">
+          <SectionHeading
+            align="left"
+            eyebrow="Paket Wisata"
+            title="Perjalanan tanpa ribet, harga jelas."
+            subtitle="Mobil, driver, BBM, tol, parkir — semua sudah termasuk."
+          />
+          <Link href="/paket" className="text-link hidden shrink-0 sm:inline-flex">
+            Lihat Semua Paket
+            <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {featured.map((packageItem, i) => (
+            <Reveal key={packageItem.id} delay={(i % 4) as 0 | 1 | 2 | 3}>
+              <PackageCard packageItem={packageItem} className="group h-full" />
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function TestimonialsSection() {
+  return (
+    <section className="bg-white py-12 lg:py-16">
+      <div className="container-site">
+        <SectionHeading
+          eyebrow="Testimoni"
+          title="Kata mereka setelah perjalanan."
+          subtitle="Pesan asli dari penumpang yang sudah berangkat bersama kami."
+        />
+        <Reveal>
+          <Testimonials items={testimonials.slice(0, 5)} />
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
 function GalleryShowcase() {
   const [first, ...rest] = galleryImages;
   return (
-    <section className="bg-white py-12 lg:py-[60px]">
+    <section className="bg-white py-12 lg:py-16">
       <div className="container-site">
         <SectionHeading
-          title="Cerita perjalanan bersama Mahessa"
-          subtitle="Dokumentasi nyata perjalanan para penumpang kami."
+          eyebrow="Galeri"
+          title="Cerita perjalanan bersama Mahessa."
         />
         <Image
           src={first.src}
@@ -136,20 +154,20 @@ function GalleryShowcase() {
           width={1200}
           height={675}
           sizes="(max-width: 1024px) 100vw, 900px"
-          className="mb-8 aspect-video w-full rounded-2xl object-cover shadow-photo"
+          className="mb-6 aspect-video w-full rounded-[24px] object-cover shadow-card"
         />
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {rest.slice(0, 4).map((img) => (
             <div
               key={img.src}
-              className="gallery-zoom cursor-pointer overflow-hidden rounded-xl shadow-card transition-shadow duration-300"
+              className="gallery-zoom cursor-pointer overflow-hidden rounded-[16px]"
             >
               <Image
                 src={img.src}
                 alt={img.alt}
                 width={480}
                 height={480}
-                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                sizes="(max-width: 768px) 50vw, 25vw"
                 className="aspect-square w-full object-cover"
               />
             </div>
@@ -171,13 +189,17 @@ export default function HomePage() {
     <>
       <Hero />
       <ServiceCards />
+      <ValueProps />
       <FeaturedArmada />
       <FeaturedPackages />
-      <ValueProps />
+      <TestimonialsSection />
       <GalleryShowcase />
-      <section className="bg-surface py-12 lg:py-[60px]" id="faq">
+      <section className="border-t border-line bg-wa-surface/40 py-12 lg:py-16" id="faq">
         <div className="container-site max-w-[800px]">
-          <SectionHeading title="Pertanyaan yang sering diajukan" />
+          <SectionHeading
+            eyebrow="FAQ"
+            title="Pertanyaan yang sering ditanyakan."
+          />
           <FaqAccordion items={faqMain} />
           <div className="mt-8 text-center">
             <Link href="/faq" className="text-link">

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import CtaSection from "@/components/CtaSection";
 import {
@@ -47,7 +47,7 @@ export default function KontakPage() {
     <>
       <PageHeader
         title="Hubungi Kami"
-        subtitle={`Kami melayani ${SERVICE_AREAS.join(", ")}. Konsultasi gratis — ceritakan kebutuhan perjalananmu.`}
+        subtitle={`Kami melayani ${SERVICE_AREAS.join(", ")}. Konsultasi gratis â€” ceritakan kebutuhan perjalananmu.`}
       />
       <section className="py-12 lg:py-16">
         <div className="container-site">
@@ -66,14 +66,14 @@ export default function KontakPage() {
                     className="text-link mt-4 text-sm font-semibold"
                   >
                     {item.cta}
-                    <span aria-hidden="true">→</span>
+                    <span aria-hidden="true">â†’</span>
                   </a>
                 )}
               </div>
             ))}
           </div>
 
-          <div className="mt-10 overflow-hidden rounded-xl border border-line shadow-photo">
+          <div className="mt-10 overflow-hidden rounded-xl border border-line shadow-card">
             <iframe
               src={MAPS_EMBED_URL}
               title="Lokasi Mahessa Trans Holiday"

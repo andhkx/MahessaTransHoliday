@@ -80,7 +80,7 @@ export default async function VehicleDetailPage({
     <>
       <JsonLd data={breadcrumbLd} />
 
-      <section className="bg-surface pb-10 pt-[104px] lg:pb-14 lg:pt-[134px]">
+      <section className="bg-wa-surface/50 pb-10 pt-[104px] lg:pb-14 lg:pt-[134px]">
         <div className="container-site">
           <nav aria-label="Breadcrumb" className="mb-6 text-sm font-medium text-body-text">
             <Link href="/" className="text-link">
@@ -113,7 +113,7 @@ export default async function VehicleDetailPage({
               height={800}
               priority
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="aspect-video w-full rounded-xl object-cover shadow-photo"
+              className="aspect-video w-full rounded-xl object-cover shadow-card"
             />
           </div>
         </div>
@@ -127,7 +127,7 @@ export default async function VehicleDetailPage({
                 <h2 className="text-h5 font-bold text-primary">Harga Sewa</h2>
                 <table className="mt-4 w-full text-sm">
                   <tbody>
-                    <tr className="border-b border-surface">
+                    <tr className="border-b border-line">
                       <td className="py-3 font-medium text-body-text">
                         Lepas Kunci 12 Jam
                       </td>
@@ -135,7 +135,7 @@ export default async function VehicleDetailPage({
                         {lease12 ? formatIDR(lease12) : "Hubungi untuk harga"}
                       </td>
                     </tr>
-                    <tr className="border-b border-surface">
+                    <tr className="border-b border-line">
                       <td className="py-3 font-medium text-body-text">
                         Lepas Kunci 24 Jam
                       </td>
@@ -165,7 +165,7 @@ export default async function VehicleDetailPage({
                   {vehicle.specs.map((spec) => (
                     <div
                       key={spec.label}
-                      className="flex justify-between gap-4 border-b border-surface px-5 py-3 last:border-b-0"
+                      className="flex justify-between gap-4 border-b border-line px-5 py-3 last:border-b-0"
                     >
                       <dt className="text-sm font-medium text-body-text">
                         {spec.label}
@@ -216,7 +216,7 @@ export default async function VehicleDetailPage({
                   {vehicle.features.map((feature) => (
                     <li
                       key={feature}
-                      className="flex items-center gap-2 rounded-lg border border-surface bg-white px-4 py-3 text-sm font-medium text-ink-soft transition-shadow duration-200 hover:shadow-card"
+                      className="flex items-center gap-2 rounded-lg border border-line bg-white px-4 py-3 text-sm font-medium text-ink-soft transition-shadow duration-200 hover:shadow-card"
                     >
                       <span className="text-primary" aria-hidden="true">
                         âœ“
@@ -300,7 +300,7 @@ export default async function VehicleDetailPage({
         </div>
       </section>
 
-      <section className="bg-surface py-12 lg:py-20">
+      <section className="bg-wa-surface/50 py-12 lg:py-20">
         <div className="container-site">
           <h2 className="mb-8 text-center text-[26px] font-bold tracking-[-0.3px] text-primary md:mb-10 md:text-h2 md:leading-[44px]">
             Kendaraan lain yang mungkin cocok

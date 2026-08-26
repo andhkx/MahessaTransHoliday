@@ -72,7 +72,7 @@ export default async function PackageDetailPage({
     <>
       <JsonLd data={breadcrumbLd} />
 
-      <section className="bg-surface pb-10 pt-[104px] lg:pb-14 lg:pt-[134px]">
+      <section className="bg-wa-surface/50 pb-10 pt-[104px] lg:pb-14 lg:pt-[134px]">
         <div className="container-site">
           <nav aria-label="Breadcrumb" className="mb-6 text-sm font-medium text-body-text">
             <Link href="/" className="text-link">
@@ -114,7 +114,7 @@ export default async function PackageDetailPage({
                   <p className="text-h4 font-extrabold text-primary">
                     {formatIDR(packageItem.price)}
                   </p>
-                  <span className="mt-2 inline-block rounded-md bg-surface px-3 py-1 text-caption font-medium uppercase text-body-text">
+                  <span className="mt-2 inline-block rounded-md bg-wa-surface/50 px-3 py-1 text-caption font-medium uppercase text-body-text">
                     {packageItem.duration}
                   </span>
                 </div>
@@ -283,7 +283,7 @@ export default async function PackageDetailPage({
         </div>
       </section>
 
-      <section className="bg-surface py-12 lg:py-20">
+      <section className="bg-wa-surface/50 py-12 lg:py-20">
         <div className="container-site">
           <h2 className="mb-8 text-center text-[26px] font-bold tracking-[-0.3px] text-primary md:mb-10 md:text-h2 md:leading-[44px]">
             Paket lain yang mungkin cocok
