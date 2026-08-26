@@ -49,18 +49,13 @@ export default function KontakPage() {
         title="Hubungi Kami"
         subtitle={`Kami melayani ${SERVICE_AREAS.join(", ")}. Konsultasi gratis — ceritakan kebutuhan perjalananmu.`}
       />
-      <section className="pb-16 sm:pb-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-5 md:grid-cols-3">
+      <section className="py-12 lg:py-16">
+        <div className="container-site">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
             {contactItems.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm"
-              >
-                <h2 className="text-lg font-extrabold text-primary">
-                  {item.title}
-                </h2>
-                <p className="mt-2 text-sm leading-relaxed text-gray-600">
+              <div key={item.title} className="card card-lift p-6">
+                <h2 className="text-h6 font-bold text-primary">{item.title}</h2>
+                <p className="mt-2 text-sm leading-relaxed text-body-text">
                   {item.value}
                 </p>
                 {item.href && item.cta && (
@@ -68,16 +63,17 @@ export default function KontakPage() {
                     href={item.href}
                     target={item.external ? "_blank" : undefined}
                     rel={item.external ? "noopener noreferrer" : undefined}
-                    className="mt-4 inline-flex items-center gap-1 text-sm font-bold text-accent transition-colors hover:text-accent-dark"
+                    className="text-link mt-4 text-sm font-semibold"
                   >
-                    {item.cta} <span aria-hidden="true">→</span>
+                    {item.cta}
+                    <span aria-hidden="true">→</span>
                   </a>
                 )}
               </div>
             ))}
           </div>
 
-          <div className="mt-10 overflow-hidden rounded-3xl border border-gray-100 shadow-md">
+          <div className="mt-10 overflow-hidden rounded-xl border border-line shadow-photo">
             <iframe
               src={MAPS_EMBED_URL}
               title="Lokasi Mahessa Trans Holiday"

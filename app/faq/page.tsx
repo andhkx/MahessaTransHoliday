@@ -33,10 +33,10 @@ export default function FaqPage() {
         title="Pertanyaan yang sering diajukan"
         subtitle="Semua yang perlu kamu tahu sebelum reservasi. Tidak menemukan jawabannya? Hubungi kami via WhatsApp."
       />
-      <section className="pb-16 sm:pb-20">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <section className="py-12 lg:py-16">
+        <div className="container-site max-w-3xl">
           <FaqAccordion items={faqMain} />
-          <h2 className="mb-6 mt-12 text-xl font-extrabold text-primary">
+          <h2 className="mb-6 mt-12 text-h5 font-bold text-primary">
             Pertanyaan lainnya
           </h2>
           <FaqAccordion items={faqExtra} />

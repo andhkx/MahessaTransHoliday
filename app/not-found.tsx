@@ -4,23 +4,23 @@ export default function NotFound() {
   return (
     <section className="flex min-h-[70vh] items-center justify-center px-4 pt-16">
       <div className="text-center">
-        <p className="text-7xl font-extrabold text-primary">404</p>
-        <h1 className="mt-4 text-2xl font-extrabold text-ink sm:text-3xl">
+        <p className="text-h1 font-extrabold text-primary">404</p>
+        <h1 className="mt-4 text-h4 font-bold text-black">
           Halaman tidak ditemukan
         </h1>
-        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-gray-600">
+        <p className="mx-auto mt-3 max-w-md text-base leading-relaxed text-body-text">
           Halaman yang kamu cari mungkin sudah dipindah atau tidak pernah ada.
         </p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <Link
             href="/"
-            className="rounded-full bg-primary px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-primary-dark"
+            className="btn btn-primary btn-md bg-primary shadow-none hover:bg-primary-mid"
           >
             Kembali ke Beranda
           </Link>
           <Link
             href="/armada"
-            className="rounded-full border-2 border-primary px-6 py-3 text-sm font-bold text-primary transition-colors hover:bg-primary hover:text-white"
+            className="btn btn-secondary btn-md"
           >
             Lihat Armada
           </Link>
