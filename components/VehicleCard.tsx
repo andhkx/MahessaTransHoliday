@@ -21,24 +21,34 @@ export default function VehicleCard({ vehicle, className }: VehicleCardProps) {
   return (
     <article
       className={cn(
-        "flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-lg",
+        "flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-lg group",
         className,
       )}
     >
-      <Image
-        src={vehicle.image}
-        alt={`${vehicle.name} — rental Mahessa Trans Holiday`}
-        width={640}
-        height={420}
-        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-        className="aspect-[16/10] w-full object-cover"
-      />
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-lg font-bold text-ink">{vehicle.name}</h3>
-        <p className="mt-1 text-sm text-gray-500">
-          {vehicle.transmission} | {vehicle.capacity} seats
-        </p>
-        <div className="mt-3">
+      <Link
+        href={`/armada/${vehicle.slug}`}
+        className="block"
+        aria-label={`Lihat detail ${vehicle.name}`}
+      >
+        <Image
+          src={vehicle.image}
+          alt={`${vehicle.name} — rental Mahessa Trans Holiday`}
+          width={640}
+          height={420}
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          className="aspect-[16/10] w-full object-cover"
+        />
+        <div className="flex flex-1 flex-col p-5">
+          <h3 className="text-lg font-bold text-ink group-hover:text-primary">
+            {vehicle.name}
+          </h3>
+          <p className="mt-1 text-sm text-gray-500">
+            {vehicle.transmission} | {vehicle.capacity} seats
+          </p>
+        </div>
+      </Link>
+      <div className="flex flex-1 flex-col px-5 pb-5">
+        <div className="mt-1">
           <p className="text-base font-extrabold text-primary">
             {vehiclePriceLine(vehicle)}
           </p>
