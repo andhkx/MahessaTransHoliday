@@ -365,8 +365,8 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-innova-reborn-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": 700000 },
-      withDriver: { startingPrice: 950000 },
+      leaseKey: { "12h": null, "24h": 1300000 },
+      withDriver: { startingPrice: 1600000 },
     },
     description: [
       "Toyota Innova Reborn adalah standar kenyamanan kelas premium mid. Kabin senyap, kursi empuk, dan suspensi yang halus membuat perjalanan jauh terasa ringan.",
@@ -397,7 +397,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Innova Reborn Bandung",
       description:
-        "Sewa Toyota Innova Reborn diesel di Cimahi, Bandung dan Padalarang mulai Rp700.000/24 jam. Premium dan nyaman. Mahessa Trans Holiday.",
+        "Sewa Toyota Innova Reborn diesel di Cimahi, Bandung dan Padalarang mulai Rp1.300.000/24 jam. Premium dan nyaman. Mahessa Trans Holiday.",
       keywords: ["rental innova reborn", "sewa innova bandung", "innova diesel rental"],
     },
   },
@@ -415,8 +415,8 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-innova-zenix-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": 850000 },
-      withDriver: { startingPrice: 1100000 },
+      leaseKey: { "12h": null, "24h": 1500000 },
+      withDriver: { startingPrice: 1800000 },
     },
     description: [
       "Toyota Innova Zenix Hybrid adalah MPV generasi terbaru dengan teknologi hybrid yang halus dan efisien. Desain interior modern memberi kesan premium sejak duduk.",
@@ -447,7 +447,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Innova Zenix Hybrid Bandung",
       description:
-        "Sewa Toyota Innova Zenix Hybrid di Cimahi, Bandung dan Padalarang mulai Rp850.000/24 jam. MPV premium modern. Mahessa Trans Holiday.",
+        "Sewa Toyota Innova Zenix Hybrid di Cimahi, Bandung dan Padalarang mulai Rp1.500.000/24 jam. MPV premium modern. Mahessa Trans Holiday.",
       keywords: ["rental zenix", "sewa innova zenix bandung", "rental hybrid bandung"],
     },
   },
@@ -616,7 +616,7 @@ export const vehicles: Vehicle[] = [
     ],
     pricing: {
       leaseKey: { "12h": null, "24h": null },
-      withDriver: { startingPrice: 1600000 },
+      withDriver: { startingPrice: 1800000 },
     },
     description: [
       "Toyota Hiace Premio adalah kendaraan andalan untuk rombongan. Kapasitas 14–15 penumpang dengan kabin tinggi yang memungkinkan gerakan bebas selama perjalanan.",
@@ -647,7 +647,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Sewa Hiace Premio Bandung & Cimahi",
       description:
-        "Charter Toyota Hiace Premio 15 penumpang dengan driver di Cimahi, Bandung dan Padalarang mulai Rp1.600.000. Mahessa Trans Holiday.",
+        "Charter Toyota Hiace Premio 15 penumpang dengan driver di Cimahi, Bandung dan Padalarang mulai Rp1.800.000. Mahessa Trans Holiday.",
       keywords: ["sewa hiace premio", "hiace bandung", "rental hiace cimahi"],
     },
   },
@@ -699,6 +699,56 @@ export const vehicles: Vehicle[] = [
       description:
         "Charter Toyota Hiace Commuter 16 penumpang dengan driver di Cimahi, Bandung dan Padalarang mulai Rp1.500.000. Mahessa Trans Holiday.",
       keywords: ["sewa hiace commuter", "rental hiace bandung", "bus kecil bandung"],
+    },
+  },
+  {
+    id: "isuzu-elf",
+    slug: "isuzu-elf",
+    name: "Isuzu Elf Long",
+    category: "group",
+    transmission: "Manual",
+    capacity: 16,
+    fuelType: "Diesel",
+    image: "/images/vehicles/isuzu-elf.svg",
+    gallery: [
+      "/images/vehicles/isuzu-elf.svg",
+      "/images/vehicles/isuzu-elf-2.svg",
+    ],
+    pricing: {
+      leaseKey: { "12h": null, "24h": null },
+      withDriver: { startingPrice: 1800000 },
+    },
+    description: [
+      "Isuzu Elf Long adalah microbus tangguh untuk rombongan besar. Kapasitas hingga 16 penumpang dengan ruang bagasi luas untuk perlengkapan perjalanan.",
+      "Hanya tersedia dengan driver berpengalaman. Pilihan ekonomis untuk trip grup, shuttle acara, dan perjalanan antar kota.",
+    ],
+    suitableFor: [
+      "Rombongan keluarga",
+      "Shuttle event",
+      "Trip komunitas",
+      "Perjalanan dinas grup",
+    ],
+    features: [
+      "AC Dingin Merata",
+      "Audio System",
+      "Kursi Jok Empuk",
+      "Bagasi Kapasitas Besar",
+      "Kabin Tinggi",
+      "Window/Kaca Tinted",
+    ],
+    specs: [
+      { label: "Kapasitas Penumpang", value: "16 orang" },
+      { label: "Transmisi", value: "Manual" },
+      { label: "Bahan Bakar", value: "Diesel" },
+      { label: "AC", value: "Full AC" },
+      { label: "Bagasi", value: "Sangat luas" },
+    ],
+    serviceAreas: SERVICE_AREAS,
+    seo: {
+      title: "Sewa Elf Long Bandung & Cimahi",
+      description:
+        "Charter Isuzu Elf Long 16 penumpang dengan driver di Cimahi, Bandung dan Padalarang mulai Rp1.800.000. Mahessa Trans Holiday.",
+      keywords: ["sewa elf bandung", "rental elf long cimahi", "microbus bandung"],
     },
   },
 ];
