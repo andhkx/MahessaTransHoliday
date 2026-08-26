@@ -3,6 +3,8 @@ import { SITE_URL } from "@/lib/constants";
 import { vehicles } from "@/data/vehicles";
 import { packages } from "@/data/packages";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
