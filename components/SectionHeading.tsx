@@ -4,12 +4,14 @@ type SectionHeadingProps = {
   title: string;
   subtitle?: string;
   align?: "left" | "center";
+  tone?: "primary" | "navy";
 };
 
 export default function SectionHeading({
   title,
   subtitle,
   align = "center",
+  tone = "primary",
 }: SectionHeadingProps) {
   return (
     <div
@@ -18,14 +20,19 @@ export default function SectionHeading({
         align === "center" ? "mx-auto text-center" : "text-left",
       )}
     >
-      <h2 className="text-[26px] font-bold leading-8 tracking-[-0.3px] text-primary md:text-h2 md:leading-[44px]">
+      <h2
+        className={cn(
+          "text-balance text-[28px] font-bold leading-tight tracking-[-0.5px] md:text-h2",
+          tone === "navy" ? "text-navy" : "text-primary",
+        )}
+      >
         {title}
       </h2>
       {subtitle && (
         <p
           className={cn(
-            "mt-3 text-sm leading-5 text-body-text md:text-base",
-            align === "center" && "mx-auto",
+            "mt-4 text-sm leading-relaxed text-body-text md:text-base",
+            align === "center" && "mx-auto max-w-xl",
           )}
         >
           {subtitle}

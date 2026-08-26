@@ -20,42 +20,52 @@ export function vehiclePriceLine(vehicle: Vehicle): string {
 
 export default function VehicleCard({ vehicle, className }: VehicleCardProps) {
   return (
-    <article className={cn("card card-lift group overflow-hidden", className)}>
+    <article
+      className={cn(
+        "card card-lift group relative overflow-hidden",
+        className,
+      )}
+    >
       <Link
         href={`/armada/${vehicle.slug}`}
         className="block"
         aria-label={`Lihat detail ${vehicle.name}`}
       >
-        <Image
-          src={vehicle.image}
-          alt={`${vehicle.name} — rental Mahessa Trans Holiday`}
-          width={640}
-          height={420}
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className="h-[200px] w-full object-cover transition-transform duration-300 group-hover:scale-[1.03] md:h-[220px]"
-        />
-        <div className="p-4 md:p-5">
-          <h3 className="mb-2 text-lg font-semibold text-black transition-colors duration-200 group-hover:text-primary">
-            {vehicle.name}
-          </h3>
-          <p className="mb-3 flex items-center gap-2 text-[13px] text-body-text">
-            <span>{vehicle.transmission}</span>
-            <span aria-hidden="true" className="text-line">
-              |
-            </span>
-            <span>{vehicle.capacity} seats</span>
-          </p>
+        <div className="relative h-[220px] bg-line md:h-[240px]">
+          <Image
+            src={vehicle.image}
+            alt={`${vehicle.name} — rental Mahessa Trans Holiday`}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+          />
         </div>
+        {vehicle.badge && <span className="badge-pill">{vehicle.badge}</span>}
       </Link>
-      <div className="px-4 pb-4 md:px-5 md:pb-5">
-        <p className="mb-3 text-xl font-bold text-accent md:text-[22px]">
+      <div className="p-5 md:p-6">
+        <h3 className="text-[22px] font-bold leading-snug text-navy">
+          <Link
+            href={`/armada/${vehicle.slug}`}
+            className="transition-colors duration-300 hover:text-primary"
+          >
+            {vehicle.name}
+          </Link>
+        </h3>
+        <p className="mt-2.5 mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-medium text-muted">
+          <span>{vehicle.capacity} seats</span>
+          <span aria-hidden="true" className="text-line">·</span>
+          <span>{vehicle.transmission}</span>
+          <span aria-hidden="true" className="text-line">·</span>
+          <span>{vehicle.fuelType}</span>
+        </p>
+        <p className="mb-4 text-2xl font-bold text-primary md:text-[26px]">
           {vehiclePriceLine(vehicle)}
         </p>
         <a
           href={waVehicleLink(vehicle.name)}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn btn-primary btn-sm w-full"
+          className="btn btn-primary btn-card w-full transition-transform duration-200 hover:scale-[1.02]"
         >
           Tanya via WhatsApp
         </a>
