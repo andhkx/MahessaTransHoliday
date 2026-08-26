@@ -17,7 +17,7 @@ import { galleryImages } from "@/lib/gallery";
 function FeaturedArmada() {
   const featured = getFeaturedVehicles();
   return (
-    <section className="bg-surface py-12 lg:py-20">
+    <section className="bg-surface py-12 lg:py-[60px]">
       <div className="container-site">
         <div className="flex items-end justify-between gap-4">
           <SectionHeading
@@ -25,23 +25,23 @@ function FeaturedArmada() {
             title="Pilih kendaraan untuk perjalananmu"
             subtitle="Mulai dari mobil compact yang irit hingga kendaraan premium dan rombongan."
           />
-          <Link href="/armada" className="text-link hidden shrink-0 text-sm sm:inline-flex">
+          <Link href="/armada" className="text-link hidden shrink-0 sm:inline-flex">
             Lihat Semua
             <span aria-hidden="true">→</span>
           </Link>
         </div>
-        <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-5 lg:overflow-visible lg:px-0">
+        <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-3 lg:mx-0 lg:grid lg:grid-cols-5 lg:gap-6 lg:overflow-visible lg:px-0">
           {featured.map((vehicle, i) => (
             <Reveal
               key={vehicle.id}
               delay={(i % 5) as 0 | 1 | 2 | 3}
-              className="min-w-[270px] snap-start lg:min-w-0"
+              className="min-w-[280px] snap-start lg:min-w-0"
             >
               <VehicleCard vehicle={vehicle} className="h-full" />
             </Reveal>
           ))}
         </div>
-        <Link href="/armada" className="text-link mt-6 inline-flex text-sm sm:hidden">
+        <Link href="/armada" className="text-link mt-6 inline-flex sm:hidden">
           Lihat Semua Armada
           <span aria-hidden="true">→</span>
         </Link>
@@ -53,7 +53,7 @@ function FeaturedArmada() {
 function FeaturedPackages() {
   const featured = getFeaturedPackages();
   return (
-    <section className="py-12 lg:py-20">
+    <section className="bg-white py-12 lg:py-[60px]">
       <div className="container-site">
         <div className="flex items-end justify-between gap-4">
           <SectionHeading
@@ -61,19 +61,19 @@ function FeaturedPackages() {
             title="Perjalanan tanpa ribet"
             subtitle="Paket all-in Hiace: mobil, driver, BBM, tol, parkir — semua sudah termasuk."
           />
-          <Link href="/paket" className="text-link hidden shrink-0 text-sm sm:inline-flex">
+          <Link href="/paket" className="text-link hidden shrink-0 sm:inline-flex">
             Lihat Semua Paket
             <span aria-hidden="true">→</span>
           </Link>
         </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {featured.map((packageItem, i) => (
             <Reveal key={packageItem.id} delay={(i % 4) as 0 | 1 | 2 | 3}>
               <PackageCard packageItem={packageItem} className="h-full" />
             </Reveal>
           ))}
         </div>
-        <Link href="/paket" className="text-link mt-6 inline-flex text-sm sm:hidden">
+        <Link href="/paket" className="text-link mt-6 inline-flex sm:hidden">
           Lihat Semua Paket
           <span aria-hidden="true">→</span>
         </Link>
@@ -84,20 +84,20 @@ function FeaturedPackages() {
 
 function ValueProps() {
   return (
-    <section className="bg-surface py-12 lg:py-20">
+    <section className="bg-sky py-12 lg:py-[60px]">
       <div className="container-site">
-        <SectionHeading title="Kenapa pilih Mahessa?" />
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+        <SectionHeading title="Kenapa pilih Mahessa?" tone="navy" />
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
           {valueProps.map((item, i) => (
             <Reveal key={item.id} delay={(i % 4) as 0 | 1 | 2 | 3}>
-              <div className="card card-lift h-full p-6">
-                <span className="flex h-12 w-12 items-center justify-center rounded-lg bg-accent/10 text-accent">
+              <div className="h-full rounded-xl bg-white p-7 text-center shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
+                <span className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-sky/50 text-primary">
                   <svg
-                    className="h-6 w-6"
+                    className="h-7 w-7"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
-                    strokeWidth={2}
+                    strokeWidth={1.8}
                   >
                     <path
                       strokeLinecap="round"
@@ -106,10 +106,12 @@ function ValueProps() {
                     />
                   </svg>
                 </span>
-                <h3 className="mb-3 mt-4 text-h5 font-semibold text-black">
+                <h3 className="text-lg font-semibold text-navy lg:text-h5 lg:font-bold">
                   {item.title}
                 </h3>
-                <p className="text-sm leading-5 text-body-text">{item.text}</p>
+                <p className="mt-2 text-sm leading-relaxed text-body-text">
+                  {item.text}
+                </p>
               </div>
             </Reveal>
           ))}
@@ -122,7 +124,7 @@ function ValueProps() {
 function GalleryShowcase() {
   const [first, ...rest] = galleryImages;
   return (
-    <section className="py-12 lg:py-20">
+    <section className="bg-white py-12 lg:py-[60px]">
       <div className="container-site">
         <SectionHeading
           title="Cerita perjalanan bersama Mahessa"
@@ -133,14 +135,14 @@ function GalleryShowcase() {
           alt={first.alt}
           width={1200}
           height={675}
-          sizes="(max-width: 1024px) 100vw, 600px"
-          className="mx-auto mb-6 aspect-video w-full max-w-[600px] rounded-xl object-cover shadow-photo"
+          sizes="(max-width: 1024px) 100vw, 900px"
+          className="mb-8 aspect-video w-full rounded-2xl object-cover shadow-photo"
         />
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
           {rest.slice(0, 4).map((img) => (
             <div
               key={img.src}
-              className="gallery-zoom overflow-hidden rounded-xl shadow-card hover:shadow-card-hover"
+              className="gallery-zoom cursor-pointer overflow-hidden rounded-xl shadow-card transition-shadow duration-300"
             >
               <Image
                 src={img.src}
@@ -154,7 +156,7 @@ function GalleryShowcase() {
           ))}
         </div>
         <div className="mt-8 text-center">
-          <Link href="/galeri" className="text-link text-sm font-semibold sm:text-base">
+          <Link href="/galeri" className="text-link">
             Lihat Galeri Lengkap
             <span aria-hidden="true">→</span>
           </Link>
@@ -173,12 +175,12 @@ export default function HomePage() {
       <FeaturedPackages />
       <ValueProps />
       <GalleryShowcase />
-      <section className="bg-surface py-12 lg:py-20" id="faq">
-        <div className="container-site max-w-3xl lg:max-w-3xl">
+      <section className="bg-surface py-12 lg:py-[60px]" id="faq">
+        <div className="container-site max-w-[800px]">
           <SectionHeading title="Pertanyaan yang sering diajukan" />
           <FaqAccordion items={faqMain} />
           <div className="mt-8 text-center">
-            <Link href="/faq" className="text-link text-sm font-semibold sm:text-base">
+            <Link href="/faq" className="text-link">
               Lihat Semua FAQ
               <span aria-hidden="true">→</span>
             </Link>

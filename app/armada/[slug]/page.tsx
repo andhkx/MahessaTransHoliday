@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -102,13 +102,13 @@ export default async function VehicleDetailPage({
                 Rental {vehicle.name} di Cimahi, Bandung, dan Padalarang untuk
                 kebutuhan keluarga, wisata, perjalanan dinas, maupun transfer.
               </p>
-              <p className="mt-5 text-h5 font-bold text-accent md:text-h4">
+              <p className="mt-5 text-h5 font-bold text-primary md:text-h4">
                 {vehiclePriceLine(vehicle)}
               </p>
             </div>
             <Image
               src={vehicle.image}
-              alt={`${vehicle.name} — ${SITE_NAME}`}
+              alt={`${vehicle.name} â€” ${SITE_NAME}`}
               width={1200}
               height={800}
               priority
@@ -199,8 +199,8 @@ export default async function VehicleDetailPage({
                       key={item}
                       className="flex items-center gap-2 text-sm text-body-text"
                     >
-                      <span className="text-accent" aria-hidden="true">
-                        ✓
+                      <span className="text-primary" aria-hidden="true">
+                        âœ“
                       </span>
                       {item}
                     </li>
@@ -218,8 +218,8 @@ export default async function VehicleDetailPage({
                       key={feature}
                       className="flex items-center gap-2 rounded-lg border border-surface bg-white px-4 py-3 text-sm font-medium text-ink-soft transition-shadow duration-200 hover:shadow-card"
                     >
-                      <span className="text-accent" aria-hidden="true">
-                        ✓
+                      <span className="text-primary" aria-hidden="true">
+                        âœ“
                       </span>
                       {feature}
                     </li>
@@ -257,7 +257,7 @@ export default async function VehicleDetailPage({
                 <ol className="mt-4 space-y-3">
                   {orderSteps.map((step, i) => (
                     <li key={step} className="flex items-start gap-3">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-accent text-xs font-bold text-white">
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary text-xs font-bold text-white">
                         {i + 1}
                       </span>
                       <span className="pt-0.5 text-sm leading-relaxed text-body-text">
@@ -290,9 +290,9 @@ export default async function VehicleDetailPage({
                   Tanya via WhatsApp
                 </a>
                 <ul className="mt-5 space-y-2 text-caption font-medium uppercase text-body-text">
-                  <li>✓ Respon cepat di jam kerja</li>
-                  <li>✓ Harga transparan</li>
-                  <li>✓ Unit bersih dan terawat</li>
+                  <li>âœ“ Respon cepat di jam kerja</li>
+                  <li>âœ“ Harga transparan</li>
+                  <li>âœ“ Unit bersih dan terawat</li>
                 </ul>
               </div>
             </aside>

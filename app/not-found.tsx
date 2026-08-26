@@ -14,7 +14,7 @@ export default function NotFound() {
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <Link
             href="/"
-            className="btn btn-primary btn-md bg-primary shadow-none hover:bg-primary-mid"
+            className="btn btn-primary btn-md"
           >
             Kembali ke Beranda
           </Link>

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import PackageCard from "@/components/PackageCard";
@@ -111,7 +111,7 @@ export default async function PackageDetailPage({
               <div className="card flex flex-wrap items-center justify-between gap-4 p-6">
                 <div>
                   <p className="text-sm font-medium text-body-text">Mulai dari</p>
-                  <p className="text-h4 font-extrabold text-accent">
+                  <p className="text-h4 font-extrabold text-primary">
                     {formatIDR(packageItem.price)}
                   </p>
                   <span className="mt-2 inline-block rounded-md bg-surface px-3 py-1 text-caption font-medium uppercase text-body-text">
@@ -146,7 +146,7 @@ export default async function PackageDetailPage({
                           className="mt-0.5 shrink-0 font-bold text-success"
                           aria-hidden="true"
                         >
-                          ✓
+                          âœ“
                         </span>
                         {item}
                       </li>
@@ -167,7 +167,7 @@ export default async function PackageDetailPage({
                           className="mt-0.5 shrink-0 font-bold text-error"
                           aria-hidden="true"
                         >
-                          ✗
+                          âœ—
                         </span>
                         {item}
                       </li>
@@ -200,7 +200,7 @@ export default async function PackageDetailPage({
                       key={item}
                       className="rounded-lg bg-primary/[0.06] px-4 py-2 text-sm font-semibold text-primary transition-colors duration-200 hover:bg-primary/10"
                     >
-                      ✓ {item}
+                      âœ“ {item}
                     </li>
                   ))}
                 </ul>
@@ -211,10 +211,10 @@ export default async function PackageDetailPage({
                   <h2 className="text-h5 font-bold text-primary">
                     Rute & Itinerary
                   </h2>
-                  <ol className="mt-4 space-y-5 border-l-2 border-dashed border-accent/40 pl-6">
+                  <ol className="mt-4 space-y-5 border-l-2 border-dashed border-secondary/50 pl-6">
                     {packageItem.itinerary.map((day) => (
                       <li key={day.day} className="relative">
-                        <span className="absolute -left-[31px] top-1 h-3 w-3 rounded-full border-2 border-accent bg-white" />
+                        <span className="absolute -left-[31px] top-1 h-3 w-3 rounded-full border-2 border-secondary bg-white" />
                         <p className="font-bold text-black">{day.day}</p>
                         <ul className="mt-2 space-y-1.5">
                           {day.activities.map((activity) => (
@@ -222,7 +222,7 @@ export default async function PackageDetailPage({
                               key={activity}
                               className="text-sm leading-relaxed text-body-text"
                             >
-                              – {activity}
+                              â€“ {activity}
                             </li>
                           ))}
                         </ul>
@@ -254,7 +254,7 @@ export default async function PackageDetailPage({
                 <h2 className="mt-1 text-h5 font-extrabold text-primary">
                   Paket Hiace {packageItem.destination}?
                 </h2>
-                <p className="mt-2 text-h4 font-extrabold text-accent">
+                <p className="mt-2 text-h4 font-extrabold text-primary">
                   {formatIDR(packageItem.price)}
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-body-text">
@@ -273,9 +273,9 @@ export default async function PackageDetailPage({
                   Tanya via WhatsApp
                 </a>
                 <ul className="mt-5 space-y-2 text-caption font-medium uppercase text-body-text">
-                  <li>✓ Biaya jelas di awal</li>
-                  <li>✓ Driver berpengalaman rute ini</li>
-                  <li>✓ Bisa request itinerary custom</li>
+                  <li>âœ“ Biaya jelas di awal</li>
+                  <li>âœ“ Driver berpengalaman rute ini</li>
+                  <li>âœ“ Bisa request itinerary custom</li>
                 </ul>
               </div>
             </aside>
