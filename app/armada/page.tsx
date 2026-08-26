@@ -3,7 +3,6 @@ import PageHeader from "@/components/PageHeader";
 import VehicleCard from "@/components/VehicleCard";
 import CtaSection from "@/components/CtaSection";
 import { vehicles } from "@/data/vehicles";
-import { SITE_NAME } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Armada",

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import type { Vehicle } from "@/lib/types";
 import { cn } from "@/lib/cn";
 import { formatIDR } from "@/lib/format";
