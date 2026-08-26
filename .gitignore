@@ -42,3 +42,7 @@ next-env.d.ts
 
 # opencode
 skills-lock.json
+
+# tool skill mirrors (tracked via .agents/skills only)
+.claude/
+.openhands/
