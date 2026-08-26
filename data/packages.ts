@@ -1,4 +1,4 @@
-import type { TravelPackage } from "@/lib/types";
+﻿import type { TravelPackage } from "@/lib/types";
 import { SERVICE_AREAS } from "@/lib/constants";
 
 const baseIncluded = [
@@ -46,6 +46,7 @@ export const packages: TravelPackage[] = [
     id: "hiace-bandung",
     slug: "hiace-bandung",
     destination: "Bandung",
+    badge: "Best Seller",
     duration: "1 Hari",
     durationHours: 9,
     price: 1300000,
@@ -112,7 +113,7 @@ export const packages: TravelPackage[] = [
     price: 1850000,
     image: "/images/packages/hiace-jakarta.svg",
     description: [
-      "Perjalanan Bandung–Jakarta bolak-balik dalam sehari jadi mudah dengan paket ini. Cocok untuk keperluan dinas, acara keluarga, hingga city tour Jakarta seperti Kota Tua, Monas, atau Ancol.",
+      "Perjalanan Bandungâ€“Jakarta bolak-balik dalam sehari jadi mudah dengan paket ini. Cocok untuk keperluan dinas, acara keluarga, hingga city tour Jakarta seperti Kota Tua, Monas, atau Ancol.",
       "Durasi hingga 12 jam memberi waktu cukup untuk urusan di Jakarta tanpa harus menginap.",
     ],
     included: baseIncluded,
@@ -379,13 +380,14 @@ export const packages: TravelPackage[] = [
     id: "hiace-bali",
     slug: "hiace-bali",
     destination: "Bali",
+    badge: "Premium",
     duration: "4 Hari 3 Malam",
     durationHours: 90,
     price: 12750000,
     image: "/images/packages/hiace-bali.svg",
     description: [
-      "Paket premium Bali 4 hari 3 malam: dari pantai Kuta, Uluwatu, Tanah Lot, hingga Ubud dan Bedugul. Tiket penyeberangan Ketapang–Gilimanuk sudah termasuk.",
-      "Perjalanan darat dengan Hiace membuat rombonganmu tetap satu kendaraan dari Bandung sampai Bali — hemat biaya dan praktis.",
+      "Paket premium Bali 4 hari 3 malam: dari pantai Kuta, Uluwatu, Tanah Lot, hingga Ubud dan Bedugul. Tiket penyeberangan Ketapangâ€“Gilimanuk sudah termasuk.",
+      "Perjalanan darat dengan Hiace membuat rombonganmu tetap satu kendaraan dari Bandung sampai Bali â€” hemat biaya dan praktis.",
     ],
     included: ferryIncluded,
     excluded: multiDayExcluded,

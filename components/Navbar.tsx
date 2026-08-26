@@ -21,12 +21,12 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="glass-nav fixed inset-x-0 top-0 z-[1000]">
-        <nav className="container-site flex h-[60px] items-center justify-between lg:h-[70px] lg:px-6 xl:px-0">
+      <header className="sticky top-0 z-[1000] bg-navy shadow-[0_2px_8px_rgba(0,0,0,0.15)]">
+        <nav className="container-site flex h-16 items-center justify-between lg:h-[72px] lg:px-8 xl:px-0">
           <Link
             href="/"
             aria-label="Mahessa Trans Holiday - Beranda"
-            onClick={() => setOpen(false)}
+            className="inline-flex items-center rounded-lg bg-white px-2.5 py-1.5"
           >
             <Image
               src="/images/logo_mahessa.png"
@@ -34,18 +34,18 @@ export default function Navbar() {
               width={160}
               height={40}
               priority
-              className="h-9 w-auto object-contain lg:h-10"
+              className="h-8 w-auto object-contain lg:h-9"
             />
           </Link>
 
-          <div className="hidden items-center gap-1 lg:flex">
+          <div className="hidden items-center gap-6 lg:flex">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "rounded-lg px-4 py-2 text-base font-medium text-black transition-colors duration-200 hover:text-primary",
-                  pathname === link.href && "font-semibold text-primary",
+                  "text-[15px] font-medium text-white transition-colors duration-300 hover:text-sky",
+                  pathname === link.href && "font-semibold text-sky",
                 )}
               >
                 {link.label}
@@ -58,7 +58,7 @@ export default function Navbar() {
               href={waGeneralLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-primary btn-sm"
+              className="btn btn-primary hidden rounded-lg !bg-primary px-6 py-3 text-[15px] shadow-btn hover:!bg-secondary sm:inline-flex"
             >
               WhatsApp
             </a>
@@ -67,21 +67,21 @@ export default function Navbar() {
               onClick={() => setOpen(true)}
               aria-expanded={open}
               aria-label="Buka menu navigasi"
-              className="flex h-10 w-10 items-center justify-center rounded-lg text-black transition-colors hover:text-primary lg:hidden"
+              className="relative flex h-11 w-11 items-center justify-center rounded-lg text-white transition-colors duration-300 hover:text-sky lg:hidden"
             >
-              <svg
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
+              <span className="sr-only">Menu</span>
+              <span
+                aria-hidden="true"
+                className="absolute h-0.5 w-6 -translate-y-[7px] rounded-full bg-current transition-transform duration-300"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute h-0.5 w-6 rounded-full bg-current transition-opacity duration-200"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute h-0.5 w-6 translate-y-[7px] rounded-full bg-current transition-transform duration-300"
+              />
             </button>
           </div>
         </nav>
@@ -96,15 +96,15 @@ export default function Navbar() {
         aria-modal="true"
         aria-hidden={!open}
       >
-        <div className="container-site flex h-[60px] items-center justify-between">
-          <span className="text-caption font-semibold uppercase text-white/60">
+        <div className="container-site flex h-16 items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white/50">
             Menu
           </span>
           <button
             type="button"
             onClick={() => setOpen(false)}
             aria-label="Tutup menu navigasi"
-            className="flex h-10 w-10 items-center justify-center rounded-lg text-white transition-colors hover:text-accent"
+            className="flex h-11 w-11 items-center justify-center rounded-lg text-white transition-colors duration-300 hover:text-secondary"
           >
             <svg
               className="h-6 w-6"
@@ -121,19 +121,19 @@ export default function Navbar() {
             </svg>
           </button>
         </div>
-        <nav className="container-site mt-8 flex flex-col gap-2">
+        <nav className="container-site mt-10 flex flex-col gap-3">
           {NAV_LINKS.map((link, i) => (
             <Link
               key={link.href}
               href={link.href}
               onClick={() => setOpen(false)}
-              style={{ transitionDelay: `${i * 40}ms` }}
+              style={{ transitionDelay: open ? `${80 + i * 45}ms` : "0ms" }}
               className={cn(
-                "rounded-xl px-4 py-4 text-2xl font-semibold transition-all duration-300",
-                open ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
+                "min-h-[52px] rounded-xl px-5 py-4 text-3xl font-bold transition-all duration-500 [transition-timing-function:var(--ease-out-expo)]",
+                open ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0",
                 pathname === link.href
-                  ? "bg-white/10 text-accent"
-                  : "text-white hover:bg-white/5 hover:text-accent",
+                  ? "text-secondary"
+                  : "text-white hover:text-secondary",
               )}
             >
               {link.label}
@@ -143,7 +143,11 @@ export default function Navbar() {
             href={waGeneralLink()}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-primary btn-md mt-6 w-full"
+            style={{ transitionDelay: open ? "320ms" : "0ms" }}
+            className={cn(
+              "btn btn-primary btn-md mt-8 w-full transition-all duration-500",
+              open ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0",
+            )}
           >
             Konsultasi via WhatsApp
           </a>

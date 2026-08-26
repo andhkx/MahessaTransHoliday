@@ -26,6 +26,7 @@ export type Vehicle = {
   fuelType: string;
   image: string;
   gallery: string[];
+  badge?: string;
   pricing: {
     leaseKey: {
       "12h": number | null;
@@ -56,6 +57,7 @@ export type TravelPackage = {
   durationHours: number;
   price: number;
   image: string;
+  badge?: string;
   description: string[];
   included: string[];
   excluded: string[];

@@ -27,11 +27,11 @@ const exploreLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-primary-dark text-white">
-      <div className="container-site py-12 lg:py-16 lg:px-6 xl:px-0">
-        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
+    <footer className="bg-navy text-white">
+      <div className="container-site py-10 lg:py-14 lg:px-8 xl:px-0">
+        <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-10">
           <div>
-            <div className="inline-flex items-center rounded-xl bg-white p-2">
+            <div className="inline-flex items-center rounded-lg bg-white p-2">
               <Image
                 src="/images/logo_mahessa.png"
                 alt={`Logo ${SITE_NAME}`}
@@ -40,24 +40,22 @@ export default function Footer() {
                 className="h-9 w-auto object-contain"
               />
             </div>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/80">
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">
               {SITE_TAGLINE}
             </p>
-            <p className="mt-4 text-caption font-medium uppercase text-white/50">
+            <p className="mt-4 text-xs font-medium uppercase tracking-wider text-muted">
               Melayani: {SERVICE_AREAS.join(" · ")}
             </p>
           </div>
 
           <div>
-            <h3 className="text-h6 font-semibold uppercase tracking-wide text-accent">
-              Layanan
-            </h3>
-            <ul className="mt-4 space-y-3">
-              {serviceLinks.map((item) => (
-                <li key={item.label}>
+            <h3 className="text-base font-semibold text-white">Layanan</h3>
+            <ul className="mt-4 space-y-2.5">
+              {serviceLinks.map((item, i) => (
+                <li key={`${item.label}-${i}`}>
                   <Link
                     href={item.href}
-                    className="text-sm text-white/80 transition-colors duration-200 hover:text-white"
+                    className="text-sm leading-relaxed text-sky transition-colors duration-300 hover:text-white hover:underline"
                   >
                     {item.label}
                   </Link>
@@ -67,46 +65,41 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-h6 font-semibold uppercase tracking-wide text-accent">
-              Kontak
-            </h3>
-            <ul className="mt-4 space-y-3 text-sm leading-relaxed text-white/80">
+            <h3 className="text-base font-semibold text-white">Kontak</h3>
+            <ul className="mt-4 space-y-2.5 text-sm leading-relaxed text-sky">
               <li>
                 <a
                   href={waGeneralLink()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-colors duration-200 hover:text-white"
+                  className="transition-colors duration-300 hover:text-white hover:underline"
                 >
                   WhatsApp: {WHATSAPP_DISPLAY}
                 </a>
               </li>
-              <li>{ADDRESS}</li>
-              <li>{OPERATING_HOURS}</li>
+              <li className="text-white/70">{ADDRESS}</li>
+              <li className="text-white/70">{OPERATING_HOURS}</li>
               <li>
                 <a
                   href={MAPS_LINK_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 font-semibold text-accent transition-colors duration-200 hover:text-white"
+                  className="font-medium transition-colors duration-300 hover:text-white hover:underline"
                 >
-                  Lihat di Google Maps
-                  <span aria-hidden="true">→</span>
+                  Lihat di Google Maps →
                 </a>
               </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-h6 font-semibold uppercase tracking-wide text-accent">
-              Jelajahi
-            </h3>
-            <ul className="mt-4 space-y-3">
+            <h3 className="text-base font-semibold text-white">Jelajahi</h3>
+            <ul className="mt-4 space-y-2.5">
               {exploreLinks.map((item) => (
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="text-sm text-white/80 transition-colors duration-200 hover:text-white"
+                    className="text-sm leading-relaxed text-sky transition-colors duration-300 hover:text-white hover:underline"
                   >
                     {item.label}
                   </Link>
@@ -116,7 +109,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 border-t border-white/15 pt-6 text-center text-caption font-medium text-white/50">
+        <div className="mt-10 border-t border-white/10 pt-6 text-center text-xs text-muted">
           © {new Date().getFullYear()} {SITE_NAME}. Seluruh hak cipta
           dilindungi.
         </div>

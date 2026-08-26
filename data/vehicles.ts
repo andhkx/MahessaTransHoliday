@@ -1,4 +1,4 @@
-import type { Vehicle } from "@/lib/types";
+﻿import type { Vehicle } from "@/lib/types";
 import { SERVICE_AREAS } from "@/lib/constants";
 
 export const vehicles: Vehicle[] = [
@@ -205,6 +205,7 @@ export const vehicles: Vehicle[] = [
     id: "toyota-avanza",
     slug: "toyota-avanza",
     name: "Toyota Avanza New TSS G",
+    badge: "Populer",
     category: "midrange",
     transmission: "Automatic",
     capacity: 7,
@@ -220,7 +221,7 @@ export const vehicles: Vehicle[] = [
     },
     description: [
       "Toyota Avanza adalah pilihan tepat untuk keluarga atau rombongan kecil. Dengan kapasitas 7 penumpang dan konsumsi bahan bakar yang irit, Avanza cocok untuk perjalanan dalam kota maupun luar kota.",
-      "Mobil ini terawat, bersih, dan siap untuk petualangan Anda — dari city tour Bandung hingga perjalanan dinas antar kota.",
+      "Mobil ini terawat, bersih, dan siap untuk petualangan Anda â€” dari city tour Bandung hingga perjalanan dinas antar kota.",
     ],
     suitableFor: [
       "Perjalanan keluarga",
@@ -555,6 +556,7 @@ export const vehicles: Vehicle[] = [
     id: "toyota-alphard",
     slug: "toyota-alphard",
     name: "Toyota Alphard",
+    badge: "Luxury",
     category: "luxury",
     transmission: "Automatic",
     capacity: 7,
@@ -605,6 +607,7 @@ export const vehicles: Vehicle[] = [
     id: "toyota-hiace-premio",
     slug: "toyota-hiace-premio",
     name: "Toyota Hiace Premio",
+    badge: "Populer",
     category: "group",
     transmission: "Manual",
     capacity: 15,
@@ -619,8 +622,8 @@ export const vehicles: Vehicle[] = [
       withDriver: { startingPrice: 1800000 },
     },
     description: [
-      "Toyota Hiace Premio adalah kendaraan andalan untuk rombongan. Kapasitas 14–15 penumpang dengan kabin tinggi yang memungkinkan gerakan bebas selama perjalanan.",
-      "Hanya tersedia dengan driver berpengalaman, sehingga kamu cukup duduk dan nikmati perjalanan — dalam kota maupun antar kota.",
+      "Toyota Hiace Premio adalah kendaraan andalan untuk rombongan. Kapasitas 14â€“15 penumpang dengan kabin tinggi yang memungkinkan gerakan bebas selama perjalanan.",
+      "Hanya tersedia dengan driver berpengalaman, sehingga kamu cukup duduk dan nikmati perjalanan â€” dalam kota maupun antar kota.",
     ],
     suitableFor: [
       "Rombongan keluarga",
@@ -670,7 +673,7 @@ export const vehicles: Vehicle[] = [
     },
     description: [
       "Toyota Hiace Commuter adalah pilihan ekonomis untuk angkutan rombongan besar. Kapasitas hingga 16 penumpang dengan konfigurasi kursi efisien.",
-      "Cocok untuk shuttle event, ziarah, atau perjalanan wisata grup dengan budget terkendali — selalu dengan driver profesional Mahessa.",
+      "Cocok untuk shuttle event, ziarah, atau perjalanan wisata grup dengan budget terkendali â€” selalu dengan driver profesional Mahessa.",
     ],
     suitableFor: [
       "Shuttle event",
