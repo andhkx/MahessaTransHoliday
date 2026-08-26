@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import { motion, useReducedMotion } from "motion/react";
 import { BadgeCheck, CarFront, MapPin, Wallet } from "lucide-react";
 
-const EASE = [0.4, 0, 0.2, 1];
+const EASE = [0.4, 0, 0.2, 1] as const;
 
 const STATS = [
   { value: "Rp350rb", label: "Rental Mulai", sub: "Lepas kunci 24 jam", Icon: Wallet },

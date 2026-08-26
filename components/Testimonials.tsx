@@ -1,67 +1,71 @@
+﻿"use client";
+
+import { motion, useReducedMotion } from "motion/react";
+import { CheckCheck } from "lucide-react";
 import type { Testimonial } from "@/lib/testimonials";
+import useSnapActive from "./useSnapActive";
 
-function Avatar({ name }: { name: string }) {
-  const initials = name
-    .replace(/^(Pak|Bu)\s+/i, "")
-    .split(" ")
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-  return (
-    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/25 text-sm font-extrabold text-accent">
-      {initials}
-    </span>
-  );
+const EASE = [0.4, 0, 0.2, 1] as const;
+
+function initials(name: string) {
+  const words = name.replace(/[.,]/g, "").split(/\s+/).filter(Boolean);
+  if (words.length === 0) return "?";
+  return ((words[0][0] ?? "") + (words[1]?.[0] ?? "")).toUpperCase();
 }
 
-export function TestimonialBubble({ item }: { item: Testimonial }) {
-  return (
-    <article className="card card-lift flex h-full flex-col p-5">
-      <header className="flex items-center gap-3 border-b border-line pb-3">
-        <Avatar name={item.name} />
-        <div className="min-w-0">
-          <p className="truncate text-sm font-extrabold text-accent">
-            {item.name}
-          </p>
-          <p className="flex items-center gap-1.5 truncate text-[11px] font-bold text-primary">
-            <span
-              aria-hidden="true"
-              className="inline-block h-1.5 w-1.5 rounded-full bg-success"
-            />
-            online · {item.role}
-          </p>
-        </div>
-      </header>
-
-      <div className="mt-4 flex flex-col gap-2">
-        <div className="max-w-[92%] self-end rounded-[16px] rounded-br-sm bg-primary/15 px-4 py-3">
-          <p className="text-sm font-semibold leading-relaxed tracking-[-0.2px] text-body-text">
-            {item.message}
-          </p>
-          <p className="mt-1 text-right text-[10px] font-bold text-body-text/50">
-            {item.time} ✓✓
-          </p>
-        </div>
-        <div className="max-w-[85%] self-start rounded-[16px] rounded-bl-sm bg-wa-surface px-4 py-3">
-          <p className="text-sm font-semibold leading-relaxed tracking-[-0.2px] text-body-text">
-            {item.reply}
-          </p>
-        </div>
-      </div>
-    </article>
-  );
-}
-
-export default function Testimonials({
-  items,
-}: {
+type TestimonialsProps = {
   items: Testimonial[];
-}) {
+};
+
+export default function Testimonials({ items }: TestimonialsProps) {
+  const reduce = useReducedMotion();
+  const [rowRef, activeIdx] = useSnapActive();
+
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-      {items.map((item) => (
-        <TestimonialBubble key={item.id} item={item} />
+    <div
+      ref={rowRef}
+      className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 scrollbar-none md:grid md:grid-cols-3 md:overflow-visible md:pb-0"
+    >
+      {items.map((t, i) => (
+        <motion.div
+          key={t.id}
+          initial={reduce ? false : { opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.5, delay: i * 0.08, ease: EASE }}
+          className={`w-[84vw] max-w-[360px] shrink-0 snap-start origin-left transition-transform duration-300 ease-out will-change-transform md:w-auto md:scale-100 ${
+            i === activeIdx ? "scale-100" : "scale-[0.92]"
+          }`}
+        >
+          <article className="flex h-full flex-col rounded-[24px] border border-line bg-white p-5">
+            <div className="mb-4 flex items-center gap-3 border-b border-line pb-4">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/15 text-sm font-extrabold text-primary">
+                {initials(t.name)}
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-extrabold text-heading">{t.name}</p>
+                <p className="truncate text-[11px] font-bold text-success">
+                  online â€¢ {t.role}
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-2 text-[13px]">
+              <div className="w-fit max-w-[92%] rounded-2xl rounded-tl-sm bg-wa-surface px-3.5 py-2.5 leading-relaxed text-body-text">
+                {t.message}
+                <span className="mt-1 flex items-center justify-end gap-1 text-[10px] font-bold text-muted">
+                  {t.time} <CheckCheck size={12} aria-hidden="true" />
+                </span>
+              </div>
+              <div className="ml-auto w-fit max-w-[85%] rounded-2xl rounded-tr-sm bg-accent px-3.5 py-2.5 font-bold text-white">
+                {t.reply}
+                <span className="mt-1 flex items-center justify-end gap-1 text-[10px] font-bold text-white/60">
+                  <CheckCheck size={12} aria-hidden="true" />
+                </span>
+              </div>
+            </div>
+          </article>
+        </motion.div>
       ))}
     </div>
   );

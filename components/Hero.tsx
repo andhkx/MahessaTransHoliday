@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -7,7 +7,7 @@ import { ArrowRight, Check, MessageCircle } from "lucide-react";
 import { SERVICE_AREAS } from "@/lib/constants";
 import { waGeneralLink } from "@/lib/whatsapp";
 
-const EASE = [0.4, 0, 0.2, 1];
+const EASE = [0.4, 0, 0.2, 1] as const;
 
 export default function Hero() {
   const reduce = useReducedMotion();
@@ -30,7 +30,7 @@ export default function Hero() {
           <p className="mb-7 max-w-xl text-sm leading-relaxed text-body-text md:text-base">
             Dari rental lepas kunci, mobil dengan driver, charter antar-jemput,
             hingga paket wisata dan perjalanan dinas dari{" "}
-            {SERVICE_AREAS.join(", ")} — semua dibikin gampang.
+            {SERVICE_AREAS.join(", ")} â€” semua dibikin gampang.
           </p>
           <div className="flex flex-nowrap justify-start gap-2 sm:gap-3">
             <a
@@ -84,7 +84,7 @@ export default function Hero() {
           >
             <Image
               src="/images/vehicles/toyota-hiace-premio.svg"
-              alt="Toyota Hiace Premio — armada Mahessa Trans Holiday"
+              alt="Toyota Hiace Premio â€” armada Mahessa Trans Holiday"
               width={1024}
               height={683}
               priority

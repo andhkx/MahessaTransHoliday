@@ -4,19 +4,27 @@ type PageHeaderProps = {
   subtitle?: string;
 };
 
-export default function PageHeader({ eyebrow, title, subtitle }: PageHeaderProps) {
+export default function PageHeader({
+  eyebrow,
+  title,
+  subtitle,
+}: PageHeaderProps) {
   return (
-    <section className="border-b border-line bg-white">
-      <div className="container-site pb-8 pt-10 lg:pb-12 lg:pt-14">
-        <div className="max-w-3xl">
-          {eyebrow && <span className="eyebrow">{eyebrow}</span>}
-          <h1 className="h-display text-balance text-accent">{title}</h1>
-          {subtitle && (
-            <p className="mt-4 max-w-2xl text-sm font-bold leading-relaxed tracking-[-0.35px] text-body-text lg:text-base">
-              {subtitle}
-            </p>
-          )}
-        </div>
+    <section className="border-b border-line bg-white pt-28 pb-10 md:pt-32 md:pb-12">
+      <div className="mx-auto w-full max-w-[1300px] px-5 text-center sm:px-8 md:px-12">
+        {eyebrow && (
+          <span className="mb-2 inline-block font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-primary">
+            {eyebrow}
+          </span>
+        )}
+        <h1 className="mx-auto mb-3 max-w-3xl text-balance text-[clamp(26px,4vw,36px)] font-extrabold leading-[1.15] tracking-tight text-heading">
+          {title}
+        </h1>
+        {subtitle && (
+          <p className="mx-auto max-w-2xl text-sm leading-relaxed text-body-text md:text-base">
+            {subtitle}
+          </p>
+        )}
       </div>
     </section>
   );

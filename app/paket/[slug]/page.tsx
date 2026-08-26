@@ -1,10 +1,12 @@
 ﻿import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import PackageCard from "@/components/PackageCard";
+import PackageCards from "@/components/PackageCards";
 import FaqAccordion from "@/components/FaqAccordion";
 import CtaSection from "@/components/CtaSection";
 import JsonLd from "@/components/JsonLd";
+import SectionHeading from "@/components/SectionHeading";
 import {
   getPackageBySlug,
   getRelatedPackages,
@@ -13,6 +15,7 @@ import {
 import { formatIDR } from "@/lib/format";
 import { SITE_URL } from "@/lib/constants";
 import { waPackageLink } from "@/lib/whatsapp";
+import { Check, MessageCircle, X } from "lucide-react";
 
 export const dynamicParams = false;
 
@@ -53,12 +56,7 @@ export default async function PackageDetailPage({
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Beranda", item: SITE_URL },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Paket",
-        item: `${SITE_URL}/paket`,
-      },
+      { "@type": "ListItem", position: 2, name: "Paket", item: `${SITE_URL}/paket` },
       {
         "@type": "ListItem",
         position: 3,
@@ -72,231 +70,212 @@ export default async function PackageDetailPage({
     <>
       <JsonLd data={breadcrumbLd} />
 
-      <section className="bg-wa-surface/50 pb-10 pt-[104px] lg:pb-14 lg:pt-[134px]">
-        <div className="container-site">
-          <nav aria-label="Breadcrumb" className="mb-6 text-sm font-medium text-body-text">
-            <Link href="/" className="text-link">
-              Beranda
-            </Link>
-            <span className="mx-2 text-line">/</span>
-            <Link href="/paket" className="text-link">
-              Paket
-            </Link>
-            <span className="mx-2 text-line">/</span>
-            <span className="font-semibold text-primary">
-              Hiace {packageItem.destination}
-            </span>
-          </nav>
-          <div className="max-w-3xl">
-            <h1 className="text-[28px] font-bold leading-9 tracking-[-0.3px] text-primary md:text-h3 md:leading-9 lg:text-h4 lg:leading-8">
+      <section className="mx-auto w-full max-w-[1300px] px-5 pb-10 pt-28 sm:px-8 md:px-12 md:pt-32">
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-6 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-muted"
+        >
+          <Link href="/" className="transition-colors hover:text-primary">
+            Beranda
+          </Link>
+          <span className="mx-2 text-line">/</span>
+          <Link href="/paket" className="transition-colors hover:text-primary">
+            Paket
+          </Link>
+          <span className="mx-2 text-line">/</span>
+          <span className="text-primary">Hiace {packageItem.destination}</span>
+        </nav>
+
+        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <div>
+            <h1 className="mb-4 text-[clamp(26px,4vw,40px)] font-extrabold leading-[1.1] tracking-tight text-heading">
               Sewa Hiace {packageItem.destination} {packageItem.duration}
             </h1>
-            <p className="mt-4 text-base leading-relaxed text-body-text">
-              Paket perjalanan all-in dengan Toyota Hiace untuk perjalanan dari{" "}
-              {packageItem.serviceAreas.join(", ")}. Mobil, driver, BBM, tol,
-              parkir
+            <p className="mb-5 max-w-xl text-sm leading-relaxed text-body-text md:text-base">
+              Paket perjalanan all-in dari {packageItem.serviceAreas.join(", ")}.
+              Mobil, driver, BBM, tol, parkir
               {packageItem.included.includes("Tiket Penyeberangan")
                 ? ", dan tiket penyeberangan"
                 : ""}{" "}
-              sudah termasuk dalam paket.
+              sudah termasuk.
             </p>
+            <p className="mb-6 text-xl font-extrabold tracking-tight text-primary">
+              Mulai {formatIDR(packageItem.price)}
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <a
+                href={waPackageLink(
+                  `Hiace ${packageItem.destination} ${packageItem.duration}`,
+                  packageItem.price,
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3.5 text-sm font-extrabold text-white transition-all hover:scale-[1.02] hover:bg-accent-hover active:scale-[0.98]"
+              >
+                <MessageCircle size={16} aria-hidden="true" />
+                Tanya via WhatsApp
+              </a>
+              <Link
+                href="#detail-paket"
+                className="inline-flex items-center gap-2 rounded-full border border-line px-5 py-3.5 text-sm font-bold text-heading transition-all hover:border-primary/50 hover:text-primary"
+              >
+                Detail Paket
+              </Link>
+            </div>
           </div>
+          <Image
+            src={packageItem.image}
+            alt={`Paket Hiace ${packageItem.destination}`}
+            width={1200}
+            height={800}
+            priority
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="aspect-video w-full rounded-[24px] object-cover shadow-card"
+          />
         </div>
       </section>
 
-      <section className="py-12 lg:py-16">
-        <div className="container-site">
-          <div className="grid gap-10 lg:grid-cols-5 lg:gap-12">
-            <div className="space-y-10 lg:col-span-3">
-              <div className="card flex flex-wrap items-center justify-between gap-4 p-6">
-                <div>
-                  <p className="text-sm font-medium text-body-text">Mulai dari</p>
-                  <p className="text-h4 font-extrabold text-primary">
-                    {formatIDR(packageItem.price)}
-                  </p>
-                  <span className="mt-2 inline-block rounded-md bg-wa-surface/50 px-3 py-1 text-caption font-medium uppercase text-body-text">
-                    {packageItem.duration}
-                  </span>
-                </div>
-                <a
-                  href={waPackageLink(
-                    `Hiace ${packageItem.destination} ${packageItem.duration}`,
-                    packageItem.price,
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary btn-md"
-                >
-                  Tanya via WhatsApp
-                </a>
-              </div>
-
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <div className="card p-6">
-                  <h2 className="text-h6 font-bold text-primary">
-                    Sudah Termasuk
-                  </h2>
-                  <ul className="mt-4 space-y-3">
-                    {packageItem.included.map((item) => (
-                      <li
-                        key={item}
-                        className="flex items-start gap-2 text-sm leading-relaxed text-body-text"
-                      >
-                        <span
-                          className="mt-0.5 shrink-0 font-bold text-success"
-                          aria-hidden="true"
-                        >
-                          âœ“
-                        </span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="card p-6">
-                  <h2 className="text-h6 font-bold text-primary">
-                    Belum Termasuk
-                  </h2>
-                  <ul className="mt-4 space-y-3">
-                    {packageItem.excluded.map((item) => (
-                      <li
-                        key={item}
-                        className="flex items-start gap-2 text-sm leading-relaxed text-body-text"
-                      >
-                        <span
-                          className="mt-0.5 shrink-0 font-bold text-error"
-                          aria-hidden="true"
-                        >
-                          âœ—
-                        </span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <div>
-                <h2 className="text-h5 font-bold text-primary">Deskripsi Paket</h2>
-                {packageItem.description.map((paragraph, i) => (
-                  <p
-                    key={i}
-                    className="mt-4 text-base leading-relaxed text-body-text"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-                <p className="mt-4 text-sm text-body-text">
-                  Durasi: {packageItem.duration} ({packageItem.durationHours} jam
-                  mulai dari pickup).
-                </p>
-              </div>
-
-              <div>
-                <h2 className="text-h5 font-bold text-primary">Cocok Untuk</h2>
-                <ul className="mt-4 flex flex-wrap gap-2.5">
-                  {packageItem.suitableFor.map((item) => (
+      <section
+        id="detail-paket"
+        className="mx-auto w-full max-w-[1300px] px-5 py-10 sm:px-8 md:px-12"
+      >
+        <div className="grid gap-10 lg:grid-cols-5 lg:gap-12">
+          <div className="space-y-10 lg:col-span-3">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <div className="rounded-[24px] border border-line bg-white p-6 shadow-card">
+                <h2 className="text-h6 mb-4 uppercase tracking-wide text-success">
+                  Sudah Termasuk
+                </h2>
+                <ul className="space-y-2.5">
+                  {packageItem.included.map((item) => (
                     <li
                       key={item}
-                      className="rounded-lg bg-primary/[0.06] px-4 py-2 text-sm font-semibold text-primary transition-colors duration-200 hover:bg-primary/10"
+                      className="flex items-start gap-2.5 text-sm leading-relaxed text-body-text"
                     >
-                      âœ“ {item}
+                      <Check size={15} className="mt-0.5 shrink-0 text-success" aria-hidden="true" />
+                      {item}
                     </li>
                   ))}
                 </ul>
               </div>
-
-              {packageItem.itinerary && (
-                <div>
-                  <h2 className="text-h5 font-bold text-primary">
-                    Rute & Itinerary
-                  </h2>
-                  <ol className="mt-4 space-y-5 border-l-2 border-dashed border-secondary/50 pl-6">
-                    {packageItem.itinerary.map((day) => (
-                      <li key={day.day} className="relative">
-                        <span className="absolute -left-[31px] top-1 h-3 w-3 rounded-full border-2 border-secondary bg-white" />
-                        <p className="font-bold text-black">{day.day}</p>
-                        <ul className="mt-2 space-y-1.5">
-                          {day.activities.map((activity) => (
-                            <li
-                              key={activity}
-                              className="text-sm leading-relaxed text-body-text"
-                            >
-                              â€“ {activity}
-                            </li>
-                          ))}
-                        </ul>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              )}
-
-              <div id="faq-paket">
-                <h2 className="text-h5 font-bold text-primary">
-                  Pertanyaan Umum Paket Ini
+              <div className="rounded-[24px] border border-line bg-white p-6 shadow-card">
+                <h2 className="text-h6 mb-4 uppercase tracking-wide text-error">
+                  Belum Termasuk
                 </h2>
-                <div className="mt-4">
-                  <FaqAccordion
-                    items={packageItem.faq.map((f) => ({
-                      id: f.q,
-                      question: f.q,
-                      answer: f.a,
-                    }))}
-                  />
-                </div>
+                <ul className="space-y-2.5">
+                  {packageItem.excluded.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-2.5 text-sm leading-relaxed text-body-text"
+                    >
+                      <X size={15} className="mt-0.5 shrink-0 text-error" aria-hidden="true" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
 
-            <aside className="lg:col-span-2">
-              <div className="card sticky top-24 p-6 shadow-elevated">
-                <p className="text-sm font-medium text-body-text">Tertarik dengan</p>
-                <h2 className="mt-1 text-h5 font-extrabold text-primary">
-                  Paket Hiace {packageItem.destination}?
-                </h2>
-                <p className="mt-2 text-h4 font-extrabold text-primary">
-                  {formatIDR(packageItem.price)}
+            <div>
+              <h2 className="text-h5 mb-3 text-heading">Deskripsi Paket</h2>
+              {packageItem.description.map((paragraph, i) => (
+                <p key={i} className="mt-3 text-sm leading-relaxed text-body-text md:text-base">
+                  {paragraph}
                 </p>
-                <p className="mt-3 text-sm leading-relaxed text-body-text">
-                  Sebutkan tanggal keberangkatan dan jumlah penumpang, tim kami
-                  akan cek ketersediaan.
-                </p>
-                <a
-                  href={waPackageLink(
-                    `Hiace ${packageItem.destination} ${packageItem.duration}`,
-                    packageItem.price,
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn btn-primary btn-md mt-5 w-full"
-                >
-                  Tanya via WhatsApp
-                </a>
-                <ul className="mt-5 space-y-2 text-caption font-medium uppercase text-body-text">
-                  <li>âœ“ Biaya jelas di awal</li>
-                  <li>âœ“ Driver berpengalaman rute ini</li>
-                  <li>âœ“ Bisa request itinerary custom</li>
-                </ul>
+              ))}
+              <p className="mt-4 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-muted">
+                Durasi: {packageItem.duration} · {packageItem.durationHours} jam dari pickup
+              </p>
+            </div>
+
+            <div>
+              <h2 className="text-h5 mb-4 text-heading">Cocok Untuk</h2>
+              <ul className="flex flex-wrap gap-2">
+                {packageItem.suitableFor.map((item) => (
+                  <li
+                    key={item}
+                    className="rounded-full border border-line bg-white px-3 py-1.5 text-xs font-bold text-body-text transition-colors duration-300 hover:border-primary/50 hover:text-primary"
+                  >
+                    ✓ {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {packageItem.itinerary && (
+              <div>
+                <h2 className="text-h5 mb-4 text-heading">Rute &amp; Itinerary</h2>
+                <ol className="space-y-5 border-l-2 border-dashed border-primary/40 pl-6">
+                  {packageItem.itinerary.map((day) => (
+                    <li key={day.day} className="relative">
+                      <span className="absolute -left-[31px] top-1 h-3 w-3 rounded-full border-2 border-primary bg-white" />
+                      <p className="font-extrabold text-heading">{day.day}</p>
+                      <ul className="mt-2 space-y-1.5">
+                        {day.activities.map((activity) => (
+                          <li key={activity} className="text-sm leading-relaxed text-body-text">
+                            – {activity}
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  ))}
+                </ol>
               </div>
-            </aside>
+            )}
+
+            <div id="faq-paket">
+              <h2 className="text-h5 mb-4 text-heading">Pertanyaan Umum Paket Ini</h2>
+              <FaqAccordion
+                items={packageItem.faq.map((f) => ({
+                  id: f.q,
+                  question: f.q,
+                  answer: f.a,
+                }))}
+              />
+            </div>
           </div>
+
+          <aside className="lg:col-span-2">
+            <div className="card sticky top-24 p-6 shadow-card">
+              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-primary">
+                Tertarik dengan
+              </p>
+              <h2 className="mt-2 text-xl font-extrabold tracking-tight text-heading md:text-2xl">
+                Paket Hiace {packageItem.destination}?
+              </h2>
+              <p className="mt-2 text-2xl font-extrabold tracking-tight text-primary">
+                Mulai {formatIDR(packageItem.price)}
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-body-text">
+                Sebutkan tanggal keberangkatan dan jumlah penumpang, tim kami cek
+                ketersediaan.
+              </p>
+              <a
+                href={waPackageLink(
+                  `Hiace ${packageItem.destination} ${packageItem.duration}`,
+                  packageItem.price,
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-5 py-3.5 text-sm font-extrabold text-white transition-all hover:scale-[1.02] hover:bg-accent-hover active:scale-[0.98]"
+              >
+                <MessageCircle size={16} aria-hidden="true" />
+                Tanya via WhatsApp
+              </a>
+              <ul className="mt-5 space-y-2 text-xs font-bold text-muted">
+                <li>✓ Biaya jelas di awal</li>
+                <li>✓ Driver berpengalaman rute ini</li>
+                <li>✓ Bisa request itinerary custom</li>
+              </ul>
+            </div>
+          </aside>
         </div>
       </section>
 
-      <section className="bg-wa-surface/50 py-12 lg:py-20">
-        <div className="container-site">
-          <h2 className="mb-8 text-center text-[26px] font-bold tracking-[-0.3px] text-primary md:mb-10 md:text-h2 md:leading-[44px]">
-            Paket lain yang mungkin cocok
-          </h2>
-          <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 lg:mx-0 lg:grid lg:grid-cols-3 lg:gap-5 lg:overflow-visible lg:px-0">
-            {related.map((item) => (
-              <PackageCard
-                key={item.id}
-                packageItem={item}
-                className="min-w-[270px] snap-start lg:min-w-0"
-              />
-            ))}
-          </div>
+      <section className="border-t border-line bg-wa-surface/40 py-16 md:py-20">
+        <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
+          <SectionHeading eyebrow="Paket lain" title="Mungkin juga cocok buatmu." />
+          <PackageCards packages={related} />
         </div>
       </section>
 

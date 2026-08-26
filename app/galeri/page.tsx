@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import Image from "next/image";
 import PageHeader from "@/components/PageHeader";
 import CtaSection from "@/components/CtaSection";
@@ -19,7 +19,7 @@ export default function GaleriPage() {
     <>
       <PageHeader
         title="Cerita perjalanan bersama Mahessa"
-        subtitle="Dokumentasi nyata perjalanan para penumpang kami — dari city tour singkat hingga perjalanan luar kota."
+        subtitle="Dokumentasi nyata perjalanan para penumpang kami â€” dari city tour singkat hingga perjalanan luar kota."
       />
       <section className="py-12 lg:py-16">
         <div className="container-site">
@@ -28,7 +28,7 @@ export default function GaleriPage() {
               <div
                 key={img.src}
                 className={cn(
-                  "gallery-zoom mb-4 break-inside-avoid overflow-hidden rounded-xl shadow-card hover:shadow-elevated",
+                  "gallery-zoom mb-4 break-inside-avoid overflow-hidden rounded-xl shadow-card hover:shadow-card",
                   i === 0 ? "aspect-[16/9]" : masonryAspects[i % 3],
                 )}
               >

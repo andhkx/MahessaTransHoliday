@@ -1,10 +1,22 @@
-import Link from "next/link";
-import Image from "next/image";
-import { services } from "@/data/services";
-import Reveal from "./Reveal";
-import SectionHeading from "./SectionHeading";
+﻿"use client";
 
-const serviceImages: Record<string, string> = {
+import Image from "next/image";
+import Link from "next/link";
+import { motion, useReducedMotion } from "motion/react";
+import { ArrowRight, CarFront, MapPinned, Plane, UserRound } from "lucide-react";
+import { services } from "@/data/services";
+import SectionHeading from "./SectionHeading";
+import useSnapActive from "./useSnapActive";
+
+const EASE = [0.4, 0, 0.2, 1] as const;
+const ICONS: Record<string, React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>> = {
+  "rental-mobil": CarFront,
+  "mobil-driver": UserRound,
+  "charter-transfer": MapPinned,
+  "paket-wisata": Plane,
+};
+
+const IMAGES: Record<string, string> = {
   "rental-mobil": "/images/vehicles/honda-brio.svg",
   "mobil-driver": "/images/vehicles/toyota-innova-reborn.svg",
   "charter-transfer": "/images/vehicles/toyota-hiace-premio.svg",
@@ -12,59 +24,82 @@ const serviceImages: Record<string, string> = {
 };
 
 export default function ServiceCards() {
+  const reduce = useReducedMotion();
+  const [rowRef, activeIdx] = useSnapActive();
+
   return (
-    <section className="border-t border-line bg-white py-12 lg:py-16">
-      <div className="container-site">
-        <SectionHeading
-          align="left"
-          eyebrow="Layanan Kami"
-          title="Butuh perjalanan seperti apa?"
-          subtitle="Pilih solusi yang sesuai dengan kebutuhan perjalanan kamu."
-        />
-        <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3 lg:mx-0 lg:grid lg:grid-cols-4 lg:px-0">
-          {services.map((service, i) => (
-            <Reveal
-              key={service.id}
-              delay={(i % 4) as 0 | 1 | 2 | 3}
-              className="w-[280px] shrink-0 snap-start sm:w-[300px] lg:w-auto"
+    <section className="relative z-10 mx-auto w-full max-w-[1300px] px-5 py-16 sm:px-8 md:px-12 md:py-24">
+      <SectionHeading
+        eyebrow="Layanan Kami"
+        title="Butuh perjalanan seperti apa?"
+        subtitle="Pilih layanan yang sesuai dengan kebutuhan perjalanan kamu."
+      />
+
+      <div className="mb-5 flex items-center justify-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-primary md:hidden">
+        <span>Geser untuk melihat layanan lainnya</span>
+        <ArrowRight size={13} aria-hidden="true" />
+      </div>
+
+      <div
+        ref={rowRef}
+        className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 scrollbar-none md:grid md:grid-cols-4 md:overflow-visible md:pb-0"
+      >
+        {services.map((item, i) => {
+          const Icon = ICONS[item.id] ?? CarFront;
+          const isActive = i === activeIdx;
+          return (
+            <motion.div
+              key={item.id}
+              initial={reduce ? false : { opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: i * 0.08, ease: EASE }}
+              className={`w-[84vw] max-w-[360px] shrink-0 snap-start origin-left transition-transform duration-300 ease-out will-change-transform md:w-auto md:scale-100 ${
+                i === activeIdx ? "scale-100" : "scale-[0.92]"
+              }`}
             >
-              <article className="card card-lift group flex h-full flex-col overflow-hidden">
-                <Image
-                  src={serviceImages[service.id]}
-                  alt={service.title}
-                  width={560}
-                  height={320}
-                  sizes="(max-width: 1024px) 80vw, 25vw"
-                  className="aspect-video w-full object-cover"
-                />
-                <div className="flex flex-1 flex-col p-5">
-                  <h3 className="text-lg font-extrabold tracking-[-0.4px] text-accent">
-                    {service.title}
-                  </h3>
-                  <p className="mt-2 flex-1 text-sm font-semibold leading-relaxed tracking-[-0.2px] text-body-text">
-                    {service.text}
-                  </p>
-                  <Link
-                    href={service.ctaHref}
-                    className="text-link mt-4 text-sm"
-                    aria-label={`${service.ctaLabel} - ${service.title}`}
-                  >
-                    {service.ctaLabel}
-                    <span
-                      aria-hidden="true"
-                      className="transition-transform duration-150 group-hover:translate-x-1"
-                    >
-                      →
+              <article className="group relative flex h-full min-h-[440px] flex-col justify-between overflow-hidden rounded-[24px] border border-line bg-white shadow-card transition-transform duration-300 hover:-translate-y-1">
+                <div className="p-6 pb-3">
+                  <div className="mb-3 flex items-center justify-between gap-2">
+                    <Icon size={20} strokeWidth={1.6} className="text-primary" aria-hidden="true" />
+                    <span className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-muted">
+                      Layanan
                     </span>
-                  </Link>
+                  </div>
+                  <h3 className="mb-2 text-xl font-extrabold leading-tight text-heading md:text-2xl">
+                    {item.title}
+                  </h3>
+                  <p className="text-[13px] leading-relaxed text-body-text md:text-sm">
+                    {item.text}
+                  </p>
                 </div>
+
+                <Link
+                  href={item.ctaHref}
+                  aria-label={`${item.ctaLabel} - ${item.title}`}
+                  className="relative mx-4 mt-2 block"
+                >
+                  <div
+                    className={`w-full origin-bottom transition-transform duration-300 ease-out ${
+                      isActive ? "scale-100" : "scale-[0.86]"
+                    }`}
+                  >
+                    <div className="relative mx-auto flex h-[190px] w-full max-w-[280px] items-end justify-center overflow-hidden rounded-t-[28px] shadow-[0_-8px_30px_-12px_rgba(35,51,45,0.25)] transition-transform duration-300 group-hover:-translate-y-2">
+                      <Image
+                        src={IMAGES[item.id]}
+                        alt={item.title}
+                        fill
+                        sizes="(max-width: 767px) 84vw, 300px"
+                        className="object-cover object-top"
+                        priority={i === 0}
+                      />
+                    </div>
+                  </div>
+                </Link>
               </article>
-            </Reveal>
-          ))}
-        </div>
-        <p className="mt-3 text-center text-xs font-bold text-muted lg:hidden">
-          Geser untuk melihat layanan lainnya →
-        </p>
+            </motion.div>
+          );
+        })}
       </div>
     </section>
   );
