@@ -6,26 +6,39 @@ type CtaSectionProps = {
 };
 
 export default function CtaSection({
-  title = "Sudah tahu mau pergi ke mana?",
-  text = "Ceritakan kebutuhan perjalananmu, biar kami bantu pilihkan kendaraan dan layanan yang sesuai dengan budget dan jadwalmu.",
+  title = "Siap berangkat bersama Mahessa?",
+  text = "Ceritakan kebutuhan perjalananmu. Kami bantu siapkan kendaraan dan layanan yang sesuai target dan anggaran.",
 }: CtaSectionProps) {
   return (
-    <section className="bg-primary">
-      <div className="container-site py-12 text-center lg:py-20">
-        <h2 className="mx-auto max-w-3xl text-balance text-[28px] font-bold leading-tight text-white lg:text-h2">
-          {title}
-        </h2>
-        <p className="mx-auto mt-4 max-w-[700px] text-base leading-relaxed text-sky lg:text-lg">
-          {text}
-        </p>
-        <a
-          href={waGeneralLink()}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn btn-white btn-lg mt-8"
-        >
-          Konsultasi via WhatsApp
-        </a>
+    <section className="bg-white py-12 lg:py-16">
+      <div className="container-site">
+        <div className="rounded-[24px] bg-accent px-6 py-12 text-center lg:px-12 lg:py-16">
+          <span className="eyebrow !text-primary">Konsultasi gratis</span>
+          <h2 className="mx-auto max-w-2xl text-balance text-[26px] font-extrabold leading-tight tracking-[-0.75px] text-white lg:h-heading lg:text-white">
+            {title}
+          </h2>
+          <p className="mx-auto mt-4 max-w-xl text-sm font-bold leading-relaxed tracking-[-0.35px] text-white/70 lg:text-base">
+            {text}
+          </p>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <a
+              href={waGeneralLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-white btn-md"
+            >
+              Mulai Konsultasi
+            </a>
+            <a
+              href={waGeneralLink()}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-md border-2 border-white/25 text-white hover:border-primary hover:text-primary"
+            >
+              Tanya via WhatsApp
+            </a>
+          </div>
+        </div>
       </div>
     </section>
   );

@@ -1,59 +1,109 @@
 import Image from "next/image";
 import Link from "next/link";
+import { SERVICE_AREAS } from "@/lib/constants";
+import { vehicles } from "@/data/vehicles";
+import { packages } from "@/data/packages";
 import { waGeneralLink } from "@/lib/whatsapp";
+
+const heroChips = [
+  "Lepas Kunci 12/24 Jam",
+  "Mobil + Driver",
+  "Charter & Transfer",
+  "Paket Wisata",
+];
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-white">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-sky/40 blur-3xl"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 -right-24 h-[28rem] w-[28rem] rounded-full bg-sky/30 blur-3xl"
-      />
-
-      <div className="container-site relative flex min-h-[80dvh] items-center pb-12 pt-12 lg:min-h-[100dvh] lg:pb-20 lg:pt-16">
-        <div className="grid w-full items-center gap-10 lg:grid-cols-[55%_45%] lg:gap-12">
-          <div>
-            <h1 className="max-w-[550px] text-balance text-[36px] font-extrabold leading-[1.1] tracking-[-1px] text-primary lg:text-h1">
-              Perjalanan nyaman, kendaraan siap menemani.
+    <section className="bg-white pb-10 pt-10 lg:pb-16 lg:pt-14">
+      <div className="container-site">
+        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
+          <div className="order-2 lg:order-1">
+            <h1 className="h-display max-w-[520px] text-balance text-accent">
+              rental mobil &amp; perjalanan wisata nyaman buat kamu di{" "}
+              <span className="text-primary">{SERVICE_AREAS.join(", ")}</span>
             </h1>
-            <p className="mt-5 max-w-[600px] text-base font-normal leading-relaxed text-body-text lg:text-lg">
-              Rental mobil lepas kunci, dengan driver, charter, hingga perjalanan
-              wisata dan perjalanan dinas dari Cimahi, Bandung & Padalarang.
+            <p className="mt-4 max-w-[520px] text-sm font-bold leading-relaxed tracking-[-0.35px] text-body-text lg:text-base">
+              Dari rental lepas kunci, mobil dengan driver, charter antar-jemput,
+              hingga paket wisata dan perjalanan dinas — Mahessa Trans Holiday
+              siap menemani perjalananmu.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-4">
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <a
                 href={waGeneralLink()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn btn-primary btn-lg"
+                className="btn btn-primary btn-md"
               >
-                Konsultasi via WhatsApp
+                Konsultasi Gratis
               </a>
-              <Link
-                href="/armada"
-                className="btn btn-secondary border-[2.5px] px-[34px] py-[14px] text-base font-semibold"
-              >
+              <Link href="/armada" className="btn btn-secondary btn-md">
                 Lihat Armada
               </Link>
             </div>
+            <div class-name="" />
           </div>
 
-          <div className="mt-10 lg:mt-0">
+          <div className="order-1 lg:order-2">
             <Image
-              src="/images/vehicles/toyota-avanza.svg"
-              alt="Toyota Avanza New TSS G — armada Mahessa Trans Holiday"
+              src="/images/vehicles/toyota-hiace-premio.svg"
+              alt="Toyota Hiace Premio — armada Mahessa Trans Holiday"
               width={1200}
               height={800}
               priority
-              sizes="(max-width: 1024px) 100vw, 45vw"
-              className="aspect-[4/3] w-full rounded-2xl object-cover shadow-photo lg:aspect-video"
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              className="aspect-[4/3] w-full rounded-[24px] object-cover shadow-card"
             />
           </div>
         </div>
+
+        <div className="mt-8 flex flex-wrap gap-2">
+          {heroChips.map((chip) => (
+            <span key={chip} className="chip">
+              {chip}
+            </span>
+          ))}
+        </div>
+
+        <dl className="mt-10 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line pt-8 md:grid-cols-4">
+          <div>
+            <dt className="text-xs font-bold uppercase tracking-wide text-primary">
+              Unit Armada
+            </dt>
+            <dd className="mt-1 text-[32px] font-extrabold tracking-[-0.9px] text-accent">
+              {vehicles.length}+
+            </dd>
+            <dd className="text-xs font-semibold text-muted">Siap sewa harian</dd>
+          </div>
+          <div>
+            <dt className="text-xs font-bold uppercase tracking-wide text-primary">
+              Paket Wisata
+            </dt>
+            <dd className="mt-1 text-[32px] font-extrabold tracking-[-0.9px] text-accent">
+              {packages.length}
+            </dd>
+            <dd className="text-xs font-semibold text-muted">Destinasi all-in</dd>
+          </div>
+          <div>
+            <dt className="text-xs font-bold uppercase tracking-wide text-primary">
+              Area Layanan
+            </dt>
+            <dd className="mt-1 text-[32px] font-extrabold tracking-[-0.9px] text-accent">
+              3 Kota
+            </dd>
+            <dd className="text-xs font-semibold text-muted">
+              Cimahi, Bandung, Padalarang
+            </dd>
+          </div>
+          <div>
+            <dt className="text-xs font-bold uppercase tracking-wide text-primary">
+              Respon Admin
+            </dt>
+            <dd className="mt-1 text-[32px] font-extrabold tracking-[-0.9px] text-accent">
+              Cepat
+            </dd>
+            <dd className="text-xs font-semibold text-muted">via WhatsApp</dd>
+          </div>
+        </dl>
       </div>
     </section>
   );

@@ -1,17 +1,17 @@
 import { cn } from "@/lib/cn";
 
 type SectionHeadingProps = {
+  eyebrow?: string;
   title: string;
   subtitle?: string;
   align?: "left" | "center";
-  tone?: "primary" | "navy";
 };
 
 export default function SectionHeading({
+  eyebrow,
   title,
   subtitle,
   align = "center",
-  tone = "primary",
 }: SectionHeadingProps) {
   return (
     <div
@@ -20,18 +20,12 @@ export default function SectionHeading({
         align === "center" ? "mx-auto text-center" : "text-left",
       )}
     >
-      <h2
-        className={cn(
-          "text-balance text-[28px] font-bold leading-tight tracking-[-0.5px] md:text-h2",
-          tone === "navy" ? "text-navy" : "text-primary",
-        )}
-      >
-        {title}
-      </h2>
+      {eyebrow && <span className="eyebrow">{eyebrow}</span>}
+      <h2 className={cn("h-heading text-balance text-accent")}>{title}</h2>
       {subtitle && (
         <p
           className={cn(
-            "mt-4 text-sm leading-relaxed text-body-text md:text-base",
+            "mt-3 text-sm font-bold leading-relaxed tracking-[-0.35px] text-body-text",
             align === "center" && "mx-auto max-w-xl",
           )}
         >

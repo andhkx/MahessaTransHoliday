@@ -18,20 +18,23 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
         return (
           <div
             key={item.id}
-            className="overflow-hidden rounded-[10px] border border-line bg-white transition-colors duration-200"
+            className={cn(
+              "overflow-hidden rounded-[16px] border transition-colors duration-150",
+              isOpen ? "border-primary/40 bg-white" : "border-line bg-white",
+            )}
           >
             <button
               type="button"
               onClick={() => setOpenId(isOpen ? null : item.id)}
               aria-expanded={isOpen}
-              className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left transition-colors duration-200 hover:bg-surface md:px-6"
+              className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors duration-150 hover:bg-wa-surface/60 md:px-6"
             >
-              <span className="text-base font-semibold text-navy">
+              <span className="text-sm font-extrabold tracking-[-0.2px] text-accent md:text-base">
                 {item.question}
               </span>
               <svg
                 className={cn(
-                  "h-5 w-5 shrink-0 text-primary transition-transform duration-300",
+                  "h-5 w-5 shrink-0 text-primary transition-transform duration-500 [transition-timing-function:var(--ease-standard)]",
                   isOpen && "rotate-180",
                 )}
                 fill="none"
@@ -48,7 +51,7 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
             </button>
             <div className={cn("acc-panel", isOpen && "open")}>
               <div>
-                <p className="px-5 pb-5 text-[15px] leading-relaxed text-body-text md:px-6">
+                <p className="px-5 pb-5 text-sm font-semibold leading-relaxed tracking-[-0.2px] text-body-text md:px-6">
                   {item.answer}
                 </p>
               </div>

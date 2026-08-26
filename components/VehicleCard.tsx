@@ -20,52 +20,51 @@ export function vehiclePriceLine(vehicle: Vehicle): string {
 
 export default function VehicleCard({ vehicle, className }: VehicleCardProps) {
   return (
-    <article
-      className={cn(
-        "card card-lift group relative overflow-hidden",
-        className,
-      )}
-    >
+    <article className={cn("card card-lift group relative overflow-hidden", className)}>
       <Link
         href={`/armada/${vehicle.slug}`}
         className="block"
         aria-label={`Lihat detail ${vehicle.name}`}
       >
-        <div className="relative h-[220px] bg-line md:h-[240px]">
+        <div className="relative h-48 bg-wa-surface md:h-52">
           <Image
             src={vehicle.image}
             alt={`${vehicle.name} — rental Mahessa Trans Holiday`}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
           />
         </div>
-        {vehicle.badge && <span className="badge-pill">{vehicle.badge}</span>}
+        {vehicle.badge && (
+          <span className="absolute right-3 top-3 z-10 rounded-full bg-accent px-3 py-1.5 text-[11px] font-extrabold text-white">
+            {vehicle.badge}
+          </span>
+        )}
       </Link>
-      <div className="p-5 md:p-6">
-        <h3 className="text-[22px] font-bold leading-snug text-navy">
+      <div className="p-5">
+        <h3 className="text-base font-extrabold tracking-[-0.3px] text-accent">
           <Link
             href={`/armada/${vehicle.slug}`}
-            className="transition-colors duration-300 hover:text-primary"
+            className="transition-colors duration-150 hover:text-primary"
           >
             {vehicle.name}
           </Link>
         </h3>
-        <p className="mt-2.5 mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm font-medium text-muted">
+        <p className="mt-1.5 mb-3 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs font-bold tracking-[-0.2px] text-body-text">
           <span>{vehicle.capacity} seats</span>
           <span aria-hidden="true" className="text-line">·</span>
           <span>{vehicle.transmission}</span>
           <span aria-hidden="true" className="text-line">·</span>
           <span>{vehicle.fuelType}</span>
         </p>
-        <p className="mb-4 text-2xl font-bold text-primary md:text-[26px]">
+        <p className="mb-4 text-lg font-extrabold tracking-[-0.4px] text-primary">
           {vehiclePriceLine(vehicle)}
         </p>
         <a
           href={waVehicleLink(vehicle.name)}
           target="_blank"
           rel="noopener noreferrer"
-          className="btn btn-primary btn-card w-full transition-transform duration-200 hover:scale-[1.02]"
+          className="btn btn-primary btn-sm w-full"
         >
           Tanya via WhatsApp
         </a>
