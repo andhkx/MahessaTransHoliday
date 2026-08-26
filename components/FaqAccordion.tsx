@@ -6,7 +6,11 @@ import { ChevronDown } from "lucide-react";
 import type { FaqItem } from "@/lib/types";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
-const VISIBLE = 5;
+const VISIBLE = 6;
+
+type FaqAccordionProps = {
+  items: FaqItem[];
+};
 
 export default function FaqAccordion({ items }: FaqAccordionProps) {
   const reduce = useReducedMotion();
@@ -24,17 +28,17 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
           return (
             <div
               key={k}
-              className={`rounded-[18px] border bg-white transition-colors duration-300 ${
-                isOpen ? "border-primary/50" : "border-line"
+              className={`rounded-[16px] border bg-white transition-colors duration-300 ${
+                isOpen ? "border-primary/50 shadow-card" : "border-line"
               }`}
             >
               <button
                 type="button"
                 onClick={() => setOpen(isOpen ? "" : k)}
                 aria-expanded={isOpen}
-                className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+                className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition-colors duration-300 hover:bg-surface/60"
               >
-                <span className="text-[15px] font-extrabold text-heading">
+                <span className="text-[14px] font-extrabold text-heading md:text-[15px]">
                   {f.question}
                 </span>
                 <ChevronDown
@@ -76,7 +80,3 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
     </div>
   );
 }
-
-type FaqAccordionProps = {
-  items: FaqItem[];
-};

@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
+﻿import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
 import FaqAccordion from "@/components/FaqAccordion";
 import CtaSection from "@/components/CtaSection";
 import JsonLd from "@/components/JsonLd";
-import { faqExtra, faqMain } from "@/data/faq";
+import { faqMain } from "@/data/faq";
 
 export const metadata: Metadata = {
   title: "FAQ",
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 const faqPageLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: [...faqMain, ...faqExtra].map((item) => ({
+  mainEntity: faqMain.map((item) => ({
     "@type": "Question",
     name: item.question,
     acceptedAnswer: {
@@ -30,17 +30,12 @@ export default function FaqPage() {
     <>
       <JsonLd data={faqPageLd} />
       <PageHeader
-        title="Pertanyaan yang sering diajukan"
+        eyebrow="FAQ"
+        title="Pertanyaan yang sering ditanyakan."
         subtitle="Semua yang perlu kamu tahu sebelum reservasi. Tidak menemukan jawabannya? Hubungi kami via WhatsApp."
       />
-      <section className="py-12 lg:py-16">
-        <div className="container-site max-w-3xl">
-          <FaqAccordion items={faqMain} />
-          <h2 className="mb-6 mt-12 text-h5 font-bold text-primary">
-            Pertanyaan lainnya
-          </h2>
-          <FaqAccordion items={faqExtra} />
-        </div>
+      <section className="mx-auto w-full max-w-[860px] px-5 py-14 sm:px-8 md:px-12">
+        <FaqAccordion items={faqMain} />
       </section>
       <CtaSection />
     </>

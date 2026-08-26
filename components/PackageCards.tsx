@@ -1,11 +1,12 @@
 ﻿"use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
-import { Check, MessageCircle, Sparkles } from "lucide-react";
+import { ArrowUpRight, MapPin } from "lucide-react";
 import type { TravelPackage } from "@/lib/types";
 import { cn } from "@/lib/cn";
-import { formatIDR } from "@/lib/format";
+import { formatShort } from "@/lib/format";
 import useSnapActive from "./useSnapActive";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
@@ -21,90 +22,75 @@ export default function PackageCards({ packages }: PackageCardsProps) {
   return (
     <div
       ref={rowRef}
-      className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 scrollbar-none md:grid md:grid-cols-3 md:overflow-visible md:pb-0 xl:grid-cols-4"
+      className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 scrollbar-none sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-4"
     >
-      {packages.map((p, i) => {
-        const featured = Boolean(p.badge);
-        return (
-          <motion.div
-            key={p.id}
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5, delay: i * 0.08, ease: EASE }}
-            className={cn(
-              "w-[84vw] max-w-[360px] shrink-0 snap-start origin-left transition-transform duration-300 ease-out will-change-transform md:w-auto md:scale-100",
-              i === activeIdx ? "scale-100" : "scale-[0.92]",
-            )}
+      {packages.map((p, i) => (
+        <motion.div
+          key={p.id}
+          initial={reduce ? false : { opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5, delay: i * 0.07, ease: EASE }}
+          className={cn(
+            "w-[260px] shrink-0 snap-start transition-transform duration-300 ease-out will-change-transform sm:w-auto",
+            i === activeIdx ? "scale-100" : "scale-[0.93]",
+          )}
+        >
+          <Link
+            href={`/paket/${p.slug}`}
+            aria-label={`Lihat detail paket Hiace ${p.destination}`}
+            className="group flex h-full flex-col overflow-hidden rounded-[18px] border border-line bg-white shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-elevated"
           >
-            <article
-              className={cn(
-                "relative flex h-full min-h-[500px] flex-col rounded-[24px] border bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1",
-                featured
-                  ? "border-primary/50 shadow-[0_18px_44px_-14px_rgba(83,189,235,0.4)]"
-                  : "border-line hover:border-primary/40",
-              )}
-            >
-              {featured && p.badge && (
-                <span className="absolute right-5 top-5 inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-[10px] font-extrabold uppercase tracking-wide text-white">
-                  <Sparkles size={12} aria-hidden="true" />
+            <div className="relative aspect-[16/10] overflow-hidden bg-surface">
+              <Image
+                src={p.image}
+                alt={`Paket Hiace ${p.destination}`}
+                fill
+                sizes="(max-width: 640px) 65vw, (max-width: 1024px) 50vw, 25vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
+              />
+              <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 rounded-full border border-line bg-white/85 px-2.5 py-1 text-[10px] font-bold text-heading backdrop-blur-md">
+                <MapPin size={11} className="text-primary" aria-hidden="true" />
+                {p.duration}
+              </span>
+              {p.badge && (
+                <span className="absolute right-2.5 top-2.5 rounded-full bg-accent px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide text-white shadow-card">
                   {p.badge}
                 </span>
               )}
+            </div>
 
-              <p className="mb-3 font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-primary">
-                Hiace Â· {p.duration}
+            <div className="flex flex-1 flex-col p-4">
+              <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-primary">
+                Paket Hiace · All-In
               </p>
-              <h3 className="mb-2 text-2xl font-extrabold tracking-tight text-heading md:text-3xl">
+              <h3 className="mt-1 text-base font-bold leading-snug text-heading transition-colors duration-300 group-hover:text-accent md:text-lg">
                 {p.destination}
               </h3>
-              {featured && (
+              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted">
+                Mobil, driver, BBM, tol, dan parkir sudah termasuk.
+              </p>
+
+              <div className="mt-auto flex items-end justify-between gap-2 border-t border-line pt-3">
+                <div>
+                  <p className="text-sm font-extrabold tracking-tight text-accent">
+                    Mulai {formatShort(p.price)}
+                  </p>
+                  <p className="text-[10px] font-semibold text-muted">
+                    {p.durationHours} jam · {p.duration}
+                  </p>
+                </div>
                 <span
-                  className="mb-3 h-1 w-10 rounded-full bg-primary"
                   aria-hidden="true"
-                />
-              )}
-              <p className="text-base font-extrabold tracking-tight text-primary">
-                Mulai {formatIDR(p.price)}
-              </p>
-              <p className="mt-1 mb-5 text-xs font-bold text-muted">
-                All-in: mobil, driver, BBM, tol, parkir
-              </p>
-
-              <ul className="mb-6 flex-1 space-y-2.5">
-                {p.included.slice(0, 4).map((f) => (
-                  <li
-                    key={f}
-                    className="flex items-start gap-2.5 text-[13px] text-body-text"
-                  >
-                    <Check
-                      size={15}
-                      className={`mt-0.5 shrink-0 ${
-                        featured ? "text-primary" : "text-muted"
-                      }`}
-                      aria-hidden="true"
-                    />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-
-              <Link
-                href={`/paket/${p.slug}`}
-                className={cn(
-                  "inline-flex items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-extrabold transition-all hover:scale-[1.02] active:scale-[0.98]",
-                  featured
-                    ? "bg-accent text-white hover:bg-accent-hover"
-                    : "border border-line bg-white text-heading hover:border-primary/60 hover:text-primary",
-                )}
-              >
-                <MessageCircle size={16} aria-hidden="true" />
-                Lihat Detail Paket
-              </Link>
-            </article>
-          </motion.div>
-        );
-      })}
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line text-muted transition-all duration-300 group-hover:border-accent group-hover:bg-accent group-hover:text-white"
+                >
+                  <ArrowUpRight size={13} />
+                </span>
+              </div>
+            </div>
+          </Link>
+        </motion.div>
+      ))}
     </div>
   );
 }

@@ -15,48 +15,58 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="flex min-h-[calc(100dvh-200px)] items-center px-5 pb-10 pt-24 sm:px-8 md:px-12 md:pt-28 lg:px-20"
+      className="relative overflow-hidden bg-gradient-to-b from-surface via-background to-background px-5 pb-10 pt-24 sm:px-8 md:px-12 md:pt-28 lg:px-20"
     >
-      <div className="mx-auto grid w-full max-w-[1200px] items-center gap-10 lg:grid-cols-2 lg:gap-14">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-32 top-10 h-80 w-80 rounded-full bg-accent/[0.07] blur-3xl"
+      />
+
+      <div className="relative mx-auto grid w-full max-w-[1200px] items-center gap-10 lg:grid-cols-2 lg:gap-14">
         <motion.div
           initial={reduce ? false : { opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: EASE }}
         >
-          <h1 className="mb-5 text-[clamp(32px,4.6vw,52px)] font-extrabold leading-[1.08] tracking-tight text-heading">
+          <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-primary shadow-card">
+            <span className="h-1.5 w-1.5 rounded-full bg-success" />
+            {SERVICE_AREAS.join(" · ")}
+          </span>
+
+          <h1 className="mt-4 mb-5 text-[clamp(30px,4.6vw,50px)] font-extrabold leading-[1.08] tracking-tight text-heading">
             rental mobil &amp; wisata nyaman buat kamu di{" "}
             <span className="text-accent">Mahessa</span>
           </h1>
           <p className="mb-7 max-w-xl text-sm leading-relaxed text-body-text md:text-base">
             Dari rental lepas kunci, mobil dengan driver, charter antar-jemput,
-            hingga paket wisata dan perjalanan dinas dari{" "}
-            {SERVICE_AREAS.join(", ")} â€” semua dibikin gampang.
+            hingga paket wisata dan perjalanan dinas — harga jelas di awal,
+            tanpa biaya siluman.
           </p>
           <div className="flex flex-nowrap justify-start gap-2 sm:gap-3">
             <a
               href={waGeneralLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-accent px-3.5 py-2.5 text-[13px] font-extrabold text-white transition-all hover:scale-[1.02] hover:bg-accent-hover active:scale-[0.98] sm:px-5 sm:text-sm"
+              className="btn btn-primary inline-flex items-center gap-2 whitespace-nowrap px-5 py-3 text-sm"
             >
               <MessageCircle size={16} aria-hidden="true" />
               Konsultasi Gratis
             </a>
             <Link
               href="/armada"
-              className="inline-flex items-center gap-2 whitespace-nowrap rounded-full border border-line px-3.5 py-2.5 text-[13px] font-extrabold text-heading transition-all hover:border-primary/60 hover:bg-primary/5 hover:text-primary sm:px-5 sm:text-sm"
+              className="btn btn-secondary inline-flex items-center gap-2 whitespace-nowrap px-5 py-3 text-sm"
             >
               Lihat Armada
               <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </div>
 
-          <div className="mt-7 grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:gap-x-5 sm:gap-y-2.5">
+          <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2.5">
             {["Lepas Kunci 12/24 Jam", "Mobil + Driver", "Paket Wisata All-In"].map(
               (t) => (
                 <span
                   key={t}
-                  className="flex flex-col items-center gap-1.5 rounded-lg border border-line bg-white/60 px-2 py-2.5 text-center transition-colors duration-300 hover:border-primary/40 sm:flex-row sm:items-center sm:gap-1.5 sm:rounded-full sm:border-transparent sm:bg-transparent sm:px-0 sm:py-0 sm:text-left"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3.5 py-2 text-xs font-bold text-body-text shadow-sm transition-colors duration-300 hover:border-primary/40 hover:text-primary"
                 >
                   <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-accent">
                     <Check
@@ -66,16 +76,14 @@ export default function Hero() {
                       aria-hidden="true"
                     />
                   </span>
-                  <span className="text-[10px] font-bold leading-tight text-body-text sm:text-[13px]">
-                    {t}
-                  </span>
+                  {t}
                 </span>
               ),
             )}
           </div>
         </motion.div>
 
-        <div className="relative mx-auto w-full max-w-[520px] lg:max-w-[620px] lg:-translate-x-8">
+        <div className="relative mx-auto w-full max-w-[520px] lg:max-w-[600px]">
           <motion.div
             initial={reduce ? false : { opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
@@ -84,12 +92,12 @@ export default function Hero() {
           >
             <Image
               src="/images/vehicles/toyota-hiace-premio.svg"
-              alt="Toyota Hiace Premio â€” armada Mahessa Trans Holiday"
+              alt="Toyota Hiace Premio — armada Mahessa Trans Holiday"
               width={1024}
               height={683}
               priority
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="h-auto w-full rounded-[24px] object-cover shadow-[0_30px_70px_-20px_rgba(35,51,45,0.35)]"
+              className="h-auto w-full rounded-[24px] object-cover shadow-elevated ring-1 ring-line"
             />
           </motion.div>
         </div>

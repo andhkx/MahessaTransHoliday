@@ -5,7 +5,6 @@ import Stats from "@/components/Stats";
 import ServiceCards from "@/components/ServiceCards";
 import VehicleCards from "@/components/VehicleCards";
 import PackageCards from "@/components/PackageCards";
-import Testimonials from "@/components/Testimonials";
 import ProcessSection from "@/components/ProcessSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import CtaSection from "@/components/CtaSection";
@@ -14,11 +13,10 @@ import { getFeaturedVehicles } from "@/data/vehicles";
 import { getFeaturedPackages } from "@/data/packages";
 import { faqMain } from "@/data/faq";
 import { galleryImages } from "@/lib/gallery";
-import { testimonials } from "@/lib/testimonials";
 
 function ValueProps() {
   return (
-    <section className="border-y border-line bg-wa-surface/40 py-12 lg:py-16">
+    <section className="border-y border-line bg-surface/50 py-12 lg:py-16">
       <div className="mx-auto grid max-w-[1300px] grid-cols-1 gap-4 px-5 sm:grid-cols-2 sm:px-8 md:grid-cols-4 md:px-12">
         {[
           ["Unit Terawat", "Mobil bersih, terawat, dan siap dipakai untuk perjalananmu."],
@@ -28,10 +26,23 @@ function ValueProps() {
         ].map(([title, desc]) => (
           <div
             key={title}
-            className="rounded-[18px] border border-line bg-white p-5 transition-colors duration-300 hover:border-primary/40"
+            className="rounded-[18px] border border-line bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-card"
           >
-            <p className="mb-1 text-sm font-extrabold text-heading">{title}</p>
-            <p className="text-[13px] leading-relaxed text-muted">{desc}</p>
+            <span className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-surface text-primary">
+              <svg
+                className="h-4.5 w-4.5"
+                width="18"
+                height="18"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+              </svg>
+            </span>
+            <p className="text-sm font-extrabold text-heading">{title}</p>
+            <p className="mt-1 text-[13px] leading-relaxed text-muted">{desc}</p>
           </div>
         ))}
       </div>
@@ -42,7 +53,7 @@ function ValueProps() {
 function FeaturedArmada() {
   const featured = getFeaturedVehicles();
   return (
-    <section className="relative z-10 mx-auto w-full max-w-[1300px] px-5 py-16 sm:px-8 md:px-12 md:py-24">
+    <section className="relative z-10 mx-auto w-full max-w-[1300px] px-5 py-16 sm:px-8 md:px-12 md:py-20">
       <SectionHeading
         eyebrow="Armada"
         title="Kendaraan untuk perjalananmu."
@@ -52,7 +63,7 @@ function FeaturedArmada() {
       <div className="mt-8 text-center">
         <Link
           href="/armada"
-          className="inline-flex items-center gap-2 rounded-full border border-line px-6 py-3.5 text-sm font-bold text-heading transition-all hover:border-primary/50 hover:text-primary"
+          className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-6 py-3 text-sm font-bold text-heading transition-all duration-300 hover:border-primary/50 hover:text-primary"
         >
           Lihat Semua Armada →
         </Link>
@@ -64,7 +75,7 @@ function FeaturedArmada() {
 function FeaturedPackages() {
   const featured = getFeaturedPackages();
   return (
-    <section className="border-y border-line bg-wa-surface/40 py-16 md:py-24">
+    <section className="border-y border-line bg-surface/50 py-16 md:py-20">
       <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
         <SectionHeading
           eyebrow="Harga Paket"
@@ -75,26 +86,11 @@ function FeaturedPackages() {
         <div className="mt-10 text-center">
           <Link
             href="/paket"
-            className="inline-flex items-center gap-2 rounded-xl border border-line px-5 py-3.5 text-sm font-bold text-heading transition-all hover:bg-white"
+            className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-6 py-3 text-sm font-bold text-heading transition-all duration-300 hover:border-primary/50 hover:text-primary"
           >
-            Lihat Semua Paket
+            Lihat Semua Paket →
           </Link>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function TestimoniSection() {
-  return (
-    <section className="bg-white py-16 md:py-24">
-      <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
-        <SectionHeading
-          eyebrow="Testimoni"
-          title="Kata mereka setelah perjalanan."
-          subtitle="Chat asli dari penumpang yang sudah berangkat bersama kami."
-        />
-        <Testimonials items={testimonials} />
       </div>
     </section>
   );
@@ -103,7 +99,7 @@ function TestimoniSection() {
 function GalleryShowcase() {
   const [first, ...rest] = galleryImages;
   return (
-    <section className="border-y border-line bg-wa-surface/40 py-16 md:py-24">
+    <section className="bg-white py-16 md:py-20">
       <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
         <SectionHeading
           eyebrow="Galeri"
@@ -116,7 +112,7 @@ function GalleryShowcase() {
           width={1200}
           height={675}
           sizes="(max-width: 1024px) 100vw, 1100px"
-          className="mb-6 aspect-video w-full rounded-[24px] object-cover shadow-card"
+          className="mb-5 aspect-video w-full rounded-[24px] object-cover shadow-card"
         />
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {rest.slice(0, 4).map((img) => (
@@ -148,7 +144,10 @@ function GalleryShowcase() {
 
 function FaqHome() {
   return (
-    <section id="faq" className="mx-auto w-full max-w-[920px] px-5 py-16 sm:px-8 md:px-12 md:py-24">
+    <section
+      id="faq"
+      className="mx-auto w-full max-w-[860px] px-5 py-16 sm:px-8 md:px-12 md:py-20"
+    >
       <SectionHeading
         eyebrow="FAQ"
         title="Pertanyaan yang sering ditanyakan."
@@ -177,7 +176,6 @@ export default function HomePage() {
       <FeaturedArmada />
       <FeaturedPackages />
       <ProcessSection />
-      <TestimoniSection />
       <GalleryShowcase />
       <FaqHome />
       <CtaSection />
