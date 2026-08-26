@@ -1,69 +1,194 @@
+import Link from "next/link";
+import Hero from "@/components/Hero";
+import ServiceCards from "@/components/ServiceCards";
+import VehicleCard from "@/components/VehicleCard";
+import PackageCard from "@/components/PackageCard";
+import SectionHeading from "@/components/SectionHeading";
+import FaqAccordion from "@/components/FaqAccordion";
+import CtaSection from "@/components/CtaSection";
+import { getFeaturedVehicles } from "@/data/vehicles";
+import { getFeaturedPackages } from "@/data/packages";
+import { valueProps } from "@/data/services";
+import { faqMain } from "@/data/faq";
+import { galleryImages } from "@/lib/gallery";
 import Image from "next/image";
 
-export default function Home() {
+function FeaturedArmada() {
+  const featured = getFeaturedVehicles();
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <section className="bg-mist py-16 sm:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-end justify-between gap-4">
+          <SectionHeading
+            align="left"
+            title="Pilih kendaraan untuk perjalananmu"
+            subtitle="Mulai dari mobil compact yang irit hingga kendaraan premium dan rombongan."
+          />
+          <Link
+            href="/armada"
+            className="hidden shrink-0 items-center gap-1 text-sm font-bold text-primary hover:text-secondary sm:inline-flex"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+            Lihat Semua <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+        <div className="-mx-4 flex snap-x gap-5 overflow-x-auto px-4 pb-2 lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-0">
+          {featured.map((vehicle) => (
+            <VehicleCard
+              key={vehicle.id}
+              vehicle={vehicle}
+              className="min-w-[270px] snap-start lg:min-w-0"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          ))}
         </div>
-      </main>
-    </div>
+        <Link
+          href="/armada"
+          className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-primary sm:hidden"
+        >
+          Lihat Semua Armada <span aria-hidden="true">→</span>
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function FeaturedPackages() {
+  const featured = getFeaturedPackages();
+  return (
+    <section className="py-16 sm:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex items-end justify-between gap-4">
+          <SectionHeading
+            align="left"
+            title="Perjalanan tanpa ribet"
+            subtitle="Paket all-in Hiace: mobil, driver, BBM, tol, parkir — semua sudah termasuk."
+          />
+          <Link
+            href="/paket"
+            className="hidden shrink-0 items-center gap-1 text-sm font-bold text-primary hover:text-secondary sm:inline-flex"
+          >
+            Lihat Semua Paket <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {featured.map((packageItem) => (
+            <PackageCard key={packageItem.id} packageItem={packageItem} />
+          ))}
+        </div>
+        <Link
+          href="/paket"
+          className="mt-6 inline-flex items-center gap-1 text-sm font-bold text-primary sm:hidden"
+        >
+          Lihat Semua Paket <span aria-hidden="true">→</span>
+        </Link>
+      </div>
+    </section>
+  );
+}
+
+function ValueProps() {
+  return (
+    <section className="bg-mist py-16 sm:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <SectionHeading title="Kenapa pilih Mahessa?" />
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {valueProps.map((item) => (
+            <div key={item.id} className="rounded-2xl bg-white p-6 shadow-sm">
+              <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <svg
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </span>
+              <h3 className="mt-4 text-lg font-bold text-primary">
+                {item.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-gray-600">
+                {item.text}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function GalleryShowcase() {
+  const [first, ...rest] = galleryImages;
+  return (
+    <section className="py-16 sm:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <SectionHeading
+          title="Cerita perjalanan bersama Mahessa"
+          subtitle="Dokumentasi nyata perjalanan para penumpang kami."
+        />
+        <Image
+          src={first.src}
+          alt={first.alt}
+          width={1280}
+          height={720}
+          sizes="(max-width: 1024px) 100vw, 80vw"
+          className="aspect-[16/9] w-full rounded-3xl object-cover shadow-md"
+        />
+        <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {rest.slice(0, 4).map((img) => (
+            <Image
+              key={img.src}
+              src={img.src}
+              alt={img.alt}
+              width={480}
+              height={360}
+              sizes="(max-width: 640px) 50vw, 25vw"
+              className="aspect-[4/3] w-full rounded-2xl object-cover shadow-sm"
+            />
+          ))}
+        </div>
+        <div className="mt-8 text-center">
+          <Link
+            href="/galeri"
+            className="inline-flex items-center gap-1 text-sm font-bold text-primary hover:text-secondary"
+          >
+            Lihat Galeri Lengkap <span aria-hidden="true">→</span>
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <>
+      <Hero />
+      <ServiceCards />
+      <FeaturedArmada />
+      <FeaturedPackages />
+      <ValueProps />
+      <GalleryShowcase />
+      <section className="bg-mist py-16 sm:py-20" id="faq">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+          <SectionHeading title="Pertanyaan yang sering diajukan" />
+          <FaqAccordion items={faqMain} />
+          <div className="mt-8 text-center">
+            <Link
+              href="/faq"
+              className="inline-flex items-center gap-1 text-sm font-bold text-primary hover:text-secondary"
+            >
+              Lihat Semua FAQ <span aria-hidden="true">→</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+      <CtaSection />
+    </>
   );
 }
