@@ -14,15 +14,20 @@ export default function SectionHeading({
   return (
     <div
       className={cn(
-        "mb-10 max-w-2xl",
+        "mb-8 max-w-2xl lg:mb-10",
         align === "center" ? "mx-auto text-center" : "text-left",
       )}
     >
-      <h2 className="text-3xl font-extrabold tracking-tight text-primary sm:text-4xl">
+      <h2 className="text-[26px] font-bold leading-8 tracking-[-0.3px] text-primary md:text-h2 md:leading-[44px]">
         {title}
       </h2>
       {subtitle && (
-        <p className="mt-3 text-base leading-relaxed text-gray-600">
+        <p
+          className={cn(
+            "mt-3 text-sm leading-5 text-body-text md:text-base",
+            align === "center" && "mx-auto",
+          )}
+        >
           {subtitle}
         </p>
       )}

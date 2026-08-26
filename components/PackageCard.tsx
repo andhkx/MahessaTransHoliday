@@ -9,13 +9,13 @@ type PackageCardProps = {
   className?: string;
 };
 
-export default function PackageCard({ packageItem, className }: PackageCardProps) {
+export default function PackageCard({
+  packageItem,
+  className,
+}: PackageCardProps) {
   return (
     <article
-      className={cn(
-        "flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-lg",
-        className,
-      )}
+      className={cn("card card-lift group overflow-hidden", className)}
     >
       <Image
         src={packageItem.image}
@@ -23,22 +23,19 @@ export default function PackageCard({ packageItem, className }: PackageCardProps
         width={640}
         height={420}
         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        className="aspect-[16/10] w-full object-cover"
+        className="h-[180px] w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
       />
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-xl font-extrabold text-primary">
-          {packageItem.destination}
-        </h3>
-        <span className="mt-2 w-fit rounded-full bg-mist px-3 py-1 text-xs font-bold text-gray-600">
+      <div className="p-4 md:p-5">
+        <h3 className="text-h5 font-bold text-black">{packageItem.destination}</h3>
+        <span className="mt-2 inline-block rounded-md bg-surface px-3 py-1 text-caption font-medium uppercase text-body-text">
           {packageItem.duration}
         </span>
-        <p className="mt-3 text-base font-extrabold text-ink">
-          Mulai{" "}
-          <span className="text-accent">{formatIDR(packageItem.price)}</span>
+        <p className="mb-3 mt-3 text-xl font-bold text-accent md:text-[22px]">
+          Mulai {formatIDR(packageItem.price)}
         </p>
         <Link
           href={`/paket/${packageItem.slug}`}
-          className="mt-4 inline-flex items-center justify-center rounded-full border-2 border-primary px-5 py-2.5 text-sm font-bold text-primary transition-colors hover:bg-primary hover:text-white"
+          className="btn btn-secondary btn-sm w-full"
         >
           Lihat Detail
         </Link>

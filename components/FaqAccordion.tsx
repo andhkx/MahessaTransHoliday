@@ -18,7 +18,10 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
         return (
           <div
             key={item.id}
-            className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
+            className={cn(
+              "card overflow-hidden transition-colors duration-200",
+              isOpen && "border-primary/10 bg-primary/[0.03]",
+            )}
           >
             <button
               type="button"
@@ -26,12 +29,12 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
               aria-expanded={isOpen}
               className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
             >
-              <span className="text-sm font-bold text-ink sm:text-base">
+              <span className="text-base font-bold text-ink-soft">
                 {item.question}
               </span>
               <svg
                 className={cn(
-                  "h-5 w-5 shrink-0 text-accent transition-transform duration-200",
+                  "h-5 w-5 shrink-0 text-accent transition-transform duration-300",
                   isOpen && "rotate-180",
                 )}
                 fill="none"
@@ -46,11 +49,13 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
                 />
               </svg>
             </button>
-            {isOpen && (
-              <p className="px-5 pb-5 text-sm leading-relaxed text-gray-600">
-                {item.answer}
-              </p>
-            )}
+            <div className={cn("acc-panel", isOpen && "open")}>
+              <div>
+                <p className="px-5 pb-5 text-sm leading-5 text-body-text">
+                  {item.answer}
+                </p>
+              </div>
+            </div>
           </div>
         );
       })}

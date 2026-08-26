@@ -5,14 +5,21 @@ type PageHeaderProps = {
 
 export default function PageHeader({ title, subtitle }: PageHeaderProps) {
   return (
-    <section className="bg-gradient-to-b from-mist to-white pt-28 pb-12 sm:pt-32 sm:pb-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="bg-surface pb-10 pt-[104px] lg:pb-14 lg:pt-[134px]">
+      <div className="container-site">
         <div className="max-w-3xl">
-          <h1 className="text-3xl font-extrabold tracking-tight text-primary sm:text-4xl lg:text-5xl">
+          <span className="eyebrow">
+            <span
+              aria-hidden="true"
+              className="inline-block w-8 border-t-2 border-dashed border-accent"
+            />
+            Mahessa Trans Holiday
+          </span>
+          <h1 className="mt-3 text-[28px] font-bold leading-9 tracking-[-0.3px] text-primary md:text-h2 md:leading-[44px]">
             {title}
           </h1>
           {subtitle && (
-            <p className="mt-4 text-base leading-relaxed text-gray-600 sm:text-lg">
+            <p className="mt-4 text-base leading-relaxed text-body-text lg:text-lg">
               {subtitle}
             </p>
           )}
