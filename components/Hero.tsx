@@ -38,18 +38,15 @@ export default function Hero() {
           </span>
 
           <h1 className="text-[clamp(38px,6vw,68px)] font-extrabold leading-[0.98] tracking-[-0.04em] text-heading">
-            Sewa Mobil
+            Perjalanan Nyaman,
             <br />
-            Jadi Lebih
+            Bersama
             <br />
-            <span className="text-accent">Mudah.</span>
+            <span className="text-accent">Mahessa Trans</span>
           </h1>
 
           <p className="mt-6 max-w-xl text-[15px] leading-relaxed text-body-text md:text-base">
-            Temukan kendaraan ideal untuk setiap perjalanan Anda. Sopir
-            profesional, harga transparan, dan unit terawat &mdash; dari city
-            car harian hingga Hiace untuk rombongan. Cepat, aman, dan tanpa
-            ribet.
+            Nikmati perjalanan bebas ribet dengan armada terawat dan sopir profesional. Dari city car harian hingga Hiace untuk rombongan — tinggal duduk tenang, semua kami urus.
           </p>
 
           <div className="mt-7 flex flex-wrap items-center gap-3">

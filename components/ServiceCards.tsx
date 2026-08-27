@@ -10,14 +10,14 @@ import useSnapActive from "./useSnapActive";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 const ICONS: Record<string, React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>> = {
-  "rental-mobil": CarFront,
+  "transfer-bandara": Plane,
   "mobil-driver": UserRound,
   "charter-transfer": MapPinned,
-  "paket-wisata": Plane,
+  "paket-wisata": CarFront,
 };
 
 const IMAGES: Record<string, string> = {
-  "rental-mobil": "/images/vehicles/toyota-agya.svg",
+  "transfer-bandara": "/images/vehicles/toyota-hiace-premio.svg",
   "mobil-driver": "/images/vehicles/toyota-innova-reborn.svg",
   "charter-transfer": "/images/vehicles/toyota-hiace-premio.svg",
   "paket-wisata": "/images/packages/hiace-bandung.svg",

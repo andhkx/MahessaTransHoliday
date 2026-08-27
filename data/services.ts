@@ -2,12 +2,12 @@ import type { Service } from "@/lib/types";
 
 export const services: Service[] = [
   {
-    id: "rental-mobil",
-    icon: "🚗",
-    title: "Rental Mobil",
-    text: "Sewa mobil dengan driver berpengalaman. Nyaman dan aman.",
-    ctaLabel: "Lihat Armada",
-    ctaHref: "/armada",
+    id: "transfer-bandara",
+    icon: "✈️",
+    title: "Transfer Bandara",
+    text: "Antar-jemput bandara Husein Sastranegara, Kertajati, dan Soekarno-Hatta. Tepat waktu, harga pasti.",
+    ctaLabel: "Pesan Transfer",
+    ctaHref: "/kontak",
   },
   {
     id: "mobil-driver",
