@@ -5,7 +5,7 @@ export const services: Service[] = [
     id: "rental-mobil",
     icon: "🚗",
     title: "Rental Mobil",
-    text: "Lepas kunci 12 atau 24 jam. Pilih sendiri, berkendara sendiri.",
+    text: "Sewa mobil dengan driver berpengalaman. Nyaman dan aman.",
     ctaLabel: "Lihat Armada",
     ctaHref: "/armada",
   },
@@ -44,7 +44,7 @@ export const valueProps = [
   {
     id: "pilihan-fleksibel",
     title: "Pilihan Fleksibel",
-    text: "Lepas kunci atau dengan driver, sesuai kebutuhan dan budget.",
+    text: "Dengan driver profesional, sesuai kebutuhan dan budget.",
   },
   {
     id: "berbagai-kebutuhan",

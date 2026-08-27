@@ -15,10 +15,8 @@ export function vehiclePrice(vehicle: Vehicle): {
   price: string | null;
   note: string;
 } {
-  const lease24 = vehicle.pricing.leaseKey["24h"];
-  if (lease24) return { price: formatShort(lease24), note: "/ 24 jam lepas kunci" };
-  const driver = vehicle.pricing.withDriver.startingPrice;
-  if (driver) return { price: formatShort(driver), note: "charter + driver" };
+  const driver = vehicle.pricing.startingPrice;
+  if (driver) return { price: formatShort(driver), note: "mulai / 24 jam" };
   return { price: null, note: "Hubungi untuk harga" };
 }
 

@@ -38,7 +38,7 @@ export default function Hero() {
             <span className="text-accent">Mahessa</span>
           </h1>
           <p className="mb-7 max-w-xl text-sm leading-relaxed text-body-text md:text-base">
-            Dari rental lepas kunci, mobil dengan driver, charter antar-jemput,
+            Dari rental mobil dengan driver, charter antar-jemput,
             hingga paket wisata dan perjalanan dinas — harga jelas di awal,
             tanpa biaya siluman.
           </p>
@@ -62,7 +62,7 @@ export default function Hero() {
           </div>
 
           <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2.5">
-            {["Lepas Kunci 12/24 Jam", "Mobil + Driver", "Paket Wisata All-In"].map(
+            {["Mobil + Driver", "Charter 24 Jam", "Paket Wisata All-In"].map(
               (t) => (
                 <span
                   key={t}

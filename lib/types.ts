@@ -28,13 +28,7 @@ export type Vehicle = {
   gallery: string[];
   badge?: string;
   pricing: {
-    leaseKey: {
-      "12h": number | null;
-      "24h": number | null;
-    };
-    withDriver: {
-      startingPrice: number | null;
-    };
+    startingPrice: number | null;
   };
   description: string[];
   suitableFor: string[];

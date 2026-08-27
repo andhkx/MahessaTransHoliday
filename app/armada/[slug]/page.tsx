@@ -40,7 +40,7 @@ export async function generateMetadata({
 const orderSteps = [
   "Hubungi via WhatsApp dengan detail perjalanan (tanggal, durasi, tujuan)",
   "Tim kami konfirmasi ketersediaan dan harga",
-  "Serah terima kunci (atau berangkat dengan driver)",
+  "Driver kami jemput di titik yang disepakati",
   "Nikmati perjalanan!",
 ];
 
@@ -52,9 +52,7 @@ export default async function VehicleDetailPage({
   if (!vehicle) notFound();
 
   const related = getRelatedVehicles(vehicle.slug);
-  const lease12 = vehicle.pricing.leaseKey["12h"];
-  const lease24 = vehicle.pricing.leaseKey["24h"];
-  const driverPrice = vehicle.pricing.withDriver.startingPrice;
+  const startingPrice = vehicle.pricing.startingPrice;
 
   const breadcrumbLd = {
     "@context": "https://schema.org",
@@ -94,11 +92,9 @@ export default async function VehicleDetailPage({
               wisata, perjalanan dinas, maupun transfer.
             </p>
             <p className="mb-6 text-xl font-extrabold tracking-tight text-primary">
-              {lease24
-                ? `Mulai ${formatIDR(lease24)} / 24 jam`
-                : driverPrice
-                  ? `Charter mulai ${formatIDR(driverPrice)}`
-                  : "Hubungi untuk harga"}
+              {startingPrice
+                ? `Mulai ${formatIDR(startingPrice)} / 24 jam`
+                : "Hubungi untuk harga"}
             </p>
             <div className="flex flex-wrap gap-3">
               <a
@@ -137,22 +133,10 @@ export default async function VehicleDetailPage({
               <h2 className="text-h5 mb-4 text-heading">Harga Sewa</h2>
               <table className="w-full text-sm">
                 <tbody>
-                  <tr className="border-b border-line">
-                    <td className="py-3 font-semibold text-body-text">Lepas Kunci 12 Jam</td>
-                    <td className="py-3 text-right font-extrabold text-heading">
-                      {lease12 ? formatIDR(lease12) : "Hubungi untuk harga"}
-                    </td>
-                  </tr>
-                  <tr className="border-b border-line">
-                    <td className="py-3 font-semibold text-body-text">Lepas Kunci 24 Jam</td>
-                    <td className="py-3 text-right font-extrabold text-heading">
-                      {lease24 ? formatIDR(lease24) : "Hubungi untuk harga"}
-                    </td>
-                  </tr>
                   <tr>
                     <td className="py-3 font-semibold text-body-text">Dengan Driver</td>
                     <td className="py-3 text-right font-extrabold text-heading">
-                      {driverPrice ? `Mulai ${formatIDR(driverPrice)}` : "Hubungi untuk penawaran"}
+                      {startingPrice ? `Mulai ${formatIDR(startingPrice)} / 24 jam` : "Hubungi untuk penawaran"}
                     </td>
                   </tr>
                 </tbody>

@@ -6,7 +6,7 @@ import { BadgeCheck, CarFront, MapPin, Wallet } from "lucide-react";
 const EASE = [0.4, 0, 0.2, 1] as const;
 
 const STATS = [
-  { value: "Rp350rb", label: "Rental Mulai", sub: "Lepas kunci 24 jam", Icon: Wallet },
+  { value: "Rp350rb", label: "Rental Mulai", sub: "Dengan driver 24 jam", Icon: Wallet },
   { value: "15+", label: "Unit Armada", sub: "Compact sampai Hiace", Icon: CarFront },
   { value: "10", label: "Paket Wisata", sub: "All-in tanpa ribet", Icon: MapPin },
   { value: "100%", label: "Harga Transparan", sub: "Tanpa biaya siluman", Icon: BadgeCheck },

@@ -249,7 +249,7 @@ export const packages: TravelPackage[] = [
     destination: "Bromo",
     duration: "2 Hari 1 Malam",
     durationHours: 48,
-    price: 3750000,
+    price: 10000000,
     image: "/images/packages/hiace-bromo.svg",
     description: [
       "Sunrise di Penanjakan, lautan pasir, dan kawah Gunung Bromo adalah pengalaman wajib sekali seumur hidup. Perjalanan dari Bandung ditempuh nyaman dengan Hiace via tol trans-Jawa.",
@@ -285,9 +285,9 @@ export const packages: TravelPackage[] = [
     serviceAreas: SERVICE_AREAS,
     faq: packageFaq,
     seo: {
-      title: "Sewa Hiace Bromo 2D1N Mulai Rp3,75 Juta",
+      title: "Sewa Hiace Bromo 2D1N Mulai Rp10 Juta",
       description:
-        "Paket Hiace Bromo 2 hari 1 malam mulai Rp3.750.000. Sunrise Penanjakan, lautan pasir, kawah Bromo. Berangkat dari Bandung all-in.",
+        "Paket Hiace Bromo 2 hari 1 malam mulai Rp10.000.000. Sunrise Penanjakan, lautan pasir, kawah Bromo. Berangkat dari Bandung all-in.",
       keywords: ["hiace bromo", "open trip bromo bandung", "paket bromo"],
     },
   },
@@ -383,7 +383,7 @@ export const packages: TravelPackage[] = [
     badge: "Premium",
     duration: "4 Hari 3 Malam",
     durationHours: 90,
-    price: 12750000,
+    price: 18000000,
     image: "/images/packages/hiace-bali.svg",
     description: [
       "Paket premium Bali 4 hari 3 malam: dari pantai Kuta, Uluwatu, Tanah Lot, hingga Ubud dan Bedugul. Tiket penyeberangan Ketapangâ€“Gilimanuk sudah termasuk.",
@@ -434,9 +434,9 @@ export const packages: TravelPackage[] = [
     serviceAreas: SERVICE_AREAS,
     faq: packageFaq,
     seo: {
-      title: "Sewa Hiace Bali 4D3N Mulai Rp12,75 Juta",
+      title: "Sewa Hiace Bali 4D3N Mulai Rp18 Juta",
       description:
-        "Paket Hiace Bali 4 hari 3 malam mulai Rp12.750.000. Kuta, Uluwatu, Ubud, Tanah Lot. Termasuk tiket penyeberangan. Berangkat dari Bandung.",
+        "Paket Hiace Bali 4 hari 3 malam mulai Rp18.000.000. Kuta, Uluwatu, Ubud, Tanah Lot. Termasuk tiket penyeberangan. Berangkat dari Bandung.",
       keywords: ["hiace bali", "paket wisata bali dari bandung", "sewa hiace bali"],
     },
   },

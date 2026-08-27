@@ -40,8 +40,8 @@ export default function Navbar() {
             <Image
               src="/images/logo_mahessa.png"
               alt="Mahessa Trans Holiday"
-              width={150}
-              height={40}
+              width={200}
+              height={50}
               priority
               className="h-9 w-auto object-contain md:h-10"
             />

@@ -11,7 +11,7 @@ const STEPS = [
     step: "01",
     title: "Ceritain",
     time: "< 5 menit",
-    desc: "Chat admin: tanggal, tujuan, jumlah orang, dan mau lepas kunci atau pakai driver.",
+    desc: "Chat admin: tanggal, tujuan, jumlah orang, dan kebutuhan perjalananmu.",
   },
   {
     step: "02",

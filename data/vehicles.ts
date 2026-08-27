@@ -3,56 +3,6 @@ import { SERVICE_AREAS } from "@/lib/constants";
 
 export const vehicles: Vehicle[] = [
   {
-    id: "honda-brio",
-    slug: "honda-brio",
-    name: "Honda Brio E AT",
-    category: "entry",
-    transmission: "Automatic",
-    capacity: 5,
-    fuelType: "Bensin",
-    image: "/images/vehicles/honda-brio.svg",
-    gallery: [
-      "/images/vehicles/honda-brio.svg",
-      "/images/vehicles/honda-brio-2.svg",
-    ],
-    pricing: {
-      leaseKey: { "12h": null, "24h": 350000 },
-      withDriver: { startingPrice: null },
-    },
-    description: [
-      "Honda Brio adalah pilihan hemat untuk perjalanan dalam kota. Ukurannya compact, mudah diparkir di area padat seperti Braga atau Alun-Alun Bandung, dan konsumsi BBM-nya sangat irit.",
-      "Unit kami bersih dan terawat, cocok untuk kamu yang butuh mobil practical untuk aktivitas harian maupun city tour singkat.",
-    ],
-    suitableFor: [
-      "Perjalanan dalam kota",
-      "City tour",
-      "Airport transfer",
-      "Pasangan kecil",
-    ],
-    features: [
-      "AC Dingin",
-      "Audio System",
-      "Power Steering",
-      "Kursi Nyaman",
-      "Bagasi Cukup",
-      "Window/Kaca Tinted",
-    ],
-    specs: [
-      { label: "Kapasitas Penumpang", value: "5 orang" },
-      { label: "Transmisi", value: "Automatic" },
-      { label: "Bahan Bakar", value: "Bensin" },
-      { label: "AC", value: "Full AC" },
-      { label: "Bagasi", value: "Cukup untuk 2-3 koper kecil" },
-    ],
-    serviceAreas: SERVICE_AREAS,
-    seo: {
-      title: "Rental Honda Brio Cimahi & Bandung",
-      description:
-        "Sewa Honda Brio di Cimahi, Bandung dan Padalarang. Lepas kunci mulai Rp350.000/24 jam atau dengan driver. Hubungi Mahessa Trans Holiday.",
-      keywords: ["rental brio", "sewa brio cimahi", "brio bandung"],
-    },
-  },
-  {
     id: "toyota-agya",
     slug: "toyota-agya",
     name: "Toyota Agya G AT",
@@ -66,8 +16,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-agya-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": 340000 },
-      withDriver: { startingPrice: null },
+      startingPrice: 340000,
     },
     description: [
       "Toyota Agya adalah city car yang lincah dan irit. Cocok untuk perjalanan singkat dalam kota, jemput kerabat dari stasiun, atau kebutuhan mobilitas harian.",
@@ -115,8 +64,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-calya-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": 400000 },
-      withDriver: { startingPrice: null },
+      startingPrice: 400000,
     },
     description: [
       "Toyota Calya adalah MPV 7 penumpang paling ekonomis di kelasnya. Pilihan tepat untuk keluarga kecil yang butuh kapasitas lebih tanpa harus keluar budget besar.",
@@ -165,8 +113,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/daihatsu-terios-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": 550000 },
-      withDriver: { startingPrice: null },
+      startingPrice: 550000,
     },
     description: [
       "Daihatsu Terios adalah SUV ringkas yang nyaman untuk berbagai medan. Ground clearance tingginya membuat percaya diri melewati jalanan menuju wisata alam seperti Ciwidey atau Lembang.",
@@ -216,12 +163,11 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-avanza-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": 450000 },
-      withDriver: { startingPrice: 650000 },
+      startingPrice: 450000,
     },
     description: [
       "Toyota Avanza adalah pilihan tepat untuk keluarga atau rombongan kecil. Dengan kapasitas 7 penumpang dan konsumsi bahan bakar yang irit, Avanza cocok untuk perjalanan dalam kota maupun luar kota.",
-      "Mobil ini terawat, bersih, dan siap untuk petualangan Anda â€” dari city tour Bandung hingga perjalanan dinas antar kota.",
+      "Mobil ini terawat, bersih, dan siap untuk petualangan Anda — dari city tour Bandung hingga perjalanan dinas antar kota.",
     ],
     suitableFor: [
       "Perjalanan keluarga",
@@ -248,7 +194,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Avanza Cimahi & Bandung",
       description:
-        "Rental Toyota Avanza di Cimahi, Bandung, dan Padalarang untuk kebutuhan keluarga, wisata, perjalanan dinas, maupun transfer. Lepas kunci mulai Rp450.000/24 jam.",
+        "Rental Toyota Avanza di Cimahi, Bandung, dan Padalarang untuk kebutuhan keluarga, wisata, perjalanan dinas, maupun transfer. Mulai Rp450.000/24 jam.",
       keywords: ["rental avanza", "sewa avanza cimahi", "avanza bandung"],
     },
   },
@@ -266,8 +212,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-rush-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": 550000 },
-      withDriver: { startingPrice: null },
+      startingPrice: 550000,
     },
     description: [
       "Toyota Rush GR Sport menggabungkan tampilan SUV yang stylish dengan kenyamanan 7 penumpang. Cocok untuk kamu yang ingin tampil beda saat berkendara.",
@@ -316,8 +261,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/honda-city-hatchback-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": 500000 },
-      withDriver: { startingPrice: null },
+      startingPrice: 550000,
     },
     description: [
       "Honda City Hatchback RS menawarkan pengalaman berkendara modern dengan desain sporty dan fitur lengkap. Nyaman untuk perjalanan dalam kota maupun jarak menengah.",
@@ -366,8 +310,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-innova-reborn-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": 1300000 },
-      withDriver: { startingPrice: 1600000 },
+      startingPrice: 1300000,
     },
     description: [
       "Toyota Innova Reborn adalah standar kenyamanan kelas premium mid. Kabin senyap, kursi empuk, dan suspensi yang halus membuat perjalanan jauh terasa ringan.",
@@ -416,8 +359,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-innova-zenix-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": 1500000 },
-      withDriver: { startingPrice: 1800000 },
+      startingPrice: 1500000,
     },
     description: [
       "Toyota Innova Zenix Hybrid adalah MPV generasi terbaru dengan teknologi hybrid yang halus dan efisien. Desain interior modern memberi kesan premium sejak duduk.",
@@ -466,8 +408,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/mitsubishi-pajero-sport-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": 1200000 },
-      withDriver: { startingPrice: 1600000 },
+      startingPrice: 1200000,
     },
     description: [
       "Mitsubishi Pajero Sport Dakar adalah SUV tangguh untuk segala medan. Sangat cocok untuk perjalanan wisata ke destinasi dengan jalanan menantang seperti Bromo atau Kawah Ijen.",
@@ -516,8 +457,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-fortuner-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": 1100000 },
-      withDriver: { startingPrice: 1500000 },
+      startingPrice: 1100000,
     },
     description: [
       "Toyota Fortuner VRZ menghadirkan keseimbangan sempurna antara kemewahan dan ketangguhan. Interior premium dengan posisi duduk tinggi yang nyaman.",
@@ -567,8 +507,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-alphard-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": 2500000 },
-      withDriver: { startingPrice: 2800000 },
+      startingPrice: 2500000,
     },
     description: [
       "Toyota Alphard adalah ikon kemewahan MPV. Kursi captain seat yang melapangkan, kabin senyap, dan fitur hiburan lengkap menjadikan setiap perjalanan terasa istimewa.",
@@ -618,8 +557,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-hiace-premio-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": null },
-      withDriver: { startingPrice: 1800000 },
+      startingPrice: 1800000,
     },
     description: [
       "Toyota Hiace Premio adalah kendaraan andalan untuk rombongan. Kapasitas 14â€“15 penumpang dengan kabin tinggi yang memungkinkan gerakan bebas selama perjalanan.",
@@ -668,8 +606,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-hiace-commuter-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": null },
-      withDriver: { startingPrice: 1500000 },
+      startingPrice: 1500000,
     },
     description: [
       "Toyota Hiace Commuter adalah pilihan ekonomis untuk angkutan rombongan besar. Kapasitas hingga 16 penumpang dengan konfigurasi kursi efisien.",
@@ -718,8 +655,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/isuzu-elf-2.svg",
     ],
     pricing: {
-      leaseKey: { "12h": null, "24h": null },
-      withDriver: { startingPrice: 1800000 },
+      startingPrice: 1800000,
     },
     description: [
       "Isuzu Elf Long adalah microbus tangguh untuk rombongan besar. Kapasitas hingga 16 penumpang dengan ruang bagasi luas untuk perlengkapan perjalanan.",
@@ -757,7 +693,6 @@ export const vehicles: Vehicle[] = [
 ];
 
 export const featuredVehicleSlugs = [
-  "honda-brio",
   "toyota-avanza",
   "toyota-innova-reborn",
   "toyota-alphard",

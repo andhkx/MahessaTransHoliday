@@ -57,7 +57,7 @@ const localBusinessJsonLd = {
   name: SITE_NAME,
   description: SITE_TAGLINE,
   url: SITE_URL,
-  telephone: "+6281234567890",
+  telephone: "+62895327077214",
   address: {
     "@type": "PostalAddress",
     streetAddress: ADDRESS,
@@ -66,7 +66,7 @@ const localBusinessJsonLd = {
     addressCountry: "ID",
   },
   areaServed: SERVICE_AREAS.map((area) => ({ "@type": "Place", name: area })),
-  priceRange: "Rp350.000 - Rp12.750.000",
+  priceRange: "Rp350.000 - Rp18.000.000",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

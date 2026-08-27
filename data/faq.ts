@@ -2,22 +2,10 @@ import type { FaqItem } from "@/lib/types";
 
 export const faqMain: FaqItem[] = [
   {
-    id: "rental-lepas-kunci",
-    question: "Apakah tersedia rental lepas kunci?",
-    answer:
-      "Ya, semua unit kami tersedia untuk rental lepas kunci dengan durasi 12 jam atau 24 jam. Syarat: KTP, SIM A, dan data pendukung.",
-  },
-  {
     id: "mobil-dengan-driver",
     question: "Apakah semua mobil bisa dengan driver?",
     answer:
       "Ya, semua unit di armada kami dapat disewa dengan driver profesional.",
-  },
-  {
-    id: "beda-harga-12-24-jam",
-    question: "Apa perbedaan harga 12 jam dan 24 jam?",
-    answer:
-      "Harga 12 jam sedang kami update. Hubungi via WhatsApp untuk penawaran terkini.",
   },
   {
     id: "antar-jemput-kcic",
@@ -53,18 +41,6 @@ export const faqMain: FaqItem[] = [
 
 export const faqExtra: FaqItem[] = [
   {
-    id: "syarat-rental-lepas-kunci",
-    question: "Apa saja syarat untuk rental lepas kunci?",
-    answer:
-      "Syaratnya: KTP asli, SIM A yang masih berlaku, dan satu dokumen pendukung (KK/NPWP/ID karyawan). Data pendukung hanya difoto untuk arsip, tidak dipungut fisik.",
-  },
-  {
-    id: "deposit",
-    question: "Apakah ada deposit saat sewa lepas kunci?",
-    answer:
-      "Ya, ada deposit yang besarannya tergantung jenis unit. Deposit dikembalikan penuh setelah unit kembali dalam kondisi baik sesuai waktu kesepakatan.",
-  },
-  {
     id: "pembayaran",
     question: "Bagaimana sistem pembayarannya?",
     answer:
@@ -81,18 +57,6 @@ export const faqExtra: FaqItem[] = [
     question: "Di area mana saja Mahessa melayani?",
     answer:
       "Kami berbasis di Cimahi, Bandung, dan Padalarang. Untuk tujuan luar kota seperti Jakarta, Yogyakarta, Bromo, hingga Bali, silakan lihat halaman paket perjalanan.",
-  },
-  {
-    id: "lepas-kunci-luar-kota",
-    question: "Boleh membawa unit lepas kunci ke luar kota?",
-    answer:
-      "Boleh, dengan konfirmasi terlebih dahulu saat reservasi. Beberapa tujuan jauh mungkin memiliki ketentuan tambahan yang akan diinformasikan sebelumnya.",
-  },
-  {
-    id: "bbm-lepas-kunci",
-    question: "Untuk rental lepas kunci, BBM ditanggung siapa?",
-    answer:
-      "Untuk sewa lepas kunci, BBM ditanggung penyewa. Unit diserahkan dengan tangki penuh atau sesuai kesepakatan, dan dikembalikan dalam kondisi yang sama.",
   },
   {
     id: "driver-menginap",

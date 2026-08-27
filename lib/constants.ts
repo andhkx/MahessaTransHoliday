@@ -2,11 +2,11 @@ export const SITE_NAME = "Mahessa Trans Holiday";
 export const SITE_TAGLINE =
   "Rental mobil, charter, wisata, dan perjalanan untuk berbagai kebutuhan.";
 export const SITE_DESCRIPTION =
-  "Rental mobil lepas kunci, dengan driver, charter, hingga perjalanan wisata dan perjalanan dinas dari Cimahi, Bandung & Padalarang.";
+  "Rental mobil dengan driver, charter, hingga perjalanan wisata dan perjalanan dinas dari Cimahi, Bandung & Padalarang.";
 export const SITE_URL = "https://mahessaholiday.my.id";
 
-export const WHATSAPP_NUMBER = "6281234567890";
-export const WHATSAPP_DISPLAY = "+62 812-3456-7890";
+export const WHATSAPP_NUMBER = "62895327077214";
+export const WHATSAPP_DISPLAY = "+62 895-3270-77214";
 
 export const ADDRESS = "Jl. Contoh Alamat No. 123, Cimahi, Jawa Barat";
 export const MAPS_EMBED_URL =

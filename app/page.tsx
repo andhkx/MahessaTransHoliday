@@ -20,7 +20,7 @@ function ValueProps() {
       <div className="mx-auto grid max-w-[1300px] grid-cols-1 gap-4 px-5 sm:grid-cols-2 sm:px-8 md:grid-cols-4 md:px-12">
         {[
           ["Unit Terawat", "Mobil bersih, terawat, dan siap dipakai untuk perjalananmu."],
-          ["Pilihan Fleksibel", "Lepas kunci atau dengan driver, sesuai kebutuhan dan budget."],
+          ["Pilihan Fleksibel", "Dengan driver profesional, sesuai kebutuhan dan budget."],
           ["Berbagai Kebutuhan", "Wisata, city tour, airport transfer, charter, perjalanan dinas."],
           ["Terbukti", "Telah melayani ratusan penumpang untuk berbagai jenis perjalanan."],
         ].map(([title, desc]) => (
