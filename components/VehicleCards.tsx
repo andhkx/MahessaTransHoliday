@@ -14,6 +14,7 @@ const EASE = [0.4, 0, 0.2, 1] as const;
 type VehicleCardsProps = {
   vehicles: Vehicle[];
   showYearPill?: boolean;
+  forceMode?: "grid" | "single";
 };
 
 export function vehiclePriceLabel(vehicle: Vehicle): string {
@@ -25,15 +26,25 @@ export function vehiclePriceLabel(vehicle: Vehicle): string {
 export default function VehicleCards({
   vehicles,
   showYearPill = true,
+  forceMode,
 }: VehicleCardsProps) {
   const reduce = useReducedMotion();
   const [rowRef, activeIdx] = useSnapActive();
+
+  // Determine layout: if forceMode says "grid", show as grid on mobile too;
+  // if "single" or auto + many items on mobile, show as carousel.
+  const useGridOnMobile = forceMode === "grid";
 
   return (
     <div className="relative -mx-5 md:mx-0">
       <div
         ref={rowRef}
-        className="flex snap-x snap-mandatory snap-center gap-3 overflow-x-auto px-[calc(50vw-130px)] pb-4 scrollbar-none md:snap-align-none md:grid md:grid-cols-2 md:gap-4 md:overflow-visible md:px-0 lg:grid-cols-3 xl:grid-cols-4"
+        className={cn(
+          "flex snap-x snap-mandatory snap-center gap-3 overflow-x-auto px-[calc(50vw-130px)] pb-4 scrollbar-none md:snap-align-none md:gap-4 md:overflow-visible md:px-0",
+          useGridOnMobile
+            ? "grid grid-cols-2 px-5 sm:grid-cols-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+            : "md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4",
+        )}
       >
       {vehicles.map((vehicle, i) => {
         const price = vehiclePriceLabel(vehicle);
@@ -46,9 +57,11 @@ export default function VehicleCards({
             transition={{ duration: 0.5, delay: i * 0.07, ease: EASE }}
             className={cn(
               "w-[260px] shrink-0 snap-center transition-all duration-300 ease-out will-change-transform md:snap-align-start md:w-auto",
-              i === activeIdx
+              useGridOnMobile
                 ? "scale-100 opacity-100"
-                : "scale-[0.88] opacity-60",
+                : i === activeIdx
+                  ? "scale-100 opacity-100"
+                  : "scale-[0.88] opacity-60",
             )}
           >
             <Link

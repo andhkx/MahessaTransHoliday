@@ -3,8 +3,9 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { ArrowRight } from "lucide-react";
 import VehicleCards from "@/components/VehicleCards";
-import type { Vehicle, VehicleCategory } from "@/lib/types";
+import { type Vehicle, type VehicleCategory } from "@/lib/types";
 import { cn } from "@/lib/cn";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
@@ -20,6 +21,13 @@ const CATEGORIES: Array<{ id: Filter; label: string }> = [
   { id: "group", label: "Group" },
 ];
 
+const FEATURED_SLUGS = [
+  "toyota-avanza",
+  "toyota-innova-reborn",
+  "toyota-hiace-premio",
+  "toyota-alphard",
+];
+
 type Props = {
   vehicles: Vehicle[];
 };
@@ -28,10 +36,15 @@ export default function ArmadaShowcaseClient({ vehicles }: Props) {
   const reduce = useReducedMotion();
   const [active, setActive] = useState<Filter>("Semua");
 
-  const filtered = useMemo(
-    () => (active === "Semua" ? vehicles : vehicles.filter((v) => v.category === active)),
-    [vehicles, active],
+  const featured = useMemo(
+    () => vehicles.filter((v) => FEATURED_SLUGS.includes(v.slug)),
+    [vehicles],
   );
+
+  const filtered = useMemo(() => {
+    if (active === "Semua") return featured;
+    return featured.filter((v) => v.category === active);
+  }, [featured, active]);
 
   return (
     <div>
@@ -72,23 +85,10 @@ export default function ArmadaShowcaseClient({ vehicles }: Props) {
       <div className="mt-10 text-center">
         <Link
           href="/armada"
-          className="inline-flex items-center gap-2 self-start rounded-full border-2 border-line bg-white px-5 py-2.5 text-sm font-extrabold text-heading transition-all hover:border-accent hover:text-accent"
+          className="inline-flex items-center gap-2 rounded-full border-2 border-line bg-white px-5 py-2.5 text-sm font-extrabold text-heading transition-all hover:border-accent hover:text-accent"
         >
           Lihat Semua {vehicles.length} Unit
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2.2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-          </svg>
+          <ArrowRight size={14} aria-hidden="true" />
         </Link>
       </div>
     </div>

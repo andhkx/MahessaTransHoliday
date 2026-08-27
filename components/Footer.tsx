@@ -233,6 +233,17 @@ export default function Footer() {
             <span>Paket wisata</span>
           </p>
         </div>
+        <div className="mx-auto flex w-full max-w-[1300px] items-center justify-center gap-1.5 px-5 pb-4 text-[11px] font-bold uppercase tracking-[0.18em] text-white/30 sm:px-8 md:px-12">
+          <span>Created by</span>
+          <a
+            href="https://hitou.my.id"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/50 transition-colors hover:text-white"
+          >
+            hitou.my.id
+          </a>
+        </div>
       </div>
     </footer>
   );

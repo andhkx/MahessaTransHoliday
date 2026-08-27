@@ -32,10 +32,10 @@ export default function CtaSection({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.6, ease: EASE }}
-        className="overflow-hidden rounded-[28px] border border-line bg-white shadow-elevated"
+        className="overflow-hidden rounded-[28px] border-2 border-accent/20 bg-white shadow-elevated"
       >
         <div className="grid lg:grid-cols-2">
-          <div className="relative bg-accent p-8 text-white md:p-12">
+          <div className="relative bg-heading p-8 text-white md:p-12">
             <div
               aria-hidden="true"
               className="pointer-events-none absolute -right-12 -top-12 h-56 w-56 rounded-full bg-white/[0.08]"
@@ -46,15 +46,15 @@ export default function CtaSection({
             />
 
             <div className="relative">
-              <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-sky-100">
+              <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/15 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white">
                 <span className="h-1.5 w-1.5 rounded-full bg-white" />
                 Konsultasi Gratis
               </span>
 
-              <h2 className="mb-4 max-w-md text-3xl font-extrabold leading-[1.05] tracking-[-0.03em] md:text-[40px]">
+              <h2 className="mb-4 max-w-md text-3xl font-extrabold leading-[1.05] tracking-[-0.03em] text-white md:text-[40px]">
                 {title}
               </h2>
-              <p className="mb-8 max-w-md text-sm leading-relaxed text-white/80 md:text-base">
+              <p className="mb-8 max-w-md text-sm leading-relaxed text-white/90 md:text-base">
                 {text}
               </p>
 

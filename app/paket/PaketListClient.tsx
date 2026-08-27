@@ -1,57 +1,54 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { Search, SlidersHorizontal, LayoutGrid, Rows3 } from "lucide-react";
-import VehicleCards from "@/components/VehicleCards";
-import type { Vehicle, VehicleCategory } from "@/lib/types";
+import { LayoutGrid, Rows3, MapPin, Search } from "lucide-react";
+import PackageCards from "@/components/PackageCards";
+import type { TravelPackage } from "@/lib/types";
 import { cn } from "@/lib/cn";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
-type Filter = "Semua" | VehicleCategory;
+type Region = "Semua" | "Jawa" | "Luar Jawa";
 type ViewMode = "grid" | "single";
 
-const CATEGORIES: Array<{ id: Filter; label: string }> = [
+const REGIONS: Array<{ id: Region; label: string }> = [
   { id: "Semua", label: "Semua" },
-  { id: "entry", label: "City Car" },
-  { id: "midrange", label: "MPV" },
-  { id: "premium", label: "SUV" },
-  { id: "luxury", label: "Luxury" },
-  { id: "group", label: "Group" },
+  { id: "Jawa", label: "Jawa" },
+  { id: "Luar Jawa", label: "Luar Jawa" },
 ];
 
+const JAWA = ["Bandung", "Ciwidey", "Lembang", "Garut", "Jakarta", "Yogyakarta", "Semarang", "Bromo"];
+
 type Props = {
-  vehicles: Vehicle[];
+  packages: TravelPackage[];
 };
 
-export default function ArmadaListClient({ vehicles }: Props) {
+export default function PaketListClient({ packages }: Props) {
   const reduce = useReducedMotion();
-  const [active, setActive] = useState<Filter>("Semua");
+  const [active, setActive] = useState<Region>("Semua");
   const [query, setQuery] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
 
-  // Auto-switch to single view when a category filter is applied
   useEffect(() => {
-    if (active !== "Semua") {
-      setViewMode("single");
-    } else {
-      setViewMode("grid");
-    }
+    if (active !== "Semua") setViewMode("single");
+    else setViewMode("grid");
   }, [active]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return vehicles.filter((v) => {
-      const matchCat = active === "Semua" || v.category === active;
+    return packages.filter((p) => {
+      const matchRegion =
+        active === "Semua" ||
+        (active === "Jawa" && JAWA.includes(p.destination)) ||
+        (active === "Luar Jawa" && !JAWA.includes(p.destination));
       const matchQuery =
         !q ||
-        v.name.toLowerCase().includes(q) ||
-        v.transmission.toLowerCase().includes(q) ||
-        v.fuelType.toLowerCase().includes(q);
-      return matchCat && matchQuery;
+        p.destination.toLowerCase().includes(q) ||
+        p.duration.toLowerCase().includes(q);
+      return matchRegion && matchQuery;
     });
-  }, [vehicles, active, query]);
+  }, [packages, active, query]);
 
   return (
     <div>
@@ -59,20 +56,22 @@ export default function ArmadaListClient({ vehicles }: Props) {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-1 flex-wrap items-center gap-2">
             <span className="hidden items-center gap-1.5 pr-2 text-[11px] font-bold uppercase tracking-[0.18em] text-muted sm:flex">
-              <SlidersHorizontal size={13} aria-hidden="true" />
-              Tipe
+              <MapPin size={13} aria-hidden="true" />
+              Area
             </span>
-            {CATEGORIES.map((c) => {
-              const isActive = c.id === active;
+            {REGIONS.map((r) => {
+              const isActive = r.id === active;
               const count =
-                c.id === "Semua"
-                  ? vehicles.length
-                  : vehicles.filter((v) => v.category === c.id).length;
+                r.id === "Semua"
+                  ? packages.length
+                  : r.id === "Jawa"
+                    ? packages.filter((p) => JAWA.includes(p.destination)).length
+                    : packages.filter((p) => !JAWA.includes(p.destination)).length;
               return (
                 <button
-                  key={c.id}
+                  key={r.id}
                   type="button"
-                  onClick={() => setActive(c.id)}
+                  onClick={() => setActive(r.id)}
                   aria-pressed={isActive}
                   className={cn(
                     "rounded-full border px-3.5 py-2 text-[12px] font-extrabold transition-all duration-300",
@@ -81,7 +80,7 @@ export default function ArmadaListClient({ vehicles }: Props) {
                       : "border-line bg-white text-body-text hover:border-accent/50 hover:text-accent",
                   )}
                 >
-                  {c.label}
+                  {r.label}
                   <span
                     className={cn(
                       "ml-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-bold",
@@ -137,7 +136,7 @@ export default function ArmadaListClient({ vehicles }: Props) {
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Cari unit (Avanza, Innova...)"
+                placeholder="Cari paket (Bandung, Bali...)"
                 className="w-full rounded-full border border-line bg-white py-2.5 pl-9 pr-3 text-[13px] font-bold text-body-text outline-none transition-all placeholder:font-normal placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/15"
               />
             </label>
@@ -154,10 +153,7 @@ export default function ArmadaListClient({ vehicles }: Props) {
             exit={reduce ? undefined : { opacity: 0, y: -8 }}
             transition={{ duration: 0.3, ease: EASE }}
           >
-            <VehicleCards
-              vehicles={filtered}
-              forceMode={viewMode}
-            />
+            <PackageCards packages={filtered} forceMode={viewMode} />
           </motion.div>
         ) : (
           <motion.div
@@ -168,7 +164,7 @@ export default function ArmadaListClient({ vehicles }: Props) {
             className="rounded-2xl border border-dashed border-line bg-white p-12 text-center"
           >
             <p className="text-base font-extrabold text-heading">
-              Tidak ada unit yang cocok.
+              Tidak ada paket yang cocok.
             </p>
             <p className="mt-1 text-sm text-muted">
               Coba ubah filter atau kata kunci pencarianmu.
@@ -178,7 +174,7 @@ export default function ArmadaListClient({ vehicles }: Props) {
       </AnimatePresence>
 
       <p className="mt-6 text-center text-[11px] font-bold uppercase tracking-[0.18em] text-muted">
-        Menampilkan {filtered.length} dari {vehicles.length} unit
+        Menampilkan {filtered.length} dari {packages.length} paket
       </p>
     </div>
   );

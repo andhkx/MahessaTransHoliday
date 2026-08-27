@@ -13,17 +13,24 @@ const EASE = [0.4, 0, 0.2, 1] as const;
 
 type PackageCardsProps = {
   packages: TravelPackage[];
+  forceMode?: "grid" | "single";
 };
 
-export default function PackageCards({ packages }: PackageCardsProps) {
+export default function PackageCards({ packages, forceMode }: PackageCardsProps) {
   const reduce = useReducedMotion();
   const [rowRef, activeIdx] = useSnapActive();
+  const useGridOnMobile = forceMode === "grid";
 
   return (
     <div className="relative -mx-5 md:mx-0">
       <div
         ref={rowRef}
-        className="flex snap-x snap-mandatory snap-center gap-3 overflow-x-auto px-[calc(50vw-130px)] pb-4 scrollbar-none md:snap-align-none md:grid md:grid-cols-2 md:gap-4 md:overflow-visible md:px-0 lg:grid-cols-4"
+        className={cn(
+          "flex snap-x snap-mandatory snap-center gap-3 overflow-x-auto px-[calc(50vw-130px)] pb-4 scrollbar-none md:snap-align-none md:gap-4 md:overflow-visible md:px-0",
+          useGridOnMobile
+            ? "grid grid-cols-2 px-5 sm:grid-cols-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-4"
+            : "md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-4",
+        )}
       >
       {packages.map((p, i) => (
         <motion.div
@@ -34,9 +41,11 @@ export default function PackageCards({ packages }: PackageCardsProps) {
           transition={{ duration: 0.5, delay: i * 0.07, ease: EASE }}
           className={cn(
             "w-[260px] shrink-0 snap-center transition-all duration-300 ease-out will-change-transform md:snap-align-start md:w-auto",
-            i === activeIdx
+            useGridOnMobile
               ? "scale-100 opacity-100"
-              : "scale-[0.88] opacity-60",
+              : i === activeIdx
+                ? "scale-100 opacity-100"
+                : "scale-[0.88] opacity-60",
           )}
         >
           <Link

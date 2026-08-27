@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
-import PackageCards from "@/components/PackageCards";
+import PaketListClient from "./PaketListClient";
 import CtaSection from "@/components/CtaSection";
 import { packages } from "@/data/packages";
 
@@ -20,7 +20,7 @@ export default function PaketPage() {
         subtitle="All-in Hiace: mobil, driver, BBM, tol, parkir — harga jelas di awal, tanpa biaya siluman."
       />
       <section className="mx-auto w-full max-w-[1300px] px-5 py-16 sm:px-8 md:px-12">
-        <PackageCards packages={packages} />
+        <PaketListClient packages={packages} />
       </section>
       <CtaSection
         title="Tidak menemukan tujuanmu?"

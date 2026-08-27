@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowRight, Check, MessageCircle, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, CarFront, Check, MessageCircle, ShieldCheck, Sparkles, Wallet } from "lucide-react";
 import { SERVICE_AREAS, SITE_NAME } from "@/lib/constants";
 import { waGeneralLink } from "@/lib/whatsapp";
 
@@ -117,19 +117,27 @@ export default function Hero() {
               className="absolute -bottom-4 left-3 flex items-center gap-2.5 rounded-2xl border border-line bg-white/95 p-2.5 shadow-elevated backdrop-blur sm:-bottom-5 sm:-left-3 sm:gap-3 sm:p-3 sm:pr-5"
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-white sm:h-10 sm:w-10">
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2.2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4Z" />
-                </svg>
+                <Wallet size={18} strokeWidth={2.2} aria-hidden="true" />
+              </span>
+              <div className="leading-tight">
+                <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-muted sm:text-[10px]">
+                  Mulai Dari
+                </p>
+                <p className="text-[14px] font-extrabold tracking-tight text-accent sm:text-[18px]">
+                  Rp 350rb
+                  <span className="ml-1 text-[10px] font-bold text-muted sm:text-[11px]">/ 24 jam</span>
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
+              className="absolute right-3 top-4 flex items-center gap-2.5 rounded-2xl border border-line bg-white/95 p-2.5 pr-4 shadow-elevated backdrop-blur sm:right-auto sm:-right-2 sm:top-6 sm:p-3 sm:pr-5"
+            >
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-white sm:h-10 sm:w-10">
+                <CarFront size={18} strokeWidth={2.2} aria-hidden="true" />
               </span>
               <div className="leading-tight">
                 <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-muted sm:text-[10px]">
@@ -139,21 +147,6 @@ export default function Hero() {
                   15+ Unit Tersedia
                 </p>
               </div>
-            </motion.div>
-
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
-              className="absolute right-3 top-4 block rounded-2xl border border-line bg-white/95 p-2.5 pr-4 shadow-elevated backdrop-blur sm:right-auto sm:-right-2 sm:top-6 sm:p-3 sm:pr-5"
-            >
-              <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-muted sm:text-[10px]">
-                Mulai Dari
-              </p>
-              <p className="text-[14px] font-extrabold tracking-tight text-accent sm:text-[18px]">
-                Rp 350rb
-                <span className="ml-1 text-[10px] font-bold text-muted sm:text-[11px]">/ 24 jam</span>
-              </p>
             </motion.div>
           </motion.div>
         </div>
