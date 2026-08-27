@@ -51,7 +51,7 @@ export default function CtaSection({
                 Konsultasi Gratis
               </span>
 
-              <h2 className="mb-4 max-w-md text-3xl font-extrabold leading-[1.05] tracking-[-0.03em] text-white md:text-[40px]">
+              <h2 className="mb-4 max-w-md text-3xl font-extrabold leading-[1.05] tracking-[-0.03em] md:text-[40px]" style={{ color: "#ffffff" }}>
                 {title}
               </h2>
               <p className="mb-8 max-w-md text-sm leading-relaxed text-white/90 md:text-base">

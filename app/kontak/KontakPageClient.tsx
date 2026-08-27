@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
+import { WHATSAPP_NUMBER } from "@/lib/constants";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -81,6 +82,23 @@ export default function KontakPageClient() {
           transition={{ duration: 0.5, ease: EASE }}
           onSubmit={(e) => {
             e.preventDefault();
+            const fd = new FormData(e.currentTarget);
+            const nama = fd.get("nama") || "";
+            const wa = fd.get("wa") || "";
+            const tanggal = fd.get("tanggal") || "";
+            const penumpang = fd.get("penumpang") || "";
+            const pesan = fd.get("pesan") || "";
+            const msg = encodeURIComponent(
+              `Halo Mahessa Trans Holiday, saya ingin reservasi.\n\n` +
+              `Topik: ${topic}\n` +
+              `Nama: ${nama}\n` +
+              `No. WA: ${wa}\n` +
+              (tanggal ? `Tanggal: ${tanggal}\n` : "") +
+              (penumpang ? `Jumlah Penumpang: ${penumpang}\n` : "") +
+              (pesan ? `Pesan: ${pesan}\n` : "") +
+              `\nTerima kasih.`
+            );
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
             setSubmitted(true);
           }}
           className="rounded-[24px] border border-line bg-white p-6 shadow-card md:p-8"
@@ -150,14 +168,15 @@ export default function KontakPageClient() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="Nama Lengkap" placeholder="Nama kamu" required />
-                <Field label="Nomor WhatsApp" placeholder="08xxx" type="tel" required />
-                <Field label="Tanggal Berangkat" type="date" />
-                <Field label="Jumlah Penumpang" type="number" placeholder="2" />
+                <Field name="nama" label="Nama Lengkap" placeholder="Nama kamu" required />
+                <Field name="wa" label="Nomor WhatsApp" placeholder="08xxx" type="tel" required />
+                <Field name="tanggal" label="Tanggal Berangkat" type="date" />
+                <Field name="penumpang" label="Jumlah Penumpang" type="number" placeholder="2" />
               </div>
 
               <div className="mt-4">
                 <Field
+                  name="pesan"
                   label="Pesan"
                   placeholder="Tujuan, jenis armada, atau detail lain..."
                   multiline
@@ -288,12 +307,14 @@ export default function KontakPageClient() {
 }
 
 function Field({
+  name,
   label,
   placeholder,
   type = "text",
   required,
   multiline,
 }: {
+  name: string;
   label: string;
   placeholder?: string;
   type?: string;
@@ -310,6 +331,7 @@ function Field({
       </span>
       {multiline ? (
         <textarea
+          name={name}
           required={required}
           rows={4}
           placeholder={placeholder}
@@ -317,6 +339,7 @@ function Field({
         />
       ) : (
         <input
+          name={name}
           type={type}
           required={required}
           placeholder={placeholder}
