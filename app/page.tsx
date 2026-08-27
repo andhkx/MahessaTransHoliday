@@ -147,7 +147,7 @@ function FeaturedPackages() {
           title="Perjalanan tanpa ribet."
           subtitle="Mobil, driver, BBM, tol, parkir — semua sudah termasuk. Pilih tujuannya, sisanya biar kami."
         />
-        <PackageCards packages={featured} />
+        <PackageCards packages={featured} forceMode="single" />
         <div className="mt-10 text-center">
           <Link href="/paket" className="text-link">
             Lihat Semua Paket

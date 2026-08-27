@@ -25,7 +25,7 @@ export default function ArmadaShowcaseClient({ vehicles }: Props) {
 
   return (
     <div>
-      <VehicleCards vehicles={featured} />
+      <VehicleCards vehicles={featured} forceMode="single" />
 
       <div className="mt-10 text-center">
         <Link
