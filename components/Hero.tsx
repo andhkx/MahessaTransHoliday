@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowRight, Check, MessageCircle } from "lucide-react";
-import { SERVICE_AREAS } from "@/lib/constants";
+import { ArrowRight, Check, MessageCircle, ShieldCheck, Sparkles } from "lucide-react";
+import { SERVICE_AREAS, SITE_NAME } from "@/lib/constants";
 import { waGeneralLink } from "@/lib/whatsapp";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
@@ -15,90 +15,146 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative overflow-hidden bg-gradient-to-b from-surface via-background to-background px-5 pb-10 pt-24 sm:px-8 md:px-12 md:pt-28 lg:px-20"
+      className="relative overflow-hidden bg-background px-5 pb-12 pt-24 sm:px-8 md:px-12 md:pt-28"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-32 top-10 h-80 w-80 rounded-full bg-accent/[0.07] blur-3xl"
+        className="pointer-events-none absolute -right-40 top-20 h-96 w-96 rounded-full bg-accent/[0.06] blur-3xl"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-32 bottom-20 h-80 w-80 rounded-full bg-primary/[0.05] blur-3xl"
       />
 
-      <div className="relative mx-auto grid w-full max-w-[1200px] items-center gap-10 lg:grid-cols-2 lg:gap-14">
+      <div className="relative mx-auto grid w-full max-w-[1300px] items-center gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-12">
         <motion.div
           initial={reduce ? false : { opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: EASE }}
         >
-          <span className="mb-3 inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-primary shadow-card">
-            <span className="h-1.5 w-1.5 rounded-full bg-success" />
-            {SERVICE_AREAS.join(" · ")}
+          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-primary shadow-card">
+            <span className="flex h-1.5 w-1.5 rounded-full bg-success" />
+            {SERVICE_AREAS.join(" · ")} &mdash; buka 24/7
           </span>
 
-          <h1 className="mt-4 mb-5 text-[clamp(30px,4.6vw,50px)] font-extrabold leading-[1.08] tracking-tight text-heading">
-            rental mobil &amp; wisata nyaman buat kamu di{" "}
-            <span className="text-accent">Mahessa</span>
+          <h1 className="text-[clamp(38px,6vw,68px)] font-extrabold leading-[0.98] tracking-[-0.04em] text-heading">
+            Sewa Mobil
+            <br />
+            Jadi Lebih
+            <br />
+            <span className="text-accent">Mudah.</span>
           </h1>
-          <p className="mb-7 max-w-xl text-sm leading-relaxed text-body-text md:text-base">
-            Dari rental mobil dengan driver, charter antar-jemput,
-            hingga paket wisata dan perjalanan dinas — harga jelas di awal,
-            tanpa biaya siluman.
+
+          <p className="mt-6 max-w-xl text-[15px] leading-relaxed text-body-text md:text-base">
+            Temukan kendaraan ideal untuk setiap perjalanan Anda. Sopir
+            profesional, harga transparan, dan unit terawat &mdash; dari city
+            car harian hingga Hiace untuk rombongan. Cepat, aman, dan tanpa
+            ribet.
           </p>
-          <div className="flex flex-nowrap justify-start gap-2 sm:gap-3">
+
+          <div className="mt-7 flex flex-wrap items-center gap-3">
+            <a
+              href="#armada"
+              className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-extrabold text-white shadow-[0_10px_24px_-10px_rgba(0,86,145,0.55)] transition-all hover:scale-[1.03] hover:bg-accent-hover active:scale-[0.97]"
+            >
+              Lihat Armada
+              <ArrowRight size={16} aria-hidden="true" />
+            </a>
             <a
               href={waGeneralLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-primary inline-flex items-center gap-2 whitespace-nowrap px-5 py-3 text-sm"
+              className="inline-flex items-center gap-2 rounded-full border-2 border-line bg-white px-5 py-3 text-sm font-extrabold text-heading transition-all hover:border-accent hover:text-accent"
             >
               <MessageCircle size={16} aria-hidden="true" />
-              Konsultasi Gratis
+              Cek Lokasi
             </a>
-            <Link
-              href="/armada"
-              className="btn btn-secondary inline-flex items-center gap-2 whitespace-nowrap px-5 py-3 text-sm"
-            >
-              Lihat Armada
-              <ArrowRight size={16} aria-hidden="true" />
-            </Link>
           </div>
 
-          <div className="mt-7 flex flex-wrap gap-x-5 gap-y-2.5">
-            {["Mobil + Driver", "Charter 24 Jam", "Paket Wisata All-In"].map(
-              (t) => (
-                <span
-                  key={t}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3.5 py-2 text-xs font-bold text-body-text shadow-sm transition-colors duration-300 hover:border-primary/40 hover:text-primary"
-                >
-                  <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-accent">
-                    <Check
-                      size={10}
-                      strokeWidth={3.5}
-                      className="text-white"
-                      aria-hidden="true"
-                    />
-                  </span>
-                  {t}
+          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+            {[
+              { Icon: ShieldCheck, t: "Driver Profesional" },
+              { Icon: Sparkles, t: "Unit Bersih & Terawat" },
+              { Icon: Check, t: "Booking 24/7" },
+            ].map(({ Icon, t }) => (
+              <span
+                key={t}
+                className="inline-flex items-center gap-2 text-[13px] font-bold text-body-text"
+              >
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent/10 text-accent">
+                  <Icon size={13} strokeWidth={2.5} aria-hidden="true" />
                 </span>
-              ),
-            )}
+                {t}
+              </span>
+            ))}
           </div>
         </motion.div>
 
-        <div className="relative mx-auto w-full max-w-[520px] lg:max-w-[600px]">
+        <div className="relative mx-auto w-full max-w-[600px]">
           <motion.div
-            initial={reduce ? false : { opacity: 0, y: 32 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.15, ease: EASE }}
-            className="animate-float-slow"
+            initial={reduce ? false : { opacity: 0, y: 32, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, delay: 0.1, ease: EASE }}
+            className="relative"
           >
-            <Image
-              src="/images/vehicles/toyota-hiace-premio.svg"
-              alt="Toyota Hiace Premio — armada Mahessa Trans Holiday"
-              width={1024}
-              height={683}
-              priority
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="h-auto w-full rounded-[24px] object-cover shadow-elevated ring-1 ring-line"
-            />
+            <div className="absolute -inset-4 -z-10 rounded-[36px] bg-gradient-to-br from-accent/15 via-primary/5 to-transparent blur-2xl" />
+            <div className="relative overflow-hidden rounded-[32px] border border-line bg-surface shadow-elevated">
+              <Image
+                src="/images/vehicles/toyota-hiace-premio.svg"
+                alt={`${SITE_NAME} - Hiace Premio`}
+                width={1200}
+                height={800}
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="h-auto w-full object-cover"
+              />
+            </div>
+
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
+              className="absolute -bottom-5 -left-3 hidden rounded-2xl border border-line bg-white/95 p-3 shadow-elevated backdrop-blur sm:flex sm:items-center sm:gap-3 sm:pr-5"
+            >
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-white">
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 2 4 6v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V6l-8-4Z" />
+                </svg>
+              </span>
+              <div className="leading-tight">
+                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted">
+                  Armada
+                </p>
+                <p className="text-[14px] font-extrabold tracking-tight text-heading">
+                  15+ Unit Tersedia
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
+              className="absolute -right-2 top-6 hidden rounded-2xl border border-line bg-white/95 p-3 shadow-elevated backdrop-blur sm:block sm:pr-5"
+            >
+              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted">
+                Mulai Dari
+              </p>
+              <p className="text-[18px] font-extrabold tracking-tight text-accent">
+                Rp 350rb
+                <span className="ml-1 text-[11px] font-bold text-muted">/ 24 jam</span>
+              </p>
+            </motion.div>
           </motion.div>
         </div>
       </div>

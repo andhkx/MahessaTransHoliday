@@ -17,7 +17,7 @@ const ICONS: Record<string, React.ComponentType<{ size?: number; className?: str
 };
 
 const IMAGES: Record<string, string> = {
-  "rental-mobil": "/images/vehicles/honda-brio.svg",
+  "rental-mobil": "/images/vehicles/toyota-agya.svg",
   "mobil-driver": "/images/vehicles/toyota-innova-reborn.svg",
   "charter-transfer": "/images/vehicles/toyota-hiace-premio.svg",
   "paket-wisata": "/images/packages/hiace-bandung.svg",

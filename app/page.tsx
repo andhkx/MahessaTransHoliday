@@ -1,5 +1,15 @@
 ﻿import Image from "next/image";
 import Link from "next/link";
+import {
+  Award,
+  BadgeDollarSign,
+  Clock,
+  Headphones,
+  MapPinned,
+  ShieldCheck,
+  Sparkles,
+  Wallet,
+} from "lucide-react";
 import Hero from "@/components/Hero";
 import Stats from "@/components/Stats";
 import ServiceCards from "@/components/ServiceCards";
@@ -14,37 +24,86 @@ import { getFeaturedPackages } from "@/data/packages";
 import { faqMain } from "@/data/faq";
 import { galleryImages } from "@/lib/gallery";
 
-function ValueProps() {
+const ADVANTAGES = [
+  {
+    Icon: ShieldCheck,
+    title: "Driver Profesional",
+    text: "Sopir berpengalaman, berlisensi, dan menguasai rute Bandung, Jakarta, dan Jawa Barat.",
+  },
+  {
+    Icon: Sparkles,
+    title: "Unit Terawat",
+    text: "Semua kendaraan dicek dan dibersihkan sebelum berangkat. Performa prima, kabin nyaman.",
+  },
+  {
+    Icon: Clock,
+    title: "Booking 24/7",
+    text: "Admin standby setiap hari lewat WhatsApp. Kirim detail perjalanan, langsung kami konfirmasi.",
+  },
+  {
+    Icon: MapPinned,
+    title: "Area Luas",
+    text: "Melayani Cimahi, Bandung, Padalarang, hingga destinasi populer di Jawa dan Bali.",
+  },
+  {
+    Icon: Award,
+    title: "Berbagai Jenis Kendaraan",
+    text: "City car hemat, MPV keluarga, SUV premium, hingga Hiace dan Elf untuk grup besar.",
+  },
+  {
+    Icon: BadgeDollarSign,
+    title: "Harga Terjangkau",
+    text: "Tarif transparan tanpa biaya tersembunyi. Cocok untuk keluarga, komunitas, dan perusahaan.",
+  },
+  {
+    Icon: Headphones,
+    title: "Proses Mudah",
+    text: "Konfirmasi cepat, komunikasi jelas, tanpa langkah rumit. Tinggal duduk dan berangkat.",
+  },
+  {
+    Icon: Wallet,
+    title: "Layanan Lengkap",
+    text: "Antar jemput bandara, city tour, perjalanan dinas, hingga paket wisata multi-hari.",
+  },
+];
+
+function Advantages() {
   return (
-    <section className="border-y border-line bg-surface/50 py-12 lg:py-16">
-      <div className="mx-auto grid max-w-[1300px] grid-cols-1 gap-4 px-5 sm:grid-cols-2 sm:px-8 md:grid-cols-4 md:px-12">
-        {[
-          ["Unit Terawat", "Mobil bersih, terawat, dan siap dipakai untuk perjalananmu."],
-          ["Pilihan Fleksibel", "Dengan driver profesional, sesuai kebutuhan dan budget."],
-          ["Berbagai Kebutuhan", "Wisata, city tour, airport transfer, charter, perjalanan dinas."],
-          ["Terbukti", "Telah melayani ratusan penumpang untuk berbagai jenis perjalanan."],
-        ].map(([title, desc]) => (
-          <div
-            key={title}
-            className="rounded-[18px] border border-line bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-card"
-          >
-            <span className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-surface text-primary">
-              <svg
-                className="h-4.5 w-4.5"
-                width="18"
-                height="18"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.2}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-              </svg>
-            </span>
-            <p className="text-sm font-extrabold text-heading">{title}</p>
-            <p className="mt-1 text-[13px] leading-relaxed text-muted">{desc}</p>
-          </div>
-        ))}
+    <section
+      id="keunggulan"
+      className="relative overflow-hidden border-y border-line bg-surface/60 py-16 md:py-24"
+    >
+      <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
+        <div className="mb-10 max-w-2xl md:mb-14">
+          <span className="mb-2 inline-block font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-primary">
+            Keunggulan
+          </span>
+          <h2 className="mb-3 text-3xl font-extrabold leading-[1.05] tracking-[-0.03em] text-heading md:text-[44px]">
+            Mitra terpercaya untuk{" "}
+            <span className="text-accent">transportasi</span> aman dan nyaman.
+          </h2>
+          <p className="max-w-xl text-[15px] leading-relaxed text-body-text md:text-base">
+            Setiap detail kami persiapkan agar kamu cukup duduk, santai, dan
+            nikmati perjalanan tanpa khawatir.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {ADVANTAGES.map(({ Icon, title, text }) => (
+            <article
+              key={title}
+              className="group relative h-full overflow-hidden rounded-[20px] border border-line bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-elevated"
+            >
+              <span className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-accent/[0.1] text-accent transition-all duration-300 group-hover:bg-accent group-hover:text-white group-hover:shadow-[0_10px_24px_-10px_rgba(0,86,145,0.6)]">
+                <Icon size={22} strokeWidth={1.8} aria-hidden="true" />
+              </span>
+              <h3 className="mb-2 text-[17px] font-extrabold tracking-tight text-heading">
+                {title}
+              </h3>
+              <p className="text-[13px] leading-relaxed text-body-text">{text}</p>
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -53,19 +112,52 @@ function ValueProps() {
 function FeaturedArmada() {
   const featured = getFeaturedVehicles();
   return (
-    <section className="relative z-10 mx-auto w-full max-w-[1300px] px-5 py-16 sm:px-8 md:px-12 md:py-20">
-      <SectionHeading
-        eyebrow="Armada"
-        title="Kendaraan untuk perjalananmu."
-        subtitle="Mulai dari mobil compact yang irit hingga kendaraan premium dan rombongan."
-      />
-      <VehicleCards vehicles={featured} />
-      <div className="mt-8 text-center">
+    <section
+      id="armada"
+      className="relative z-10 mx-auto w-full max-w-[1300px] px-5 py-16 sm:px-8 md:px-12 md:py-24"
+    >
+      <div className="mb-8 flex flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between md:mb-12">
+        <div>
+          <span className="mb-2 inline-block font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-primary">
+            Armada Mobil Kami
+          </span>
+          <h2 className="mb-2 text-3xl font-extrabold leading-[1.05] tracking-[-0.03em] text-heading md:text-[44px]">
+            Kendaraan untuk{" "}
+            <span className="text-accent">perjalananmu.</span>
+          </h2>
+          <p className="max-w-xl text-[15px] leading-relaxed text-body-text">
+            Pilih unit yang sesuai, dari city car harian hingga Hiace Premio
+            untuk rombongan besar.
+          </p>
+        </div>
         <Link
           href="/armada"
-          className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-6 py-3 text-sm font-bold text-heading transition-all duration-300 hover:border-primary/50 hover:text-primary"
+          className="inline-flex items-center gap-2 self-start rounded-full border-2 border-line bg-white px-5 py-2.5 text-sm font-extrabold text-heading transition-all hover:border-accent hover:text-accent sm:self-auto"
         >
-          Lihat Semua Armada →
+          Armada Lainnya
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14" />
+            <path d="m12 5 7 7-7 7" />
+          </svg>
+        </Link>
+      </div>
+
+      <VehicleCards vehicles={featured} />
+
+      <div className="mt-10 text-center md:hidden">
+        <Link href="/armada" className="text-link">
+          Lihat Semua Armada
+          <span aria-hidden="true">→</span>
         </Link>
       </div>
     </section>
@@ -75,7 +167,7 @@ function FeaturedArmada() {
 function FeaturedPackages() {
   const featured = getFeaturedPackages();
   return (
-    <section className="border-y border-line bg-surface/50 py-16 md:py-20">
+    <section className="border-y border-line bg-surface/60 py-16 md:py-24">
       <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
         <SectionHeading
           eyebrow="Harga Paket"
@@ -84,11 +176,9 @@ function FeaturedPackages() {
         />
         <PackageCards packages={featured} />
         <div className="mt-10 text-center">
-          <Link
-            href="/paket"
-            className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-6 py-3 text-sm font-bold text-heading transition-all duration-300 hover:border-primary/50 hover:text-primary"
-          >
-            Lihat Semua Paket →
+          <Link href="/paket" className="text-link">
+            Lihat Semua Paket
+            <span aria-hidden="true">→</span>
           </Link>
         </div>
       </div>
@@ -98,27 +188,63 @@ function FeaturedPackages() {
 
 function GalleryShowcase() {
   const [first, ...rest] = galleryImages;
+  const grid = rest.slice(0, 4);
   return (
-    <section className="bg-white py-16 md:py-20">
+    <section className="bg-background py-16 md:py-24">
       <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
         <SectionHeading
           eyebrow="Galeri"
           title="Cerita perjalanan bersama Mahessa."
-          subtitle="Dokumentasi nyata perjalanan para penumpang kami."
+          subtitle="Dokumentasi nyata perjalanan para pelanggan kami."
         />
-        <Image
-          src={first.src}
-          alt={first.alt}
-          width={1200}
-          height={675}
-          sizes="(max-width: 1024px) 100vw, 1100px"
-          className="mb-5 aspect-video w-full rounded-[24px] object-cover shadow-card"
-        />
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {rest.slice(0, 4).map((img) => (
+
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+          <div className="gallery-zoom relative col-span-2 row-span-2 overflow-hidden rounded-[24px] shadow-card md:col-span-2 md:row-span-2">
+            <Image
+              src={first.src}
+              alt={first.alt}
+              width={1200}
+              height={1200}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="aspect-square h-full w-full object-cover md:aspect-[4/4]"
+            />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-heading/50 via-transparent to-transparent" />
+            <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-2 text-white md:bottom-5 md:left-5">
+              <div>
+                <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-white/70">
+                  Galeri
+                </p>
+                <p className="text-base font-extrabold leading-tight md:text-lg">
+                  Momen Pelanggan
+                </p>
+              </div>
+              <Link
+                href="/galeri"
+                className="inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-2 text-[12px] font-extrabold text-accent transition-transform hover:scale-105"
+              >
+                Lihat
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+
+          {grid.map((img) => (
             <div
               key={img.src}
-              className="gallery-zoom cursor-pointer overflow-hidden rounded-[16px]"
+              className="gallery-zoom relative aspect-square overflow-hidden rounded-[16px] shadow-sm"
             >
               <Image
                 src={img.src}
@@ -126,12 +252,13 @@ function GalleryShowcase() {
                 width={480}
                 height={480}
                 sizes="(max-width: 768px) 50vw, 25vw"
-                className="aspect-square w-full object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
           ))}
         </div>
-        <div className="mt-8 text-center">
+
+        <div className="mt-10 text-center">
           <Link href="/galeri" className="text-link">
             Lihat Galeri Lengkap
             <span aria-hidden="true">→</span>
@@ -146,7 +273,7 @@ function FaqHome() {
   return (
     <section
       id="faq"
-      className="mx-auto w-full max-w-[860px] px-5 py-16 sm:px-8 md:px-12 md:py-20"
+      className="mx-auto w-full max-w-[860px] px-5 py-16 sm:px-8 md:px-12 md:py-24"
     >
       <SectionHeading
         eyebrow="FAQ"
@@ -172,7 +299,7 @@ export default function HomePage() {
       <Hero />
       <Stats />
       <ServiceCards />
-      <ValueProps />
+      <Advantages />
       <FeaturedArmada />
       <FeaturedPackages />
       <ProcessSection />
