@@ -42,7 +42,7 @@ export default function ServiceCards() {
 
       <div
         ref={rowRef}
-        className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 scrollbar-none md:grid md:grid-cols-4 md:overflow-visible md:pb-0"
+        className="-mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 scrollbar-none md:mx-0 md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:px-0 md:pb-0"
       >
         {services.map((item, i) => {
           const Icon = ICONS[item.id] ?? CarFront;
@@ -52,10 +52,10 @@ export default function ServiceCards() {
               key={item.id}
               initial={reduce ? false : { opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.05 }}
               transition={{ duration: 0.5, delay: i * 0.08, ease: EASE }}
               className={`w-[84vw] max-w-[360px] shrink-0 snap-start origin-left transition-transform duration-300 ease-out will-change-transform md:w-auto md:scale-100 ${
-                i === activeIdx ? "scale-100" : "scale-[0.92]"
+                i === activeIdx ? "scale-100" : "scale-[0.96]"
               }`}
             >
               <article className="group relative flex h-full min-h-[440px] flex-col justify-between overflow-hidden rounded-[24px] border border-line bg-white shadow-card transition-transform duration-300 hover:-translate-y-1">
@@ -81,7 +81,7 @@ export default function ServiceCards() {
                 >
                   <div
                     className={`w-full origin-bottom transition-transform duration-300 ease-out ${
-                      isActive ? "scale-100" : "scale-[0.86]"
+                      isActive ? "scale-100" : "scale-[0.95]"
                     }`}
                   >
                     <div className="relative mx-auto flex h-[190px] w-full max-w-[280px] items-end justify-center overflow-hidden rounded-t-[28px] shadow-[0_-8px_30px_-12px_rgba(35,51,45,0.25)] transition-transform duration-300 group-hover:-translate-y-2">

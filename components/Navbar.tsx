@@ -34,30 +34,16 @@ export default function Navbar() {
         <nav className="relative mx-auto flex h-16 max-w-[1300px] items-center justify-between px-5 sm:px-8 md:px-12">
           <Link
             href="/"
-            className="flex items-center gap-2.5 transition-opacity hover:opacity-90"
+            className="flex items-center transition-opacity hover:opacity-90"
             aria-label={`${SITE_NAME} - Beranda`}
           >
-            <span
-              aria-hidden="true"
-              className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-[15px] font-extrabold tracking-tighter text-white shadow-[0_8px_18px_-8px_rgba(0,86,145,0.5)]"
-            >
-              M
-            </span>
-            <span className="hidden flex-col leading-none sm:flex">
-              <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-accent">
-                Mahessa
-              </span>
-              <span className="text-[13px] font-extrabold tracking-tight text-heading">
-                Trans Holiday
-              </span>
-            </span>
             <Image
               src="/images/logo_mahessa.png"
               alt={SITE_NAME}
-              width={180}
-              height={50}
+              width={200}
+              height={56}
               priority
-              className="h-8 w-auto object-contain sm:hidden"
+              className="h-9 w-auto object-contain md:h-10"
             />
           </Link>
 

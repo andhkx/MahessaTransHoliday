@@ -41,21 +41,14 @@ export default function Footer() {
       <div className="mx-auto w-full max-w-[1300px] px-5 py-14 sm:px-8 md:px-12 md:py-16">
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.2fr]">
           <div>
-            <Link href="/" className="flex items-center gap-2.5">
-              <span
-                aria-hidden="true"
-                className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[16px] font-extrabold tracking-tighter text-accent"
-              >
-                M
-              </span>
-              <span className="flex flex-col leading-none">
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
-                  Mahessa
-                </span>
-                <span className="text-[14px] font-extrabold tracking-tight text-white">
-                  Trans Holiday
-                </span>
-              </span>
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/images/logo_mahessa.png"
+                alt={SITE_NAME}
+                width={200}
+                height={56}
+                className="h-10 w-auto object-contain brightness-0 invert"
+              />
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">
               {SITE_TAGLINE}

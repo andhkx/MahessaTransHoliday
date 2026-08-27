@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import PageHeader from "@/components/PageHeader";
-import VehicleCards from "@/components/VehicleCards";
+import ArmadaListClient from "./ArmadaListClient";
 import CtaSection from "@/components/CtaSection";
 import { vehicles } from "@/data/vehicles";
 
@@ -20,7 +20,7 @@ export default function ArmadaPage() {
         subtitle={`Mulai dari mobil compact yang irit hingga kendaraan premium dan rombongan. Tersedia ${vehicles.length} unit siap berangkat.`}
       />
       <section className="mx-auto w-full max-w-[1300px] px-5 py-16 sm:px-8 md:px-12">
-        <VehicleCards vehicles={vehicles} />
+        <ArmadaListClient vehicles={vehicles} />
       </section>
       <CtaSection
         title="Bingung pilih kendaraan?"

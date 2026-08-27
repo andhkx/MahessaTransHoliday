@@ -19,10 +19,11 @@ import ProcessSection from "@/components/ProcessSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import CtaSection from "@/components/CtaSection";
 import SectionHeading from "@/components/SectionHeading";
-import { getFeaturedVehicles } from "@/data/vehicles";
+import { vehicles } from "@/data/vehicles";
 import { getFeaturedPackages } from "@/data/packages";
 import { faqMain } from "@/data/faq";
 import { galleryImages } from "@/lib/gallery";
+import ArmadaShowcaseClient from "./ArmadaShowcaseClient";
 
 const ADVANTAGES = [
   {
@@ -110,7 +111,6 @@ function Advantages() {
 }
 
 function FeaturedArmada() {
-  const featured = getFeaturedVehicles();
   return (
     <section
       id="armada"
@@ -130,36 +130,9 @@ function FeaturedArmada() {
             untuk rombongan besar.
           </p>
         </div>
-        <Link
-          href="/armada"
-          className="inline-flex items-center gap-2 self-start rounded-full border-2 border-line bg-white px-5 py-2.5 text-sm font-extrabold text-heading transition-all hover:border-accent hover:text-accent sm:self-auto"
-        >
-          Armada Lainnya
-          <svg
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={2.2}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-          </svg>
-        </Link>
       </div>
 
-      <VehicleCards vehicles={featured} />
-
-      <div className="mt-10 text-center md:hidden">
-        <Link href="/armada" className="text-link">
-          Lihat Semua Armada
-          <span aria-hidden="true">→</span>
-        </Link>
-      </div>
+      <ArmadaShowcaseClient vehicles={vehicles} />
     </section>
   );
 }

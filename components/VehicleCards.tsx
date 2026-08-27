@@ -32,7 +32,7 @@ export default function VehicleCards({
   return (
     <div
       ref={rowRef}
-      className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 scrollbar-none sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-3 xl:grid-cols-4"
+      className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 scrollbar-none sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 lg:grid-cols-3 xl:grid-cols-4"
     >
       {vehicles.map((vehicle, i) => {
         const price = vehiclePriceLabel(vehicle);
@@ -41,11 +41,11 @@ export default function VehicleCards({
             key={vehicle.id}
             initial={reduce ? false : { opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.5, delay: i * 0.07, ease: EASE }}
             className={cn(
               "w-[260px] shrink-0 snap-start transition-transform duration-300 ease-out will-change-transform sm:w-auto",
-              i === activeIdx ? "scale-100" : "scale-[0.93]",
+              i === activeIdx ? "scale-100" : "scale-[0.96]",
             )}
           >
             <Link
