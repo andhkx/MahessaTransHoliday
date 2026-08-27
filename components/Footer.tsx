@@ -177,16 +177,18 @@ export default function Footer() {
               href={waGeneralLink()}
               target="_blank"
               rel="noopener noreferrer"
-              className="group block rounded-2xl border border-white/15 bg-white/5 p-4 transition-colors hover:border-primary"
+              className="group flex items-center justify-between gap-3 rounded-2xl border border-white/15 bg-white/5 px-4 py-3 transition-colors hover:border-primary"
             >
-              <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">
-                WhatsApp Admin
+              <span className="min-w-0">
+                <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">
+                  WhatsApp Admin
+                </span>
+                <span className="mt-0.5 block truncate text-[14px] font-extrabold text-white">
+                  {WHATSAPP_DISPLAY}
+                </span>
               </span>
-              <span className="mt-1 block truncate text-[15px] font-extrabold text-white">
-                {WHATSAPP_DISPLAY}
-              </span>
-              <span className="mt-2 inline-flex items-center gap-1.5 text-[12px] font-bold text-primary group-hover:underline">
-                Chat Sekarang
+              <span className="inline-flex shrink-0 items-center gap-1.5 text-[12px] font-bold text-primary group-hover:underline">
+                Chat
                 <svg
                   width="12"
                   height="12"

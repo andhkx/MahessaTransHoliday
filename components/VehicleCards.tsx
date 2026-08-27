@@ -31,19 +31,18 @@ export default function VehicleCards({
   const reduce = useReducedMotion();
   const [rowRef, activeIdx] = useSnapActive();
 
-  // Determine layout: if forceMode says "grid", show as grid on mobile too;
-  // if "single" or auto + many items on mobile, show as carousel.
-  const useGridOnMobile = forceMode === "grid";
+  // Default: grid 2-col on mobile (kayak desktop biar keliatan banyak kecil-kecil).
+  // forceMode="single" → carousel 1-satu.
+  const useCarousel = forceMode === "single";
 
   return (
-    <div className="relative -mx-5 md:mx-0">
+    <div className="relative md:mx-0">
       <div
         ref={rowRef}
         className={cn(
-          "flex snap-x snap-mandatory snap-center gap-3 overflow-x-auto px-[calc(50vw-130px)] pb-4 scrollbar-none md:snap-align-none md:gap-4 md:overflow-visible md:px-0",
-          useGridOnMobile
-            ? "grid grid-cols-2 px-5 sm:grid-cols-2 sm:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-            : "md:grid md:grid-cols-2 md:gap-4 lg:grid-cols-3 xl:grid-cols-4",
+          useCarousel
+            ? "flex snap-x snap-mandatory snap-center gap-3 overflow-x-auto px-[calc(50vw-130px)] pb-4 scrollbar-none md:snap-align-none md:grid md:grid-cols-2 md:gap-4 md:overflow-visible md:px-0 lg:grid-cols-3 xl:grid-cols-4"
+            : "grid grid-cols-2 gap-3 px-0 sm:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
         )}
       >
       {vehicles.map((vehicle, i) => {
@@ -56,12 +55,13 @@ export default function VehicleCards({
             viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.5, delay: i * 0.07, ease: EASE }}
             className={cn(
-              "w-[260px] shrink-0 snap-center transition-all duration-300 ease-out will-change-transform md:snap-align-start md:w-auto",
-              useGridOnMobile
-                ? "scale-100 opacity-100"
-                : i === activeIdx
-                  ? "scale-100 opacity-100"
-                  : "scale-[0.88] opacity-60",
+              "shrink-0 transition-all duration-300 ease-out will-change-transform",
+              useCarousel
+                ? "w-[260px] snap-center md:snap-align-start md:w-auto"
+                : "w-auto",
+              useCarousel && i !== activeIdx
+                ? "scale-[0.88] opacity-60"
+                : "scale-100 opacity-100",
             )}
           >
             <Link
@@ -128,10 +128,12 @@ export default function VehicleCards({
         );
       })}
       </div>
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-background to-transparent md:hidden"
-      />
+      {useCarousel && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-background to-transparent md:hidden"
+        />
+      )}
     </div>
   );
 }
