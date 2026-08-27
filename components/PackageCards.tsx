@@ -20,10 +20,11 @@ export default function PackageCards({ packages }: PackageCardsProps) {
   const [rowRef, activeIdx] = useSnapActive();
 
   return (
-    <div
-      ref={rowRef}
-      className="-mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 scrollbar-none sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 lg:grid-cols-4"
-    >
+    <div className="relative -mx-5 md:mx-0">
+      <div
+        ref={rowRef}
+        className="flex snap-x snap-mandatory snap-center gap-3 overflow-x-auto px-[calc(50vw-130px)] pb-4 scrollbar-none md:snap-align-none md:grid md:grid-cols-2 md:gap-4 md:overflow-visible md:px-0 lg:grid-cols-4"
+      >
       {packages.map((p, i) => (
         <motion.div
           key={p.id}
@@ -32,8 +33,10 @@ export default function PackageCards({ packages }: PackageCardsProps) {
           viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.5, delay: i * 0.07, ease: EASE }}
           className={cn(
-            "w-[260px] shrink-0 snap-start transition-transform duration-300 ease-out will-change-transform sm:w-auto",
-            i === activeIdx ? "scale-100" : "scale-[0.96]",
+            "w-[260px] shrink-0 snap-center transition-all duration-300 ease-out will-change-transform md:snap-align-start md:w-auto",
+            i === activeIdx
+              ? "scale-100 opacity-100"
+              : "scale-[0.88] opacity-60",
           )}
         >
           <Link
@@ -91,6 +94,11 @@ export default function PackageCards({ packages }: PackageCardsProps) {
           </Link>
         </motion.div>
       ))}
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-background to-transparent sm:hidden"
+      />
     </div>
   );
 }

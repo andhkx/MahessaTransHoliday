@@ -40,10 +40,11 @@ export default function ServiceCards() {
         <ArrowRight size={13} aria-hidden="true" />
       </div>
 
-      <div
-        ref={rowRef}
-        className="-mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 scrollbar-none md:mx-0 md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:px-0 md:pb-0"
-      >
+      <div className="relative -mx-5 md:mx-0">
+        <div
+          ref={rowRef}
+          className="flex snap-x snap-mandatory snap-center gap-3 overflow-x-auto px-[calc(50vw-42vw)] pb-4 scrollbar-none md:snap-align-none md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:px-0 md:pb-0"
+        >
         {services.map((item, i) => {
           const Icon = ICONS[item.id] ?? CarFront;
           const isActive = i === activeIdx;
@@ -54,8 +55,10 @@ export default function ServiceCards() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.05 }}
               transition={{ duration: 0.5, delay: i * 0.08, ease: EASE }}
-              className={`w-[84vw] max-w-[360px] shrink-0 snap-start origin-left transition-transform duration-300 ease-out will-change-transform md:w-auto md:scale-100 ${
-                i === activeIdx ? "scale-100" : "scale-[0.96]"
+              className={`w-[84vw] max-w-[360px] shrink-0 snap-center origin-left transition-all duration-300 ease-out will-change-transform md:snap-align-start md:w-auto md:scale-100 md:opacity-100 ${
+                isActive
+                  ? "scale-100 opacity-100"
+                  : "scale-[0.9] opacity-60"
               }`}
             >
               <article className="group relative flex h-full min-h-[440px] flex-col justify-between overflow-hidden rounded-[24px] border border-line bg-white shadow-card transition-transform duration-300 hover:-translate-y-1">
@@ -100,6 +103,7 @@ export default function ServiceCards() {
             </motion.div>
           );
         })}
+        </div>
       </div>
     </section>
   );

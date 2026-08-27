@@ -114,9 +114,9 @@ export default function Hero() {
               initial={reduce ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
-              className="absolute -bottom-5 -left-3 hidden rounded-2xl border border-line bg-white/95 p-3 shadow-elevated backdrop-blur sm:flex sm:items-center sm:gap-3 sm:pr-5"
+              className="absolute -bottom-4 left-3 flex items-center gap-2.5 rounded-2xl border border-line bg-white/95 p-2.5 shadow-elevated backdrop-blur sm:-bottom-5 sm:-left-3 sm:gap-3 sm:p-3 sm:pr-5"
             >
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent text-white">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-white sm:h-10 sm:w-10">
                 <svg
                   width="18"
                   height="18"
@@ -132,10 +132,10 @@ export default function Hero() {
                 </svg>
               </span>
               <div className="leading-tight">
-                <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted">
+                <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-muted sm:text-[10px]">
                   Armada
                 </p>
-                <p className="text-[14px] font-extrabold tracking-tight text-heading">
+                <p className="text-[12px] font-extrabold tracking-tight text-heading sm:text-[14px]">
                   15+ Unit Tersedia
                 </p>
               </div>
@@ -145,14 +145,14 @@ export default function Hero() {
               initial={reduce ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
-              className="absolute -right-2 top-6 hidden rounded-2xl border border-line bg-white/95 p-3 shadow-elevated backdrop-blur sm:block sm:pr-5"
+              className="absolute right-3 top-4 block rounded-2xl border border-line bg-white/95 p-2.5 pr-4 shadow-elevated backdrop-blur sm:right-auto sm:-right-2 sm:top-6 sm:p-3 sm:pr-5"
             >
-              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted">
+              <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-muted sm:text-[10px]">
                 Mulai Dari
               </p>
-              <p className="text-[18px] font-extrabold tracking-tight text-accent">
+              <p className="text-[14px] font-extrabold tracking-tight text-accent sm:text-[18px]">
                 Rp 350rb
-                <span className="ml-1 text-[11px] font-bold text-muted">/ 24 jam</span>
+                <span className="ml-1 text-[10px] font-bold text-muted sm:text-[11px]">/ 24 jam</span>
               </p>
             </motion.div>
           </motion.div>
