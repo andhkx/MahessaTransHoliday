@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import PageHeader from "@/components/PageHeader";
+import PageHero from "@/components/PageHero";
 import ArmadaListClient from "./ArmadaListClient";
 import CtaSection from "@/components/CtaSection";
 import { vehicles } from "@/data/vehicles";
@@ -14,12 +14,12 @@ export const metadata: Metadata = {
 export default function ArmadaPage() {
   return (
     <>
-      <PageHeader
+      <PageHero
         eyebrow="Armada"
         title="Kendaraan untuk perjalananmu."
         subtitle={`Mulai dari mobil compact yang irit hingga kendaraan premium dan rombongan. Tersedia ${vehicles.length} unit siap berangkat.`}
       />
-      <section className="mx-auto w-full max-w-[1300px] px-5 py-16 sm:px-8 md:px-12">
+      <section className="mx-auto w-full max-w-[1300px] px-5 py-12 sm:px-8 md:px-12 md:py-16">
         <ArmadaListClient vehicles={vehicles} />
       </section>
       <CtaSection

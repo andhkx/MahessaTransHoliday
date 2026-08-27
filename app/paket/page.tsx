@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import PageHeader from "@/components/PageHeader";
+import PageHero from "@/components/PageHero";
 import PaketListClient from "./PaketListClient";
 import CtaSection from "@/components/CtaSection";
 import { packages } from "@/data/packages";
@@ -14,12 +14,12 @@ export const metadata: Metadata = {
 export default function PaketPage() {
   return (
     <>
-      <PageHeader
+      <PageHero
         eyebrow="Harga Paket"
         title="Paket untuk perjalananmu."
         subtitle="All-in Hiace: mobil, driver, BBM, tol, parkir — harga jelas di awal, tanpa biaya siluman."
       />
-      <section className="mx-auto w-full max-w-[1300px] px-5 py-16 sm:px-8 md:px-12">
+      <section className="mx-auto w-full max-w-[1300px] px-5 py-12 sm:px-8 md:px-12">
         <PaketListClient packages={packages} />
       </section>
       <CtaSection

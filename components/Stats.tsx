@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import { BadgeCheck, CarFront, MapPin, Star, Wallet } from "lucide-react";
+import { CarFront, MapPin, Star, Wallet } from "lucide-react";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -10,15 +10,14 @@ const STATS = [
   { value: "15+", label: "Armada Pilihan", sub: "Compact sampai Hiace", Icon: CarFront },
   { value: "10", label: "Paket Wisata", sub: "All-in tanpa ribet", Icon: MapPin },
   { value: "5★", label: "Rating Pelanggan", sub: "Layanan profesional", Icon: Star },
-  { value: "100%", label: "Harga Transparan", sub: "Tanpa biaya siluman", Icon: BadgeCheck },
 ];
 
 export default function Stats() {
   const reduce = useReducedMotion();
 
   return (
-    <section className="relative z-10 mx-auto -mt-4 w-full max-w-[1300px] px-5 pb-6 sm:px-8 md:px-12">
-      <div className="grid grid-cols-2 gap-3 rounded-[24px] border border-line bg-white px-4 py-5 shadow-card md:grid-cols-5 md:gap-2 md:px-6 md:py-6">
+    <section className="relative z-10 mx-auto -mt-4 w-full max-w-[1100px] px-5 pb-6 sm:px-8 md:px-12">
+      <div className="grid grid-cols-2 gap-3 rounded-[24px] border border-line bg-white px-4 py-5 shadow-card md:grid-cols-4 md:gap-4 md:px-6 md:py-6">
         {STATS.map((s, i) => (
           <motion.div
             key={s.label}

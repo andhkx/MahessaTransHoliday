@@ -71,7 +71,7 @@ export default function Hero() {
             </a>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="mt-8 grid grid-cols-3 gap-2.5 sm:flex sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3">
             {[
               { Icon: ShieldCheck, t: "Driver Profesional" },
               { Icon: Sparkles, t: "Unit Bersih & Terawat" },
@@ -79,9 +79,9 @@ export default function Hero() {
             ].map(({ Icon, t }) => (
               <span
                 key={t}
-                className="inline-flex items-center gap-2 text-[13px] font-bold text-body-text"
+                className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-line bg-white px-2.5 py-3 text-center text-[11px] font-extrabold leading-tight text-body-text shadow-sm sm:inline-flex sm:flex-row sm:border-0 sm:bg-transparent sm:p-0 sm:text-left sm:text-[13px] sm:shadow-none"
               >
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent/10 text-accent">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-accent/10 text-accent sm:h-6 sm:w-6">
                   <Icon size={13} strokeWidth={2.5} aria-hidden="true" />
                 </span>
                 {t}
@@ -114,7 +114,7 @@ export default function Hero() {
               initial={reduce ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5, ease: EASE }}
-              className="absolute -bottom-4 left-3 flex items-center gap-2.5 rounded-2xl border border-line bg-white/95 p-2.5 shadow-elevated backdrop-blur sm:-bottom-5 sm:-left-3 sm:gap-3 sm:p-3 sm:pr-5"
+              className="absolute -bottom-6 left-3 flex items-center gap-2.5 rounded-2xl border border-line bg-white/95 p-2.5 shadow-elevated backdrop-blur sm:-bottom-5 sm:left-4 sm:gap-3 sm:p-3 sm:pr-5"
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-white sm:h-10 sm:w-10">
                 <Wallet size={18} strokeWidth={2.2} aria-hidden="true" />
@@ -134,7 +134,7 @@ export default function Hero() {
               initial={reduce ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
-              className="absolute right-3 top-4 flex items-center gap-2.5 rounded-2xl border border-line bg-white/95 p-2.5 pr-4 shadow-elevated backdrop-blur sm:right-auto sm:-right-2 sm:top-6 sm:p-3 sm:pr-5"
+              className="absolute right-3 -top-6 flex items-center gap-2.5 rounded-2xl border border-line bg-white/95 p-2.5 pr-4 shadow-elevated backdrop-blur sm:right-4 sm:-top-7 sm:p-3 sm:pr-5 z-10"
             >
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-white sm:h-10 sm:w-10">
                 <CarFront size={18} strokeWidth={2.2} aria-hidden="true" />

@@ -6,12 +6,7 @@ import { ArrowRight } from "lucide-react";
 import VehicleCards from "@/components/VehicleCards";
 import type { Vehicle } from "@/lib/types";
 
-const FEATURED_SLUGS = [
-  "toyota-avanza",
-  "toyota-innova-reborn",
-  "toyota-hiace-premio",
-  "toyota-alphard",
-];
+const FEATURED_SLUG = "toyota-hiace-premio";
 
 type Props = {
   vehicles: Vehicle[];
@@ -19,13 +14,13 @@ type Props = {
 
 export default function ArmadaShowcaseClient({ vehicles }: Props) {
   const featured = useMemo(
-    () => vehicles.filter((v) => FEATURED_SLUGS.includes(v.slug)),
+    () => vehicles.filter((v) => v.slug === FEATURED_SLUG),
     [vehicles],
   );
 
   return (
     <div>
-      <VehicleCards vehicles={featured} />
+      <VehicleCards vehicles={featured} forceMode="single" />
 
       <div className="mt-10 text-center">
         <Link

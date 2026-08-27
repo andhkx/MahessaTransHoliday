@@ -35,7 +35,7 @@ export default function CtaSection({
         className="overflow-hidden rounded-[28px] border-2 border-accent/20 bg-white shadow-elevated"
       >
         <div className="grid lg:grid-cols-2">
-          <div className="relative bg-heading p-8 text-white md:p-12">
+          <div className="relative bg-accent p-8 text-white md:p-12">
             <div
               aria-hidden="true"
               className="pointer-events-none absolute -right-12 -top-12 h-56 w-56 rounded-full bg-white/[0.08]"
@@ -51,7 +51,7 @@ export default function CtaSection({
                 Konsultasi Gratis
               </span>
 
-              <h2 className="mb-4 max-w-md text-3xl font-extrabold leading-[1.05] tracking-[-0.03em] text-white md:text-[40px]">
+              <h2 className="mb-4 max-w-md text-3xl font-extrabold leading-[1.05] tracking-[-0.03em] text-sky-200 md:text-[40px]">
                 {title}
               </h2>
               <p className="mb-8 max-w-md text-sm leading-relaxed text-white/90 md:text-base">
