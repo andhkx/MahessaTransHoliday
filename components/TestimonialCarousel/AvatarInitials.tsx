@@ -1,7 +1,3 @@
-import { useMemo } from "react";
-
-const colors = ["#0F4C75", "#3282B8", "#BBE1FA", "#1B262C", "#005691"];
-
 export function getInitials(name: string): string {
   return name
     .split(" ")
@@ -12,6 +8,7 @@ export function getInitials(name: string): string {
 }
 
 export function getAvatarColor(index: number): string {
+  const colors = ["#0F4C75", "#3282B8", "#1B262C", "#005691", "#0A4B7F", "#052E5A"];
   return colors[index % colors.length];
 }
 
@@ -21,14 +18,14 @@ type AvatarProps = {
   size?: number;
 };
 
-export default function Avatar({ name, index, size = 56 }: AvatarProps) {
+export default function Avatar({ name, index, size = 64 }: AvatarProps) {
   const initials = getInitials(name);
-  const color = useMemo(() => getAvatarColor(index), [index]);
-  const fontSize = Math.round(size * 0.35);
+  const color = getAvatarColor(index);
+  const fontSize = Math.round(size * 0.36);
 
   return (
     <div
-      className="flex items-center justify-center rounded-full text-white font-extrabold"
+      className="flex shrink-0 items-center justify-center rounded-full font-extrabold text-white shadow-[0_4px_12px_rgba(15,76,117,0.25)]"
       style={{ width: size, height: size, backgroundColor: color, fontSize }}
       aria-hidden="true"
     >

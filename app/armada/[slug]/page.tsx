@@ -93,7 +93,7 @@ export default async function VehicleDetailPage({
             </p>
             <p className="mb-6 text-xl font-extrabold tracking-tight text-primary">
               {startingPrice
-                ? `Mulai ${formatIDR(startingPrice)} / 24 jam`
+                ? `Mulai ${formatIDR(startingPrice)} / 12 jam`
                 : "Hubungi untuk harga"}
             </p>
             <div className="flex flex-wrap gap-3">
@@ -136,7 +136,7 @@ export default async function VehicleDetailPage({
                   <tr>
                     <td className="py-3 font-semibold text-body-text">Dengan Driver</td>
                     <td className="py-3 text-right font-extrabold text-heading">
-                      {startingPrice ? `Mulai ${formatIDR(startingPrice)} / 24 jam` : "Hubungi untuk penawaran"}
+                      {startingPrice ? `Mulai ${formatIDR(startingPrice)} / 12 jam` : "Hubungi untuk penawaran"}
                     </td>
                   </tr>
                 </tbody>

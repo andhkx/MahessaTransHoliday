@@ -13,7 +13,7 @@ import type { JourneyType } from "@/data/finder";
 import { cn } from "@/lib/cn";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
-const STEP_LABELS = ["Budget", "Orang", "Tujuan", "Rekomendasi"];
+const STEP_LABELS = ["Budget", "Orang", "Perjalanan", "Rekomendasi"];
 
 type WizardStep = 1 | 2 | 3 | 4;
 

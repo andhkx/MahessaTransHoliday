@@ -12,7 +12,7 @@ export function waGeneralLink(): string {
 
 export function waVehicleLink(vehicleName: string): string {
   return waLink(
-    `Halo ${SITE_NAME}, saya ingin menanyakan ketersediaan ${vehicleName} untuk rental. Saya ingin sewa [12/24 jam] pada tanggal [XX Bulan YYYY]. Berapa harganya?`,
+    `Halo ${SITE_NAME}, saya ingin menanyakan ketersediaan ${vehicleName} untuk rental. Saya ingin sewa [12/ 12 jam] pada tanggal [XX Bulan YYYY]. Berapa harganya?`,
   );
 }
 

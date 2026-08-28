@@ -46,7 +46,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Agya Cimahi & Bandung",
       description:
-        "Sewa Toyota Agya automatic di Cimahi, Bandung dan Padalarang mulai Rp340.000/24 jam. Unit terawat, siap dipakai. Mahessa Trans Holiday.",
+        "Sewa Toyota Agya automatic di Cimahi, Bandung dan Padalarang mulai Rp340.000/ 12 jam. Unit terawat, siap dipakai. Mahessa Trans Holiday.",
       keywords: ["rental agya", "sewa agya bandung", "rental murah cimahi"],
     },
   },
@@ -95,7 +95,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Calya Cimahi & Bandung",
       description:
-        "Sewa Toyota Calya 7 penumpang di Cimahi, Bandung dan Padalarang mulai Rp400.000/24 jam. Ekonomis untuk keluarga. Mahessa Trans Holiday.",
+        "Sewa Toyota Calya 7 penumpang di Cimahi, Bandung dan Padalarang mulai Rp400.000/ 12 jam. Ekonomis untuk keluarga. Mahessa Trans Holiday.",
       keywords: ["rental calya", "sewa calya bandung", "rental 7 penumpang murah"],
     },
   },
@@ -144,7 +144,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Daihatsu Terios Cimahi & Bandung",
       description:
-        "Sewa Daihatsu Terios di Cimahi, Bandung dan Padalarang mulai Rp550.000/24 jam. SUV nyaman untuk wisata alam. Mahessa Trans Holiday.",
+        "Sewa Daihatsu Terios di Cimahi, Bandung dan Padalarang mulai Rp550.000/ 12 jam. SUV nyaman untuk wisata alam. Mahessa Trans Holiday.",
       keywords: ["rental terios", "sewa terios bandung", "rental suv bandung"],
     },
   },
@@ -194,7 +194,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Avanza Cimahi & Bandung",
       description:
-        "Rental Toyota Avanza di Cimahi, Bandung, dan Padalarang untuk kebutuhan keluarga, wisata, perjalanan dinas, maupun transfer. Mulai Rp450.000/24 jam.",
+        "Rental Toyota Avanza di Cimahi, Bandung, dan Padalarang untuk kebutuhan keluarga, wisata, perjalanan dinas, maupun transfer. Mulai Rp450.000/ 12 jam.",
       keywords: ["rental avanza", "sewa avanza cimahi", "avanza bandung"],
     },
   },
@@ -243,7 +243,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Rush Cimahi & Bandung",
       description:
-        "Sewa Toyota Rush GR Sport di Cimahi, Bandung dan Padalarang mulai Rp550.000/24 jam. SUV stylish untuk keluarga. Mahessa Trans Holiday.",
+        "Sewa Toyota Rush GR Sport di Cimahi, Bandung dan Padalarang mulai Rp550.000/ 12 jam. SUV stylish untuk keluarga. Mahessa Trans Holiday.",
       keywords: ["rental rush", "sewa rush bandung", "rush gr sport rental"],
     },
   },
@@ -292,7 +292,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Honda City Hatchback Bandung",
       description:
-        "Sewa Honda City Hatchback RS di Cimahi, Bandung dan Padalarang mulai Rp500.000/24 jam. Modern, sporty, nyaman. Mahessa Trans Holiday.",
+        "Sewa Honda City Hatchback RS di Cimahi, Bandung dan Padalarang mulai Rp500.000/ 12 jam. Modern, sporty, nyaman. Mahessa Trans Holiday.",
       keywords: ["rental honda city", "sewa city hatchback bandung"],
     },
   },
@@ -341,7 +341,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Innova Reborn Bandung",
       description:
-        "Sewa Toyota Innova Reborn diesel di Cimahi, Bandung dan Padalarang mulai Rp1.300.000/24 jam. Premium dan nyaman. Mahessa Trans Holiday.",
+        "Sewa Toyota Innova Reborn diesel di Cimahi, Bandung dan Padalarang mulai Rp1.300.000/ 12 jam. Premium dan nyaman. Mahessa Trans Holiday.",
       keywords: ["rental innova reborn", "sewa innova bandung", "innova diesel rental"],
     },
   },
@@ -390,7 +390,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Innova Zenix Hybrid Bandung",
       description:
-        "Sewa Toyota Innova Zenix Hybrid di Cimahi, Bandung dan Padalarang mulai Rp1.500.000/24 jam. MPV premium modern. Mahessa Trans Holiday.",
+        "Sewa Toyota Innova Zenix Hybrid di Cimahi, Bandung dan Padalarang mulai Rp1.500.000/ 12 jam. MPV premium modern. Mahessa Trans Holiday.",
       keywords: ["rental zenix", "sewa innova zenix bandung", "rental hybrid bandung"],
     },
   },
@@ -439,7 +439,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Mitsubishi Pajero Sport Bandung",
       description:
-        "Sewa Mitsubishi Pajero Sport Dakar di Cimahi, Bandung dan Padalarang mulai Rp1.200.000/24 jam. Tangguh untuk semua medan. Mahessa Trans Holiday.",
+        "Sewa Mitsubishi Pajero Sport Dakar di Cimahi, Bandung dan Padalarang mulai Rp1.200.000/ 12 jam. Tangguh untuk semua medan. Mahessa Trans Holiday.",
       keywords: ["rental pajero", "sewa pajero sport bandung", "rental jeep bandung"],
     },
   },
@@ -488,7 +488,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Fortuner Bandung",
       description:
-        "Sewa Toyota Fortuner VRZ di Cimahi, Bandung dan Padalarang mulai Rp1.100.000/24 jam. Mewah dan tangguh. Mahessa Trans Holiday.",
+        "Sewa Toyota Fortuner VRZ di Cimahi, Bandung dan Padalarang mulai Rp1.100.000/ 12 jam. Mewah dan tangguh. Mahessa Trans Holiday.",
       keywords: ["rental fortuner", "sewa fortuner bandung"],
     },
   },
@@ -538,7 +538,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Alphard Bandung & Cimahi",
       description:
-        "Sewa Toyota Alphard di Cimahi, Bandung dan Padalarang mulai Rp2.500.000/24 jam. Untuk wedding, VIP, dan perjalanan eksekutif. Mahessa Trans Holiday.",
+        "Sewa Toyota Alphard di Cimahi, Bandung dan Padalarang mulai Rp2.500.000/ 12 jam. Untuk wedding, VIP, dan perjalanan eksekutif. Mahessa Trans Holiday.",
       keywords: ["rental alphard", "sewa alphard bandung", "rental mobil wedding bandung"],
     },
   },

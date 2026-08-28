@@ -1,13 +1,15 @@
-import type { JourneyType } from "@/data/finder";
-import { journeyKeywords } from "@/data/finder";
+import type { JourneyType, BudgetTier } from "@/data/finder";
+import { journeyKeywords, BUDGET_TIERS } from "@/data/finder";
 import { vehicles } from "@/data/vehicles";
 import { packages } from "@/data/packages";
 import type { Vehicle, TravelPackage } from "@/lib/types";
 
 export type FinderResult = {
   vehicle: Vehicle | null;
+  alternatives: Vehicle[];
   package: TravelPackage | null;
   whatsappMessage: string;
+  tier: BudgetTier | null;
 };
 
 function vehicleMatchesJourney(v: Vehicle, jt: JourneyType): boolean {
@@ -29,31 +31,45 @@ function findBestVehicle(
   budget: number,
   jt: JourneyType,
 ): Vehicle | null {
-  const candidates = vehicles.filter(
-    (v) => v.capacity >= people && vehicleMatchesJourney(v, jt),
-  );
+  const candidates = vehicles
+    .filter((v) => v.capacity >= people && vehicleMatchesJourney(v, jt))
+    .filter((v) => v.pricing.startingPrice !== null && v.pricing.startingPrice <= budget)
+    .sort((a, b) => (a.pricing.startingPrice ?? 0) - (b.pricing.startingPrice ?? 0));
 
-  if (candidates.length === 0) {
-    const fallback = vehicles.filter((v) => v.capacity >= people);
-    if (fallback.length > 0) {
-      return fallback.sort((a, b) => {
-        const ap = a.pricing.startingPrice ?? Infinity;
-        const bp = b.pricing.startingPrice ?? Infinity;
-        const distA = Math.abs(ap - budget);
-        const distB = Math.abs(bp - budget);
-        return distA - distB;
-      })[0];
-    }
-    return null;
-  }
+  if (candidates.length > 0) return candidates[0];
 
-  return candidates.sort((a, b) => {
-    const ap = a.pricing.startingPrice ?? Infinity;
-    const bp = b.pricing.startingPrice ?? Infinity;
-    const distA = Math.abs(ap - budget);
-    const distB = Math.abs(bp - budget);
-    return distA - distB;
-  })[0];
+  // Fallback: relax journey match but keep capacity+budget
+  const fallback = vehicles
+    .filter((v) => v.capacity >= people && v.pricing.startingPrice !== null && v.pricing.startingPrice <= budget)
+    .sort((a, b) => (a.pricing.startingPrice ?? 0) - (b.pricing.startingPrice ?? 0));
+
+  if (fallback.length > 0) return fallback[0];
+
+  // Final fallback: cheapest vehicle that fits capacity
+  const cheapest = vehicles
+    .filter((v) => v.capacity >= people && v.pricing.startingPrice !== null)
+    .sort((a, b) => (a.pricing.startingPrice ?? 0) - (b.pricing.startingPrice ?? 0));
+  return cheapest[0] ?? null;
+}
+
+function findAlternatives(
+  people: number,
+  budget: number,
+  jt: JourneyType,
+  excludeSlug: string,
+  limit = 3,
+): Vehicle[] {
+  return vehicles
+    .filter((v) => v.slug !== excludeSlug)
+    .filter(
+      (v) =>
+        v.capacity >= people &&
+        v.pricing.startingPrice !== null &&
+        v.pricing.startingPrice <= budget &&
+        vehicleMatchesJourney(v, jt),
+    )
+    .sort((a, b) => (a.pricing.startingPrice ?? 0) - (b.pricing.startingPrice ?? 0))
+    .slice(0, limit);
 }
 
 function findBestPackage(
@@ -65,9 +81,7 @@ function findBestPackage(
     (p) => p.price <= budget && packageMatchesJourney(p, jt),
   );
 
-  if (candidates.length === 0) {
-    return null;
-  }
+  if (candidates.length === 0) return null;
 
   return candidates.sort((a, b) => a.price - b.price)[0];
 }
@@ -75,12 +89,16 @@ function findBestPackage(
 const JOURNEY_LABELS: Record<JourneyType, string> = {
   city: "City tour / Wisata lokal",
   dinas: "Perjalanan dinas",
-  outcity: "Perjalanan luar kota (multi-hari)",
+  outcity: "Perjalanan luar kota (Multi-hari)",
   transfer: "Transfer bandara",
 };
 
 export function getJourneyLabel(jt: JourneyType): string {
   return JOURNEY_LABELS[jt];
+}
+
+export function getBudgetTier(budget: number): BudgetTier | null {
+  return BUDGET_TIERS.find((t) => budget >= t.min && budget <= t.max) ?? null;
 }
 
 export function buildFinderResult(
@@ -89,6 +107,9 @@ export function buildFinderResult(
   journey: JourneyType,
 ): FinderResult {
   const vehicle = findBestVehicle(people, budget, journey);
+  const alternatives = vehicle
+    ? findAlternatives(people, budget, journey, vehicle.slug)
+    : [];
   const pkg = findBestPackage(people, budget, journey);
 
   const budgetShort =
@@ -101,14 +122,19 @@ export function buildFinderResult(
 
   return {
     vehicle,
+    alternatives,
     package: pkg,
     whatsappMessage: message,
+    tier: getBudgetTier(budget),
   };
 }
 
 export function getPreviewVehicles(budget: number): Vehicle[] {
   return vehicles
-    .filter((v) => v.pricing.startingPrice !== null && v.pricing.startingPrice <= budget)
+    .filter(
+      (v) =>
+        v.pricing.startingPrice !== null && v.pricing.startingPrice <= budget,
+    )
     .sort((a, b) => (a.pricing.startingPrice ?? 0) - (b.pricing.startingPrice ?? 0))
     .slice(0, 4);
 }

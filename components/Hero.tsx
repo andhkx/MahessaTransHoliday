@@ -122,7 +122,7 @@ export default function Hero() {
                 </p>
                 <p className="text-[14px] font-extrabold tracking-tight text-accent sm:text-[18px]">
                   Rp 350rb
-                  <span className="ml-1 text-[10px] font-bold text-muted sm:text-[11px]">/ 24 jam</span>
+                  <span className="ml-1 text-[10px] font-bold text-muted sm:text-[11px]">/ 12 jam</span>
                 </p>
               </div>
             </motion.div>

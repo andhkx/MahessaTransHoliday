@@ -313,7 +313,7 @@ export default function KontakPageClient() {
                   Estimasi Harga
                 </p>
                 <p className="mt-1 text-[14px] font-extrabold text-heading">
-                  Mulai Rp 350.000 / 24 jam
+                  Mulai Rp 350.000 / 12 jam
                 </p>
                 <p className="mt-1 text-[12px] leading-relaxed text-body-text">
                   Harga final tergantung armada, durasi, dan tujuan. Konfirmasi

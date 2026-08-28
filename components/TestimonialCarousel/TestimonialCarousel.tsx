@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/cn";
@@ -15,17 +15,26 @@ function getItemsPerPage(width: number): number {
   return 4;
 }
 
+function getPeekAmount(width: number): number {
+  if (width < 768) return 0.2; // 1.5 card peek
+  return 0;
+}
+
 export default function TestimonialCarousel() {
   const reduce = useReducedMotion();
   const [itemsPerPage, setItemsPerPage] = useState<number>(4);
   const [pageIndex, setPageIndex] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartX, setDragStartX] = useState<number>(0);
+  const [dragOffset, setDragOffset] = useState<number>(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<number | null>(null);
 
   // total page count (sliding windows of itemsPerPage)
   const totalPages = Math.max(1, testimonials.length - itemsPerPage + 1);
 
+  // Update itemsPerPage on resize
   useEffect(() => {
     const handleResize = () => {
       const w = window.innerWidth;
@@ -40,24 +49,109 @@ export default function TestimonialCarousel() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Auto-scroll
   useEffect(() => {
     if (reduce) return;
-    if (paused) return;
+    if (paused || isDragging) return;
     intervalRef.current = window.setInterval(() => {
       setPageIndex((p) => (p + 1) % totalPages);
     }, 5000);
     return () => {
       if (intervalRef.current !== null) window.clearInterval(intervalRef.current);
     };
-  }, [reduce, paused, totalPages]);
+  }, [reduce, paused, isDragging, totalPages]);
 
-  const handlePrev = () => setPageIndex((p) => (p - 1 + totalPages) % totalPages);
-  const handleNext = () => setPageIndex((p) => (p + 1) % totalPages);
+  const handlePrev = useCallback(() => {
+    setPageIndex((p) => (p - 1 + totalPages) % totalPages);
+  }, [totalPages]);
+
+  const handleNext = useCallback(() => {
+    setPageIndex((p) => (p + 1) % totalPages);
+  }, [totalPages]);
+
+  const handleDot = useCallback((i: number) => {
+    setPageIndex(i);
+  }, []);
+
+  // Touch/Swipe handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (itemsPerPage > 1) return; // only swipe on mobile (1 card)
+    setIsDragging(true);
+    setDragStartX(e.touches[0].clientX);
+    if (intervalRef.current) window.clearInterval(intervalRef.current);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    const deltaX = e.touches[0].clientX - dragStartX;
+    setDragOffset(deltaX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    const threshold = 50; // minimum swipe distance
+    if (Math.abs(dragOffset) > threshold) {
+      if (dragOffset < 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+    setDragOffset(0);
+    setDragStartX(0);
+    // Resume auto-scroll after swipe
+    if (intervalRef.current) window.clearInterval(intervalRef.current);
+  };
+
+  // Mouse drag for desktop testing (optional)
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (itemsPerPage > 1) return;
+    setIsDragging(true);
+    setDragStartX(e.clientX);
+    if (intervalRef.current) window.clearInterval(intervalRef.current);
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    const deltaX = e.clientX - dragStartX;
+    setDragOffset(deltaX);
+  };
+
+  const handleMouseUp = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+    const threshold = 50;
+    if (Math.abs(dragOffset) > threshold) {
+      if (dragOffset < 0) handleNext();
+      else handlePrev();
+    }
+    setDragOffset(0);
+    setDragStartX(0);
+    if (intervalRef.current) window.clearInterval(intervalRef.current);
+  };
+
+  // Calculate translateX with drag offset
+  const baseTranslate = `calc(-${pageIndex * (100 / itemsPerPage)}% - ${pageIndex * (16 / itemsPerPage)}px)`;
+  const dragTranslatePx = dragOffset;
+  const finalTranslate = itemsPerPage === 1
+    ? `${baseTranslate} + ${dragTranslatePx}px`
+    : baseTranslate;
 
   return (
     <section
       className="border-y border-line bg-surface/60 py-16 md:py-24"
       aria-label="Testimoni pelanggan"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={(e) => {
+        setPaused(true);
+        handleTouchStart(e as React.TouchEvent);
+      }}
+      onTouchEnd={() => {
+        setPaused(false);
+        handleTouchEnd();
+      }}
     >
       <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
         <motion.header
@@ -79,39 +173,48 @@ export default function TestimonialCarousel() {
           </p>
         </motion.header>
 
-        <div
-          className="relative"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-        >
-          {/* Desktop nav buttons */}
+        <div className="relative" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+          {/* Desktop nav buttons (44x44 circle, navy bg) */}
           <button
             type="button"
             onClick={handlePrev}
             aria-label="Testimoni sebelumnya"
-            className="absolute -left-4 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-white text-heading shadow-card transition-all hover:border-accent hover:text-accent md:flex"
+            className={cn(
+              "absolute top-1/2 z-10 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-accent text-white shadow-[0_4px_14px_rgba(15,76,117,0.35)] transition-all duration-300 hover:bg-accent-hover hover:scale-105 hover:shadow-[0_8px_24px_rgba(15,76,117,0.45)] hidden md:flex",
+              isDragging && "opacity-50 pointer-events-none"
+            )}
+            style={{ left: itemsPerPage > 1 ? "-52px" : undefined }}
           >
-            <ChevronLeft size={18} aria-hidden="true" />
+            <ChevronLeft size={20} aria-hidden="true" />
           </button>
           <button
             type="button"
             onClick={handleNext}
             aria-label="Testimoni berikutnya"
-            className="absolute -right-4 top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-white text-heading shadow-card transition-all hover:border-accent hover:text-accent md:flex"
+            className={cn(
+              "absolute top-1/2 z-10 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-accent text-white shadow-[0_4px_14px_rgba(15,76,117,0.35)] transition-all duration-300 hover:bg-accent-hover hover:scale-105 hover:shadow-[0_8px_24px_rgba(15,76,117,0.45)] hidden md:flex",
+              isDragging && "opacity-50 pointer-events-none"
+            )}
+            style={{ right: itemsPerPage > 1 ? "-52px" : undefined }}
           >
-            <ChevronRight size={18} aria-hidden="true" />
+            <ChevronRight size={20} aria-hidden="true" />
           </button>
 
           <div
             ref={trackRef}
             className="overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
           >
             <motion.div
               className="flex"
-              animate={{
-                x: `calc(-${pageIndex * (100 / itemsPerPage)}% - ${pageIndex * (16 / itemsPerPage)}px)`,
-              }}
-              transition={{ duration: 0.5, ease: EASE }}
+              animate={{ x: finalTranslate }}
+              transition={isDragging ? undefined : { duration: 0.5, ease: EASE }}
             >
               {testimonials.map((t, i) => (
                 <div
@@ -139,11 +242,13 @@ export default function TestimonialCarousel() {
                 <button
                   key={i}
                   type="button"
-                  onClick={() => setPageIndex(i)}
+                  onClick={() => handleDot(i)}
                   aria-label={`Halaman ${i + 1}`}
                   className={cn(
-                    "h-2 rounded-full transition-all duration-300",
-                    isActive ? "w-8 bg-accent" : "w-2 bg-line",
+                    "rounded-full transition-all duration-300",
+                    isActive
+                      ? "w-8 bg-accent scale-110"
+                      : "w-2 h-2 bg-line hover:bg-accent/60",
                   )}
                 />
               );
