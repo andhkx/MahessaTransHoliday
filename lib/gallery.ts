@@ -2,65 +2,67 @@ export type GalleryImage = {
   src: string;
   alt: string;
   title: string;
-  category: "Wisata" | "Rombongan" | "Keluarga" | "Dinas" | "City Tour";
+  location: "Malaysia" | "Toli-Toli" | "Manado";
+  badge?: string;
 };
 
 export const galleryImages: GalleryImage[] = [
   {
-    src: "/images/gallery/galeri1.svg",
-    alt: "Dokumentasi penumpang Mahessa Trans Holiday 1",
-    title: "Trip Bromo",
-    category: "Wisata",
+    src: "/images/gallery/galeri1.webp",
+    alt: "Perjalanan ke Malaysia bersama Mahessa Trans Holiday",
+    title: "Malaysia Tour",
+    location: "Malaysia",
   },
   {
-    src: "/images/gallery/galeri2.svg",
-    alt: "Dokumentasi penumpang Mahessa Trans Holiday 2",
-    title: "City Tour Bandung",
-    category: "City Tour",
+    src: "/images/gallery/galeri2.webp",
+    alt: "Wisata Malaysia keluarga dengan Mahessa Trans Holiday",
+    title: "Malaysia Family Trip",
+    location: "Malaysia",
   },
   {
-    src: "/images/gallery/galeri3.svg",
-    alt: "Dokumentasi penumpang Mahessa Trans Holiday 3",
-    title: "Keluarga Besar",
-    category: "Keluarga",
+    src: "/images/gallery/galeri3.webp",
+    alt: "Perjalanan ke Toli-Toli Sulawesi Tengah",
+    title: "Toli-Toli Trip",
+    location: "Toli-Toli",
   },
   {
-    src: "/images/gallery/galeri4.svg",
-    alt: "Dokumentasi penumpang Mahessa Trans Holiday 4",
-    title: "Studi Tour",
-    category: "Dinas",
+    src: "/images/gallery/galeri4.webp",
+    alt: "Wisata Toli-Toli dengan rombongan",
+    title: "Toli-Toli Group Tour",
+    location: "Toli-Toli",
   },
   {
-    src: "/images/gallery/galeri5.svg",
-    alt: "Dokumentasi penumpang Mahessa Trans Holiday 5",
-    title: "Paket Ciwidey",
-    category: "Wisata",
+    src: "/images/gallery/galeri5.webp",
+    alt: "Perjalanan dinas ke Toli-Toli",
+    title: "Toli-Toli Business Trip",
+    location: "Toli-Toli",
   },
   {
-    src: "/images/gallery/galeri6.svg",
-    alt: "Dokumentasi penumpang Mahessa Trans Holiday 6",
-    title: "Rombongan Kantor",
-    category: "Rombongan",
+    src: "/images/gallery/galeri6.webp",
+    alt: "Liburan ke Manado Sulawesi Utara",
+    title: "Manado Holiday",
+    location: "Manado",
+    badge: "Wisata",
   },
   {
-    src: "/images/gallery/galeri7.svg",
-    alt: "Dokumentasi penumpang Mahessa Trans Holiday 7",
-    title: "Trip Yogyakarta",
-    category: "Wisata",
+    src: "/images/gallery/galeri7.webp",
+    alt: "Perjalanan keluarga ke Manado",
+    title: "Manado Family Trip",
+    location: "Manado",
+    badge: "Keluarga",
   },
   {
-    src: "/images/gallery/galeri8.svg",
-    alt: "Dokumentasi penumpang Mahessa Trans Holiday 8",
-    title: "Liburan Keluarga",
-    category: "Keluarga",
+    src: "/images/gallery/galeri8.webp",
+    alt: "Wisata bahari Manado bersama Mahessa",
+    title: "Manado Marine Tour",
+    location: "Manado",
+    badge: "Bahari",
   },
 ];
 
-export const galleryCategories: Array<"Semua" | GalleryImage["category"]> = [
+export const galleryLocations: Array<"Semua" | GalleryImage["location"]> = [
   "Semua",
-  "Wisata",
-  "Rombongan",
-  "Keluarga",
-  "Dinas",
-  "City Tour",
+  "Malaysia",
+  "Toli-Toli",
+  "Manado",
 ];
