@@ -26,6 +26,8 @@ export default function TestimonialCarousel() {
   const trackRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<number | null>(null);
 
+  const isMobile = itemsPerPage === 1;
+
   // total page count (sliding windows of itemsPerPage)
   const totalPages = Math.max(1, testimonials.length - itemsPerPage + 1);
 
@@ -117,10 +119,23 @@ export default function TestimonialCarousel() {
   };
 
   // Calculate translateX with drag offset
-  const baseTranslate = `calc(-${pageIndex * (100 / itemsPerPage)}% - ${pageIndex * (16 / itemsPerPage)}px)`;
-  const finalTranslate = isDragging
-    ? `${baseTranslate} + ${dragOffset}px`
-    : baseTranslate;
+  // Mobile: card width = 100% of track, but track width is viewport-based
+  // Use translate based on viewport width minus section padding
+  // Track has gap-3 (12px) and card px-2 (8px each side = 16px)
+  const gapPx = 12;
+  const cardSidePadPx = 8; // px-2 = 8px each side
+
+  // Calculate translate for mobile (1 card per view)
+  const mobileCardWidthPercent = 100; // card takes full track width
+  const mobileGapPercent = (gapPx / (window.innerWidth - 40)) * 100; // gap as % of viewport minus px-5 (20px each side)
+
+  const finalTranslate = isMobile
+    ? // Mobile: translateX based on viewport width (track width = viewport - section padding)
+      `-${pageIndex * (100 + mobileGapPercent)}%`
+    : // Desktop: original calc
+      isDragging
+        ? `calc(-${pageIndex * (100 / itemsPerPage)}% - ${pageIndex * (16 / itemsPerPage)}px) + ${dragOffset}px`
+        : `calc(-${pageIndex * (100 / itemsPerPage)}% - ${pageIndex * (16 / itemsPerPage)}px)`;
 
   return (
     <section
@@ -229,7 +244,7 @@ export default function TestimonialCarousel() {
           </div>
 
           {/* Pagination dots */}
-          <div className="mt-8 flex items-center justify-center gap-2">
+          <div className="mt-8 flex items-center justify-center gap-3">
             {Array.from({ length: totalPages }).map((_, i) => {
               const isActive = i === pageIndex;
               return (
@@ -239,12 +254,21 @@ export default function TestimonialCarousel() {
                   onClick={() => handleDot(i)}
                   aria-label={`Halaman ${i + 1}`}
                   className={cn(
-                    "rounded-full transition-all duration-300",
+                    "relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300",
                     isActive
-                      ? "w-8 bg-accent scale-110"
-                      : "w-2 h-2 bg-line hover:bg-accent/60",
+                      ? "bg-accent"
+                      : "bg-line hover:bg-accent/60",
                   )}
-                />
+                >
+                  <span
+                    className={cn(
+                      "rounded-full transition-all duration-300",
+                      isActive
+                        ? "h-2.5 w-2.5 bg-white"
+                        : "h-1.5 w-1.5 bg-transparent",
+                    )}
+                  />
+                </button>
               );
             })}
           </div>

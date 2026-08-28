@@ -38,7 +38,7 @@ export default function Navbar() {
             aria-label={`${SITE_NAME} - Beranda`}
           >
             <Image
-              src="/images/logo_mahessa.png"
+              src="/images/logo_mahessa.webp"
               alt={SITE_NAME}
               width={200}
               height={56}

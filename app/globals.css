@@ -15,14 +15,14 @@
   --accent-hover: #004a7c;
   --text-heading: #004a7c;
   --text-body: #42596b;
-  --text-muted: #7b93a3;
+  --text-muted: #5a6b7a;
 }
 
 @theme {
   --color-background: #fafafa;
   --color-heading: #004a7c;
   --color-body-text: #42596b;
-  --color-muted: #7b93a3;
+  --color-muted: #5a6b7a;
 
   --color-accent: #005691;
   --color-accent-hover: #004a7c;
