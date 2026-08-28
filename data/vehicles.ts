@@ -10,10 +10,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 5,
     fuelType: "Bensin",
-    image: "/images/vehicles/toyota-agya.svg",
+    image: "/images/vehicles/toyota-agya.webp",
     gallery: [
-      "/images/vehicles/toyota-agya.svg",
-      "/images/vehicles/toyota-agya-2.svg",
+      "/images/vehicles/toyota-agya.webp",
+      "/images/vehicles/toyota-agya-2.webp",
     ],
     pricing: {
       startingPrice: 340000,
@@ -58,10 +58,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Manual",
     capacity: 7,
     fuelType: "Bensin",
-    image: "/images/vehicles/toyota-calya.svg",
+    image: "/images/vehicles/toyota-calya.webp",
     gallery: [
-      "/images/vehicles/toyota-calya.svg",
-      "/images/vehicles/toyota-calya-2.svg",
+      "/images/vehicles/toyota-calya.webp",
+      "/images/vehicles/toyota-calya-2.webp",
     ],
     pricing: {
       startingPrice: 400000,
@@ -107,10 +107,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin",
-    image: "/images/vehicles/daihatsu-terios.svg",
+    image: "/images/vehicles/daihatsu-terios.webp",
     gallery: [
-      "/images/vehicles/daihatsu-terios.svg",
-      "/images/vehicles/daihatsu-terios-2.svg",
+      "/images/vehicles/daihatsu-terios.webp",
+      "/images/vehicles/daihatsu-terios-2.webp",
     ],
     pricing: {
       startingPrice: 550000,
@@ -157,10 +157,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin",
-    image: "/images/vehicles/toyota-avanza.svg",
+    image: "/images/vehicles/toyota-avanza.webp",
     gallery: [
-      "/images/vehicles/toyota-avanza.svg",
-      "/images/vehicles/toyota-avanza-2.svg",
+      "/images/vehicles/toyota-avanza.webp",
+      "/images/vehicles/toyota-avanza-2.webp",
     ],
     pricing: {
       startingPrice: 450000,
@@ -206,10 +206,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin",
-    image: "/images/vehicles/toyota-rush.svg",
+    image: "/images/vehicles/toyota-rush.webp",
     gallery: [
-      "/images/vehicles/toyota-rush.svg",
-      "/images/vehicles/toyota-rush-2.svg",
+      "/images/vehicles/toyota-rush.webp",
+      "/images/vehicles/toyota-rush-2.webp",
     ],
     pricing: {
       startingPrice: 550000,
@@ -255,10 +255,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 5,
     fuelType: "Bensin",
-    image: "/images/vehicles/honda-city-hatchback.svg",
+    image: "/images/vehicles/honda-city-hatchback.webp",
     gallery: [
-      "/images/vehicles/honda-city-hatchback.svg",
-      "/images/vehicles/honda-city-hatchback-2.svg",
+      "/images/vehicles/honda-city-hatchback.webp",
+      "/images/vehicles/honda-city-hatchback-2.webp",
     ],
     pricing: {
       startingPrice: 550000,
@@ -304,10 +304,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Diesel",
-    image: "/images/vehicles/toyota-innova-reborn.svg",
+    image: "/images/vehicles/toyota-innova-reborn.webp",
     gallery: [
-      "/images/vehicles/toyota-innova-reborn.svg",
-      "/images/vehicles/toyota-innova-reborn-2.svg",
+      "/images/vehicles/toyota-innova-reborn.webp",
+      "/images/vehicles/toyota-innova-reborn-2.webp",
     ],
     pricing: {
       startingPrice: 1300000,
@@ -353,10 +353,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin Hybrid",
-    image: "/images/vehicles/toyota-innova-zenix.svg",
+    image: "/images/vehicles/toyota-innova-zenix.webp",
     gallery: [
-      "/images/vehicles/toyota-innova-zenix.svg",
-      "/images/vehicles/toyota-innova-zenix-2.svg",
+      "/images/vehicles/toyota-innova-zenix.webp",
+      "/images/vehicles/toyota-innova-zenix-2.webp",
     ],
     pricing: {
       startingPrice: 1500000,
@@ -402,10 +402,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Diesel",
-    image: "/images/vehicles/mitsubishi-pajero-sport.svg",
+    image: "/images/vehicles/mitsubishi-pajero-sport.webp",
     gallery: [
-      "/images/vehicles/mitsubishi-pajero-sport.svg",
-      "/images/vehicles/mitsubishi-pajero-sport-2.svg",
+      "/images/vehicles/mitsubishi-pajero-sport.webp",
+      "/images/vehicles/mitsubishi-pajero-sport-2.webp",
     ],
     pricing: {
       startingPrice: 1200000,
@@ -451,10 +451,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Diesel",
-    image: "/images/vehicles/toyota-fortuner.svg",
+    image: "/images/vehicles/toyota-fortuner.webp",
     gallery: [
-      "/images/vehicles/toyota-fortuner.svg",
-      "/images/vehicles/toyota-fortuner-2.svg",
+      "/images/vehicles/toyota-fortuner.webp",
+      "/images/vehicles/toyota-fortuner-2.webp",
     ],
     pricing: {
       startingPrice: 1100000,
@@ -501,10 +501,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin",
-    image: "/images/vehicles/toyota-alphard.svg",
+    image: "/images/vehicles/toyota-alphard.webp",
     gallery: [
-      "/images/vehicles/toyota-alphard.svg",
-      "/images/vehicles/toyota-alphard-2.svg",
+      "/images/vehicles/toyota-alphard.webp",
+      "/images/vehicles/toyota-alphard-2.webp",
     ],
     pricing: {
       startingPrice: 2500000,
@@ -551,10 +551,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Manual",
     capacity: 15,
     fuelType: "Diesel",
-    image: "/images/vehicles/toyota-hiace-premio.svg",
+    image: "/images/vehicles/toyota-hiace-premio.webp",
     gallery: [
-      "/images/vehicles/toyota-hiace-premio.svg",
-      "/images/vehicles/toyota-hiace-premio-2.svg",
+      "/images/vehicles/toyota-hiace-premio.webp",
+      "/images/vehicles/toyota-hiace-premio-2.webp",
     ],
     pricing: {
       startingPrice: 1800000,
@@ -600,10 +600,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Manual",
     capacity: 16,
     fuelType: "Diesel",
-    image: "/images/vehicles/toyota-hiace-commuter.svg",
+    image: "/images/vehicles/toyota-hiace-commuter.webp",
     gallery: [
-      "/images/vehicles/toyota-hiace-commuter.svg",
-      "/images/vehicles/toyota-hiace-commuter-2.svg",
+      "/images/vehicles/toyota-hiace-commuter.webp",
+      "/images/vehicles/toyota-hiace-commuter-2.webp",
     ],
     pricing: {
       startingPrice: 1500000,
@@ -649,10 +649,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Manual",
     capacity: 16,
     fuelType: "Diesel",
-    image: "/images/vehicles/isuzu-elf.svg",
+    image: "/images/vehicles/isuzu-elf.webp",
     gallery: [
-      "/images/vehicles/isuzu-elf.svg",
-      "/images/vehicles/isuzu-elf-2.svg",
+      "/images/vehicles/isuzu-elf.webp",
+      "/images/vehicles/isuzu-elf-2.webp",
     ],
     pricing: {
       startingPrice: 1800000,

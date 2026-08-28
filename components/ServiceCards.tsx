@@ -17,10 +17,10 @@ const ICONS: Record<string, React.ComponentType<{ size?: number; className?: str
 };
 
 const IMAGES: Record<string, string> = {
-  "transfer-bandara": "/images/vehicles/toyota-hiace-premio.svg",
-  "mobil-driver": "/images/vehicles/toyota-innova-reborn.svg",
-  "charter-transfer": "/images/vehicles/toyota-hiace-premio.svg",
-  "paket-wisata": "/images/packages/hiace-bandung.svg",
+  "transfer-bandara": "/images/vehicles/toyota-hiace-premio.webp",
+  "mobil-driver": "/images/vehicles/toyota-innova-reborn.webp",
+  "charter-transfer": "/images/vehicles/toyota-hiace-premio.webp",
+  "paket-wisata": "/images/packages/hiace-bandung.webp",
 };
 
 export default function ServiceCards() {

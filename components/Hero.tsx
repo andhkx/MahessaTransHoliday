@@ -97,7 +97,7 @@ export default function Hero() {
             <div className="absolute -inset-4 -z-10 rounded-[36px] bg-gradient-to-br from-accent/15 via-primary/5 to-transparent blur-2xl" />
             <div className="relative overflow-hidden rounded-[32px] border border-line bg-surface shadow-elevated">
               <Image
-                src="/images/vehicles/toyota-hiace-premio.svg"
+                src="/images/vehicles/toyota-hiace-premio.webp"
                 alt={`${SITE_NAME} - Hiace Premio`}
                 width={1200}
                 height={800}
