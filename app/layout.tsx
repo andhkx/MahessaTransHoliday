@@ -50,10 +50,11 @@ export const metadata: Metadata = {
     url: SITE_URL,
   },
   icons: {
-    icon: "/icon.svg",
-    shortcut: "/icon.svg",
-    apple: "/icon.svg",
+    icon: "/icon.png",
+    shortcut: "/favicon-32.png",
+    apple: "/apple-icon.png",
   },
+  manifest: "/manifest.json",
 };
 
 const localBusinessJsonLd = {

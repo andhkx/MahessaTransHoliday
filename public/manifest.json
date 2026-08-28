@@ -1,0 +1,23 @@
+{
+  "name": "Mahessa Trans Holiday",
+  "short_name": "Mahessa",
+  "description": "Rental mobil, charter, wisata, dan perjalanan untuk berbagai kebutuhan.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAFAFA",
+  "theme_color": "#0F4C75",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "apple touch icon"
+    }
+  ]
+}
