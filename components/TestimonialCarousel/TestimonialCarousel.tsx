@@ -15,11 +15,6 @@ function getItemsPerPage(width: number): number {
   return 4;
 }
 
-function getPeekAmount(width: number): number {
-  if (width < 768) return 0.2; // 1.5 card peek
-  return 0;
-}
-
 export default function TestimonialCarousel() {
   const reduce = useReducedMotion();
   const [itemsPerPage, setItemsPerPage] = useState<number>(4);
@@ -30,6 +25,8 @@ export default function TestimonialCarousel() {
   const [dragOffset, setDragOffset] = useState<number>(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<number | null>(null);
+
+  const isMobile = itemsPerPage === 1;
 
   // total page count (sliding windows of itemsPerPage)
   const totalPages = Math.max(1, testimonials.length - itemsPerPage + 1);
@@ -49,17 +46,28 @@ export default function TestimonialCarousel() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Auto-scroll
+  // Auto-scroll: continuous on mobile, pause on hover on desktop
   useEffect(() => {
     if (reduce) return;
-    if (paused || isDragging) return;
-    intervalRef.current = window.setInterval(() => {
-      setPageIndex((p) => (p + 1) % totalPages);
-    }, 5000);
-    return () => {
-      if (intervalRef.current !== null) window.clearInterval(intervalRef.current);
-    };
-  }, [reduce, paused, isDragging, totalPages]);
+    if (isMobile) {
+      // Mobile: NEVER pause, continuous infinite scroll
+      intervalRef.current = window.setInterval(() => {
+        setPageIndex((p) => (p + 1) % totalPages);
+      }, 5000);
+      return () => {
+        if (intervalRef.current !== null) window.clearInterval(intervalRef.current);
+      };
+    } else {
+      // Desktop: pause on hover/drag
+      if (paused || isDragging) return;
+      intervalRef.current = window.setInterval(() => {
+        setPageIndex((p) => (p + 1) % totalPages);
+      }, 5000);
+      return () => {
+        if (intervalRef.current !== null) window.clearInterval(intervalRef.current);
+      };
+    }
+  }, [reduce, isMobile, paused, isDragging, totalPages]);
 
   const handlePrev = useCallback(() => {
     setPageIndex((p) => (p - 1 + totalPages) % totalPages);
@@ -73,24 +81,24 @@ export default function TestimonialCarousel() {
     setPageIndex(i);
   }, []);
 
-  // Touch/Swipe handlers
+  // Touch/Swipe handlers - only for desktop (mobile scrolls continuously)
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (itemsPerPage > 1) return; // only swipe on mobile (1 card)
+    if (isMobile) return; // Mobile doesn't need swipe, it auto-scrolls
     setIsDragging(true);
     setDragStartX(e.touches[0].clientX);
     if (intervalRef.current) window.clearInterval(intervalRef.current);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return;
+    if (!isDragging || isMobile) return;
     const deltaX = e.touches[0].clientX - dragStartX;
     setDragOffset(deltaX);
   };
 
   const handleTouchEnd = () => {
-    if (!isDragging) return;
+    if (!isDragging || isMobile) return;
     setIsDragging(false);
-    const threshold = 50; // minimum swipe distance
+    const threshold = 50;
     if (Math.abs(dragOffset) > threshold) {
       if (dragOffset < 0) {
         handleNext();
@@ -100,26 +108,25 @@ export default function TestimonialCarousel() {
     }
     setDragOffset(0);
     setDragStartX(0);
-    // Resume auto-scroll after swipe
     if (intervalRef.current) window.clearInterval(intervalRef.current);
   };
 
-  // Mouse drag for desktop testing (optional)
+  // Mouse drag for desktop only
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (itemsPerPage > 1) return;
+    if (isMobile) return;
     setIsDragging(true);
     setDragStartX(e.clientX);
     if (intervalRef.current) window.clearInterval(intervalRef.current);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
+    if (!isDragging || isMobile) return;
     const deltaX = e.clientX - dragStartX;
     setDragOffset(deltaX);
   };
 
   const handleMouseUp = () => {
-    if (!isDragging) return;
+    if (!isDragging || isMobile) return;
     setIsDragging(false);
     const threshold = 50;
     if (Math.abs(dragOffset) > threshold) {
@@ -131,27 +138,17 @@ export default function TestimonialCarousel() {
     if (intervalRef.current) window.clearInterval(intervalRef.current);
   };
 
-  // Calculate translateX with drag offset
+  // Calculate translateX with drag offset (only for desktop)
   const baseTranslate = `calc(-${pageIndex * (100 / itemsPerPage)}% - ${pageIndex * (16 / itemsPerPage)}px)`;
-  const dragTranslatePx = dragOffset;
-  const finalTranslate = itemsPerPage === 1
-    ? `${baseTranslate} + ${dragTranslatePx}px`
-    : baseTranslate;
+  const finalTranslate = isMobile ? baseTranslate : `${baseTranslate} + ${dragOffset}px`;
 
   return (
     <section
       className="border-y border-line bg-surface/60 py-16 md:py-24"
       aria-label="Testimoni pelanggan"
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-      onTouchStart={(e) => {
-        setPaused(true);
-        handleTouchStart(e as React.TouchEvent);
-      }}
-      onTouchEnd={() => {
-        setPaused(false);
-        handleTouchEnd();
-      }}
+      // Desktop pause on hover, mobile never pauses
+      onMouseEnter={() => !isMobile && setPaused(true)}
+      onMouseLeave={() => !isMobile && setPaused(false)}
     >
       <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
         <motion.header
@@ -173,43 +170,47 @@ export default function TestimonialCarousel() {
           </p>
         </motion.header>
 
-        <div className="relative" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+        <div className="relative">
           {/* Desktop nav buttons (44x44 circle, navy bg) */}
-          <button
-            type="button"
-            onClick={handlePrev}
-            aria-label="Testimoni sebelumnya"
-            className={cn(
-              "absolute top-1/2 z-10 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-accent text-white shadow-[0_4px_14px_rgba(15,76,117,0.35)] transition-all duration-300 hover:bg-accent-hover hover:scale-105 hover:shadow-[0_8px_24px_rgba(15,76,117,0.45)] hidden md:flex",
-              isDragging && "opacity-50 pointer-events-none"
-            )}
-            style={{ left: itemsPerPage > 1 ? "-52px" : undefined }}
-          >
-            <ChevronLeft size={20} aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            onClick={handleNext}
-            aria-label="Testimoni berikutnya"
-            className={cn(
-              "absolute top-1/2 z-10 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-accent text-white shadow-[0_4px_14px_rgba(15,76,117,0.35)] transition-all duration-300 hover:bg-accent-hover hover:scale-105 hover:shadow-[0_8px_24px_rgba(15,76,117,0.45)] hidden md:flex",
-              isDragging && "opacity-50 pointer-events-none"
-            )}
-            style={{ right: itemsPerPage > 1 ? "-52px" : undefined }}
-          >
-            <ChevronRight size={20} aria-hidden="true" />
-          </button>
+          {!isMobile && (
+            <>
+              <button
+                type="button"
+                onClick={handlePrev}
+                aria-label="Testimoni sebelumnya"
+                className={cn(
+                  "absolute top-1/2 z-10 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-accent text-white shadow-[0_4px_14px_rgba(15,76,117,0.35)] transition-all duration-300 hover:bg-accent-hover hover:scale-105 hover:shadow-[0_8px_24px_rgba(15,76,117,0.45)] hidden md:flex",
+                  isDragging && "opacity-50 pointer-events-none"
+                )}
+                style={{ left: itemsPerPage > 1 ? "-52px" : undefined }}
+              >
+                <ChevronLeft size={20} aria-hidden="true" />
+              </button>
+              <button
+                type="button"
+                onClick={handleNext}
+                aria-label="Testimoni berikutnya"
+                className={cn(
+                  "absolute top-1/2 z-10 -translate-y-1/2 flex h-11 w-11 items-center justify-center rounded-full bg-accent text-white shadow-[0_4px_14px_rgba(15,76,117,0.35)] transition-all duration-300 hover:bg-accent-hover hover:scale-105 hover:shadow-[0_8px_24px_rgba(15,76,117,0.45)] hidden md:flex",
+                  isDragging && "opacity-50 pointer-events-none"
+                )}
+                style={{ right: itemsPerPage > 1 ? "-52px" : undefined }}
+              >
+                <ChevronRight size={20} aria-hidden="true" />
+              </button>
+            </>
+          )}
 
           <div
             ref={trackRef}
             className="overflow-hidden"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
+            onTouchStart={isMobile ? undefined : handleTouchStart}
+            onTouchMove={isMobile ? undefined : handleTouchMove}
+            onTouchEnd={isMobile ? undefined : handleTouchEnd}
+            onMouseDown={isMobile ? undefined : handleMouseDown}
+            onMouseMove={isMobile ? undefined : handleMouseMove}
+            onMouseUp={isMobile ? undefined : handleMouseUp}
+            onMouseLeave={isMobile ? undefined : handleMouseUp}
           >
             <motion.div
               className="flex"

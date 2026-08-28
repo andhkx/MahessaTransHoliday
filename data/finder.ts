@@ -25,8 +25,8 @@ export const BUDGET_TIERS: BudgetTier[] = [
   {
     id: "menengah",
     label: "Menengah",
-    range: "Rp700rb - 1.5jt",
-    min: 700000,
+    range: "Rp600rb - 1.5jt",
+    min: 600001,
     max: 1500000,
     color: "#F39C12",
     bgClass: "bg-warning",
@@ -34,8 +34,8 @@ export const BUDGET_TIERS: BudgetTier[] = [
   {
     id: "premium",
     label: "Premium",
-    range: "Rp1.8jt - 4.5jt",
-    min: 1800000,
+    range: "Rp1.5jt - 4.5jt",
+    min: 1500001,
     max: 4500000,
     color: "#0F4C75",
     bgClass: "bg-accent",
@@ -43,8 +43,8 @@ export const BUDGET_TIERS: BudgetTier[] = [
   {
     id: "grup",
     label: "Grup / Wisata",
-    range: "Rp12.75jt+",
-    min: 4500000,
+    range: "Rp4.5jt+",
+    min: 4500001,
     max: 12750000,
     color: "#7B2CBF",
     bgClass: "bg-[#7B2CBF]",
