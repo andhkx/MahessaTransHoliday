@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/cn";
@@ -19,12 +19,12 @@ export default function TestimonialCarousel() {
   const reduce = useReducedMotion();
   const [itemsPerPage, setItemsPerPage] = useState<number>(4);
   const [pageIndex, setPageIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState<number>(0);
   const [dragOffset, setDragOffset] = useState<number>(0);
   const trackRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<number | null>(null);
+  const animationRef = useRef<number | null>(null);
 
   const isMobile = itemsPerPage === 1;
 
@@ -46,20 +46,18 @@ export default function TestimonialCarousel() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Auto-scroll: continuous on mobile, pause on hover on desktop
+  // Mobile: CSS marquee continuous scroll (no interval, no pause)
+  // Desktop: interval-based with pause on hover
   useEffect(() => {
     if (reduce) return;
+
     if (isMobile) {
-      // Mobile: NEVER pause, continuous infinite scroll
-      intervalRef.current = window.setInterval(() => {
-        setPageIndex((p) => (p + 1) % totalPages);
-      }, 5000);
-      return () => {
-        if (intervalRef.current !== null) window.clearInterval(intervalRef.current);
-      };
+      // Mobile: continuous marquee - no interval, no pause
+      // The animation is handled purely by CSS on the track element
+      return;
     } else {
-      // Desktop: pause on hover/drag
-      if (paused || isDragging) return;
+      // Desktop: interval-based with pause on hover
+      if (intervalRef.current) window.clearInterval(intervalRef.current);
       intervalRef.current = window.setInterval(() => {
         setPageIndex((p) => (p + 1) % totalPages);
       }, 5000);
@@ -67,26 +65,25 @@ export default function TestimonialCarousel() {
         if (intervalRef.current !== null) window.clearInterval(intervalRef.current);
       };
     }
-  }, [reduce, isMobile, paused, isDragging, totalPages]);
+  }, [reduce, isMobile, totalPages]);
 
-  const handlePrev = useCallback(() => {
+  const handlePrev = () => {
     setPageIndex((p) => (p - 1 + totalPages) % totalPages);
-  }, [totalPages]);
+  };
 
-  const handleNext = useCallback(() => {
+  const handleNext = () => {
     setPageIndex((p) => (p + 1) % totalPages);
-  }, [totalPages]);
+  };
 
-  const handleDot = useCallback((i: number) => {
+  const handleDot = (i: number) => {
     setPageIndex(i);
-  }, []);
+  };
 
-  // Touch/Swipe handlers - only for desktop (mobile scrolls continuously)
+  // Touch/Swipe handlers - only for desktop
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (isMobile) return; // Mobile doesn't need swipe, it auto-scrolls
+    if (isMobile) return;
     setIsDragging(true);
     setDragStartX(e.touches[0].clientX);
-    if (intervalRef.current) window.clearInterval(intervalRef.current);
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -100,15 +97,11 @@ export default function TestimonialCarousel() {
     setIsDragging(false);
     const threshold = 50;
     if (Math.abs(dragOffset) > threshold) {
-      if (dragOffset < 0) {
-        handleNext();
-      } else {
-        handlePrev();
-      }
+      if (dragOffset < 0) handleNext();
+      else handlePrev();
     }
     setDragOffset(0);
     setDragStartX(0);
-    if (intervalRef.current) window.clearInterval(intervalRef.current);
   };
 
   // Mouse drag for desktop only
@@ -116,7 +109,6 @@ export default function TestimonialCarousel() {
     if (isMobile) return;
     setIsDragging(true);
     setDragStartX(e.clientX);
-    if (intervalRef.current) window.clearInterval(intervalRef.current);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -135,20 +127,19 @@ export default function TestimonialCarousel() {
     }
     setDragOffset(0);
     setDragStartX(0);
-    if (intervalRef.current) window.clearInterval(intervalRef.current);
   };
 
-  // Calculate translateX with drag offset (only for desktop)
+  // Calculate translateX for desktop (with drag offset)
   const baseTranslate = `calc(-${pageIndex * (100 / itemsPerPage)}% - ${pageIndex * (16 / itemsPerPage)}px)`;
-  const finalTranslate = isMobile ? baseTranslate : `${baseTranslate} + ${dragOffset}px`;
+  const finalTranslate = isMobile ? undefined : (isDragging ? `${baseTranslate} + ${dragOffset}px` : baseTranslate);
+
+  // For mobile: we use CSS animation on a duplicated track for seamless infinite marquee
+  // We need 2x the cards for seamless loop
 
   return (
     <section
       className="border-y border-line bg-surface/60 py-16 md:py-24"
       aria-label="Testimoni pelanggan"
-      // Desktop pause on hover, mobile never pauses
-      onMouseEnter={() => !isMobile && setPaused(true)}
-      onMouseLeave={() => !isMobile && setPaused(false)}
     >
       <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
         <motion.header
@@ -171,7 +162,7 @@ export default function TestimonialCarousel() {
         </motion.header>
 
         <div className="relative">
-          {/* Desktop nav buttons (44x44 circle, navy bg) */}
+          {/* Desktop nav buttons */}
           {!isMobile && (
             <>
               <button
@@ -203,7 +194,7 @@ export default function TestimonialCarousel() {
 
           <div
             ref={trackRef}
-            className="overflow-hidden"
+            className={cn("overflow-hidden", isMobile && "relative")}
             onTouchStart={isMobile ? undefined : handleTouchStart}
             onTouchMove={isMobile ? undefined : handleTouchMove}
             onTouchEnd={isMobile ? undefined : handleTouchEnd}
@@ -212,50 +203,107 @@ export default function TestimonialCarousel() {
             onMouseUp={isMobile ? undefined : handleMouseUp}
             onMouseLeave={isMobile ? undefined : handleMouseUp}
           >
-            <motion.div
-              className="flex"
-              animate={{ x: finalTranslate }}
-              transition={isDragging ? undefined : { duration: 0.5, ease: EASE }}
-            >
-              {testimonials.map((t, i) => (
-                <div
-                  key={t.id}
-                  className="shrink-0 px-2"
-                  style={{ width: `${100 / itemsPerPage}%` }}
-                >
-                  <TestimonialCard
-                    name={t.name}
-                    role={t.role}
-                    quote={t.quote}
-                    rating={t.rating}
-                    index={i}
-                  />
-                </div>
-              ))}
-            </motion.div>
+            {isMobile ? (
+              // Mobile: CSS Marquee - duplicate cards for seamless infinite loop
+              <div
+                className="flex"
+                style={{
+                  animation: "marquee 40s linear infinite",
+                  width: "max-content",
+                }}
+              >
+                {/* First set */}
+                {testimonials.map((t, i) => (
+                  <div
+                    key={`first-${t.id}`}
+                    className="shrink-0 px-2"
+                    style={{ width: "100%" }}
+                  >
+                    <TestimonialCard
+                      name={t.name}
+                      role={t.role}
+                      quote={t.quote}
+                      rating={t.rating}
+                      index={i}
+                    />
+                  </div>
+                ))}
+                {/* Second set (duplicate) for seamless loop */}
+                {testimonials.map((t, i) => (
+                  <div
+                    key={`second-${t.id}`}
+                    className="shrink-0 px-2"
+                    style={{ width: "100%" }}
+                  >
+                    <TestimonialCard
+                      name={t.name}
+                      role={t.role}
+                      quote={t.quote}
+                      rating={t.rating}
+                      index={i + testimonials.length}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              // Desktop: discrete sliding with interval
+              <motion.div
+                className="flex"
+                animate={{ x: finalTranslate }}
+                transition={isDragging ? undefined : { duration: 0.5, ease: EASE }}
+              >
+                {testimonials.map((t, i) => (
+                  <div
+                    key={t.id}
+                    className="shrink-0 px-2"
+                    style={{ width: `${100 / itemsPerPage}%` }}
+                  >
+                    <TestimonialCard
+                      name={t.name}
+                      role={t.role}
+                      quote={t.quote}
+                      rating={t.rating}
+                      index={i}
+                    />
+                  </div>
+                ))}
+              </motion.div>
+            )}
           </div>
 
-          {/* Pagination dots */}
-          <div className="mt-8 flex items-center justify-center gap-2">
-            {Array.from({ length: totalPages }).map((_, i) => {
-              const isActive = i === pageIndex;
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => handleDot(i)}
-                  aria-label={`Halaman ${i + 1}`}
-                  className={cn(
-                    "rounded-full transition-all duration-300",
-                    isActive
-                      ? "w-8 bg-accent scale-110"
-                      : "w-2 h-2 bg-line hover:bg-accent/60",
-                  )}
-                />
-              );
-            })}
-          </div>
+          {/* Pagination dots - desktop only */}
+          {!isMobile && (
+            <div className="mt-8 flex items-center justify-center gap-2">
+              {Array.from({ length: totalPages }).map((_, i) => {
+                const isActive = i === pageIndex;
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => handleDot(i)}
+                    aria-label={`Halaman ${i + 1}`}
+                    className={cn(
+                      "rounded-full transition-all duration-300",
+                      isActive
+                        ? "w-8 bg-accent scale-110"
+                        : "w-2 h-2 bg-line hover:bg-accent/60",
+                    )}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
+
+        {/* Mobile marquee keyframes injected */}
+        {isMobile && (
+          <style jsx>{`
+            @keyframes marquee {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+          `}</style>
+        )}
       </div>
     </section>
   );
