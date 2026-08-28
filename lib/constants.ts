@@ -20,6 +20,7 @@ export const NAV_LINKS = [
   { href: "/", label: "Beranda" },
   { href: "/armada", label: "Armada" },
   { href: "/paket", label: "Paket" },
+  { href: "/temukan", label: "Temukan" },
   { href: "/galeri", label: "Galeri" },
   { href: "/faq", label: "FAQ" },
   { href: "/kontak", label: "Kontak" },

@@ -13,6 +13,7 @@ import {
   Send,
   Sparkles,
   Wallet,
+  AlertCircle,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
@@ -67,10 +68,50 @@ const CONTACT = [
   },
 ];
 
+type Errors = Partial<Record<"nama" | "wa" | "pesan", string>>;
+
+function validateWa(input: string): boolean {
+  const digits = input.replace(/\D/g, "");
+  return digits.length >= 10 && digits.length <= 15;
+}
+
 export default function KontakPageClient() {
   const reduce = useReducedMotion();
   const [topic, setTopic] = useState<Topic>("Sewa Mobil");
   const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState<Errors>({});
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const nama = String(fd.get("nama") || "").trim();
+    const wa = String(fd.get("wa") || "").trim();
+    const pesan = String(fd.get("pesan") || "").trim();
+
+    const next: Errors = {};
+    if (nama.length < 3) next.nama = "Nama minimal 3 karakter.";
+    if (!wa) next.wa = "Nomor WhatsApp wajib diisi.";
+    else if (!validateWa(wa)) next.wa = "Nomor WhatsApp tidak valid (10-15 digit).";
+    if (pesan.length < 10) next.pesan = "Pesan minimal 10 karakter.";
+
+    if (Object.keys(next).length > 0) {
+      setErrors(next);
+      return;
+    }
+
+    setErrors({});
+    const msg = encodeURIComponent(
+      `Halo Mahessa Trans Holiday, saya ingin reservasi.\n\n` +
+      `Topik: ${topic}\n` +
+      `Nama: ${nama}\n` +
+      `No. WA: ${wa}\n` +
+      `Pesan: ${pesan}\n` +
+      `\nTerima kasih.`
+    );
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
+    setSubmitted(true);
+  };
 
   return (
     <div className="mx-auto w-full max-w-[1300px] px-5 py-12 sm:px-8 md:px-12 md:py-16">
@@ -80,27 +121,8 @@ export default function KontakPageClient() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.5, ease: EASE }}
-          onSubmit={(e) => {
-            e.preventDefault();
-            const fd = new FormData(e.currentTarget);
-            const nama = fd.get("nama") || "";
-            const wa = fd.get("wa") || "";
-            const tanggal = fd.get("tanggal") || "";
-            const penumpang = fd.get("penumpang") || "";
-            const pesan = fd.get("pesan") || "";
-            const msg = encodeURIComponent(
-              `Halo Mahessa Trans Holiday, saya ingin reservasi.\n\n` +
-              `Topik: ${topic}\n` +
-              `Nama: ${nama}\n` +
-              `No. WA: ${wa}\n` +
-              (tanggal ? `Tanggal: ${tanggal}\n` : "") +
-              (penumpang ? `Jumlah Penumpang: ${penumpang}\n` : "") +
-              (pesan ? `Pesan: ${pesan}\n` : "") +
-              `\nTerima kasih.`
-            );
-            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
-            setSubmitted(true);
-          }}
+          onSubmit={handleSubmit}
+          noValidate
           className="rounded-[24px] border border-line bg-white p-6 shadow-card md:p-8"
         >
           {submitted ? (
@@ -114,10 +136,10 @@ export default function KontakPageClient() {
                 <Check size={26} strokeWidth={2.5} aria-hidden="true" />
               </span>
               <h2 className="mb-2 text-xl font-extrabold text-heading">
-                Pesan terkirim!
+                Terima kasih!
               </h2>
               <p className="mb-5 max-w-sm text-sm text-body-text">
-                Tim kami akan balas via WhatsApp dalam beberapa menit. Terima kasih!
+                Chat akan terbuka di WhatsApp. Tim kami balas dalam beberapa menit.
               </p>
               <button
                 type="button"
@@ -168,10 +190,21 @@ export default function KontakPageClient() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <Field name="nama" label="Nama Lengkap" placeholder="Nama kamu" required />
-                <Field name="wa" label="Nomor WhatsApp" placeholder="08xxx" type="tel" required />
-                <Field name="tanggal" label="Tanggal Berangkat" type="date" />
-                <Field name="penumpang" label="Jumlah Penumpang" type="number" placeholder="2" />
+                <Field
+                  name="nama"
+                  label="Nama Lengkap"
+                  placeholder="Nama kamu"
+                  required
+                  error={errors.nama}
+                />
+                <Field
+                  name="wa"
+                  label="Nomor WhatsApp"
+                  placeholder="08xxx"
+                  type="tel"
+                  required
+                  error={errors.wa}
+                />
               </div>
 
               <div className="mt-4">
@@ -180,6 +213,8 @@ export default function KontakPageClient() {
                   label="Pesan"
                   placeholder="Tujuan, jenis armada, atau detail lain..."
                   multiline
+                  required
+                  error={errors.pesan}
                 />
               </div>
 
@@ -188,7 +223,7 @@ export default function KontakPageClient() {
                 className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-5 py-3.5 text-sm font-extrabold text-white shadow-[0_10px_24px_-10px_rgba(0,86,145,0.6)] transition-all hover:scale-[1.01] hover:bg-accent-hover active:scale-[0.98]"
               >
                 <Send size={15} aria-hidden="true" />
-                Kirim Pesan
+                Kirim via WhatsApp
               </button>
 
               <p className="mt-3 text-center text-[11px] text-muted">
@@ -313,6 +348,7 @@ function Field({
   type = "text",
   required,
   multiline,
+  error,
 }: {
   name: string;
   label: string;
@@ -320,9 +356,13 @@ function Field({
   type?: string;
   required?: boolean;
   multiline?: boolean;
+  error?: string;
 }) {
   const baseInput =
-    "w-full rounded-xl border border-line bg-white px-4 py-2.5 text-[13px] font-bold text-body-text outline-none transition-all placeholder:font-normal placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/15";
+    "w-full rounded-xl border bg-white px-4 py-2.5 text-[13px] font-bold text-body-text outline-none transition-all placeholder:font-normal placeholder:text-muted focus:ring-2";
+  const borderClass = error
+    ? "border-error focus:border-error focus:ring-error/20"
+    : "border-line focus:border-accent focus:ring-accent/15";
   return (
     <label className="block">
       <span className="mb-1.5 block text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
@@ -335,7 +375,8 @@ function Field({
           required={required}
           rows={4}
           placeholder={placeholder}
-          className={baseInput + " resize-none"}
+          aria-invalid={error ? "true" : undefined}
+          className={cn(baseInput, borderClass, "resize-none")}
         />
       ) : (
         <input
@@ -343,8 +384,15 @@ function Field({
           type={type}
           required={required}
           placeholder={placeholder}
-          className={baseInput}
+          aria-invalid={error ? "true" : undefined}
+          className={cn(baseInput, borderClass)}
         />
+      )}
+      {error && (
+        <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-error">
+          <AlertCircle size={11} aria-hidden="true" />
+          {error}
+        </span>
       )}
     </label>
   );

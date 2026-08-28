@@ -19,6 +19,8 @@ import ProcessSection from "@/components/ProcessSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import CtaSection from "@/components/CtaSection";
 import SectionHeading from "@/components/SectionHeading";
+import VehicleFinder from "@/components/VehicleFinder/VehicleFinder";
+import TestimonialCarousel from "@/components/TestimonialCarousel";
 import { vehicles } from "@/data/vehicles";
 import { getFeaturedPackages } from "@/data/packages";
 import { faqMain } from "@/data/faq";
@@ -275,10 +277,19 @@ export default function HomePage() {
       <Advantages />
       <FeaturedArmada />
       <FeaturedPackages />
+      {/* Insert Vehicle Finder CTA after Packages */}
+      <section className="py-8 bg-wa-surface/40 text-center">
+        <p className="text-sm font-semibold text-heading mb-4">Tidak tahu mobil mana yang cocok?</p>
+        <Link href="/temukan" className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3.5 text-sm font-extrabold text-white transition-all hover:scale-[1.01] hover:bg-accent-hover active:scale-[0.98]">
+          Temukan Mobil Cocok Untukmu →
+        </Link>
+      </section>
       <ProcessSection />
       <GalleryShowcase />
       <FaqHome />
+      <TestimonialCarousel />
       <CtaSection />
     </>
   );
 }
+
