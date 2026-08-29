@@ -8,6 +8,8 @@ import TestimonialCard from "./TestimonialCard";
 import { testimonials } from "@/data/testimonials";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
+const MOBILE_INTERVAL = 1000; // 1 detik auto-advance di mobile
+const DESKTOP_INTERVAL = 5000; // 5 detik di desktop
 
 function getItemsPerPage(width: number): number {
   if (width < 768) return 1;
@@ -20,10 +22,6 @@ export default function TestimonialCarousel() {
   const [itemsPerPage, setItemsPerPage] = useState<number>(4);
   const [pageIndex, setPageIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragStartX, setDragStartX] = useState<number>(0);
-  const [dragOffset, setDragOffset] = useState<number>(0);
-  const trackRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<number | null>(null);
 
   const isMobile = itemsPerPage === 1;
@@ -46,17 +44,18 @@ export default function TestimonialCarousel() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Auto-scroll for desktop (paused on hover/drag)
+  // Auto-scroll for both mobile and desktop (paused on hover for desktop)
   useEffect(() => {
-    if (reduce || isMobile) return;
-    if (paused || isDragging) return;
+    if (reduce) return;
+    if (paused) return;
+    const interval = isMobile ? MOBILE_INTERVAL : DESKTOP_INTERVAL;
     intervalRef.current = window.setInterval(() => {
       setPageIndex((p) => (p + 1) % totalPages);
-    }, 5000);
+    }, interval);
     return () => {
       if (intervalRef.current !== null) window.clearInterval(intervalRef.current);
     };
-  }, [reduce, isMobile, paused, isDragging, totalPages]);
+  }, [reduce, isMobile, paused, totalPages]);
 
   const handlePrev = useCallback(() => {
     setPageIndex((p) => (p - 1 + totalPages) % totalPages);
@@ -70,59 +69,8 @@ export default function TestimonialCarousel() {
     setPageIndex(i);
   }, []);
 
-  // Touch/Swipe (works on mobile for manual slide)
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setIsDragging(true);
-    setDragStartX(e.touches[0].clientX);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging) return;
-    const deltaX = e.touches[0].clientX - dragStartX;
-    setDragOffset(deltaX);
-  };
-
-  const handleTouchEnd = () => {
-    if (!isDragging) return;
-    setIsDragging(false);
-    const threshold = 50;
-    if (Math.abs(dragOffset) > threshold) {
-      if (dragOffset < 0) handleNext();
-      else handlePrev();
-    }
-    setDragOffset(0);
-    setDragStartX(0);
-  };
-
-  // Mouse drag (desktop)
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    setDragStartX(e.clientX);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    const deltaX = e.clientX - dragStartX;
-    setDragOffset(deltaX);
-  };
-
-  const handleMouseUp = () => {
-    if (!isDragging) return;
-    setIsDragging(false);
-    const threshold = 50;
-    if (Math.abs(dragOffset) > threshold) {
-      if (dragOffset < 0) handleNext();
-      else handlePrev();
-    }
-    setDragOffset(0);
-    setDragStartX(0);
-  };
-
-  // Calculate translateX with drag offset
-  const baseTranslate = `calc(-${pageIndex * (100 / itemsPerPage)}% - ${pageIndex * (16 / itemsPerPage)}px)`;
-  const finalTranslate = isDragging
-    ? `${baseTranslate} + ${dragOffset}px`
-    : baseTranslate;
+  // Calculate translateX for discrete sliding
+  const translateX = `calc(-${pageIndex * (100 / itemsPerPage)}% - ${pageIndex * (16 / itemsPerPage)}px)`;
 
   return (
     <section
@@ -152,18 +100,14 @@ export default function TestimonialCarousel() {
         </motion.header>
 
         <div className="relative">
-          {/* Desktop nav buttons (44x44 circle, navy bg) */}
+          {/* Desktop nav buttons (hidden on mobile — mobile is auto-slide only) */}
           {!isMobile && (
             <>
               <button
                 type="button"
                 onClick={handlePrev}
                 aria-label="Testimoni sebelumnya"
-                className={cn(
-                  "absolute top-1/2 z-10 -translate-y-1/2 hidden h-11 w-11 items-center justify-center rounded-full bg-accent text-white shadow-[0_4px_14px_rgba(15,76,117,0.35)] transition-all duration-300 hover:bg-accent-hover hover:scale-105 hover:shadow-[0_8px_24px_rgba(15,76,117,0.45)] md:flex",
-                  isDragging && "opacity-50 pointer-events-none"
-                )}
-                style={{ left: itemsPerPage > 1 ? "-52px" : undefined }}
+                className="absolute top-1/2 z-10 -translate-y-1/2 hidden h-11 w-11 items-center justify-center rounded-full bg-accent text-white shadow-[0_4px_14px_rgba(15,76,117,0.35)] transition-all duration-300 hover:bg-accent-hover hover:scale-105 hover:shadow-[0_8px_24px_rgba(15,76,117,0.45)] md:flex"
               >
                 <ChevronLeft size={20} aria-hidden="true" />
               </button>
@@ -171,10 +115,7 @@ export default function TestimonialCarousel() {
                 type="button"
                 onClick={handleNext}
                 aria-label="Testimoni berikutnya"
-                className={cn(
-                  "absolute top-1/2 z-10 -translate-y-1/2 hidden h-11 w-11 items-center justify-center rounded-full bg-accent text-white shadow-[0_4px_14px_rgba(15,76,117,0.35)] transition-all duration-300 hover:bg-accent-hover hover:scale-105 hover:shadow-[0_8px_24px_rgba(15,76,117,0.45)] md:flex",
-                  isDragging && "opacity-50 pointer-events-none"
-                )}
+                className="absolute top-1/2 z-10 -translate-y-1/2 hidden h-11 w-11 items-center justify-center rounded-full bg-accent text-white shadow-[0_4px_14px_rgba(15,76,117,0.35)] transition-all duration-300 hover:bg-accent-hover hover:scale-105 hover:shadow-[0_8px_24px_rgba(15,76,117,0.45)] md:flex"
                 style={{ right: itemsPerPage > 1 ? "-52px" : undefined }}
               >
                 <ChevronRight size={20} aria-hidden="true" />
@@ -182,146 +123,60 @@ export default function TestimonialCarousel() {
             </>
           )}
 
-          {/* Mobile prev/next buttons (below md) */}
-          <button
-            type="button"
-            onClick={handlePrev}
-            aria-label="Testimoni sebelumnya"
-            className="absolute left-2 top-1/2 z-10 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 border border-line text-heading shadow-card transition-all active:scale-95 md:hidden"
-          >
-            <ChevronLeft size={18} aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            onClick={handleNext}
-            aria-label="Testimoni berikutnya"
-            className="absolute right-2 top-1/2 z-10 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 border border-line text-heading shadow-card transition-all active:scale-95 md:hidden"
-          >
-            <ChevronRight size={18} aria-hidden="true" />
-          </button>
-
-          <div
-            ref={trackRef}
-            className={cn("overflow-hidden", isMobile && "relative")}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-          >
-            {isMobile ? (
-              // Mobile: Continuous CSS marquee - infinite loop with duplicated cards
-              <div
-                className="flex"
-                style={{
-                  animation: "marquee 40s linear infinite",
-                  width: "max-content",
-                }}
-              >
-                {/* First set */}
-                {testimonials.map((t, i) => (
-                  <div
-                    key={`first-${t.id}`}
-                    className="shrink-0 px-2"
-                    style={{ width: "100%" }}
-                  >
-                    <TestimonialCard
-                      name={t.name}
-                      role={t.role}
-                      quote={t.quote}
-                      rating={t.rating}
-                      index={i}
-                    />
-                  </div>
-                ))}
-                {/* Second set (duplicate) for seamless loop */}
-                {testimonials.map((t, i) => (
-                  <div
-                    key={`second-${t.id}`}
-                    className="shrink-0 px-2"
-                    style={{ width: "100%" }}
-                  >
-                    <TestimonialCard
-                      name={t.name}
-                      role={t.role}
-                      quote={t.quote}
-                      rating={t.rating}
-                      index={i + testimonials.length}
-                    />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              // Desktop: discrete sliding with interval
-              <motion.div
-                className="flex"
-                animate={{ x: finalTranslate }}
-                transition={isDragging ? undefined : { duration: 0.5, ease: EASE }}
-              >
-                {testimonials.map((t, i) => (
-                  <div
-                    key={t.id}
-                    className="shrink-0 px-2"
-                    style={{ width: `${100 / itemsPerPage}%` }}
-                  >
-                    <TestimonialCard
-                      name={t.name}
-                      role={t.role}
-                      quote={t.quote}
-                      rating={t.rating}
-                      index={i}
-                    />
-                  </div>
-                ))}
-              </motion.div>
-            )}
+          <div className="overflow-hidden">
+            <motion.div
+              className="flex"
+              animate={{ x: translateX }}
+              transition={{ duration: isMobile ? 0.4 : 0.5, ease: EASE }}
+            >
+              {testimonials.map((t, i) => (
+                <div
+                  key={t.id}
+                  className="shrink-0 px-2"
+                  style={{ width: `${100 / itemsPerPage}%` }}
+                >
+                  <TestimonialCard
+                    name={t.name}
+                    role={t.role}
+                    quote={t.quote}
+                    rating={t.rating}
+                    index={i}
+                  />
+                </div>
+              ))}
+            </motion.div>
           </div>
 
-          {/* Pagination dots - desktop only */}
-          {!isMobile && (
-            <div className="mt-8 flex items-center justify-center gap-3">
-              {Array.from({ length: totalPages }).map((_, i) => {
-                const isActive = i === pageIndex;
-                return (
-                  <button
-                    key={i}
-                    type="button"
-                    onClick={() => handleDot(i)}
-                    aria-label={`Halaman ${i + 1}`}
+          {/* Pagination dots */}
+          <div className="mt-8 flex items-center justify-center gap-3">
+            {Array.from({ length: totalPages }).map((_, i) => {
+              const isActive = i === pageIndex;
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => handleDot(i)}
+                  aria-label={`Testimoni ${i + 1}`}
+                  className={cn(
+                    "relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300",
+                    isActive
+                      ? "bg-accent"
+                      : "bg-line hover:bg-accent/60",
+                  )}
+                >
+                  <span
                     className={cn(
-                      "relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300",
+                      "rounded-full transition-all duration-300",
                       isActive
-                        ? "bg-accent"
-                        : "bg-line hover:bg-accent/60",
+                        ? "h-2.5 w-2.5 bg-white"
+                        : "h-1.5 w-1.5 bg-transparent",
                     )}
-                  >
-                    <span
-                      className={cn(
-                        "rounded-full transition-all duration-300",
-                        isActive
-                          ? "h-2.5 w-2.5 bg-white"
-                          : "h-1.5 w-1.5 bg-transparent",
-                      )}
-                    />
-                  </button>
-                );
-              })}
-            </div>
-          )}
-
-          {/* Mobile marquee keyframes */}
-          {isMobile && (
-            <style jsx>{`
-              @keyframes marquee {
-                0% { transform: translateX(0); }
-                100% { transform: translateX(-50%); }
-              }
-            `}</style>
-          )}
+                  />
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
   );
-}

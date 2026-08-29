@@ -7,7 +7,7 @@ import { packages } from "@/data/packages";
 export const metadata: Metadata = {
   title: "Paket Perjalanan",
   description:
-    "Nikmati perjalanan tanpa ribet dengan paket all-in kami. Mobil, driver, BBM, tol, parkir — semua sudah termasuk. Berangkat dari Cimahi, Bandung & Padalarang.",
+    "Nikmati perjalanan tanpa ribet dengan paket all-in kami. Mobil, driver, BBM — sudah termasuk. Berangkat dari Cimahi, Bandung & Padalarang.",
   alternates: { canonical: "/paket" },
 };
 
@@ -17,7 +17,7 @@ export default function PaketPage() {
       <PageHero
         eyebrow="Harga Paket"
         title="Paket untuk perjalananmu."
-        subtitle="All-in Hiace: mobil, driver, BBM, tol, parkir — harga jelas di awal, tanpa biaya siluman."
+        subtitle="All-in Hiace: mobil, driver, BBM — harga jelas di awal, tanpa biaya siluman."
       />
       <section className="mx-auto w-full max-w-[1300px] px-5 py-12 sm:px-8 md:px-12">
         <PaketListClient packages={packages} />

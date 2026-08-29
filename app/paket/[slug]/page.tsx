@@ -93,7 +93,7 @@ export default async function PackageDetailPage({
             </h1>
             <p className="mb-5 max-w-xl text-sm leading-relaxed text-body-text md:text-base">
               Paket perjalanan all-in dari {packageItem.serviceAreas.join(", ")}.
-              Mobil, driver, BBM, tol, parkir
+              Mobil, driver, BBM
               {packageItem.included.includes("Tiket Penyeberangan")
                 ? ", dan tiket penyeberangan"
                 : ""}{" "}

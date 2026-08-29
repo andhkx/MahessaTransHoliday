@@ -5,22 +5,19 @@ const baseIncluded = [
   "Mobil Toyota Hiace",
   "Driver berpengalaman",
   "BBM",
-  "Tol",
-  "Parkir",
 ];
 
 const ferryIncluded = [...baseIncluded, "Tiket Penyeberangan"];
 
 const baseExcluded = [
+  "Tol",
+  "Parkir",
   "Retribusi Wisata / Tiket Masuk Atraksi",
-  "Makan-minum selama perjalanan",
+  "Makan driver",
   "Overtime (per jam tambahan)",
 ];
 
-const multiDayExcluded = [
-  ...baseExcluded,
-  "Akomodasi & makan driver (multi-hari)",
-];
+const multiDayExcluded = baseExcluded;
 
 const packageFaq = [
   {

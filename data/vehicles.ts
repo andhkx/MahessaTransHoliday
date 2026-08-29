@@ -3,54 +3,6 @@ import { SERVICE_AREAS } from "@/lib/constants";
 
 export const vehicles: Vehicle[] = [
   {
-    id: "toyota-agya",
-    slug: "toyota-agya",
-    name: "Toyota Agya G AT",
-    category: "entry",
-    transmission: "Automatic",
-    capacity: 5,
-    fuelType: "Bensin",
-    image: "/images/vehicles/toyota-agya.webp",
-    gallery: [
-      "/images/vehicles/toyota-agya.webp",
-      "/images/vehicles/toyota-agya-2.webp",
-    ],
-    pricing: {
-      startingPrice: 340000,
-    },
-    description: [
-      "Toyota Agya adalah city car yang lincah dan irit. Cocok untuk perjalanan singkat dalam kota, jemput kerabat dari stasiun, atau kebutuhan mobilitas harian.",
-      "Ukurannya mungil tapi tetap nyaman untuk 4 penumpang dewasa dengan bagasi kecil.",
-    ],
-    suitableFor: [
-      "Perjalanan dalam kota",
-      "Antar-jemput stasiun/bandara",
-      "Kebutuhan harian",
-      "City tour singkat",
-    ],
-    features: [
-      "AC Dingin",
-      "Audio System",
-      "Power Steering",
-      "Kursi Nyaman",
-      "Window/Kaca Tinted",
-    ],
-    specs: [
-      { label: "Kapasitas Penumpang", value: "5 orang" },
-      { label: "Transmisi", value: "Automatic" },
-      { label: "Bahan Bakar", value: "Bensin" },
-      { label: "AC", value: "Full AC" },
-      { label: "Bagasi", value: "Cukup untuk 2 koper kecil" },
-    ],
-    serviceAreas: SERVICE_AREAS,
-    seo: {
-      title: "Rental Toyota Agya Cimahi & Bandung",
-      description:
-        "Sewa Toyota Agya automatic di Cimahi, Bandung dan Padalarang mulai Rp340.000/ 12 jam. Unit terawat, siap dipakai. Mahessa Trans Holiday.",
-      keywords: ["rental agya", "sewa agya bandung", "rental murah cimahi"],
-    },
-  },
-  {
     id: "toyota-calya",
     slug: "toyota-calya",
     name: "Toyota Calya G MT",
@@ -64,7 +16,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-calya-2.webp",
     ],
     pricing: {
-      startingPrice: 400000,
+      startingPrice: 650000,
     },
     description: [
       "Toyota Calya adalah MPV 7 penumpang paling ekonomis di kelasnya. Pilihan tepat untuk keluarga kecil yang butuh kapasitas lebih tanpa harus keluar budget besar.",
@@ -95,7 +47,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Calya Cimahi & Bandung",
       description:
-        "Sewa Toyota Calya 7 penumpang di Cimahi, Bandung dan Padalarang mulai Rp400.000/ 12 jam. Ekonomis untuk keluarga. Mahessa Trans Holiday.",
+        "Sewa Toyota Calya 7 penumpang di Cimahi, Bandung dan Padalarang mulai Rp650.000/ 12 jam. Ekonomis untuk keluarga. Mahessa Trans Holiday.",
       keywords: ["rental calya", "sewa calya bandung", "rental 7 penumpang murah"],
     },
   },
@@ -113,7 +65,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/daihatsu-terios-2.webp",
     ],
     pricing: {
-      startingPrice: 550000,
+      startingPrice: 800000,
     },
     description: [
       "Daihatsu Terios adalah SUV ringkas yang nyaman untuk berbagai medan. Ground clearance tingginya membuat percaya diri melewati jalanan menuju wisata alam seperti Ciwidey atau Lembang.",
@@ -144,7 +96,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Daihatsu Terios Cimahi & Bandung",
       description:
-        "Sewa Daihatsu Terios di Cimahi, Bandung dan Padalarang mulai Rp550.000/ 12 jam. SUV nyaman untuk wisata alam. Mahessa Trans Holiday.",
+        "Sewa Daihatsu Terios di Cimahi, Bandung dan Padalarang mulai Rp800.000/ 12 jam. SUV nyaman untuk wisata alam. Mahessa Trans Holiday.",
       keywords: ["rental terios", "sewa terios bandung", "rental suv bandung"],
     },
   },
@@ -163,7 +115,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-avanza-2.webp",
     ],
     pricing: {
-      startingPrice: 450000,
+      startingPrice: 750000,
     },
     description: [
       "Toyota Avanza adalah pilihan tepat untuk keluarga atau rombongan kecil. Dengan kapasitas 7 penumpang dan konsumsi bahan bakar yang irit, Avanza cocok untuk perjalanan dalam kota maupun luar kota.",
@@ -194,7 +146,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Avanza Cimahi & Bandung",
       description:
-        "Rental Toyota Avanza di Cimahi, Bandung, dan Padalarang untuk kebutuhan keluarga, wisata, perjalanan dinas, maupun transfer. Mulai Rp450.000/ 12 jam.",
+        "Rental Toyota Avanza di Cimahi, Bandung, dan Padalarang untuk kebutuhan keluarga, wisata, perjalanan dinas, maupun transfer. Mulai Rp750.000/ 12 jam.",
       keywords: ["rental avanza", "sewa avanza cimahi", "avanza bandung"],
     },
   },
@@ -212,7 +164,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-rush-2.webp",
     ],
     pricing: {
-      startingPrice: 550000,
+      startingPrice: 800000,
     },
     description: [
       "Toyota Rush GR Sport menggabungkan tampilan SUV yang stylish dengan kenyamanan 7 penumpang. Cocok untuk kamu yang ingin tampil beda saat berkendara.",
@@ -243,57 +195,8 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Rush Cimahi & Bandung",
       description:
-        "Sewa Toyota Rush GR Sport di Cimahi, Bandung dan Padalarang mulai Rp550.000/ 12 jam. SUV stylish untuk keluarga. Mahessa Trans Holiday.",
+        "Sewa Toyota Rush GR Sport di Cimahi, Bandung dan Padalarang mulai Rp800.000/ 12 jam. SUV stylish untuk keluarga. Mahessa Trans Holiday.",
       keywords: ["rental rush", "sewa rush bandung", "rush gr sport rental"],
-    },
-  },
-  {
-    id: "honda-city-hatchback",
-    slug: "honda-city-hatchback",
-    name: "Honda City Hatchback RS AT",
-    category: "midrange",
-    transmission: "Automatic",
-    capacity: 5,
-    fuelType: "Bensin",
-    image: "/images/vehicles/honda-city-hatchback.webp",
-    gallery: [
-      "/images/vehicles/honda-city-hatchback.webp",
-      "/images/vehicles/honda-city-hatchback-2.webp",
-    ],
-    pricing: {
-      startingPrice: 550000,
-    },
-    description: [
-      "Honda City Hatchback RS menawarkan pengalaman berkendara modern dengan desain sporty dan fitur lengkap. Nyaman untuk perjalanan dalam kota maupun jarak menengah.",
-      "Kabinnya senyap dan fitur keselamatan Honda Sensing membuat perjalanan terasa lebih tenang.",
-    ],
-    suitableFor: [
-      "Perjalanan dinas",
-      "City tour",
-      "Pasangan kecil",
-      "Airport transfer",
-    ],
-    features: [
-      "AC Dingin",
-      "Audio System",
-      "Power Steering",
-      "Kursi Nyaman",
-      "Window/Kaca Tinted",
-      "Fitur Keselamatan Lengkap",
-    ],
-    specs: [
-      { label: "Kapasitas Penumpang", value: "5 orang" },
-      { label: "Transmisi", value: "Automatic" },
-      { label: "Bahan Bakar", value: "Bensin" },
-      { label: "AC", value: "Full AC" },
-      { label: "Bagasi", value: "Cukup untuk 3 koper sedang" },
-    ],
-    serviceAreas: SERVICE_AREAS,
-    seo: {
-      title: "Rental Honda City Hatchback Bandung",
-      description:
-        "Sewa Honda City Hatchback RS di Cimahi, Bandung dan Padalarang mulai Rp500.000/ 12 jam. Modern, sporty, nyaman. Mahessa Trans Holiday.",
-      keywords: ["rental honda city", "sewa city hatchback bandung"],
     },
   },
   {
@@ -408,7 +311,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/mitsubishi-pajero-sport-2.webp",
     ],
     pricing: {
-      startingPrice: 1200000,
+      startingPrice: 2200000,
     },
     description: [
       "Mitsubishi Pajero Sport Dakar adalah SUV tangguh untuk segala medan. Sangat cocok untuk perjalanan wisata ke destinasi dengan jalanan menantang seperti Bromo atau Kawah Ijen.",
@@ -439,7 +342,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Mitsubishi Pajero Sport Bandung",
       description:
-        "Sewa Mitsubishi Pajero Sport Dakar di Cimahi, Bandung dan Padalarang mulai Rp1.200.000/ 12 jam. Tangguh untuk semua medan. Mahessa Trans Holiday.",
+        "Sewa Mitsubishi Pajero Sport Dakar di Cimahi, Bandung dan Padalarang mulai Rp2.200.000/ 12 jam. Tangguh untuk semua medan. Mahessa Trans Holiday.",
       keywords: ["rental pajero", "sewa pajero sport bandung", "rental jeep bandung"],
     },
   },
@@ -457,7 +360,7 @@ export const vehicles: Vehicle[] = [
       "/images/vehicles/toyota-fortuner-2.webp",
     ],
     pricing: {
-      startingPrice: 1100000,
+      startingPrice: 2200000,
     },
     description: [
       "Toyota Fortuner VRZ menghadirkan keseimbangan sempurna antara kemewahan dan ketangguhan. Interior premium dengan posisi duduk tinggi yang nyaman.",
@@ -488,7 +391,7 @@ export const vehicles: Vehicle[] = [
     seo: {
       title: "Rental Toyota Fortuner Bandung",
       description:
-        "Sewa Toyota Fortuner VRZ di Cimahi, Bandung dan Padalarang mulai Rp1.100.000/ 12 jam. Mewah dan tangguh. Mahessa Trans Holiday.",
+        "Sewa Toyota Fortuner VRZ di Cimahi, Bandung dan Padalarang mulai Rp2.200.000/ 12 jam. Mewah dan tangguh. Mahessa Trans Holiday.",
       keywords: ["rental fortuner", "sewa fortuner bandung"],
     },
   },
@@ -709,7 +612,7 @@ export function getFeaturedVehicles(): Vehicle[] {
     .filter((v): v is Vehicle => Boolean(v));
 }
 
-export function getRelatedVehicles(slug: string, limit = 3): Vehicle[] {
+export function getRelatedVehicles(slug: string, limit = 4): Vehicle[] {
   const current = getVehicleBySlug(slug);
   if (!current) return vehicles.slice(0, limit);
   const sameCategory = vehicles.filter(
