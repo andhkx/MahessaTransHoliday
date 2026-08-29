@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { seoMetadata } from "@/data/seo";
 import PageHero from "@/components/PageHero";
 import ArmadaListClient from "./ArmadaListClient";
 import CtaSection from "@/components/CtaSection";
 import { vehicles } from "@/data/vehicles";
 
 export const metadata: Metadata = {
-  title: "Armada",
-  description:
-    "Pilih kendaraan untuk perjalananmu. Kami punya berbagai pilihan mulai dari mobil compact hingga kendaraan premium dan rombongan di Cimahi, Bandung, dan Padalarang.",
+  title: seoMetadata.armada.title,
+  description: seoMetadata.armada.description,
+  keywords: seoMetadata.armada.keywords,
   alternates: { canonical: "/armada" },
 };
 

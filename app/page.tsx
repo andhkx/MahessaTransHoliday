@@ -11,6 +11,8 @@ import {
   Wallet,
 } from "lucide-react";
 import Hero from "@/components/Hero";
+import { Metadata } from "next";
+import { seoMetadata } from "@/data/seo";
 import Stats from "@/components/Stats";
 import ServiceCards from "@/components/ServiceCards";
 import VehicleCards from "@/components/VehicleCards";
@@ -26,6 +28,19 @@ import { getFeaturedPackages } from "@/data/packages";
 import { faqMain } from "@/data/faq";
 import { galleryImages } from "@/lib/gallery";
 import ArmadaShowcaseClient from "./ArmadaShowcaseClient";
+
+export const metadata: Metadata = {
+  title: seoMetadata.homepage.title,
+  description: seoMetadata.homepage.description,
+  keywords: seoMetadata.homepage.keywords,
+  alternates: { canonical: "/" },
+  openGraph: {
+    title: seoMetadata.homepage.title,
+    description: seoMetadata.homepage.description,
+    url: "/",
+    type: "website",
+  },
+};
 
 const ADVANTAGES = [
   {

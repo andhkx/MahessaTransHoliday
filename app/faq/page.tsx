@@ -1,13 +1,14 @@
 ﻿import type { Metadata } from "next";
+import { seoMetadata } from "@/data/seo";
 import JsonLd from "@/components/JsonLd";
 import CtaSection from "@/components/CtaSection";
 import FaqPageClient from "./FaqPageClient";
 import { faqMain, faqExtra } from "@/data/faq";
 
 export const metadata: Metadata = {
-  title: "FAQ",
-  description:
-    "Pertanyaan yang sering diajukan seputar rental mobil, syarat sewa, pembayaran, paket wisata, dan layanan Mahessa Trans Holiday.",
+  title: seoMetadata.faq.title,
+  description: seoMetadata.faq.description,
+  keywords: seoMetadata.faq.keywords,
   alternates: { canonical: "/faq" },
 };
 

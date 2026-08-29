@@ -1,11 +1,12 @@
 ﻿import type { Metadata } from "next";
+import { seoMetadata } from "@/data/seo";
 import GaleriPageClient from "./GaleriPageClient";
 import CtaSection from "@/components/CtaSection";
 
 export const metadata: Metadata = {
-  title: "Galeri",
-  description:
-    "Cerita perjalanan bersama Mahessa Trans Holiday. Dokumentasi nyata perjalanan para penumpang kami.",
+  title: seoMetadata.galeri.title,
+  description: seoMetadata.galeri.description,
+  keywords: seoMetadata.galeri.keywords,
   alternates: { canonical: "/galeri" },
 };
 

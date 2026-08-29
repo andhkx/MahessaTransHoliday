@@ -1,12 +1,13 @@
 ﻿import type { Metadata } from "next";
+import { seoMetadata } from "@/data/seo";
 import CtaSection from "@/components/CtaSection";
 import KontakPageClient from "./KontakPageClient";
 import { SERVICE_AREAS } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Kontak",
-  description:
-    "Hubungi Mahessa Trans Holiday via WhatsApp untuk reservasi rental mobil, charter, dan paket wisata di Cimahi, Bandung, dan Padalarang.",
+  title: seoMetadata.kontak.title,
+  description: seoMetadata.kontak.description,
+  keywords: seoMetadata.kontak.keywords,
   alternates: { canonical: "/kontak" },
 };
 

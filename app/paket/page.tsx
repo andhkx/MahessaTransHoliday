@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { seoMetadata } from "@/data/seo";
 import PageHero from "@/components/PageHero";
 import PaketListClient from "./PaketListClient";
 import CtaSection from "@/components/CtaSection";
 import { packages } from "@/data/packages";
 
 export const metadata: Metadata = {
-  title: "Paket Perjalanan",
-  description:
-    "Nikmati perjalanan tanpa ribet dengan paket all-in kami. Mobil, driver, BBM — sudah termasuk. Berangkat dari Cimahi, Bandung & Padalarang.",
+  title: seoMetadata.paket.title,
+  description: seoMetadata.paket.description,
+  keywords: seoMetadata.paket.keywords,
   alternates: { canonical: "/paket" },
 };
 
