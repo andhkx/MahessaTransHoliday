@@ -455,7 +455,7 @@ export function getFeaturedPackages(): TravelPackage[] {
     .filter((p): p is TravelPackage => Boolean(p));
 }
 
-export function getRelatedPackages(slug: string, limit = 3): TravelPackage[] {
+export function getRelatedPackages(slug: string, limit = 4): TravelPackage[] {
   const current = getPackageBySlug(slug);
   if (!current) return packages.slice(0, limit);
   const sameDurationType = packages.filter(

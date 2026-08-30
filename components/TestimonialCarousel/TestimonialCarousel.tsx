@@ -1,92 +1,81 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
-import { motion, useReducedMotion } from "motion/react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 import TestimonialCard from "./TestimonialCard";
 import { testimonials } from "@/data/testimonials";
 
-const EASE = [0.4, 0, 0.2, 1] as const;
-const MOBILE_INTERVAL = 1000; // 1 detik auto-advance di mobile
-const DESKTOP_INTERVAL = 5000; // 5 detik di desktop
-
-function getItemsPerPage(width: number): number {
-  if (width < 768) return 1;
-  if (width < 1024) return 2;
-  return 4;
-}
-
 export default function TestimonialCarousel() {
-  const reduce = useReducedMotion();
-  const [itemsPerPage, setItemsPerPage] = useState<number>(4);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const intervalRef = useRef<number | null>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+  const animationFrameRef = useRef<number>(0);
+  const [isHovered, setIsHovered] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [listWidth, setListWidth] = useState(0);
+  const [viewportWidth, setViewportWidth] = useState(0);
 
-  const isMobile = itemsPerPage === 1;
-
-  // total page count (sliding windows of itemsPerPage)
-  const totalPages = Math.max(1, testimonials.length - itemsPerPage + 1);
-
-  // Update itemsPerPage on resize
+  // Update viewport width on resize
   useEffect(() => {
     const handleResize = () => {
-      const w = window.innerWidth;
-      const next = getItemsPerPage(w);
-      setItemsPerPage((prev) => {
-        if (prev !== next) setPageIndex(0);
-        return next;
-      });
+      setViewportWidth(window.innerWidth);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Auto-scroll for both mobile and desktop (paused on hover for desktop)
-    useEffect(() => {
-    if (reduce) return;
-    if (paused) return;
-    const interval = isMobile ? MOBILE_INTERVAL : DESKTOP_INTERVAL;
-    intervalRef.current = window.setInterval(() => {
-      setPageIndex((p) => (p + 1) % totalPages);
-    }, interval);
-    return () => {
-      if (intervalRef.current !== null) window.clearInterval(intervalRef.current);
+  // Measure the width of the first list (horizontal width of all cards)
+  useEffect(() => {
+    if (listRef.current) {
+      const width = listRef.current.getBoundingClientRect().width;
+      setListWidth(width);
+    }
+  }, [testimonials]);
+
+  // Animation loop for horizontal marquee
+  useEffect(() => {
+    if (listWidth === 0) return;
+
+    const targetVelocity = 40; // pixels per second
+    const hoverSpeed = 0; // pause on hover
+
+    const animate = (timestamp: number) => {
+      if (!trackRef.current) return;
+
+      const velocity = isHovered ? hoverSpeed : targetVelocity;
+      const now = timestamp / 1000;
+      const last = animationFrameRef.current || now;
+      const delta = now - last;
+
+      const newOffset = offset + velocity * delta;
+      // Loop seamlessly: when offset reaches listWidth, reset to 0
+      // Because we have duplicate content, the jump is invisible
+      const wrappedOffset = newOffset % listWidth;
+
+      setOffset(wrappedOffset);
+      animationFrameRef.current = requestAnimationFrame(animate);
     };
-  }, [reduce, isMobile, paused, totalPages]);
 
-  const handlePrev = useCallback(() => {
-    setPageIndex((p) => (p - 1 + totalPages) % totalPages);
-  }, [totalPages]);
+    animationFrameRef.current = requestAnimationFrame(animate);
 
-  const handleNext = useCallback(() => {
-    setPageIndex((p) => (p + 1) % totalPages);
-  }, [totalPages]);
+    return () => {
+      cancelAnimationFrame(animationFrameRef.current);
+    };
+  }, [isHovered, listWidth, offset]);
 
-  const handleDot = useCallback((i: number) => {
-    setPageIndex(i);
-  }, []);
-
-  // Calculate translateX for discrete sliding
-  const translateX = `calc(-${pageIndex * (100 / itemsPerPage)}% - ${pageIndex * (16 / itemsPerPage)}px)`;
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => setIsHovered(false);
 
   return (
-    <section
-      className="border-y border-line bg-surface/60 py-16 md:py-24"
-      aria-label="Testimoni pelanggan"
-      onMouseEnter={() => !isMobile && setPaused(true)}
-      onMouseLeave={() => !isMobile && setPaused(false)}
+    <div
+      ref={wrapperRef}
+      className="relative overflow-hidden border-y border-line bg-surface/60 py-16 md:py-24"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
-        <motion.header
-          initial={reduce ? false : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.5, ease: EASE }}
-          className="mb-10 text-center md:mb-12"
-        >
+        <div className="mb-10 text-center md:mb-12">
           <span className="mb-2 inline-block font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-primary">
             Testimoni
           </span>
@@ -97,87 +86,52 @@ export default function TestimonialCarousel() {
           <p className="mx-auto max-w-xl text-sm leading-relaxed text-body-text md:text-base">
             Ribuan pelanggan telah mempercayai layanan kami untuk berbagai kebutuhan perjalanan.
           </p>
-        </motion.header>
+        </div>
 
         <div className="relative">
-          {/* Desktop nav buttons (hidden on mobile — mobile is auto-slide only) */}
-          {!isMobile && (
-            <>
-              <button
-                type="button"
-                onClick={handlePrev}
-                aria-label="Testimoni sebelumnya"
-                className="absolute top-1/2 z-10 -translate-y-1/2 hidden h-11 w-11 items-center justify-center rounded-full bg-accent text-white shadow-[0_4px_14px_rgba(15,76,117,0.35)] transition-all duration-300 hover:bg-accent-hover hover:scale-105 hover:shadow-[0_8px_24px_rgba(15,76,117,0.45)] md:flex"
-              >
-                <ChevronLeft size={20} aria-hidden="true" />
-              </button>
-              <button
-                type="button"
-                onClick={handleNext}
-                aria-label="Testimoni berikutnya"
-                className="absolute top-1/2 z-10 -translate-y-1/2 hidden h-11 w-11 items-center justify-center rounded-full bg-accent text-white shadow-[0_4px_14px_rgba(15,76,117,0.35)] transition-all duration-300 hover:bg-accent-hover hover:scale-105 hover:shadow-[0_8px_24px_rgba(15,76,117,0.45)] md:flex"
-                style={{ right: itemsPerPage > 1 ? "-52px" : undefined }}
-              >
-                <ChevronRight size={20} aria-hidden="true" />
-              </button>
-            </>
-          )}
-
-          <div className="overflow-hidden">
-            <motion.div
-              className="flex"
-              animate={{ x: translateX }}
-              transition={{ duration: isMobile ? 0.4 : 0.5, ease: EASE }}
+          <div
+            ref={trackRef}
+            className="flex"
+            style={{
+              transform: `translateX(-${offset}px)`,
+              willChange: "transform"
+            }}
+          >
+            {/* First group */}
+            <div
+              ref={listRef}
+              className="flex items-stretch gap-5"
             >
               {testimonials.map((t, i) => (
-                <div
+                <TestimonialCard
                   key={t.id}
-                  className="shrink-0 px-2"
-                  style={{ width: `${100 / itemsPerPage}%` }}
-                >
-                  <TestimonialCard
-                    name={t.name}
-                    role={t.role}
-                    quote={t.quote}
-                    rating={t.rating}
-                    index={i}
-                  />
-                </div>
+                  name={t.name}
+                  role={t.role}
+                  quote={t.quote}
+                  rating={t.rating}
+                  index={i}
+                />
               ))}
-            </motion.div>
-          </div>
-
-          {/* Pagination dots */}
-          <div className="mt-8 flex items-center justify-center gap-3">
-            {Array.from({ length: totalPages }).map((_, i) => {
-              const isActive = i === pageIndex;
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => handleDot(i)}
-                  aria-label={`Testimoni ${i + 1}`}
-                  className={cn(
-                    "relative flex h-11 w-11 items-center justify-center rounded-full transition-all duration-300",
-                    isActive
-                      ? "bg-accent"
-                      : "bg-line hover:bg-accent/60",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "rounded-full transition-all duration-300",
-                      isActive
-                        ? "h-2.5 w-2.5 bg-white"
-                        : "h-1.5 w-1.5 bg-transparent",
-                    )}
-                  />
-                </button>
-              );
-            })}
+            </div>
+            {/* Second group (duplicate) for seamless loop */}
+            <div
+              className="flex items-stretch gap-5"
+              aria-hidden="true"
+            >
+              {testimonials.map((t, i) => (
+                <TestimonialCard
+                  key={t.id + "-duplicate"}
+                  name={t.name}
+                  role={t.role}
+                  quote={t.quote}
+                  rating={t.rating}
+                  index={i}
+                />
+              ))}
+            </div>
           </div>
         </div>
-       </div>
-     </section>
-   );
+      </div>
+    </div>
+  );
 }
