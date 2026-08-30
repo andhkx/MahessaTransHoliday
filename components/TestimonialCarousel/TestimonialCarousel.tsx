@@ -45,7 +45,7 @@ export default function TestimonialCarousel() {
   }, []);
 
   // Auto-scroll for both mobile and desktop (paused on hover for desktop)
-  useEffect(() => {
+    useEffect(() => {
     if (reduce) return;
     if (paused) return;
     const interval = isMobile ? MOBILE_INTERVAL : DESKTOP_INTERVAL;
@@ -177,6 +177,7 @@ export default function TestimonialCarousel() {
             })}
           </div>
         </div>
-      </div>
-    </section>
-  );
+       </div>
+     </section>
+   );
+}
