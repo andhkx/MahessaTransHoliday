@@ -43,3 +43,57 @@ Pages/params use Next's typed-routes types: e.g. `PageProps<"/armada/[slug]">` a
 - `mahessa-design-v2.md` — design system / palette / typography spec
 - `mahessa-website-prompt.md` — project brief (target audience, SEO & conversion goals)
 - Deployment target is Cloudflare Pages (static export). `CLAUDE.md` just includes `@AGENTS.md`.
+
+## Deployment Architecture (2-branch strategy)
+
+### Branches
+- **`main`** → **Vercel** (server runtime) — `admin.mahessatransholiday.web.id`
+  - Full Next.js server: middleware, dynamic routes, server components
+  - Middleware protects `/admin/*` via Supabase SSR cookies
+  - `app/admin/**` accessible (CRUD dashboard)
+  - Auto-deploy on every push to `main`
+
+- **`public`** → **Cloudflare Pages** (static export) — `mahessatransholiday.web.id`
+  - `output: "export"`, `images.unoptimized: true`
+  - **No middleware** (removed by sync script)
+  - **No admin routes** — `app/admin/` renamed to `app/_admin_disabled/` (Next.js ignores `_`-prefixed folders)
+  - Static-only, zero server cost
+  - Updated automatically via GitHub Actions when `main` changes
+
+### Sync Workflow (main → public)
+1. **Push to `main`** triggers `.github/workflows/sync-public.yml`
+2. Workflow:
+   - Force-syncs `public` branch to current `main`
+   - Runs `scripts/sync-public.sh`:
+     - `git mv app/admin app/_admin_disabled`
+     - `git rm middleware.ts`
+     - `rm -rf .next out`
+   - Commits & force-pushes `public` branch
+3. Cloudflare Pages auto-builds `public` branch on push
+
+### Manual sync (if needed)
+```bash
+git checkout public
+./scripts/sync-public.sh
+git add -A
+git commit -m "chore(sync): transform main → public"
+git push origin public
+```
+
+### Environment Variables
+**Vercel (admin):**
+- `NEXT_PUBLIC_SUPABASE_URL` — `https://rxhibmwhkjpfwirzvojt.supabase.co`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` — `sb_publishable_...`
+
+**Cloudflare Pages (public):**
+- Same Supabase vars (public anon key is safe for client-side usage)
+
+### Adding New Admin Pages
+1. Create under `app/admin/dashboard/...` in `main`
+2. Push → Vercel auto-deploys
+3. GitHub Actions syncs to `public` → Cloudflare rebuilds public site (admin routes stay disabled)
+
+### Testing Admin Login
+- Admin dashboard: `https://admin.mahessatransholiday.web.id`
+- Login uses Supabase Auth (client-side `createClient` from `@/lib/supabase/client`)
+- Middleware on `main` protects routes server-side; client-side check in dashboard redirects if session invalid
