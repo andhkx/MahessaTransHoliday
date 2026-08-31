@@ -16,16 +16,17 @@ type AvatarProps = {
   name: string;
   index: number;
   size?: number;
+  className?: string;
 };
 
-export default function Avatar({ name, index, size = 64 }: AvatarProps) {
+export default function Avatar({ name, index, size = 64, className }: AvatarProps) {
   const initials = getInitials(name);
   const color = getAvatarColor(index);
   const fontSize = Math.round(size * 0.36);
 
   return (
     <div
-      className="flex shrink-0 items-center justify-center rounded-full font-extrabold text-white shadow-[0_4px_12px_rgba(15,76,117,0.25)]"
+      className={`flex shrink-0 items-center justify-center rounded-full font-extrabold text-white shadow-[0_4px_12px_rgba(15,76,117,0.25)] ${className || ''}`}
       style={{ width: size, height: size, backgroundColor: color, fontSize }}
       aria-hidden="true"
     >
