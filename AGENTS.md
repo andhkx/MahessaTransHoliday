@@ -19,13 +19,15 @@ Static marketing site (Next.js 16 App Router + Tailwind v4) for an Indonesian ca
 - `npm run start` — serve the build
 - `npm run lint` — `eslint` (only lint; there is **no test suite and no typecheck script**). `npx tsc --noEmit` for type errors.
 
-## Static export (critical)
+## Server runtime on Vercel
 
-`next.config.ts` sets `output: "export"` and `images.unoptimized: true`. The whole app is a pre-rendered static site — there is **no Node/API runtime**.
+The project runs as a full Next.js server on Vercel — `next.config.ts` does NOT set `output: "export"` anymore.
 
-- Every dynamic route **must** define `generateStaticParams` and set `export const dynamicParams = false` (see `app/armada/[slug]/page.tsx`). Forgetting this breaks the build for new slugs.
-- All images are local assets (SVGs in `/images/...`); do not rely on remote image optimization.
-- Always verify with `npm run build` after adding routes or data-driven pages.
+- `app/admin/**` uses dynamic routes (e.g. `app/admin/dashboard/armada/[id]/page.tsx`) that need a server runtime.
+- `middleware.ts` protects `/admin/*` via Supabase SSR cookies — middleware requires a server runtime.
+- All marketing pages still pre-render fine; Vercel's CDN caches the static work.
+
+If you add a new dynamic route, you do **not** need `generateStaticParams` — but keep it if you want pre-rendered SSG.
 
 ## Next.js 16 typed-route generics
 
@@ -42,58 +44,26 @@ Pages/params use Next's typed-routes types: e.g. `PageProps<"/armada/[slug]">` a
 
 - `mahessa-design-v2.md` — design system / palette / typography spec
 - `mahessa-website-prompt.md` — project brief (target audience, SEO & conversion goals)
-- Deployment target is Cloudflare Pages (static export). `CLAUDE.md` just includes `@AGENTS.md`.
+- `CLAUDE.md` just includes `@AGENTS.md`.
 
-## Deployment Architecture (2-branch strategy)
+## Deployment
 
-### Branches
-- **`main`** → **Vercel** (server runtime) — `admin.mahessatransholiday.web.id`
-  - Full Next.js server: middleware, dynamic routes, server components
-  - Middleware protects `/admin/*` via Supabase SSR cookies
-  - `app/admin/**` accessible (CRUD dashboard)
-  - Auto-deploy on every push to `main`
+Single host: **Vercel** serves both the public marketing site and the admin dashboard from the same `main` branch.
 
-- **`public`** → **Cloudflare Pages** (static export) — `mahessatransholiday.web.id`
-  - `output: "export"`, `images.unoptimized: true`
-  - **No middleware** (removed by sync script)
-  - **No admin routes** — `app/admin/` renamed to `app/_admin_disabled/` (Next.js ignores `_`-prefixed folders)
-  - Static-only, zero server cost
-  - Updated automatically via GitHub Actions when `main` changes
+- Public site: `https://mahessatransholiday.web.id` (or `https://<project>.vercel.app`)
+- Admin dashboard: `https://mahessatransholiday.web.id/admin/login`
 
-### Sync Workflow (main → public)
-1. **Push to `main`** triggers `.github/workflows/sync-public.yml`
-2. Workflow:
-   - Force-syncs `public` branch to current `main`
-   - Runs `scripts/sync-public.sh`:
-     - `git mv app/admin app/_admin_disabled`
-     - `git rm middleware.ts`
-     - `rm -rf .next out`
-   - Commits & force-pushes `public` branch
-3. Cloudflare Pages auto-builds `public` branch on push
+Auto-deploy on every push to `main`.
 
-### Manual sync (if needed)
-```bash
-git checkout public
-./scripts/sync-public.sh
-git add -A
-git commit -m "chore(sync): transform main → public"
-git push origin public
-```
-
-### Environment Variables
-**Vercel (admin):**
+### Environment Variables (Vercel)
+Set in Vercel → Settings → Environment Variables (apply to Production / Preview / Development):
 - `NEXT_PUBLIC_SUPABASE_URL` — `https://rxhibmwhkjpfwirzvojt.supabase.co`
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` — `sb_publishable_...`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` — Supabase publishable/anon key
 
-**Cloudflare Pages (public):**
-- Same Supabase vars (public anon key is safe for client-side usage)
+The `NEXT_PUBLIC_*` prefix is correct here — Supabase anon keys are designed to be public, and Vercel automatically inlines them into the client bundle. Use Type **Plain Text** (Sensitive hides the value in the UI but the prefix already signals it's public).
 
-### Adding New Admin Pages
-1. Create under `app/admin/dashboard/...` in `main`
-2. Push → Vercel auto-deploys
-3. GitHub Actions syncs to `public` → Cloudflare rebuilds public site (admin routes stay disabled)
-
-### Testing Admin Login
-- Admin dashboard: `https://admin.mahessatransholiday.web.id`
-- Login uses Supabase Auth (client-side `createClient` from `@/lib/supabase/client`)
-- Middleware on `main` protects routes server-side; client-side check in dashboard redirects if session invalid
+### Admin Login
+- Create a user in Supabase: Authentication → Users → Add user → Create new user (enable **Auto Confirm User**)
+- Visit `/admin/login` and sign in with those credentials
+- Middleware on the server side redirects unauthenticated `/admin/*` requests to `/admin/login` (HTTP 307 — visible in Vercel logs as expected, not an error)
+- The dashboard pages do a client-side `supabase.auth.getUser()` check and also redirect if the session is invalid
