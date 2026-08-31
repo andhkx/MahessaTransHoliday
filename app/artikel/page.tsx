@@ -22,13 +22,13 @@ export default function ArtikelList() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const supabase = createClient();
 
   useEffect(() => {
-    fetchArticles();
+    const supabase = createClient();
+    fetchArticles(supabase);
   }, []);
 
-  const fetchArticles = async () => {
+  const fetchArticles = async (supabase: ReturnType<typeof createClient>) => {
     setLoading(true);
     try {
       const { data, error } = await supabase
@@ -62,8 +62,6 @@ export default function ArtikelList() {
               <Image
                 src={a.cover_image_url}
                 alt={a.title}
-                width={600}
-                height={400}
                 fill
                 className="aspect-[16/10] object-cover"
               />
