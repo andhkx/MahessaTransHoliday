@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Star, Check } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import AdminDashboardLayout from '@/app/admin/dashboard/layout';
+import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
 
 const SERVICE_TYPES = ['rental', 'charter', 'package'] as const;
 

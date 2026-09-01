@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Check } from 'lucide-react';
-import AdminDashboardLayout from '@/app/admin/dashboard/layout';
+import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
 
 type FaqItem = {
   id: string;

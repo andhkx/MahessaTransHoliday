@@ -1,0 +1,72 @@
+﻿npm notice run mahessa_trans_holiday@0.1.0 build
+npm notice run next build
+Γû▓ Next.js 16.3.3 (Turbopack)
+- Environments: .env.local
+Γ£ô Running next.config.ts took 28ms
+
+ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead.
+System.Management.Automation.RemoteException
+  To migrate automatically, run:
+  npx @next/codemod@canary middleware-to-proxy .
+System.Management.Automation.RemoteException
+  Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 5.8s
+  Running TypeScript ...
+  Finished TypeScript in 3.7s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/48) ...
+  Generating static pages using 7 workers (12/48) 
+  Generating static pages using 7 workers (24/48) 
+  Generating static pages using 7 workers (36/48) 
+Γ£ô Generating static pages using 7 workers (48/48) in 1689ms
+  Finalizing page optimization ...
+
+Route (app)
+Γöî Γùï /
+Γö£ Γùï /_not-found
+Γö£ Γùï /admin/dashboard
+Γö£ Γùï /admin/dashboard/armada
+Γö£ ╞Æ /admin/dashboard/armada/[id]
+Γö£ Γùï /admin/dashboard/armada/new
+Γö£ Γùï /admin/dashboard/artikel
+Γö£ Γùï /admin/dashboard/artikel/new
+Γö£ Γùï /admin/dashboard/faq
+Γö£ ╞Æ /admin/dashboard/faq/[id]
+Γö£ Γùï /admin/dashboard/faq/new
+Γö£ Γùï /admin/dashboard/paket
+Γö£ ╞Æ /admin/dashboard/paket/[id]
+Γö£ Γùï /admin/dashboard/paket/new
+Γö£ Γùï /admin/dashboard/testimoni
+Γö£ ╞Æ /admin/dashboard/testimoni/[id]
+Γö£ Γùï /admin/dashboard/testimoni/new
+Γö£ Γùï /admin/login
+Γö£ Γùï /apple-icon.png
+Γö£ Γùï /armada
+Γö£   /armada/[slug]
+Γöé Γö£ ΓùÅ /armada/toyota-calya
+Γöé Γö£ ΓùÅ /armada/daihatsu-terios
+Γöé Γö£ ΓùÅ /armada/toyota-avanza
+Γöé Γöö ΓùÅ [+9 more paths]
+Γö£ Γùï /artikel
+Γö£ Γùï /faq
+Γö£ Γùï /galeri
+Γö£ Γùï /icon.png
+Γö£ Γùï /kontak
+Γö£ Γùï /paket
+Γö£   /paket/[slug]
+Γöé Γö£ ΓùÅ /paket/hiace-bandung
+Γöé Γö£ ΓùÅ /paket/hiace-garut
+Γöé Γö£ ΓùÅ /paket/hiace-jakarta
+Γöé Γöö ΓùÅ [+7 more paths]
+Γö£ Γùï /robots.txt
+Γö£ Γùï /sitemap.xml
+Γöö Γùï /temukan
+
+
+╞Æ Proxy (Middleware)
+
+Γùï  (Static)   prerendered as static content
+ΓùÅ  (SSG)      prerendered as static HTML (uses generateStaticParams)
+╞Æ  (Dynamic)  server-rendered on demand
+

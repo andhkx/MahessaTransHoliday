@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
-import { Star, Loader2 } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { cn } from '@/lib/cn';
-import AdminDashboardLayout from '@/app/admin/dashboard/layout';
+import AdminForm from '@/components/admin/AdminForm';
+import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
 
 const SERVICE_TYPES = ['rental', 'charter', 'package'] as const;
 
@@ -49,143 +50,131 @@ export default function TestimoniCreate() {
 
   return (
     <AdminDashboardLayout title="Tambah Testimoni">
-      <div className="bg-white rounded-[18px] border border-line shadow-card p-6 max-w-3xl">
-        <form onSubmit={handleSave} className="space-y-6">
-          {error && (
-            <div className="bg-error/10 border border-error/30 text-error p-4 rounded-xl">
-              {error}
-            </div>
-          )}
+      <AdminForm
+        title="Tambah Testimoni Baru"
+        description="Tambahkan testimoni dari pelanggan untuk ditampilkan di website."
+        onSubmit={handleSave}
+        onCancel={handleCancel}
+        loading={loading}
+        submitText="Simpan Testimoni"
+      >
+        {error && (
+          <div className="bg-error/10 border border-error/30 text-error p-4 rounded-xl">
+            {error}
+          </div>
+        )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                Nama *
-              </label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
-                placeholder="Hendri Wijaya"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                Peran / Keterangan
-              </label>
-              <input
-                type="text"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
-                placeholder="Project Manager, PT X"
-              />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Nama *
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
+              placeholder="Hendri Wijaya"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Peran / Keterangan
+            </label>
+            <input
+              type="text"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
+              placeholder="Project Manager, PT X"
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+            Testimoni *
+          </label>
+          <textarea
+            value={quote}
+            onChange={(e) => setQuote(e.target.value)}
+            rows={5}
+            className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 resize-none"
+            placeholder="Perjalanan dinas jadi lebih santai..."
+            required
+          />
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Rating *
+            </label>
+            <div className="flex items-center gap-1">
+              {[1, 2, 3, 4, 5].map((s) => (
+                <button
+                  key={s}
+                  type="button"
+                  onClick={() => setRating(s)}
+                  className="p-1"
+                >
+                  <Star
+                    size={26}
+                    className={cn(s <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-line')}
+                  />
+                </button>
+              ))}
             </div>
           </div>
 
           <div>
             <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-              Testimoni *
+              Tipe Layanan
             </label>
-            <textarea
-              value={quote}
-              onChange={(e) => setQuote(e.target.value)}
-              rows={5}
-              className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 resize-none"
-              placeholder="Perjalanan dinas jadi lebih santai..."
-              required
+            <select
+              value={serviceType}
+              onChange={(e) => setServiceType(e.target.value as typeof SERVICE_TYPES[number] | '')}
+              className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
+            >
+              <option value="">Pilih tipe</option>
+              {SERVICE_TYPES.map((t) => (
+                <option key={t} value={t}>
+                  {t === 'rental' ? 'Rental' : t === 'charter' ? 'Charter' : 'Paket'}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Urutan
+            </label>
+            <input
+              type="number"
+              value={displayOrder}
+              onChange={(e) => setDisplayOrder(e.target.value)}
+              min={1}
+              className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
             />
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                Rating *
-              </label>
-              <div className="flex items-center gap-1">
-                {[1,2,3,4,5].map((s) => (
-                  <button
-                    key={s}
-                    type="button"
-                    onClick={() => setRating(s)}
-                    className="p-1"
-                  >
-                    <Star
-                      size={26}
-                      className={cn(s <= rating ? 'fill-yellow-400 text-yellow-400' : 'text-line')}
-                    />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                Tipe Layanan
-              </label>
-              <select
-                value={serviceType}
-                onChange={(e) => setServiceType(e.target.value as typeof SERVICE_TYPES[number] | '')}
-                className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
-              >
-                <option value="">Pilih tipe</option>
-                {SERVICE_TYPES.map((t) => (
-                  <option key={t} value={t}>
-                    {t === 'rental' ? 'Rental' : t === 'charter' ? 'Charter' : 'Paket'}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                Urutan
-              </label>
-              <input
-                type="number"
-                value={displayOrder}
-                onChange={(e) => setDisplayOrder(e.target.value)}
-                min={1}
-                className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
-              />
-            </div>
+        <div className="flex items-center gap-3">
+          <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+            Status Aktif
+          </label>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={isActive}
+              onChange={(e) => setIsActive(e.target.checked)}
+              className="h-4 w-4 text-accent"
+            />
+            <span className="text-sm text-heading">Tampilkan di website</span>
           </div>
-
-          <div className="flex items-center gap-3">
-            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-              Status Aktif
-            </label>
-            <div className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={isActive}
-                onChange={(e) => setIsActive(e.target.checked)}
-                className="h-4 w-4 text-accent"
-              />
-              <span className="text-sm text-heading">Tampilkan di website</span>
-            </div>
-          </div>
-
-          <div className="flex justify-end pt-4 space-x-3 border-t border-line">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="px-5 py-2.5 border border-line rounded-xl text-sm font-medium text-heading hover:bg-surface/50 transition"
-            >
-              Batal
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-5 py-2.5 bg-accent text-white font-extrabold rounded-xl hover:bg-accent-hover transition disabled:opacity-50 shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)]"
-            >
-              {loading ? 'Menyimpan...' : 'Simpan Testimoni'}
-            </button>
-          </div>
-        </form>
-      </div>
+        </div>
+      </AdminForm>
     </AdminDashboardLayout>
   );
 }

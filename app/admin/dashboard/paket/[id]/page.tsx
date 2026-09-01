@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import ImageUpload from '@/components/admin/ImageUpload';
 import { Check, Loader2 } from 'lucide-react';
-import AdminDashboardLayout from '@/app/admin/dashboard/layout';
+import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
 
 const DESTINATIONS = ['Bandung', 'Garut', 'Jakarta', 'Yogyakarta', 'Bali', 'Pangalengan', 'Ciwidey', 'Pangandaran', 'Bromo', 'Semarang'] as const;
 const INCLUDES = [

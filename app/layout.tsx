@@ -1,17 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, DM_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import JsonLd from "@/components/JsonLd";
-import {
-  ADDRESS,
-  SERVICE_AREAS,
-  SITE_DESCRIPTION,
-  SITE_NAME,
-  SITE_TAGLINE,
-  SITE_URL,
-} from "@/lib/constants";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -25,68 +14,18 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
+  metadataBase: new URL("https://mahessaholiday.my.id"),
   title: {
-    default: `${SITE_NAME} | Rental Mobil & Paket Perjalanan Cimahi, Bandung, Padalarang`,
-    template: `%s | ${SITE_NAME}`,
+    default: "Mahessa Trans Holiday | Rental Mobil & Paket Perjalanan",
+    template: "%s | Mahessa Trans Holiday",
   },
-  description: SITE_DESCRIPTION,
-  keywords: [
-    "rental mobil cimahi",
-    "rental mobil bandung",
-    "rental mobil padalarang",
-    "sewa mobil dengan driver",
-    "paket wisata bandung",
-    "sewa hiace bandung",
-    "charter mobil bandung",
-    "mahessa trans holiday",
-  ],
-  openGraph: {
-    type: "website",
-    locale: "id_ID",
-    siteName: SITE_NAME,
-    title: `${SITE_NAME} | Rental Mobil & Paket Perjalanan`,
-    description: SITE_TAGLINE,
-    url: SITE_URL,
-  },
-  icons: {
-    icon: "/icon.png",
-    shortcut: "/favicon-32.png",
-    apple: "/apple-icon.png",
-  },
-  manifest: "/manifest.json",
+  description: "Rental mobil dengan driver, charter, hingga perjalanan wisata dan perjalanan dinas dari Cimahi, Bandung & Padalarang.",
 };
 
-const localBusinessJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  name: SITE_NAME,
-  description: SITE_TAGLINE,
-  url: SITE_URL,
-  telephone: "+62895327077214",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: ADDRESS,
-    addressLocality: "Cimahi",
-    addressRegion: "Jawa Barat",
-    addressCountry: "ID",
-  },
-  areaServed: SERVICE_AREAS.map((area) => ({ "@type": "Place", name: area })),
-  priceRange: "Rp350.000 - Rp18.000.000",
-};
-
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html
-      lang="id"
-      className={`${jakarta.variable} ${dmMono.variable} h-full antialiased`}
-    >
-      <body className="flex min-h-full flex-col">
-        <JsonLd data={localBusinessJsonLd} />
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-      </body>
+    <html lang="id" className={`${jakarta.variable} ${dmMono.variable} h-full antialiased`}>
+      <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
 }
