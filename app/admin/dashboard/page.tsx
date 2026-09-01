@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
-import { CarFront, MapPin, FileText, Star, LogOut, LayoutDashboard, Calendar, TrendingUp } from 'lucide-react';
+import { CarFront, MapPin, FileText, Star, Calendar, TrendingUp, MessageCircle } from 'lucide-react';
 import AdminDashboardLayout from '@/app/admin/dashboard/layout';
 
 type Stats = {
@@ -11,12 +11,13 @@ type Stats = {
   packages: number;
   articles: number;
   testimonials: number;
+  faq: number;
 };
 
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState<Stats>({ vehicles: 0, packages: 0, articles: 0, testimonials: 0 });
+  const [stats, setStats] = useState<Stats>({ vehicles: 0, packages: 0, articles: 0, testimonials: 0, faq: 0 });
   const supabase = createClient();
 
   useEffect(() => {
@@ -35,17 +36,19 @@ export default function DashboardPage() {
 
     const loadStats = async () => {
       try {
-        const [vehicles, packages, articles, testimonials] = await Promise.all([
+        const [vehicles, packages, articles, testimonials, faq] = await Promise.all([
           supabase.from('vehicles').select('id', { count: 'exact', head: true }),
           supabase.from('packages').select('id', { count: 'exact', head: true }),
           supabase.from('articles').select('id', { count: 'exact', head: true }),
           supabase.from('testimonials').select('id', { count: 'exact', head: true }),
+          supabase.from('faq_items').select('id', { count: 'exact', head: true }),
         ]);
         setStats({
           vehicles: vehicles.count || 0,
           packages: packages.count || 0,
           articles: articles.count || 0,
           testimonials: testimonials.count || 0,
+          faq: faq.count || 0,
         });
       } catch (e) {
         console.error('Failed to load stats:', e);
@@ -69,10 +72,11 @@ export default function DashboardPage() {
 
   // Stats for hero cards
   const statsData = [
-    { icon: CarFront, label: 'Armada', value: stats.vehicles, color: 'bg-blue-500/10 text-blue-700' },
-    { icon: MapPin, label: 'Paket', value: stats.packages, color: 'bg-green-500/10 text-green-700' },
-    { icon: FileText, label: 'Artikel', value: stats.articles, color: 'bg-purple-500/10 text-purple-700' },
-    { icon: Star, label: 'Testimoni', value: stats.testimonials, color: 'bg-yellow-500/10 text-yellow-700' },
+    { icon: CarFront, label: 'Armada', value: stats.vehicles },
+    { icon: MapPin, label: 'Paket', value: stats.packages },
+    { icon: FileText, label: 'Artikel', value: stats.articles },
+    { icon: Star, label: 'Testimoni', value: stats.testimonials },
+    { icon: MessageCircle, label: 'FAQ', value: stats.faq },
   ];
 
   // Quick nav items
@@ -81,12 +85,13 @@ export default function DashboardPage() {
     { icon: MapPin, label: 'Paket', href: '/admin/dashboard/paket', desc: 'Kelola paket perjalanan' },
     { icon: FileText, label: 'Artikel', href: '/admin/dashboard/artikel', desc: 'Kelola blog/artikel' },
     { icon: Star, label: 'Testimoni', href: '/admin/dashboard/testimoni', desc: 'Kelola testimoni pelanggan' },
+    { icon: MessageCircle, label: 'FAQ', href: '/admin/dashboard/faq', desc: 'Kelola pertanyaan jawab' },
   ];
 
   return (
     <AdminDashboardLayout title="Dashboard" stats={statsData}>
       {/* Quick actions grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
         {navItems.map((item) => {
           const Icon = item.icon;
           return (

@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
-import { Trash2, Plus, Edit, MapPin, Calendar, ChevronDown } from 'lucide-react';
+import { Trash2, Plus, Edit, Image as ImageIcon } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import { formatIDR } from '@/lib/format';
 import AdminDashboardLayout from '@/app/admin/dashboard/layout';
 
 type Package = {
@@ -12,9 +13,27 @@ type Package = {
   name: string;
   slug: string;
   destination: string;
+  duration_text: string | null;
   price: number;
-  duration_days: number;
+  badge: string | null;
+  cover_image_url: string | null;
   is_active: boolean;
+};
+
+const destinationStyle = (dest: string): string => {
+  const map: Record<string, string> = {
+    'Bandung': 'bg-success/20 text-success',
+    'Garut': 'bg-accent/20 text-accent',
+    'Jakarta': 'bg-warning/20 text-warning',
+    'Yogyakarta': 'bg-primary/20 text-primary',
+    'Bali': 'bg-error/20 text-error',
+    'Pangalengan': 'bg-success/20 text-success',
+    'Ciwidey': 'bg-success/20 text-success',
+    'Pangandaran': 'bg-warning/20 text-warning',
+    'Bromo': 'bg-primary/20 text-primary',
+    'Semarang': 'bg-accent/20 text-accent',
+  };
+  return map[dest] || 'bg-muted/20 text-muted';
 };
 
 export default function PaketList() {
@@ -24,18 +43,14 @@ export default function PaketList() {
   const [selectedDestination, setSelectedDestination] = useState<string>('all');
   const supabase = createClient();
 
-  useEffect(() => {
-    fetchPackages();
-  }, []);
-
   const fetchPackages = async () => {
     setLoading(true);
     try {
       let query = supabase
         .from('packages')
-        .select('*')
+        .select('id,name,slug,destination,duration_text,price,badge,cover_image_url,is_active')
         .eq('is_active', true)
-        .order('name');
+        .order('price');
 
       if (selectedDestination !== 'all') {
         query = query.eq('destination', selectedDestination);
@@ -43,13 +58,17 @@ export default function PaketList() {
 
       const { data, error } = await query;
       if (error) throw error;
-      setPackages(data);
-    } catch (err: any) {
-      setError(err.message);
+      setPackages(data || []);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchPackages();
+  }, [selectedDestination]);
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('Yakin ingin menghapus paket ini?')) return;
@@ -60,92 +79,107 @@ export default function PaketList() {
         .eq('id', id);
       if (error) throw error;
       await fetchPackages();
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : String(err));
     }
   };
 
-  const destinations = ['all', 'Bandung', 'Garut', 'Jakarta', 'Yogya', 'Bali'] as const;
-
-  if (loading) return <div className="p-8 text-center">Loading...</div>;
-  if (error) return <div className="p-8 text-error">{error}</div>;
+  const destinations = ['all', 'Bandung', 'Garut', 'Jakarta', 'Yogyakarta', 'Bali', 'Pangalengan', 'Ciwidey', 'Pangandaran', 'Bromo', 'Semarang'] as const;
 
   return (
-    <AdminDashboardLayout>
-      <div className="p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-          <h1 className="text-2xl font-extrabold text-heading">Paket Perjalanan</h1>
-          <div className="flex items-center gap-4">
+    <AdminDashboardLayout title="Paket Perjalanan">
+      <div className="bg-white rounded-[18px] border border-line shadow-card p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+          <div>
+            <h1 className="text-2xl font-extrabold text-heading">Kelola Paket</h1>
+            <p className="text-sm text-muted mt-1">Total {packages.length} paket aktif</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <select
+              value={selectedDestination}
+              onChange={(e) => setSelectedDestination(e.target.value)}
+              className="px-4 py-2.5 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
+            >
+              {destinations.map((dest) => (
+                <option key={dest} value={dest}>
+                  {dest === 'all' ? 'Semua Destinasi' : dest}
+                </option>
+              ))}
+            </select>
             <Link
               href="/admin/dashboard/paket/new"
-              className="flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-xl font-extrabold hover:bg-accent-hover transition"
+              className="flex items-center gap-2 bg-accent text-white px-4 py-2.5 rounded-xl font-extrabold hover:bg-accent-hover transition shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)]"
             >
               <Plus size={18} /> Tambah Paket
             </Link>
-            <div className="relative">
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-1">
-                Destinasi
-              </label>
-              <select
-                value={selectedDestination}
-                onChange={(e) => setSelectedDestination(e.target.value)}
-                className="w-full px-4 py-2 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
-              >
-                {destinations.map((dest) => (
-                  <option key={dest} value={dest}>
-                    {dest === 'all' ? 'Semua' : dest}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted" />
-            </div>
           </div>
         </div>
 
-        {packages.length === 0 ? (
+        {loading && <div className="p-8 text-center text-muted">Loading...</div>}
+        {error && <div className="p-8 text-error">{error}</div>}
+
+        {packages.length === 0 && !loading && !error && (
           <p className="text-center text-muted py-8">Belum ada paket yang tersedia.</p>
-        ) : (
+        )}
+
+        {packages.length > 0 && (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-line">
               <thead className="bg-surface">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">ID</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Nama</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Destinasi</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Durasi</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Harga</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Aksi</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Cover</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Nama</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Destinasi</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Durasi</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Harga</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-line">
                 {packages.map((p) => (
-                  <tr key={p.id} className="hover:bg-surface/50">
-                    <td className="px-6 py-4 text-sm font-mono text-muted">{p.id.slice(0, 8)}</td>
-                    <td className="px-6 py-4 text-sm font-bold text-heading">{p.name}</td>
-                    <td className="px-6 py-4 text-sm text-muted">{p.destination}</td>
-                    <td className="px-6 py-4 text-sm">{p.duration_days} hari</td>
-                    <td className="px-6 py-4 text-sm font-bold text-accent">
-                      Rp{`${p.price.toLocaleString()}`}
+                  <tr key={p.id} className="hover:bg-surface/50 transition">
+                    <td className="px-4 py-3">
+                      {p.cover_image_url ? (
+                        <img src={p.cover_image_url} alt={p.name} className="h-12 w-16 object-cover rounded-xl" />
+                      ) : (
+                        <div className="h-12 w-16 bg-surface rounded-xl flex items-center justify-center">
+                          <ImageIcon size={16} className="text-muted" />
+                        </div>
+                      )}
                     </td>
-                    <td className="px-6 py-4 text-sm">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${p.is_active ? 'bg-success/20 text-success' : 'bg-error/20 text-error'}`}>
-                        {p.is_active ? 'Aktif' : 'Tidak Aktif'}
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-heading">{p.name}</span>
+                        {p.badge && (
+                          <span className="px-2 py-0.5 rounded-full bg-warning/20 text-warning text-[10px] font-bold uppercase">
+                            {p.badge}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted font-mono mt-0.5">{p.slug}</p>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={cn('px-2.5 py-1 rounded-full text-xs font-bold', destinationStyle(p.destination))}>
+                        {p.destination}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm flex space-x-2">
-                      <Link
-                        href={`/admin/dashboard/paket/${p.id}`}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-border border border-line text-sm font-medium text-heading hover:bg-accent/10"
-                      >
-                        <Edit size={16} /> Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(p.id)}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-border border border-line text-sm font-medium text-error hover:bg-error/10"
-                      >
-                        <Trash2 size={16} /> Hapus
-                      </button>
+                    <td className="px-4 py-3 text-sm text-muted">{p.duration_text || '-'}</td>
+                    <td className="px-4 py-3 text-sm font-bold text-accent">{formatIDR(p.price)}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={`/admin/dashboard/paket/${p.id}`}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-line text-sm font-medium text-heading hover:bg-accent/10 hover:border-accent transition"
+                        >
+                          <Edit size={14} /> Edit
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(p.id)}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-line text-sm font-medium text-error hover:bg-error/10 hover:border-error transition"
+                        >
+                          <Trash2 size={14} /> Hapus
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
-import { CarFront, Plus, Edit, Trash2, ChevronDown } from 'lucide-react';
+import { CarFront, Plus, Edit, Trash2, Image as ImageIcon } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import { formatIDR } from '@/lib/format';
 import AdminDashboardLayout from '@/app/admin/dashboard/layout';
 
 type Vehicle = {
@@ -16,13 +17,12 @@ type Vehicle = {
   fuel_type: string;
   price_per_day: number;
   capacity: number;
+  badge: string | null;
+  image_url: string | null;
   is_active: boolean;
 };
 
 const categoryLabel = (category: string): string => {
-  if (category === 'compact') return 'City Car';
-  if (category === 'mpv') return 'MPV';
-  if (category === 'van') return 'Van';
   if (category === 'entry') return 'City Car';
   if (category === 'midrange') return 'MPV';
   if (category === 'premium') return 'SUV & Premium';
@@ -32,13 +32,11 @@ const categoryLabel = (category: string): string => {
 };
 
 const categoryStyle = (category: string): string => {
-  if (category === 'compact') return 'bg-blue-500/20 text-blue-700';
-  if (category === 'mpv') return 'bg-green-500/20 text-green-700';
-  if (category === 'van') return 'bg-purple-500/20 text-purple-700';
   if (category === 'entry') return 'bg-success/20 text-success';
-  if (category === 'midrange') return 'bg-warning/20 text-warning';
-  if (category === 'premium') return 'bg-accent/20 text-accent';
-  if (category === 'luxury') return 'bg-error/20 text-error';
+  if (category === 'midrange') return 'bg-accent/20 text-accent';
+  if (category === 'premium') return 'bg-primary/20 text-primary';
+  if (category === 'luxury') return 'bg-warning/20 text-warning';
+  if (category === 'group') return 'bg-error/20 text-error';
   return 'bg-muted/20 text-muted';
 };
 
@@ -49,19 +47,15 @@ export default function ArmadaList() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const supabase = createClient();
 
-  useEffect(() => {
-    fetchVehicles();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCategory]);
-
   const fetchVehicles = async () => {
     setLoading(true);
     try {
       let query = supabase
         .from('vehicles')
-        .select('*')
+        .select('id,name,slug,category,transmission,fuel_type,price_per_day,capacity,badge,image_url,is_active')
         .eq('is_active', true)
-        .order('name');
+        .order('category')
+        .order('price_per_day');
 
       if (selectedCategory !== 'all') {
         query = query.eq('category', selectedCategory);
@@ -70,12 +64,16 @@ export default function ArmadaList() {
       const { data, error } = await query;
       if (error) throw error;
       setVehicles(data || []);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchVehicles();
+  }, [selectedCategory]);
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('Yakin ingin menghapus armada ini?')) return;
@@ -86,46 +84,43 @@ export default function ArmadaList() {
         .eq('id', id);
       if (error) throw error;
       await fetchVehicles();
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : String(err));
     }
   };
 
-  const categories = ['all', 'compact', 'mpv', 'van', 'entry', 'midrange', 'premium', 'luxury', 'group'] as const;
+  const categories = ['all', 'entry', 'midrange', 'premium', 'luxury', 'group'] as const;
 
   return (
-    <AdminDashboardLayout>
-      <div className="p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-          <h1 className="text-2xl font-extrabold text-heading">Armada</h1>
-          <div className="flex items-center gap-4">
+    <AdminDashboardLayout title="Armada">
+      <div className="bg-white rounded-[18px] border border-line shadow-card p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+          <div>
+            <h1 className="text-2xl font-extrabold text-heading">Kelola Armada</h1>
+            <p className="text-sm text-muted mt-1">Total {vehicles.length} unit aktif</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="px-4 py-2.5 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
+            >
+              {categories.map((cat) => (
+                <option key={cat} value={cat}>
+                  {cat === 'all' ? 'Semua Kategori' : categoryLabel(cat)}
+                </option>
+              ))}
+            </select>
             <Link
               href="/admin/dashboard/armada/new"
-              className="flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-xl font-extrabold hover:bg-accent-hover transition"
+              className="flex items-center gap-2 bg-accent text-white px-4 py-2.5 rounded-xl font-extrabold hover:bg-accent-hover transition shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)]"
             >
               <Plus size={18} /> Tambah Armada
             </Link>
-            <div className="relative">
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-1">
-                Kategori
-              </label>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-4 py-2 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
-              >
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat === 'all' ? 'Semua' : categoryLabel(cat)}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted" />
-            </div>
           </div>
         </div>
 
-        {loading && <div className="p-8 text-center">Loading...</div>}
+        {loading && <div className="p-8 text-center text-muted">Loading...</div>}
         {error && <div className="p-8 text-error">{error}</div>}
 
         {vehicles.length === 0 && !loading && !error && (
@@ -137,55 +132,62 @@ export default function ArmadaList() {
             <table className="min-w-full divide-y divide-line">
               <thead className="bg-surface">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">ID</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Nama</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Kategori</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Transmisi</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Harga/Hari</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Kapasitas</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Aksi</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Foto</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Nama</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Kategori</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Transmisi</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Harga</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Kapasitas</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-line">
                 {vehicles.map((v) => (
-                  <tr key={v.id} className="hover:bg-surface/50">
-                    <td className="px-6 py-4 text-sm font-mono text-muted">{v.id.slice(0, 8)}</td>
-                    <td className="px-6 py-4 text-sm font-bold text-heading">{v.name}</td>
-                    <td className="px-6 py-4 text-sm text-muted">
-                      <span className={cn('px-2 py-0.5 rounded-full text-xs font-bold', categoryStyle(v.category))}>
+                  <tr key={v.id} className="hover:bg-surface/50 transition">
+                    <td className="px-4 py-3">
+                      {v.image_url ? (
+                        <img src={v.image_url} alt={v.name} className="h-12 w-16 object-cover rounded-xl" />
+                      ) : (
+                        <div className="h-12 w-16 bg-surface rounded-xl flex items-center justify-center">
+                          <ImageIcon size={16} className="text-muted" />
+                        </div>
+                      )}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-bold text-heading">{v.name}</span>
+                        {v.badge && (
+                          <span className="px-2 py-0.5 rounded-full bg-warning/20 text-warning text-[10px] font-bold uppercase">
+                            {v.badge}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted font-mono mt-0.5">{v.slug}</p>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={cn('px-2.5 py-1 rounded-full text-xs font-bold', categoryStyle(v.category))}>
                         {categoryLabel(v.category)}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-muted">{v.transmission}</td>
-                    <td className="px-6 py-4 text-sm font-bold text-accent">
-                      {`Rp${v.price_per_day.toLocaleString()}`}
-                    </td>
-                    <td className="px-6 py-4 text-sm text-muted">{v.capacity} orang</td>
-                    <td className="px-6 py-4 text-sm">
-                      <span
-                        className={cn(
-                          'px-2 py-0.5 rounded-full text-xs font-bold',
-                          v.is_active ? 'bg-success/20 text-success' : 'bg-error/20 text-error'
-                        )}
-                      >
-                        {v.is_active ? 'Aktif' : 'Tidak Aktif'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-sm flex space-x-2">
-                      <Link
-                        href={`/admin/dashboard/armada/${v.id}`}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded border border-line text-sm font-medium text-heading hover:bg-accent/10"
-                      >
-                        <Edit size={16} /> Edit
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(v.id)}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded border border-line text-sm font-medium text-error hover:bg-error/10"
-                      >
-                        <Trash2 size={16} /> Hapus
-                      </button>
+                    <td className="px-4 py-3 text-sm text-muted">{v.transmission}</td>
+                    <td className="px-4 py-3 text-sm font-bold text-accent">{formatIDR(v.price_per_day)}<span className="text-[10px] text-muted font-normal">/12jam</span></td>
+                    <td className="px-4 py-3 text-sm text-muted">{v.capacity} orang</td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={`/admin/dashboard/armada/${v.id}`}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-line text-sm font-medium text-heading hover:bg-accent/10 hover:border-accent transition"
+                        >
+                          <Edit size={14} /> Edit
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(v.id)}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-line text-sm font-medium text-error hover:bg-error/10 hover:border-error transition"
+                        >
+                          <Trash2 size={14} /> Hapus
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

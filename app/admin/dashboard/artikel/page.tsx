@@ -25,10 +25,6 @@ export default function ArtikelList() {
   const [filterStatus, setFilterStatus] = useState<'all' | 'draft' | 'published' | 'archived'>('all');
   const supabase = createClient();
 
-  useEffect(() => {
-    fetchArticles();
-  }, []);
-
   const fetchArticles = async () => {
     setLoading(true);
     try {
@@ -39,12 +35,16 @@ export default function ArtikelList() {
       const { data, error } = await query;
       if (error) throw error;
       setArticles(data || []);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchArticles();
+  }, [filterStatus]);
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('Yakin ingin menghapus artikel ini?')) return;
@@ -52,8 +52,8 @@ export default function ArtikelList() {
       const { error } = await supabase.from('articles').delete().eq('id', id);
       if (error) throw error;
       await fetchArticles();
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : String(err));
     }
   };
 
@@ -61,30 +61,30 @@ export default function ArtikelList() {
   if (error) return <div className="p-8 text-error">{error}</div>;
 
   return (
-    <AdminDashboardLayout>
-      <div className="p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-          <h1 className="text-2xl font-extrabold text-heading">Artikel</h1>
-          <div className="flex items-center gap-4">
+    <AdminDashboardLayout title="Artikel">
+      <div className="bg-white rounded-[18px] border border-line shadow-card p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+          <div>
+            <h1 className="text-2xl font-extrabold text-heading">Kelola Artikel</h1>
+            <p className="text-sm text-muted mt-1">Total {articles.length} artikel</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value as 'all' | 'draft' | 'published' | 'archived')}
+              className="px-4 py-2.5 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
+            >
+              <option value="all">Semua Status</option>
+              <option value="draft">Draft</option>
+              <option value="published">Published</option>
+              <option value="archived">Archived</option>
+            </select>
             <Link
               href="/admin/dashboard/artikel/new"
-              className="flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-xl font-extrabold hover:bg-accent-hover transition"
+              className="flex items-center gap-2 bg-accent text-white px-4 py-2.5 rounded-xl font-extrabold hover:bg-accent-hover transition shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)]"
             >
               <Plus size={18} /> Tulis Artikel
             </Link>
-            <div className="relative">
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-1">Status</label>
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as 'all' | 'draft' | 'published' | 'archived')}
-                className="w-full px-4 py-2 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
-              >
-                <option value="all">Semua</option>
-                <option value="draft">Draft</option>
-                <option value="published">Published</option>
-                <option value="archived">Archived</option>
-              </select>
-            </div>
           </div>
         </div>
 
@@ -95,30 +95,37 @@ export default function ArtikelList() {
             <table className="min-w-full divide-y divide-line">
               <thead className="bg-surface">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Cover</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Judul</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Kategori</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Tgl Publish</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Views</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Aksi</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Cover</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Judul</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Kategori</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Status</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Tgl Publish</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Views</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-line">
                 {articles.map((a) => (
-                  <tr key={a.id} className="hover:bg-surface/50">
-                    <td className="px-6 py-4">
+                  <tr key={a.id} className="hover:bg-surface/50 transition">
+                    <td className="px-4 py-3">
                       {a.cover_image_url ? (
-                        <img src={a.cover_image_url} alt="" className="h-12 w-12 object-cover rounded" />
+                        <img src={a.cover_image_url} alt="" className="h-12 w-16 object-cover rounded-xl" />
                       ) : (
-                        <div className="h-12 w-12 bg-surface rounded flex items-center justify-center">
+                        <div className="h-12 w-16 bg-surface rounded-xl flex items-center justify-center">
                           <FileText size={16} className="text-muted" />
                         </div>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-sm font-bold text-heading max-w-xs truncate">{a.title}</td>
-                    <td className="px-6 py-4 text-sm text-muted">{a.category}</td>
-                    <td className="px-6 py-4 text-sm">
+                    <td className="px-4 py-3">
+                      <div className="text-sm font-bold text-heading max-w-xs truncate">{a.title}</div>
+                      <p className="text-xs text-muted font-mono mt-0.5">{a.slug}</p>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className="px-2.5 py-1 rounded-full bg-accent/20 text-accent text-xs font-bold capitalize">
+                        {a.category}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${
                         a.status === 'published' ? 'bg-success/20 text-success' :
                         a.status === 'draft' ? 'bg-warning/20 text-warning' :
@@ -127,23 +134,25 @@ export default function ArtikelList() {
                         {a.status === 'published' ? 'Published' : a.status === 'draft' ? 'Draft' : 'Archived'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-sm text-muted">
+                    <td className="px-4 py-3 text-sm text-muted">
                       {a.published_at ? new Date(a.published_at).toLocaleDateString('id-ID') : '-'}
                     </td>
-                    <td className="px-6 py-4 text-sm text-muted">{a.view_count}</td>
-                    <td className="px-6 py-4 text-sm flex space-x-2">
-                      <Link
-                        href={`/admin/dashboard/artikel/${a.id}`}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-border border border-line text-sm font-medium text-heading hover:bg-accent/10"
-                      >
-                        <Edit size={16} /> Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(a.id)}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-border border border-line text-sm font-medium text-error hover:bg-error/10"
-                      >
-                        <Trash2 size={16} /> Hapus
-                      </button>
+                    <td className="px-4 py-3 text-sm text-muted">{a.view_count}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={`/admin/dashboard/artikel/${a.id}`}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-line text-sm font-medium text-heading hover:bg-accent/10 hover:border-accent transition"
+                        >
+                          <Edit size={14} /> Edit
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(a.id)}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-line text-sm font-medium text-error hover:bg-error/10 hover:border-error transition"
+                        >
+                          <Trash2 size={14} /> Hapus
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}

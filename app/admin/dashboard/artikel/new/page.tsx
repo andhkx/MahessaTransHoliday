@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import ImageUpload from '@/components/admin/ImageUpload';
-import { X } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import AdminDashboardLayout from '@/app/admin/dashboard/layout';
 
 const CATEGORIES = ['tips', 'destinasi', 'panduan', 'berita'] as const;
 
@@ -47,8 +47,8 @@ export default function ArtikelCreate() {
       if (error) throw error;
 
       router.push('/admin/dashboard/artikel');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
@@ -57,22 +57,20 @@ export default function ArtikelCreate() {
   const handleCancel = () => router.push('/admin/dashboard/artikel');
 
   return (
-    <div className="min-h-screen bg-surface">
-      <nav className="bg-white shadow-sm border-b border-line">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-4 flex justify-between items-center">
-          <Link href="/admin/dashboard/artikel" className="flex items-center gap-3">
-            <X size={20} className="text-muted" />
-            <span className="text-sm font-medium text-heading">Artikel</span>
-          </Link>
-          <h1 className="text-xl font-extrabold text-heading">Tulis Artikel Baru</h1>
-        </div>
-      </nav>
+    <AdminDashboardLayout title="Tulis Artikel Baru">
+      <div className="bg-white rounded-[18px] border border-line shadow-card p-6 max-w-4xl">
+        <form onSubmit={handleSave} className="space-y-6">
+          {error && (
+            <div className="bg-error/10 border border-error/30 text-error p-4 rounded-xl">
+              {error}
+            </div>
+          )}
 
-      <div className="max-w-4xl mx-auto px-5 sm:px-8 py-8">
-        <form onSubmit={handleSave} className="bg-white rounded-[24px] border border-line shadow-card p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Judul *</label>
+              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+                Judul *
+              </label>
               <input
                 type="text"
                 value={title}
@@ -93,7 +91,9 @@ export default function ArtikelCreate() {
               />
             </div>
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Slug</label>
+              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+                Slug
+              </label>
               <input
                 type="text"
                 value={slug}
@@ -106,7 +106,9 @@ export default function ArtikelCreate() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Kategori</label>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Kategori
+            </label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value as any)}
@@ -119,7 +121,9 @@ export default function ArtikelCreate() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Excerpt (Ringkasan)</label>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Excerpt (Ringkasan)
+            </label>
             <textarea
               value={excerpt}
               onChange={(e) => setExcerpt(e.target.value)}
@@ -130,7 +134,9 @@ export default function ArtikelCreate() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Konten (Markdown)</label>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Konten (Markdown) *
+            </label>
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
@@ -143,7 +149,9 @@ export default function ArtikelCreate() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Meta Title (SEO)</label>
+              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+                Meta Title (SEO)
+              </label>
               <input
                 type="text"
                 value={meta_title}
@@ -153,7 +161,9 @@ export default function ArtikelCreate() {
               />
             </div>
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Meta Description (SEO)</label>
+              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+                Meta Description (SEO)
+              </label>
               <input
                 type="text"
                 value={meta_description}
@@ -166,7 +176,9 @@ export default function ArtikelCreate() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Status</label>
+              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+                Status
+              </label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as any)}
@@ -191,7 +203,9 @@ export default function ArtikelCreate() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Cover</label>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Cover Gambar
+            </label>
             <ImageUpload
               bucket="articles"
               onUpload={(url) => setCoverImageUrl(url)}
@@ -200,24 +214,24 @@ export default function ArtikelCreate() {
             />
           </div>
 
-          <div className="flex justify-end pt-4 space-x-3">
+          <div className="flex justify-end pt-4 space-x-3 border-t border-line">
             <button
               type="button"
               onClick={handleCancel}
-              className="px-5 py-2.5 border border-line rounded-xl text-sm font-medium text-heading hover:bg-surface/50"
+              className="px-5 py-2.5 border border-line rounded-xl text-sm font-medium text-heading hover:bg-surface/50 transition"
             >
               Batal
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2.5 bg-accent text-white font-extrabold rounded-xl hover:bg-accent-hover disabled:opacity-50"
+              className="px-5 py-2.5 bg-accent text-white font-extrabold rounded-xl hover:bg-accent-hover transition disabled:opacity-50 shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)]"
             >
               {loading ? 'Menyimpan...' : 'Simpan Artikel'}
             </button>
           </div>
         </form>
       </div>
-    </div>
+    </AdminDashboardLayout>
   );
 }

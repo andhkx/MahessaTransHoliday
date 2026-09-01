@@ -5,12 +5,14 @@ import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import ImageUpload from '@/components/admin/ImageUpload';
-import { X, Loader2, Check } from 'lucide-react';
+import { formatIDR } from '@/lib/format';
+import { X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import AdminDashboardLayout from '@/app/admin/dashboard/layout';
 
-const DESTINATIONS = ['Bandung', 'Garut', 'Jakarta', 'Yogyakarta', 'Bali'] as const;
+const DESTINATIONS = ['Bandung', 'Garut', 'Jakarta', 'Yogyakarta', 'Bali', 'Pangalengan', 'Ciwidey', 'Pangandaran', 'Bromo', 'Semarang'] as const;
 const INCLUDES = [
-  'Mobil',
+  'Mobil Toyota Hiace',
   'Driver Berpengalaman',
   'BBM',
   'Tol',
@@ -36,12 +38,16 @@ export default function PaketCreate() {
   const [name, setName] = useState('');
   const [slug, setSlug] = useState('');
   const [description, setDescription] = useState('');
-  const [destination, setDestination] = useState<'' | 'Bandung' | 'Garut' | 'Jakarta' | 'Yogyakarta' | 'Bali'>('');
+  const [destination, setDestination] = useState<'' | typeof DESTINATIONS[number]>('');
   const [duration_days, setDurationDays] = useState('');
+  const [duration_text, setDurationText] = useState('');
+  const [duration_hours, setDurationHours] = useState('');
   const [price, setPrice] = useState('');
-  const [includes, setIncludes] = useState<string[]>(['Mobil', 'Driver Berpengalaman', 'BBM']);
+  const [includes, setIncludes] = useState<string[]>(['Mobil Toyota Hiace', 'Driver Berpengalaman', 'BBM']);
+  const [excluded, setExcluded] = useState<string[]>([]);
   const [suitable_for, setSuitableFor] = useState<string[]>([]);
   const [cover_image_url, setCoverImageUrl] = useState<string | null>(null);
+  const [badge, setBadge] = useState('');
   const [is_active, setIsActive] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -57,21 +63,25 @@ export default function PaketCreate() {
       const { error } = await supabase.from('packages').insert({
         name,
         slug,
-        description,
+        description: description ? [description] : [],
         destination,
         duration_days: parseInt(duration_days),
+        duration_text: duration_text || `${duration_days} Hari`,
+        duration_hours: parseInt(duration_hours) || parseInt(duration_days) * 10,
         price: parseInt(price),
         includes,
+        excluded,
         suitable_for,
         cover_image_url,
+        badge: badge || null,
         is_active,
       });
 
       if (error) throw error;
 
       router.push('/admin/dashboard/paket');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
@@ -82,229 +92,293 @@ export default function PaketCreate() {
   };
 
   return (
-    <div className="min-h-screen bg-surface">
-      <nav className="bg-white shadow-sm border-b border-line">
-        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-4 flex justify-between items-center">
-          <Link href="/admin/dashboard/paket" className="flex items-center gap-3">
-            <X size={20} className="text-muted" />
-            <span className="text-sm font-medium text-heading">Paket</span>
-          </Link>
-          <h1 className="text-xl font-extrabold text-heading">Tambah Paket Baru</h1>
-        </div>
-      </nav>
-
-      <div className="max-w-7xl mx-auto px-5 sm:px-8 py-8">
-        <div className="bg-white rounded-[24px] border border-line shadow-card p-6">
-          <form onSubmit={handleSave} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                  Nama Paket *
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setName(value);
-                    const generatedSlug = value
-                      .toLowerCase()
-                      .trim()
-                      .replace(/[^\w\s-]/g, '')
-                      .replace(/\s+/g, '-')
-                      .replace(/-+/g, '-');
-                    setSlug(generatedSlug);
-                  }}
-                  className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15"
-                  placeholder="Paket Wisata Bandung 1 Hari"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                  Slug
-                </label>
-                <input
-                  type="text"
-                  value={slug}
-                  onChange={(e) => setSlug(e.target.value)}
-                  className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15"
-                  placeholder="paket-wisata-bandung-1-hari"
-                  required
-                />
-              </div>
+    <AdminDashboardLayout title="Tambah Paket Baru">
+      <div className="bg-white rounded-[18px] border border-line shadow-card p-6 max-w-3xl">
+        <form onSubmit={handleSave} className="space-y-6">
+          {error && (
+            <div className="bg-error/10 border border-error/30 text-error p-4 rounded-xl">
+              {error}
             </div>
+          )}
 
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                Deskripsi
-              </label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={4}
-                className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15 resize-none"
-                placeholder="Deskripsi paket perjalanan..."
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                  Destinasi *
-                </label>
-                <select
-                  value={destination}
-                  onChange={(e) => setDestination(e.target.value as any)}
-                  className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15"
-                  required
-                >
-                  <option value="">Pilih destinasi</option>
-                  {DESTINATIONS.map((d) => (
-                    <option key={d} value={d}>{d}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                  Durasi (hari) *
-                </label>
-                <input
-                  type="number"
-                  value={duration_days}
-                  onChange={(e) => setDurationDays(e.target.value)}
-                  min={1}
-                  className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15"
-                  placeholder="1"
-                  required
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                Harga (Rp) *
+                Nama Paket *
               </label>
               <input
-                type="number"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                min={0}
+                type="text"
+                value={name}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setName(value);
+                  const generatedSlug = value
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[^\w\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-');
+                  setSlug(generatedSlug);
+                }}
                 className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15"
-                placeholder="1300000"
+                placeholder="Paket Wisata Bandung 1 Hari"
                 required
               />
             </div>
 
             <div>
               <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                Termasuk
+                Slug
               </label>
-              <div className="flex flex-wrap gap-2">
-                {INCLUDES.map((item) => (
-                  <div key={item} className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id={`include-${item}`}
-                      checked={includes.includes(item)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setIncludes([...includes, item]);
-                        } else {
-                          setIncludes(includes.filter(i => i !== item));
-                        }
-                      }}
-                      className="h-4 w-4 text-accent"
-                    />
-                    <label
-                      className="text-sm text-heading"
-                      htmlFor={`include-${item}`}
-                    >
-                      {item}
-                    </label>
-                  </div>
+              <input
+                type="text"
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+                className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15"
+                placeholder="paket-wisata-bandung-1-hari"
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Badge (Opsional - "Best Seller", "Premium", dll)
+            </label>
+            <input
+              type="text"
+              value={badge}
+              onChange={(e) => setBadge(e.target.value)}
+              className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15"
+              placeholder="Best Seller"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Deskripsi Singkat
+            </label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
+              className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15 resize-none"
+              placeholder="Deskripsi paket perjalanan..."
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+                Destinasi *
+              </label>
+              <select
+                value={destination}
+                onChange={(e) => setDestination(e.target.value as typeof DESTINATIONS[number] | '')}
+                className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15"
+                required
+              >
+                <option value="">Pilih destinasi</option>
+                {DESTINATIONS.map((d) => (
+                  <option key={d} value={d}>{d}</option>
                 ))}
-              </div>
+              </select>
             </div>
 
             <div>
               <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                Cocok Untuk
+                Durasi (Hari) *
               </label>
-              <div className="flex flex-wrap gap-2">
-                {SUITABLE_FOR.map((item) => (
-                  <div key={item} className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id={`suitable-${item}`}
-                      checked={suitable_for.includes(item)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSuitableFor([...suitable_for, item]);
-                        } else {
-                          setSuitableFor(suitable_for.filter(i => i !== item));
-                        }
-                      }}
-                      className="h-4 w-4 text-accent"
-                    />
-                    <label
-                      className="text-sm text-heading"
-                      htmlFor={`suitable-${item}`}
-                    >
-                      {item}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                Cover Gambar
-              </label>
-              <ImageUpload
-                bucket="packages"
-                onUpload={(url) => setCoverImageUrl(url)}
-                currentUrl={cover_image_url}
-                label="Cover Paket"
+              <input
+                type="number"
+                value={duration_days}
+                onChange={(e) => setDurationDays(e.target.value)}
+                min={1}
+                max={14}
+                className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15"
+                placeholder="1"
+                required
               />
             </div>
 
-            <div className="flex items-center gap-3">
+            <div>
               <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-                Status Aktif
+                Durasi (Jam) *
               </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={is_active}
-                  onChange={(e) => setIsActive(e.target.checked)}
-                  className="h-4 w-4 text-accent"
-                />
-              </div>
+              <input
+                type="number"
+                value={duration_hours}
+                onChange={(e) => setDurationHours(e.target.value)}
+                min={1}
+                max={336}
+                className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15"
+                placeholder="10"
+                required
+              />
             </div>
+          </div>
 
-            <div className="flex justify-end pt-4 space-x-3">
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="px-5 py-2.5 border border-line rounded-xl text-sm font-medium text-heading hover:bg-surface/50 transition"
-              >
-                Batal
-              </button>
-              <button
-                type="submit"
-                disabled={loading}
-                className="px-5 py-2.5 bg-accent text-white font-extrabold rounded-xl hover:bg-accent-hover transition disabled:opacity-50"
-              >
-                {loading ? 'Menyimpan...' : 'Simpan Paket'}
-              </button>
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Label Durasi (Opsional - "1 Hari", "2 Hari 1 Malam", dll)
+            </label>
+            <input
+              type="text"
+              value={duration_text}
+              onChange={(e) => setDurationText(e.target.value)}
+              className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15"
+              placeholder="1 Hari"
+            />
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Harga (Rp) *
+            </label>
+            <input
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              min={0}
+              className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none transition-all focus:border-accent focus:ring-2 focus:ring-accent/15"
+              placeholder="1300000"
+              required
+            />
+            <p className="text-xs text-muted mt-1">Contoh: 1300000 = Rp1.300.000</p>
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Termasuk
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {INCLUDES.map((item) => (
+                <div key={item} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id={`include-${item}`}
+                    checked={includes.includes(item)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setIncludes([...includes, item]);
+                      } else {
+                        setIncludes(includes.filter(i => i !== item));
+                      }
+                    }}
+                    className="h-4 w-4 text-accent"
+                  />
+                  <label
+                    className="text-sm text-heading"
+                    htmlFor={`include-${item}`}
+                  >
+                    {item}
+                  </label>
+                </div>
+              ))}
             </div>
-          </form>
-        </div>
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Tidak Termasuk
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {['Tol', 'Parkir', 'Retribusi Wisata', 'Makan Driver', 'Overtime'].map((item) => (
+                <div key={item} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id={`exclude-${item}`}
+                    checked={excluded.includes(item)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setExcluded([...excluded, item]);
+                      } else {
+                        setExcluded(excluded.filter(i => i !== item));
+                      }
+                    }}
+                    className="h-4 w-4 text-accent"
+                  />
+                  <label className="text-sm text-heading" htmlFor={`exclude-${item}`}>
+                    {item}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Cocok Untuk
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {SUITABLE_FOR.map((item) => (
+                <div key={item} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    id={`suitable-${item}`}
+                    checked={suitable_for.includes(item)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSuitableFor([...suitable_for, item]);
+                      } else {
+                        setSuitableFor(suitable_for.filter(i => i !== item));
+                      }
+                    }}
+                    className="h-4 w-4 text-accent"
+                  />
+                  <label className="text-sm text-heading" htmlFor={`suitable-${item}`}>
+                    {item}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Cover Gambar
+            </label>
+            <ImageUpload
+              bucket="packages"
+              onUpload={(url) => setCoverImageUrl(url)}
+              currentUrl={cover_image_url}
+              label="Cover Paket"
+            />
+          </div>
+
+          <div className="flex items-center gap-3">
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Status Aktif
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={is_active}
+                onChange={(e) => setIsActive(e.target.checked)}
+                className="h-4 w-4 text-accent"
+              />
+              <span className="text-sm text-heading">Tampilkan di website</span>
+            </div>
+          </div>
+
+          <div className="flex justify-end pt-4 space-x-3 border-t border-line">
+            <button
+              type="button"
+              onClick={handleCancel}
+              className="px-5 py-2.5 border border-line rounded-xl text-sm font-medium text-heading hover:bg-surface/50 transition"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-5 py-2.5 bg-accent text-white font-extrabold rounded-xl hover:bg-accent-hover transition disabled:opacity-50 shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)]"
+            >
+              {loading ? 'Menyimpan...' : 'Simpan Paket'}
+            </button>
+          </div>
+        </form>
       </div>
-    </div>
+    </AdminDashboardLayout>
   );
 }

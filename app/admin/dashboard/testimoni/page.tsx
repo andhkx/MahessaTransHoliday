@@ -25,10 +25,6 @@ export default function TestimoniList() {
   const [filterActive, setFilterActive] = useState<'all' | 'active' | 'inactive'>('all');
   const supabase = createClient();
 
-  useEffect(() => {
-    fetchTestimonials();
-  }, []);
-
   const fetchTestimonials = async () => {
     setLoading(true);
     try {
@@ -41,12 +37,16 @@ export default function TestimoniList() {
       const { data, error } = await query;
       if (error) throw error;
       setTestimonials(data || []);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchTestimonials();
+  }, [filterActive]);
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('Yakin ingin menghapus testimoni ini?')) return;
@@ -54,8 +54,8 @@ export default function TestimoniList() {
       const { error } = await supabase.from('testimonials').delete().eq('id', id);
       if (error) throw error;
       await fetchTestimonials();
-    } catch (err: any) {
-      alert(err.message);
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : String(err));
     }
   };
 
@@ -63,31 +63,29 @@ export default function TestimoniList() {
   if (error) return <div className="p-8 text-error">{error}</div>;
 
   return (
-    <AdminDashboardLayout>
-      <div className="p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-          <h1 className="text-2xl font-extrabold text-heading">Testimoni Pelanggan</h1>
-          <div className="flex items-center gap-4">
+    <AdminDashboardLayout title="Testimoni Pelanggan">
+      <div className="bg-white rounded-[18px] border border-line shadow-card p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+          <div>
+            <h1 className="text-2xl font-extrabold text-heading">Kelola Testimoni</h1>
+            <p className="text-sm text-muted mt-1">Total {testimonials.length} testimoni aktif</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <select
+              value={filterActive}
+              onChange={(e) => setFilterActive(e.target.value as any)}
+              className="px-4 py-2.5 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
+            >
+              <option value="all">Semua Status</option>
+              <option value="active">Aktif</option>
+              <option value="inactive">Tidak Aktif</option>
+            </select>
             <Link
               href="/admin/dashboard/testimoni/new"
-              className="flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-xl font-extrabold hover:bg-accent-hover transition"
+              className="flex items-center gap-2 bg-accent text-white px-4 py-2.5 rounded-xl font-extrabold hover:bg-accent-hover transition shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)]"
             >
               <Plus size={18} /> Tambah Testimoni
             </Link>
-            <div className="relative">
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-1">
-                Status
-              </label>
-              <select
-                value={filterActive}
-                onChange={(e) => setFilterActive(e.target.value as any)}
-                className="w-full px-4 py-2 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
-              >
-                <option value="all">Semua</option>
-                <option value="active">Aktif</option>
-                <option value="inactive">Tidak Aktif</option>
-              </select>
-            </div>
           </div>
         </div>
 
@@ -98,53 +96,57 @@ export default function TestimoniList() {
             <table className="min-w-full divide-y divide-line">
               <thead className="bg-surface">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Foto</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Nama</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Peran</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Rating</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Layanan</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-muted uppercase tracking-wider">Aksi</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Avatar</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Nama</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Peran</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Rating</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Layanan</th>
+                  <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Aksi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-line">
                 {testimonials.map((t) => (
-                  <tr key={t.id} className="hover:bg-surface/50">
-                    <td className="px-6 py-4">
-                      <div className="flex h-12 w-12 items-center justify-center bg-surface rounded">
-                        <AvatarInitials name={t.name} index={hashCode(t.name)} size={24} className="text-white" />
+                  <tr key={t.id} className="hover:bg-surface/50 transition">
+                    <td className="px-4 py-3">
+                      <div className="flex h-10 w-10 items-center justify-center bg-accent/10 rounded-xl">
+                        <AvatarInitials name={t.name} index={hashCode(t.name)} size={18} className="text-accent" />
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-sm font-bold text-heading">{t.name}</td>
-                    <td className="px-6 py-4 text-sm text-muted">{t.role || '-'}</td>
-                    <td className="px-6 py-4 text-sm flex items-center gap-2">
-                      {[1,2,3,4,5].map((star) => (
-                        <Star
-                          key={star}
-                          size={14}
-                          className={star <= t.rating ? 'fill-yellow-400 text-yellow-400' : 'text-line'}
-                        />
-                      ))}
+                    <td className="px-4 py-3 text-sm font-bold text-heading">{t.name}</td>
+                    <td className="px-4 py-3 text-sm text-muted">{t.role || '-'}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-1">
+                        {[1,2,3,4,5].map((star) => (
+                          <Star
+                            key={star}
+                            size={14}
+                            className={star <= t.rating ? 'fill-yellow-400 text-yellow-400' : 'text-line'}
+                          />
+                        ))}
+                      </div>
                     </td>
-                    <td className="px-6 py-4 text-sm text-muted">{t.service_type || '-'}</td>
-                    <td className="px-6 py-4 text-sm">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${t.is_active ? 'bg-success/20 text-success' : 'bg-error/20 text-error'}`}>
-                        {t.is_active ? 'Aktif' : 'Tidak Aktif'}
-                      </span>
+                    <td className="px-4 py-3">
+                      {t.service_type && (
+                        <span className="px-2.5 py-1 rounded-full bg-accent/20 text-accent text-xs font-bold capitalize">
+                          {t.service_type}
+                        </span>
+                      )}
                     </td>
-                    <td className="px-6 py-4 text-sm flex space-x-2">
-                      <Link
-                        href={`/admin/dashboard/testimoni/${t.id}`}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-border border border-line text-sm font-medium text-heading hover:bg-accent/10"
-                      >
-                        <Edit size={16} /> Edit
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(t.id)}
-                        className="flex items-center gap-2 px-3 py-1.5 rounded-border border border-line text-sm font-medium text-error hover:bg-error/10"
-                      >
-                        <Trash2 size={16} /> Hapus
-                      </button>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href={`/admin/dashboard/testimoni/${t.id}`}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-line text-sm font-medium text-heading hover:bg-accent/10 hover:border-accent transition"
+                        >
+                          <Edit size={14} /> Edit
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(t.id)}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-line text-sm font-medium text-error hover:bg-error/10 hover:border-error transition"
+                        >
+                          <Trash2 size={14} /> Hapus
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
