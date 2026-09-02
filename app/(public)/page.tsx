@@ -24,7 +24,8 @@ import TestimonialCarousel from "@/components/TestimonialCarousel";
 import { getFeaturedVehicles } from "@/lib/data/supabase/vehicles";
 import { getFeaturedPackages, getAllPackages } from "@/lib/data/supabase/packages";
 import { getFeaturedTestimonials } from "@/lib/data/supabase/testimonials";
-import { galleryImages } from "@/lib/gallery";
+import { getFeaturedGallery } from "@/lib/data/supabase/gallery";
+import { galleryImages as staticGallery } from "@/lib/gallery";
 import ArmadaShowcaseClient from "./ArmadaShowcaseClient";
 
 export const metadata: Metadata = {
@@ -126,12 +127,22 @@ function Advantages() {
 }
 
 export default async function HomePage() {
-  const [vehicles, packages, testimonials, allPackages] = await Promise.all([
+  const [vehicles, packages, testimonials, allPackages, gallery] = await Promise.all([
     getFeaturedVehicles(),
     getFeaturedPackages(),
     getFeaturedTestimonials(8),
     getAllPackages(),
+    getFeaturedGallery(5),
   ]);
+
+  const galleryItems = gallery.length > 0
+    ? gallery.map((g) => ({
+        src: g.image_url,
+        alt: g.caption,
+        title: g.caption,
+        location: g.location || "Umum",
+      }))
+    : staticGallery;
 
   return (
     <>
@@ -148,7 +159,7 @@ export default async function HomePage() {
         </Link>
       </section>
       <ProcessSection />
-      <GalleryShowcase />
+      <GalleryShowcase items={galleryItems} />
       <FaqHome />
       <TestimonialCarousel testimonials={testimonials} />
       <CtaSection />
@@ -204,8 +215,9 @@ function FeaturedPackages({ packages, allPackages }: { packages: Awaited<ReturnT
   );
 }
 
-function GalleryShowcase() {
-  const [first, ...rest] = galleryImages;
+function GalleryShowcase({ items }: { items: Array<{ src: string; alt: string; title: string; location: string }> }) {
+  if (items.length === 0) return null;
+  const [first, ...rest] = items;
   const grid = rest.slice(0, 4);
   return (
     <section className="bg-background py-16 md:py-24">
@@ -233,7 +245,7 @@ function GalleryShowcase() {
                   Galeri
                 </p>
                 <p className="text-base font-extrabold leading-tight md:text-lg">
-                  Momen Pelanggan
+                  {first.title}
                 </p>
               </div>
               <Link

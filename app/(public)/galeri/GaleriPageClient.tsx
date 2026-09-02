@@ -2,10 +2,22 @@
 
 import Image from "next/image";
 import { motion, useReducedMotion, AnimatePresence } from "motion/react";
-import { galleryImages } from "@/lib/gallery";
 import { cn } from "@/lib/cn";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
+
+type GalleryClientItem = {
+  src: string;
+  alt: string;
+  title: string;
+  location: string;
+  badge?: string;
+  category?: string;
+};
+
+type Props = {
+  items: GalleryClientItem[];
+};
 
 function PageHeaderClient({ title, subtitle }: { title: string; subtitle: string }) {
   return (
@@ -35,8 +47,25 @@ function aspectFor(idx: number) {
   return set[idx % set.length];
 }
 
-export default function GaleriPageClient() {
+export default function GaleriPageClient({ items }: Props) {
   const reduce = useReducedMotion();
+
+  if (items.length === 0) {
+    return (
+      <>
+        <PageHeaderClient
+          title="Cerita perjalanan bersama Mahessa"
+          subtitle="Dokumentasi nyata perjalanan para penumpang kami — dari city tour singkat hingga perjalanan luar kota."
+        />
+        <section className="pb-16 md:pb-24">
+          <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12 text-center py-20">
+            <p className="text-base font-extrabold text-heading">Belum ada foto di galeri.</p>
+            <p className="mt-1 text-sm text-muted">Tim kami sedang menyiapkan dokumentasi perjalanan terbaru.</p>
+          </div>
+        </section>
+      </>
+    );
+  }
 
   return (
     <>
@@ -55,7 +84,7 @@ export default function GaleriPageClient() {
               transition={{ duration: 0.35, ease: EASE }}
               className="columns-1 gap-4 sm:columns-2 lg:columns-3"
             >
-              {galleryImages.map((img, i) => (
+              {items.map((img, i) => (
                 <motion.figure
                   key={img.src}
                   initial={reduce ? false : { opacity: 0, y: 18 }}

@@ -9,6 +9,7 @@ import {
   FileText,
   Star,
   MessageCircle,
+  ImageIcon,
   Clock,
   TrendingUp,
   ArrowRight,
@@ -24,6 +25,7 @@ type Stats = {
   articles: number;
   testimonials: number;
   faq: number;
+  gallery: number;
 };
 
 type RecentVehicle = {
@@ -58,7 +60,7 @@ const categoryStyle = (c: string) =>
 export default function DashboardPage() {
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState<Stats>({ vehicles: 0, packages: 0, articles: 0, testimonials: 0, faq: 0 });
+  const [stats, setStats] = useState<Stats>({ vehicles: 0, packages: 0, articles: 0, testimonials: 0, faq: 0, gallery: 0 });
   const [recentVehicles, setRecentVehicles] = useState<RecentVehicle[]>([]);
   const [recentPackages, setRecentPackages] = useState<RecentPackage[]>([]);
   const [recentTestimonials, setRecentTestimonials] = useState<RecentTestimonial[]>([]);
@@ -83,12 +85,13 @@ export default function DashboardPage() {
 
   const loadStats = async () => {
     try {
-      const [vehicles, packages, articles, testimonials, faq] = await Promise.all([
+      const [vehicles, packages, articles, testimonials, faq, gallery] = await Promise.all([
         supabase.from('vehicles').select('id', { count: 'exact', head: true }).eq('is_active', true),
         supabase.from('packages').select('id', { count: 'exact', head: true }).eq('is_active', true),
         supabase.from('articles').select('id', { count: 'exact', head: true }),
         supabase.from('testimonials').select('id', { count: 'exact', head: true }).eq('is_active', true),
         supabase.from('faq_items').select('id', { count: 'exact', head: true }).eq('is_active', true),
+        supabase.from('gallery_items').select('id', { count: 'exact', head: true }).eq('is_active', true),
       ]);
       setStats({
         vehicles: vehicles.count || 0,
@@ -96,6 +99,7 @@ export default function DashboardPage() {
         articles: articles.count || 0,
         testimonials: testimonials.count || 0,
         faq: faq.count || 0,
+        gallery: gallery.count || 0,
       });
     } catch (e) {
       console.error('Failed to load stats:', e);
@@ -149,6 +153,7 @@ export default function DashboardPage() {
     { icon: CarFront, label: 'Armada', value: stats.vehicles },
     { icon: MapPin, label: 'Paket', value: stats.packages },
     { icon: FileText, label: 'Artikel', value: stats.articles },
+    { icon: ImageIcon, label: 'Galeri', value: stats.gallery },
     { icon: Star, label: 'Testimoni', value: stats.testimonials },
     { icon: MessageCircle, label: 'FAQ', value: stats.faq },
   ];
@@ -157,6 +162,7 @@ export default function DashboardPage() {
     { icon: CarFront, label: 'Tambah Armada', href: '/admin/dashboard/armada/new', color: 'bg-accent/10 text-accent' },
     { icon: MapPin, label: 'Tambah Paket', href: '/admin/dashboard/paket/new', color: 'bg-success/10 text-success' },
     { icon: FileText, label: 'Tulis Artikel', href: '/admin/dashboard/artikel/new', color: 'bg-primary/10 text-primary' },
+    { icon: ImageIcon, label: 'Upload Galeri', href: '/admin/dashboard/galeri/new', color: 'bg-warning/10 text-warning' },
     { icon: Star, label: 'Tambah Testimoni', href: '/admin/dashboard/testimoni/new', color: 'bg-warning/10 text-warning' },
     { icon: MessageCircle, label: 'Tambah FAQ', href: '/admin/dashboard/faq/new', color: 'bg-error/10 text-error' },
   ];

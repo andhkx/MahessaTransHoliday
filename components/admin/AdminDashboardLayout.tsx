@@ -10,6 +10,7 @@ import {
   FileText,
   Star,
   MessageCircle,
+  ImageIcon,
   LogOut,
   LayoutDashboard,
   Menu,
@@ -30,6 +31,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Armada', href: '/admin/dashboard/armada', icon: CarFront },
   { label: 'Paket', href: '/admin/dashboard/paket', icon: MapPin },
   { label: 'Artikel', href: '/admin/dashboard/artikel', icon: FileText },
+  { label: 'Galeri', href: '/admin/dashboard/galeri', icon: ImageIcon },
   { label: 'Testimoni', href: '/admin/dashboard/testimoni', icon: Star },
   { label: 'FAQ', href: '/admin/dashboard/faq', icon: MessageCircle },
 ];

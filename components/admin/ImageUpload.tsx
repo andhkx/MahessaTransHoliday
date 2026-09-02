@@ -6,7 +6,7 @@ import { Upload, X, Image as ImageIcon, CheckCircle } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
 type ImageUploadProps = {
-  bucket: 'vehicles' | 'packages' | 'articles';
+  bucket: 'vehicles' | 'packages' | 'articles' | 'gallery';
   onUpload: (url: string | null) => void;
   currentUrl?: string | null;
   label?: string;
