@@ -4,11 +4,10 @@ import JsonLd from "@/components/JsonLd";
 import CtaSection from "@/components/CtaSection";
 import FaqPageClient from "./FaqPageClient";
 import { getMainFaqs, getExtraFaqs } from "@/lib/data/supabase/faq";
-import { faqMain as staticFaqMain, faqExtra as staticFaqExtra } from "@/data/faq";
 
 export const dynamic = 'force-dynamic';
-export const metadata: Metadata = {
 
+export const metadata: Metadata = {
   title: seoMetadata.faq.title,
   description: seoMetadata.faq.description,
   keywords: seoMetadata.faq.keywords,
@@ -16,17 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function FaqPage() {
-  const [supabaseMain, supabaseExtra] = await Promise.all([getMainFaqs(), getExtraFaqs()]);
-
-  // Fallback to static data if Supabase returns empty (RLS, network, or empty table)
-  const faqMain = supabaseMain.length > 0 ? supabaseMain : staticFaqMain;
-  const faqExtra = supabaseExtra.length > 0 ? supabaseExtra : staticFaqExtra;
-
-  if (supabaseMain.length === 0 || supabaseExtra.length === 0) {
-    console.warn(
-      `[FAQ Page] Using static fallback. Supabase: main=${supabaseMain.length}, extra=${supabaseExtra.length}`
-    );
-  }
+  const [faqMain, faqExtra] = await Promise.all([getMainFaqs(), getExtraFaqs()]);
 
   const faqPageLd = {
     "@context": "https://schema.org",
