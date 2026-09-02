@@ -23,6 +23,17 @@ function toArray(value: any): string[] {
   return [];
 }
 
+function parseItinerary(value: any): PackageItineraryStep[] | null {
+  if (Array.isArray(value)) return value as PackageItineraryStep[];
+  if (typeof value === 'string' && value.trim()) {
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) return parsed as PackageItineraryStep[];
+    } catch {}
+  }
+  return null;
+}
+
 function mapSupabasePackage(p: any): TravelPackage {
   return {
     id: p.id,
@@ -37,7 +48,7 @@ function mapSupabasePackage(p: any): TravelPackage {
     included: toArray(p.includes),
     excluded: toArray(p.excluded),
     suitableFor: toArray(p.suitable_for),
-    itinerary: (p.itinerary as PackageItineraryStep[]) || null,
+    itinerary: parseItinerary(p.itinerary),
     serviceAreas: toArray(p.service_areas).length > 0
       ? toArray(p.service_areas)
       : ['Cimahi', 'Bandung', 'Padalarang'],

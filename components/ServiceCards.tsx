@@ -16,10 +16,10 @@ const ICONS: Record<string, React.ComponentType<{ size?: number; className?: str
 };
 
 const SERVICE_IMAGES: Record<string, string> = {
-  "transfer-bandara": "/images/vehicles/toyota-hiace-premio.webp",
-  "mobil-driver": "/images/vehicles/toyota-innova-reborn.webp",
-  "charter-transfer": "/images/vehicles/toyota-hiace-premio.webp",
-  "paket-wisata": "/images/services/paket-wisata.webp",
+  "transfer-bandara": "https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/toyota-hiace-premio/toyota-hiace-premio.webp",
+  "mobil-driver": "https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/toyota-innova-reborn/toyota-innova-reborn.webp",
+  "charter-transfer": "https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/toyota-hiace-premio/toyota-hiace-premio.webp",
+  "paket-wisata": "https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/packages/hiace-bandung/hiace-bandung.webp",
 };
 
 export default function ServiceCards() {

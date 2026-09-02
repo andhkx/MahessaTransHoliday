@@ -97,13 +97,14 @@ export default function Hero() {
             <div className="absolute -inset-4 -z-10 rounded-[36px] bg-gradient-to-br from-accent/15 via-primary/5 to-transparent blur-2xl" />
             <div className="relative overflow-hidden rounded-[32px] border border-line bg-surface shadow-elevated">
               <Image
-                src="/images/vehicles/toyota-hiace-premio.webp"
+                src="https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/toyota-hiace-premio/toyota-hiace-premio.webp"
                 alt={`${SITE_NAME} - Hiace Premio`}
                 width={1200}
                 height={800}
                 priority
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 600px"
+                sizes="(max-width: 1024px) 100vw, 600px"
                 className="h-auto w-full object-cover"
+                unoptimized
               />
             </div>
 
