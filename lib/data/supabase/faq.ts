@@ -1,8 +1,15 @@
-import { createClient } from '@/lib/supabase/server';
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
+import { unstable_cache } from 'next/cache';
 import type { FaqItem } from '@/lib/types';
 
-async function getClient() {
-  return await createClient();
+function getPublicClient() {
+  return createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    {
+      auth: { persistSession: false, autoRefreshToken: false },
+    }
+  );
 }
 
 function mapSupabaseFaq(f: any): FaqItem {
@@ -13,53 +20,71 @@ function mapSupabaseFaq(f: any): FaqItem {
   };
 }
 
+const fetchAllFaqs = unstable_cache(
+  async () => {
+    const supabase = getPublicClient();
+    const { data, error } = await supabase
+      .from('faq_items')
+      .select('*')
+      .eq('is_active', true)
+      .order('group_name')
+      .order('display_order');
+    if (error) {
+      console.error('Error fetching FAQs:', error);
+      return [];
+    }
+    return (data || []).map(mapSupabaseFaq);
+  },
+  ['faqs-all'],
+  { revalidate: 60, tags: ['faqs'] }
+);
+
+const fetchMainFaqs = unstable_cache(
+  async () => {
+    const supabase = getPublicClient();
+    const { data, error } = await supabase
+      .from('faq_items')
+      .select('*')
+      .eq('is_active', true)
+      .eq('group_name', 'main')
+      .order('display_order');
+    if (error) {
+      console.error('Error fetching main FAQs:', error);
+      return [];
+    }
+    return (data || []).map(mapSupabaseFaq);
+  },
+  ['faqs-main'],
+  { revalidate: 60, tags: ['faqs'] }
+);
+
+const fetchExtraFaqs = unstable_cache(
+  async () => {
+    const supabase = getPublicClient();
+    const { data, error } = await supabase
+      .from('faq_items')
+      .select('*')
+      .eq('is_active', true)
+      .eq('group_name', 'extra')
+      .order('display_order');
+    if (error) {
+      console.error('Error fetching extra FAQs:', error);
+      return [];
+    }
+    return (data || []).map(mapSupabaseFaq);
+  },
+  ['faqs-extra'],
+  { revalidate: 60, tags: ['faqs'] }
+);
+
 export async function getAllFaqs(): Promise<FaqItem[]> {
-  const supabase = await getClient();
-  const { data, error } = await supabase
-    .from('faq_items')
-    .select('*')
-    .eq('is_active', true)
-    .order('group_name')
-    .order('display_order');
-
-  if (error) {
-    console.error('Error fetching FAQs:', error);
-    return [];
-  }
-
-  return (data || []).map(mapSupabaseFaq);
+  return fetchAllFaqs();
 }
 
 export async function getMainFaqs(): Promise<FaqItem[]> {
-  const supabase = await getClient();
-  const { data, error } = await supabase
-    .from('faq_items')
-    .select('*')
-    .eq('is_active', true)
-    .eq('group_name', 'main')
-    .order('display_order');
-
-  if (error) {
-    console.error('Error fetching main FAQs:', error);
-    return [];
-  }
-
-  return (data || []).map(mapSupabaseFaq);
+  return fetchMainFaqs();
 }
 
 export async function getExtraFaqs(): Promise<FaqItem[]> {
-  const supabase = await getClient();
-  const { data, error } = await supabase
-    .from('faq_items')
-    .select('*')
-    .eq('is_active', true)
-    .eq('group_name', 'extra')
-    .order('display_order');
-
-  if (error) {
-    console.error('Error fetching extra FAQs:', error);
-    return [];
-  }
-
-  return (data || []).map(mapSupabaseFaq);
+  return fetchExtraFaqs();
 }

@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import {
   ADDRESS,
+  EMAIL_DISPLAY,
   MAPS_LINK_URL,
   OPERATING_HOURS,
   SERVICE_AREAS,
@@ -14,6 +15,7 @@ import { waGeneralLink } from "@/lib/whatsapp";
 const NAV = [
   { href: "/armada", label: "Armada" },
   { href: "/paket", label: "Paket Perjalanan" },
+  { href: "/artikel", label: "Artikel" },
   { href: "/galeri", label: "Galeri" },
   { href: "/faq", label: "FAQ" },
   { href: "/kontak", label: "Kontak" },
@@ -189,6 +191,37 @@ export default function Footer() {
               </span>
               <span className="inline-flex shrink-0 items-center gap-1.5 text-[12px] font-bold text-primary group-hover:underline">
                 Chat
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
+              </span>
+            </a>
+
+            <a
+              href={`mailto:${EMAIL_DISPLAY}`}
+              className="group mt-3 flex items-center justify-between gap-3 rounded-2xl border border-white/15 bg-white/5 px-4 py-3 transition-colors hover:border-primary"
+            >
+              <span className="min-w-0">
+                <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">
+                  Email
+                </span>
+                <span className="mt-0.5 block truncate text-[13px] font-extrabold text-white">
+                  {EMAIL_DISPLAY}
+                </span>
+              </span>
+              <span className="inline-flex shrink-0 items-center gap-1.5 text-[12px] font-bold text-primary group-hover:underline">
+                Kirim
                 <svg
                   width="12"
                   height="12"

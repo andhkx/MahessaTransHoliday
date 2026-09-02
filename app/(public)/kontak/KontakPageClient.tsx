@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/cn";
-import { WHATSAPP_NUMBER } from "@/lib/constants";
+import { EMAIL_DISPLAY, WHATSAPP_NUMBER } from "@/lib/constants";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -55,8 +55,8 @@ const CONTACT = [
   {
     Icon: Mail,
     title: "Email",
-    value: "halo@mahessaholiday.my.id",
-    href: "mailto:halo@mahessaholiday.my.id",
+    value: EMAIL_DISPLAY,
+    href: `mailto:${EMAIL_DISPLAY}`,
     cta: "Kirim Email",
   },
   {

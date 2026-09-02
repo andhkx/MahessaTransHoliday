@@ -4,6 +4,7 @@ import PageHero from "@/components/PageHero";
 import ArmadaListClient from "./ArmadaListClient";
 import CtaSection from "@/components/CtaSection";
 import { getAllVehicles } from "@/lib/data/supabase/vehicles";
+import { vehicles as staticVehicles } from "@/data/vehicles";
 
 export const metadata: Metadata = {
   title: seoMetadata.armada.title,
@@ -13,7 +14,12 @@ export const metadata: Metadata = {
 };
 
 export default async function ArmadaPage() {
-  const vehicles = await getAllVehicles();
+  const supabaseVehicles = await getAllVehicles();
+  const vehicles = supabaseVehicles.length > 0 ? supabaseVehicles : staticVehicles;
+
+  if (supabaseVehicles.length === 0) {
+    console.warn('[Armada Page] Using static fallback data');
+  }
 
   return (
     <>
