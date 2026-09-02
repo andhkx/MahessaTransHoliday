@@ -11,6 +11,18 @@ function getPublicClient() {
   );
 }
 
+function toArray(value: any): string[] {
+  if (Array.isArray(value)) return value;
+  if (typeof value === 'string' && value.trim()) {
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) return parsed;
+    } catch {}
+    return [value];
+  }
+  return [];
+}
+
 function mapSupabasePackage(p: any): TravelPackage {
   return {
     id: p.id,
@@ -21,12 +33,14 @@ function mapSupabasePackage(p: any): TravelPackage {
     durationHours: p.duration_hours || 0,
     price: p.price,
     image: p.cover_image_url || '/images/packages/placeholder.webp',
-    description: p.description || [],
-    included: p.includes || [],
-    excluded: p.excluded || [],
-    suitableFor: p.suitable_for || [],
+    description: toArray(p.description),
+    included: toArray(p.includes),
+    excluded: toArray(p.excluded),
+    suitableFor: toArray(p.suitable_for),
     itinerary: (p.itinerary as PackageItineraryStep[]) || null,
-    serviceAreas: p.service_areas || ['Cimahi', 'Bandung', 'Padalarang'],
+    serviceAreas: toArray(p.service_areas).length > 0
+      ? toArray(p.service_areas)
+      : ['Cimahi', 'Bandung', 'Padalarang'],
     faq: p.faq || [],
     seo: p.seo || {
       title: `Paket ${p.destination} - Mahessa Trans Holiday`,
@@ -56,7 +70,7 @@ export async function getFeaturedPackages(): Promise<TravelPackage[]> {
     .from('packages')
     .select('*')
     .eq('is_active', true)
-    .not('badge', 'is', null)
+    .eq('is_featured', true)
     .order('price')
     .limit(4);
   let result: TravelPackage[] = (data || []).map(mapSupabasePackage);

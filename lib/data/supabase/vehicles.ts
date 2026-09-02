@@ -11,7 +11,30 @@ function getPublicClient() {
   );
 }
 
+function toArray(value: any): string[] {
+  if (Array.isArray(value)) return value;
+  if (typeof value === 'string' && value.trim()) {
+    try {
+      const parsed = JSON.parse(value);
+      if (Array.isArray(parsed)) return parsed;
+    } catch {}
+    return [value];
+  }
+  return [];
+}
+
 function mapSupabaseVehicle(v: any): Vehicle {
+  // Normalize specs (jsonb column may come as string or array)
+  let specs: { label: string; value: string }[] = [];
+  if (Array.isArray(v.specs)) {
+    specs = v.specs;
+  } else if (typeof v.specs === 'string' && v.specs.trim()) {
+    try {
+      const parsed = JSON.parse(v.specs);
+      if (Array.isArray(parsed)) specs = parsed;
+    } catch {}
+  }
+
   return {
     id: v.id,
     slug: v.slug,
@@ -21,14 +44,16 @@ function mapSupabaseVehicle(v: any): Vehicle {
     capacity: v.capacity,
     fuelType: v.fuel_type || v.fuel_type_extra || 'Bensin',
     image: v.image_url || '/images/vehicles/placeholder.webp',
-    gallery: v.gallery || [v.image_url || '/images/vehicles/placeholder.webp'],
+    gallery: v.gallery || (v.image_url ? [v.image_url] : []),
     badge: v.badge,
     pricing: { startingPrice: v.price_per_day },
-    description: v.description || [],
-    suitableFor: v.suitable_for || [],
-    features: v.features || [],
-    specs: v.specs || [],
-    serviceAreas: v.service_areas || ['Cimahi', 'Bandung', 'Padalarang'],
+    description: toArray(v.description),
+    suitableFor: toArray(v.suitable_for),
+    features: toArray(v.features),
+    specs,
+    serviceAreas: toArray(v.service_areas).length > 0
+      ? toArray(v.service_areas)
+      : ['Cimahi', 'Bandung', 'Padalarang'],
     seo: v.seo || {
       title: `Rental ${v.name} Cimahi & Bandung`,
       description: `Sewa ${v.name} di Cimahi, Bandung dan Padalarang mulai Rp${v.price_per_day?.toLocaleString()}/ 12 jam.`,
@@ -58,7 +83,7 @@ export async function getFeaturedVehicles(): Promise<Vehicle[]> {
     .from('vehicles')
     .select('*')
     .eq('is_active', true)
-    .not('badge', 'is', null)
+    .eq('is_featured', true)
     .order('price_per_day')
     .limit(4);
   let result: Vehicle[] = (data || []).map(mapSupabaseVehicle);

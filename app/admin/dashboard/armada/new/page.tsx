@@ -54,6 +54,7 @@ export default function ArmadaCreate() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [badge, setBadge] = useState('');
   const [is_active, setIsActive] = useState(true);
+  const [is_featured, setIsFeatured] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const supabase = createClient();
@@ -77,6 +78,7 @@ export default function ArmadaCreate() {
         badge: badge || null,
         image_url: previewUrl,
         is_active,
+        is_featured,
       });
 
       if (error) throw error;
@@ -300,6 +302,21 @@ export default function ArmadaCreate() {
               className="h-4 w-4 text-accent"
             />
             <span className="text-sm text-heading">Tampilkan di website</span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+            Tampilkan di Beranda
+          </label>
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={is_featured}
+              onChange={(e) => setIsFeatured(e.target.checked)}
+              className="h-4 w-4 text-accent"
+            />
+            <span className="text-sm text-heading">Featured (muncul di halaman utama)</span>
           </div>
         </div>
       </AdminForm>
