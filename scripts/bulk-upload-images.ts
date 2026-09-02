@@ -219,12 +219,74 @@ async function processPackages() {
   console.log(`\n📊 Packages: ${uploaded} uploaded, ${updated} rows updated`);
 }
 
+async function processGallery() {
+  console.log('\n📦 Processing gallery...');
+  const folder = join(process.cwd(), 'public', 'images', 'gallery');
+  const files = await getImageFiles(folder);
+  if (files.length === 0) return;
+
+  console.log(`  Found ${files.length} images`);
+
+  const staticGallery = [
+    { caption: 'Malaysia Tour', location: 'Malaysia', category: 'perjalanan', displayOrder: 1 },
+    { caption: 'Malaysia Family Trip', location: 'Malaysia', category: 'perjalanan', displayOrder: 2 },
+    { caption: 'Toli-Toli Trip', location: 'Toli-Toli', category: 'perjalanan', displayOrder: 3 },
+    { caption: 'Toli-Toli Group Tour', location: 'Toli-Toli', category: 'perjalanan', displayOrder: 4 },
+    { caption: 'Toli-Toli Business Trip', location: 'Toli-Toli', category: 'perjalanan', displayOrder: 5 },
+    { caption: 'Manado Holiday', location: 'Manado', category: 'perjalanan', displayOrder: 6 },
+    { caption: 'Manado Family Trip', location: 'Manado', category: 'pelanggan', displayOrder: 7 },
+    { caption: 'Manado Marine Tour', location: 'Manado', category: 'pelanggan', displayOrder: 8 },
+  ];
+
+  let uploaded = 0;
+  let inserted = 0;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    const meta = staticGallery[i] || {
+      caption: `Galeri ${i + 1}`,
+      location: 'Umum',
+      category: 'general',
+      displayOrder: i + 1,
+    };
+
+    try {
+      const filePath = join(folder, file);
+      const storagePath = file;
+      const imageUrl = await uploadToStorage('gallery', filePath, storagePath);
+      uploaded++;
+
+      const { error: dbError } = await supabase.from('gallery_items').insert({
+        caption: meta.caption,
+        image_url: imageUrl,
+        category: meta.category,
+        location: meta.location,
+        display_order: meta.displayOrder,
+        is_active: true,
+      });
+
+      if (dbError) {
+        console.error(`  ❌ ${file}: DB insert failed - ${dbError.message}`);
+        continue;
+      }
+
+      inserted++;
+      console.log(`  ✅ ${file} → ${meta.caption}`);
+    } catch (e) {
+      console.error(`  ❌ ${file}: ${(e as Error).message}`);
+    }
+  }
+
+  console.log(`\n📊 Gallery: ${uploaded} uploaded, ${inserted} rows inserted`);
+}
+
 async function main() {
   console.log('🚀 Bulk upload images to Supabase Storage\n');
   console.log(`Supabase URL: ${SUPABASE_URL}`);
 
   await processVehicles();
   await processPackages();
+  await processGallery();
 
   console.log('\n✅ Done!');
 }
