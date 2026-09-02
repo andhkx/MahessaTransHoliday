@@ -1,11 +1,13 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { seoMetadata } from "@/data/seo";
 import GaleriPageClient from "./GaleriPageClient";
 import CtaSection from "@/components/CtaSection";
 import { getAllGallery } from "@/lib/data/supabase/gallery";
 import { galleryImages as staticGallery } from "@/lib/gallery";
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
+
   title: seoMetadata.galeri.title,
   description: seoMetadata.galeri.description,
   keywords: seoMetadata.galeri.keywords,

@@ -4,7 +4,9 @@ import Link from "next/link";
 import { FileText } from "lucide-react";
 import { getAllArticles } from "@/lib/data/supabase/articles";
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
+
   title: "Artikel & Tips Perjalanan | Mahessa Trans Holiday",
   description:
     "Artikel, tips, dan panduan seputar rental mobil, charter, dan paket wisata dari Cimahi, Bandung & Padalarang.",

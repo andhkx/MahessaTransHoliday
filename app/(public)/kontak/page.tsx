@@ -1,10 +1,12 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { seoMetadata } from "@/data/seo";
 import CtaSection from "@/components/CtaSection";
 import KontakPageClient from "./KontakPageClient";
 import { SERVICE_AREAS } from "@/lib/constants";
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
+
   title: seoMetadata.kontak.title,
   description: seoMetadata.kontak.description,
   keywords: seoMetadata.kontak.keywords,
@@ -27,7 +29,7 @@ export default function KontakPage() {
             Hubungi kami kapan saja.
           </h1>
           <p className="max-w-2xl text-[15px] leading-relaxed text-body-text md:text-base">
-            Kami melayani {SERVICE_AREAS.join(", ")}. Konsultasi gratis —
+            Kami melayani {SERVICE_AREAS.join(", ")}. Konsultasi gratis �
             ceritakan kebutuhan perjalananmu.
           </p>
         </div>

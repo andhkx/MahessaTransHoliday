@@ -1,4 +1,7 @@
-﻿import type { Metadata } from "next";
+export const dynamic = 'force-dynamic';
+
+
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -110,7 +113,7 @@ export default async function VehicleDetailPage({
           </div>
           <Image
             src={vehicle.image}
-            alt={`${vehicle.name} — ${SITE_NAME}`}
+            alt={`${vehicle.name} � ${SITE_NAME}`}
             width={1200}
             height={800}
             priority
@@ -232,9 +235,9 @@ export default async function VehicleDetailPage({
                 Tanya via WhatsApp
               </a>
               <ul className="mt-5 space-y-2 text-xs font-bold text-muted">
-                <li>✓ Respon cepat di jam operasional</li>
-                <li>✓ Harga transparan tanpa biaya siluman</li>
-                <li>✓ Unit bersih dan terawat</li>
+                <li>? Respon cepat di jam operasional</li>
+                <li>? Harga transparan tanpa biaya siluman</li>
+                <li>? Unit bersih dan terawat</li>
               </ul>
             </div>
           </aside>

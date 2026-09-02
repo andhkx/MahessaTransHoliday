@@ -6,7 +6,9 @@ import CtaSection from "@/components/CtaSection";
 import { getAllVehicles } from "@/lib/data/supabase/vehicles";
 import { vehicles as staticVehicles } from "@/data/vehicles";
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
+
   title: seoMetadata.armada.title,
   description: seoMetadata.armada.description,
   keywords: seoMetadata.armada.keywords,

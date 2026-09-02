@@ -1,5 +1,4 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
-import { unstable_cache } from 'next/cache';
 
 export type Article = {
   id: string;
@@ -28,69 +27,43 @@ function getPublicClient() {
   );
 }
 
-const fetchAllArticles = unstable_cache(
-  async (): Promise<Article[]> => {
-    const supabase = getPublicClient();
-    const { data, error } = await supabase
-      .from('articles')
-      .select('*')
-      .eq('status', 'published')
-      .order('published_at', { ascending: false });
-    if (error) {
-      console.error('Error fetching articles:', error);
-      return [];
-    }
-    return data || [];
-  },
-  ['articles-all'],
-  { revalidate: 60, tags: ['articles'] }
-);
-
-const fetchArticleBySlug = (slug: string) =>
-  unstable_cache(
-    async (): Promise<Article | null> => {
-      const supabase = getPublicClient();
-      const { data, error } = await supabase
-        .from('articles')
-        .select('*')
-        .eq('slug', slug)
-        .eq('status', 'published')
-        .single();
-      if (error || !data) return null;
-      return data;
-    },
-    [`article-${slug}`],
-    { revalidate: 60, tags: [`article-${slug}`, 'articles'] }
-  )();
-
-const fetchLatestArticles = (limit: number) =>
-  unstable_cache(
-    async (): Promise<Article[]> => {
-      const supabase = getPublicClient();
-      const { data, error } = await supabase
-        .from('articles')
-        .select('*')
-        .eq('status', 'published')
-        .order('published_at', { ascending: false })
-        .limit(limit);
-      if (error) {
-        console.error('Error fetching latest articles:', error);
-        return [];
-      }
-      return data || [];
-    },
-    [`articles-latest-${limit}`],
-    { revalidate: 60, tags: ['articles'] }
-  )();
-
 export async function getAllArticles(): Promise<Article[]> {
-  return fetchAllArticles();
+  const supabase = getPublicClient();
+  const { data, error } = await supabase
+    .from('articles')
+    .select('*')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false });
+  if (error) {
+    console.error('Error fetching articles:', error);
+    return [];
+  }
+  return data || [];
 }
 
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
-  return fetchArticleBySlug(slug);
+  const supabase = getPublicClient();
+  const { data, error } = await supabase
+    .from('articles')
+    .select('*')
+    .eq('slug', slug)
+    .eq('status', 'published')
+    .single();
+  if (error || !data) return null;
+  return data;
 }
 
 export async function getLatestArticles(limit = 6): Promise<Article[]> {
-  return fetchLatestArticles(limit);
+  const supabase = getPublicClient();
+  const { data, error } = await supabase
+    .from('articles')
+    .select('*')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .limit(limit);
+  if (error) {
+    console.error('Error fetching latest articles:', error);
+    return [];
+  }
+  return data || [];
 }

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { seoMetadata } from "@/data/seo";
 import VehicleFinder from "@/components/VehicleFinder/VehicleFinder";
+export const dynamic = 'force-dynamic';
+
+
 
 export const metadata: Metadata = {
   title: seoMetadata.temukan.title,

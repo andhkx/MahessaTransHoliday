@@ -1,4 +1,4 @@
-﻿import Image from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import {
   Award,
@@ -28,7 +28,9 @@ import { getFeaturedGallery } from "@/lib/data/supabase/gallery";
 import { galleryImages as staticGallery } from "@/lib/gallery";
 import ArmadaShowcaseClient from "./ArmadaShowcaseClient";
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
+
   title: seoMetadata.homepage.title,
   description: seoMetadata.homepage.description,
   keywords: seoMetadata.homepage.keywords,
@@ -155,7 +157,7 @@ export default async function HomePage() {
       <section className="py-8 bg-wa-surface/40 text-center">
         <p className="text-sm font-semibold text-heading mb-4">Tidak tahu mobil mana yang cocok?</p>
         <Link href="/temukan" className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3.5 text-sm font-extrabold text-white transition-all hover:scale-[1.01] hover:bg-accent-hover active:scale-[0.98]">
-          Temukan Mobil Cocok Untukmu →
+          Temukan Mobil Cocok Untukmu ?
         </Link>
       </section>
       <ProcessSection />
@@ -201,13 +203,13 @@ function FeaturedPackages({ packages, allPackages }: { packages: Awaited<ReturnT
         <SectionHeading
           eyebrow="Harga Paket"
           title="Perjalanan tanpa ribet."
-          subtitle="Mobil, driver, BBM, tol, parkir — semua sudah termasuk. Pilih tujuannya, sisanya biar kami."
+          subtitle="Mobil, driver, BBM, tol, parkir � semua sudah termasuk. Pilih tujuannya, sisanya biar kami."
         />
         <PackageCards packages={packages} forceMode="single" />
         <div className="mt-10 text-center">
           <Link href="/paket" className="text-link">
             Lihat Semua Paket ({allPackages.length})
-            <span aria-hidden="true">→</span>
+            <span aria-hidden="true">?</span>
           </Link>
         </div>
       </div>
@@ -291,7 +293,7 @@ function GalleryShowcase({ items }: { items: Array<{ src: string; alt: string; t
         <div className="mt-10 text-center">
           <Link href="/galeri" className="text-link">
             Lihat Galeri Lengkap
-            <span aria-hidden="true">→</span>
+            <span aria-hidden="true">?</span>
           </Link>
         </div>
       </div>
@@ -323,7 +325,7 @@ function FaqHome() {
           href="/faq"
           className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-primary"
         >
-          Lihat semua pertanyaan →
+          Lihat semua pertanyaan ?
         </Link>
       </div>
     </section>

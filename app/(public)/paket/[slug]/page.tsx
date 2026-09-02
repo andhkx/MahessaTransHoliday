@@ -1,4 +1,7 @@
-﻿import type { Metadata } from "next";
+export const dynamic = 'force-dynamic';
+
+
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -174,7 +177,7 @@ export default async function PackageDetailPage({
                 </p>
               ))}
               <p className="mt-4 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-muted">
-                Durasi: {packageItem.duration} · {packageItem.durationHours} jam dari pickup
+                Durasi: {packageItem.duration} � {packageItem.durationHours} jam dari pickup
               </p>
             </div>
 
@@ -186,7 +189,7 @@ export default async function PackageDetailPage({
                     key={item}
                     className="rounded-full border border-line bg-white px-3 py-1.5 text-xs font-bold text-body-text transition-colors duration-300 hover:border-primary/50 hover:text-primary"
                   >
-                    ✓ {item}
+                    ? {item}
                   </li>
                 ))}
               </ul>
@@ -203,7 +206,7 @@ export default async function PackageDetailPage({
                       <ul className="mt-2 space-y-1.5">
                         {day.activities.map((activity) => (
                           <li key={activity} className="text-sm leading-relaxed text-body-text">
-                            – {activity}
+                            � {activity}
                           </li>
                         ))}
                       </ul>
@@ -255,9 +258,9 @@ export default async function PackageDetailPage({
                 Tanya via WhatsApp
               </a>
               <ul className="mt-5 space-y-2 text-xs font-bold text-muted">
-                <li>✓ Biaya jelas di awal</li>
-                <li>✓ Driver berpengalaman rute ini</li>
-                <li>✓ Bisa request itinerary custom</li>
+                <li>? Biaya jelas di awal</li>
+                <li>? Driver berpengalaman rute ini</li>
+                <li>? Bisa request itinerary custom</li>
               </ul>
             </div>
           </aside>

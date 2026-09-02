@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { seoMetadata } from "@/data/seo";
 import JsonLd from "@/components/JsonLd";
 import CtaSection from "@/components/CtaSection";
@@ -6,7 +6,9 @@ import FaqPageClient from "./FaqPageClient";
 import { getMainFaqs, getExtraFaqs } from "@/lib/data/supabase/faq";
 import { faqMain as staticFaqMain, faqExtra as staticFaqExtra } from "@/data/faq";
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
+
   title: seoMetadata.faq.title,
   description: seoMetadata.faq.description,
   keywords: seoMetadata.faq.keywords,
