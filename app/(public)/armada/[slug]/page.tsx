@@ -47,7 +47,10 @@ export default async function VehicleDetailPage({
 }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const vehicle = await getVehicleBySlug(slug);
-  if (!vehicle) notFound();
+  if (!vehicle) {
+    console.error(`[armada/[slug]] Vehicle not found: "${slug}"`);
+    notFound();
+  }
 
   const related = await getRelatedVehicles(vehicle.slug);
   const startingPrice = vehicle.pricing.startingPrice;

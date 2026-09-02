@@ -82,7 +82,14 @@ export async function getVehicleBySlug(slug: string): Promise<Vehicle | null> {
     .eq('slug', slug)
     .eq('is_active', true)
     .single();
-  if (error || !data) return null;
+  if (error) {
+    console.error(`[getVehicleBySlug] Error for "${slug}":`, error.message, error.code);
+    return null;
+  }
+  if (!data) {
+    console.warn(`[getVehicleBySlug] No data for "${slug}"`);
+    return null;
+  }
   return mapSupabaseVehicle(data);
 }
 
