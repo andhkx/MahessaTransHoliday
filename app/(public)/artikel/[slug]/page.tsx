@@ -1,4 +1,3 @@
-export const dynamic = 'force-dynamic';
 
 
 import type { Metadata } from "next";
@@ -11,6 +10,8 @@ import { SITE_URL } from "@/lib/constants";
 import { MessageCircle, Calendar, Eye, FileText, ArrowLeft } from "lucide-react";
 import { waGeneralLink } from "@/lib/whatsapp";
 
+
+export const dynamic = 'force-dynamic';
 export async function generateMetadata({
   params,
 }: { params: Promise<{ slug: string }> }): Promise<Metadata> {

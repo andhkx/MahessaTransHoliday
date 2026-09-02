@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   // Server runtime → middleware works for /admin/* protection.
   // Dynamic routes (app/admin/dashboard/armada/[id], etc.) are SSR.
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",

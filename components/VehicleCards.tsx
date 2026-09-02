@@ -74,6 +74,7 @@ export default function VehicleCards({
                   src={vehicle.image}
                   alt={`${vehicle.name} — rental Mahessa Trans Holiday`}
                   fill
+                  unoptimized
                   sizes="(max-width: 640px) 60vw, (max-width: 1024px) 33vw, 25vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
                 />
