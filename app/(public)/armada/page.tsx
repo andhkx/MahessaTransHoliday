@@ -3,7 +3,7 @@ import { seoMetadata } from "@/data/seo";
 import PageHero from "@/components/PageHero";
 import ArmadaListClient from "./ArmadaListClient";
 import CtaSection from "@/components/CtaSection";
-import { vehicles } from "@/data/vehicles";
+import { getAllVehicles } from "@/lib/data/supabase/vehicles";
 
 export const metadata: Metadata = {
   title: seoMetadata.armada.title,
@@ -12,7 +12,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/armada" },
 };
 
-export default function ArmadaPage() {
+export default async function ArmadaPage() {
+  const vehicles = await getAllVehicles();
+
   return (
     <>
       <PageHero

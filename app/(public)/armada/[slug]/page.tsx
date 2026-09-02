@@ -6,23 +6,17 @@ import VehicleCards from "@/components/VehicleCards";
 import CtaSection from "@/components/CtaSection";
 import JsonLd from "@/components/JsonLd";
 import SectionHeading from "@/components/SectionHeading";
-import { getRelatedVehicles, getVehicleBySlug, vehicles } from "@/data/vehicles";
+import { getVehicleBySlug, getRelatedVehicles } from "@/lib/data/supabase/vehicles";
 import { formatIDR } from "@/lib/format";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { waVehicleLink } from "@/lib/whatsapp";
 import { Check, MessageCircle } from "lucide-react";
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return vehicles.map((vehicle) => ({ slug: vehicle.slug }));
-}
-
 export async function generateMetadata({
   params,
-}: PageProps<"/armada/[slug]">): Promise<Metadata> {
+}: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const vehicle = getVehicleBySlug(slug);
+  const vehicle = await getVehicleBySlug(slug);
   if (!vehicle) return {};
   return {
     title: vehicle.seo.title,
@@ -46,12 +40,12 @@ const orderSteps = [
 
 export default async function VehicleDetailPage({
   params,
-}: PageProps<"/armada/[slug]">) {
+}: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const vehicle = getVehicleBySlug(slug);
+  const vehicle = await getVehicleBySlug(slug);
   if (!vehicle) notFound();
 
-  const related = getRelatedVehicles(vehicle.slug);
+  const related = await getRelatedVehicles(vehicle.slug);
   const startingPrice = vehicle.pricing.startingPrice;
 
   const breadcrumbLd = {

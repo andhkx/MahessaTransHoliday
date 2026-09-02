@@ -7,27 +7,17 @@ import FaqAccordion from "@/components/FaqAccordion";
 import CtaSection from "@/components/CtaSection";
 import JsonLd from "@/components/JsonLd";
 import SectionHeading from "@/components/SectionHeading";
-import {
-  getPackageBySlug,
-  getRelatedPackages,
-  packages,
-} from "@/data/packages";
+import { getPackageBySlug, getRelatedPackages } from "@/lib/data/supabase/packages";
 import { formatIDR } from "@/lib/format";
 import { SITE_URL } from "@/lib/constants";
 import { waPackageLink } from "@/lib/whatsapp";
 import { Check, MessageCircle, X } from "lucide-react";
 
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return packages.map((packageItem) => ({ slug: packageItem.slug }));
-}
-
 export async function generateMetadata({
   params,
-}: PageProps<"/paket/[slug]">): Promise<Metadata> {
+}: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const packageItem = getPackageBySlug(slug);
+  const packageItem = await getPackageBySlug(slug);
   if (!packageItem) return {};
   return {
     title: packageItem.seo.title,
@@ -44,12 +34,12 @@ export async function generateMetadata({
 
 export default async function PackageDetailPage({
   params,
-}: PageProps<"/paket/[slug]">) {
+}: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const packageItem = getPackageBySlug(slug);
+  const packageItem = await getPackageBySlug(slug);
   if (!packageItem) notFound();
 
-  const related = getRelatedPackages(packageItem.slug);
+  const related = await getRelatedPackages(packageItem.slug);
 
   const breadcrumbLd = {
     "@context": "https://schema.org",
@@ -223,16 +213,18 @@ export default async function PackageDetailPage({
               </div>
             )}
 
-            <div id="faq-paket">
-              <h2 className="text-h5 mb-4 text-heading">Pertanyaan Umum Paket Ini</h2>
-              <FaqAccordion
-                items={packageItem.faq.map((f) => ({
-                  id: f.q,
-                  question: f.q,
-                  answer: f.a,
-                }))}
-              />
-            </div>
+            {packageItem.faq.length > 0 && (
+              <div id="faq-paket">
+                <h2 className="text-h5 mb-4 text-heading">Pertanyaan Umum Paket Ini</h2>
+                <FaqAccordion
+                  items={packageItem.faq.map((f: any, i: number) => ({
+                    id: `${packageItem.slug}-${i}`,
+                    question: f.q,
+                    answer: f.a,
+                  }))}
+                />
+              </div>
+            )}
           </div>
 
           <aside className="lg:col-span-2">

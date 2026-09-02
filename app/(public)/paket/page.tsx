@@ -3,7 +3,7 @@ import { seoMetadata } from "@/data/seo";
 import PageHero from "@/components/PageHero";
 import PaketListClient from "./PaketListClient";
 import CtaSection from "@/components/CtaSection";
-import { packages } from "@/data/packages";
+import { getAllPackages } from "@/lib/data/supabase/packages";
 
 export const metadata: Metadata = {
   title: seoMetadata.paket.title,
@@ -12,7 +12,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/paket" },
 };
 
-export default function PaketPage() {
+export default async function PaketPage() {
+  const packages = await getAllPackages();
+
   return (
     <>
       <PageHero

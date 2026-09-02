@@ -84,11 +84,11 @@ export default function DashboardPage() {
   const loadStats = async () => {
     try {
       const [vehicles, packages, articles, testimonials, faq] = await Promise.all([
-        supabase.from('vehicles').select('id', { count: 'exact', head: true }),
-        supabase.from('packages').select('id', { count: 'exact', head: true }),
+        supabase.from('vehicles').select('id', { count: 'exact', head: true }).eq('is_active', true),
+        supabase.from('packages').select('id', { count: 'exact', head: true }).eq('is_active', true),
         supabase.from('articles').select('id', { count: 'exact', head: true }),
-        supabase.from('testimonials').select('id', { count: 'exact', head: true }),
-        supabase.from('faq_items').select('id', { count: 'exact', head: true }),
+        supabase.from('testimonials').select('id', { count: 'exact', head: true }).eq('is_active', true),
+        supabase.from('faq_items').select('id', { count: 'exact', head: true }).eq('is_active', true),
       ]);
       setStats({
         vehicles: vehicles.count || 0,

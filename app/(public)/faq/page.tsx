@@ -3,7 +3,7 @@ import { seoMetadata } from "@/data/seo";
 import JsonLd from "@/components/JsonLd";
 import CtaSection from "@/components/CtaSection";
 import FaqPageClient from "./FaqPageClient";
-import { faqMain, faqExtra } from "@/data/faq";
+import { getMainFaqs, getExtraFaqs } from "@/lib/data/supabase/faq";
 
 export const metadata: Metadata = {
   title: seoMetadata.faq.title,
@@ -12,20 +12,23 @@ export const metadata: Metadata = {
   alternates: { canonical: "/faq" },
 };
 
-const faqPageLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [...faqMain, ...faqExtra].map((item) => ({
-    "@type": "Question",
-    name: item.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: item.answer,
-    },
-  })),
-};
+export default async function FaqPage() {
+  const faqMain = await getMainFaqs();
+  const faqExtra = await getExtraFaqs();
 
-export default function FaqPage() {
+  const faqPageLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [...faqMain, ...faqExtra].map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+
   return (
     <>
       <JsonLd data={faqPageLd} />
@@ -47,7 +50,7 @@ export default function FaqPage() {
           </p>
         </div>
       </header>
-      <FaqPageClient />
+      <FaqPageClient faqMain={faqMain} faqExtra={faqExtra} />
       <CtaSection />
     </>
   );

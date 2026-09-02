@@ -15,17 +15,15 @@ import { Metadata } from "next";
 import { seoMetadata } from "@/data/seo";
 import Stats from "@/components/Stats";
 import ServiceCards from "@/components/ServiceCards";
-import VehicleCards from "@/components/VehicleCards";
 import PackageCards from "@/components/PackageCards";
 import ProcessSection from "@/components/ProcessSection";
 import FaqAccordion from "@/components/FaqAccordion";
 import CtaSection from "@/components/CtaSection";
 import SectionHeading from "@/components/SectionHeading";
-import VehicleFinder from "@/components/VehicleFinder/VehicleFinder";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
-import { vehicles } from "@/data/vehicles";
-import { getFeaturedPackages } from "@/data/packages";
-import { faqMain } from "@/data/faq";
+import { getFeaturedVehicles } from "@/lib/data/supabase/vehicles";
+import { getFeaturedPackages, getAllPackages } from "@/lib/data/supabase/packages";
+import { getFeaturedTestimonials } from "@/lib/data/supabase/testimonials";
 import { galleryImages } from "@/lib/gallery";
 import ArmadaShowcaseClient from "./ArmadaShowcaseClient";
 
@@ -127,7 +125,38 @@ function Advantages() {
   );
 }
 
-function FeaturedArmada() {
+export default async function HomePage() {
+  const [vehicles, packages, testimonials, allPackages] = await Promise.all([
+    getFeaturedVehicles(),
+    getFeaturedPackages(),
+    getFeaturedTestimonials(8),
+    getAllPackages(),
+  ]);
+
+  return (
+    <>
+      <Hero />
+      <Stats />
+      <ServiceCards />
+      <Advantages />
+      <FeaturedArmada vehicles={vehicles} />
+      <FeaturedPackages packages={packages} allPackages={allPackages} />
+      <section className="py-8 bg-wa-surface/40 text-center">
+        <p className="text-sm font-semibold text-heading mb-4">Tidak tahu mobil mana yang cocok?</p>
+        <Link href="/temukan" className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3.5 text-sm font-extrabold text-white transition-all hover:scale-[1.01] hover:bg-accent-hover active:scale-[0.98]">
+          Temukan Mobil Cocok Untukmu →
+        </Link>
+      </section>
+      <ProcessSection />
+      <GalleryShowcase />
+      <FaqHome />
+      <TestimonialCarousel testimonials={testimonials} />
+      <CtaSection />
+    </>
+  );
+}
+
+function FeaturedArmada({ vehicles }: { vehicles: Awaited<ReturnType<typeof getFeaturedVehicles>> }) {
   return (
     <section
       id="armada"
@@ -154,8 +183,7 @@ function FeaturedArmada() {
   );
 }
 
-function FeaturedPackages() {
-  const featured = getFeaturedPackages();
+function FeaturedPackages({ packages, allPackages }: { packages: Awaited<ReturnType<typeof getFeaturedPackages>>; allPackages: Awaited<ReturnType<typeof getAllPackages>> }) {
   return (
     <section className="border-y border-line bg-surface/60 py-16 md:py-24">
       <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
@@ -164,10 +192,10 @@ function FeaturedPackages() {
           title="Perjalanan tanpa ribet."
           subtitle="Mobil, driver, BBM, tol, parkir — semua sudah termasuk. Pilih tujuannya, sisanya biar kami."
         />
-        <PackageCards packages={featured} forceMode="single" />
+        <PackageCards packages={packages} forceMode="single" />
         <div className="mt-10 text-center">
           <Link href="/paket" className="text-link">
-            Lihat Semua Paket
+            Lihat Semua Paket ({allPackages.length})
             <span aria-hidden="true">→</span>
           </Link>
         </div>
@@ -270,7 +298,14 @@ function FaqHome() {
         title="Pertanyaan yang sering ditanyakan."
         subtitle="Ringkasan pertanyaan seputar rental dan paket."
       />
-      <FaqAccordion items={faqMain} />
+      <FaqAccordion items={[
+        { id: "1", question: "Apakah semua mobil bisa dengan driver?", answer: "Ya, semua unit di armada kami dapat disewa dengan driver profesional." },
+        { id: "2", question: "Apakah bisa antar-jemput dari Stasiun KCIC Padalarang?", answer: "Ya, kami melayani charter dan transfer dari berbagai lokasi termasuk Stasiun KCIC Padalarang." },
+        { id: "3", question: "Apakah harga paket sudah termasuk BBM?", answer: "Ya, paket All In Hiace sudah termasuk mobil, driver, BBM, tol, parkir, dan tiket penyeberangan." },
+        { id: "4", question: "Apakah melayani perjalanan luar kota?", answer: "Ya, kami melayani perjalanan luar kota dalam maupun multi-hari. Lihat paket wisata untuk rute dan harga." },
+        { id: "5", question: "Bagaimana cara reservasi?", answer: "Hubungi kami via WhatsApp dengan detail kebutuhan perjalananmu (tanggal, lokasi, jenis kendaraan). Tim kami akan membantu." },
+        { id: "6", question: "Apakah ada biaya tambahan selain harga yang tertera?", answer: "Harga sudah fixed seperti tertera. Biaya tambahan (overtime, tujuan di luar coverage) akan dikonfirmasi sebelumnya." },
+      ]} />
       <div className="mt-6 text-center">
         <Link
           href="/faq"
@@ -282,29 +317,3 @@ function FaqHome() {
     </section>
   );
 }
-
-export default function HomePage() {
-  return (
-    <>
-      <Hero />
-      <Stats />
-      <ServiceCards />
-      <Advantages />
-      <FeaturedArmada />
-      <FeaturedPackages />
-      {/* Insert Vehicle Finder CTA after Packages */}
-      <section className="py-8 bg-wa-surface/40 text-center">
-        <p className="text-sm font-semibold text-heading mb-4">Tidak tahu mobil mana yang cocok?</p>
-        <Link href="/temukan" className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3.5 text-sm font-extrabold text-white transition-all hover:scale-[1.01] hover:bg-accent-hover active:scale-[0.98]">
-          Temukan Mobil Cocok Untukmu →
-        </Link>
-      </section>
-      <ProcessSection />
-      <GalleryShowcase />
-      <FaqHome />
-      <TestimonialCarousel />
-      <CtaSection />
-    </>
-  );
-}
-

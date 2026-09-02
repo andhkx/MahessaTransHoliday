@@ -1,31 +1,24 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/cn";
 import TestimonialCard from "./TestimonialCard";
-import { testimonials } from "@/data/testimonials";
 
-export default function TestimonialCarousel() {
-  const wrapperRef = useRef<HTMLDivElement>(null);
+type Testimonial = {
+  id: string | number;
+  name: string;
+  role: string;
+  quote: string;
+  rating: number;
+};
+
+export default function TestimonialCarousel({ testimonials }: { testimonials: Testimonial[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const animationFrameRef = useRef<number>(0);
   const [isHovered, setIsHovered] = useState(false);
   const [offset, setOffset] = useState(0);
   const [listWidth, setListWidth] = useState(0);
-  const [viewportWidth, setViewportWidth] = useState(0);
 
-  // Update viewport width on resize
-  useEffect(() => {
-    const handleResize = () => {
-      setViewportWidth(window.innerWidth);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // Measure the width of the first list (horizontal width of all cards)
   useEffect(() => {
     if (listRef.current) {
       const width = listRef.current.getBoundingClientRect().width;
@@ -33,24 +26,21 @@ export default function TestimonialCarousel() {
     }
   }, [testimonials]);
 
-  // Animation loop for horizontal marquee
   useEffect(() => {
-    if (listWidth === 0) return;
+    if (listWidth === 0 || testimonials.length === 0) return;
 
-    const targetVelocity = 40; // pixels per second
-    const hoverSpeed = 0; // pause on hover
+    const targetVelocity = 40;
+    const hoverSpeed = 0;
+    let last = performance.now() / 1000;
 
     const animate = (timestamp: number) => {
       if (!trackRef.current) return;
+      const now = timestamp / 1000;
+      const delta = now - last;
+      last = now;
 
       const velocity = isHovered ? hoverSpeed : targetVelocity;
-      const now = timestamp / 1000;
-      const last = animationFrameRef.current || now;
-      const delta = now - last;
-
       const newOffset = offset + velocity * delta;
-      // Loop seamlessly: when offset reaches listWidth, reset to 0
-      // Because we have duplicate content, the jump is invisible
       const wrappedOffset = newOffset % listWidth;
 
       setOffset(wrappedOffset);
@@ -62,17 +52,23 @@ export default function TestimonialCarousel() {
     return () => {
       cancelAnimationFrame(animationFrameRef.current);
     };
-  }, [isHovered, listWidth, offset]);
+  }, [isHovered, listWidth, offset, testimonials.length]);
 
-  const handleMouseEnter = () => setIsHovered(true);
-  const handleMouseLeave = () => setIsHovered(false);
+  if (testimonials.length === 0) {
+    return (
+      <div className="border-y border-line bg-surface/60 py-16 md:py-24">
+        <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12 text-center">
+          <p className="text-sm text-muted">Belum ada testimoni.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
-      ref={wrapperRef}
       className="relative overflow-hidden border-y border-line bg-surface/60 py-16 md:py-24"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
         <div className="mb-10 text-center md:mb-12">
@@ -97,14 +93,10 @@ export default function TestimonialCarousel() {
               willChange: "transform"
             }}
           >
-            {/* First group */}
-            <div
-              ref={listRef}
-              className="flex items-stretch gap-5"
-            >
+            <div ref={listRef} className="flex items-stretch gap-5 flex-shrink-0">
               {testimonials.map((t, i) => (
                 <TestimonialCard
-                  key={t.id}
+                  key={`a-${t.id}`}
                   name={t.name}
                   role={t.role}
                   quote={t.quote}
@@ -113,14 +105,10 @@ export default function TestimonialCarousel() {
                 />
               ))}
             </div>
-            {/* Second group (duplicate) for seamless loop */}
-            <div
-              className="flex items-stretch gap-5"
-              aria-hidden="true"
-            >
+            <div className="flex items-stretch gap-5 flex-shrink-0" aria-hidden="true">
               {testimonials.map((t, i) => (
                 <TestimonialCard
-                  key={t.id + "-duplicate"}
+                  key={`b-${t.id}`}
                   name={t.name}
                   role={t.role}
                   quote={t.quote}

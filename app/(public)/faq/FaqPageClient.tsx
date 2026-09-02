@@ -6,18 +6,14 @@ import {
   ChevronDown,
   HelpCircle,
   MessageCircle,
-  Sparkles,
   Search,
   Wallet,
   Calendar,
   CarFront,
-  MapPin,
   Users,
 } from "lucide-react";
-import Link from "next/link";
 import type { FaqItem } from "@/lib/types";
 import { cn } from "@/lib/cn";
-import { faqMain, faqExtra } from "@/data/faq";
 import { waGeneralLink } from "@/lib/whatsapp";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
@@ -29,53 +25,61 @@ type Category = {
   items: FaqItem[];
 };
 
-const CATEGORIES: Category[] = [
-  {
-    id: "layanan",
-    label: "Layanan",
-    Icon: CarFront,
-    items: faqMain.filter((f) =>
-      ["mobil-dengan-driver", "antar-jemput-kcic", "perjalanan-luar-kota"].includes(f.id),
-    ),
-  },
-  {
-    id: "harga",
-    label: "Harga & Pembayaran",
-    Icon: Wallet,
-    items: [
-      ...faqMain.filter((f) => ["harga-termasuk-bbm", "biaya-tambahan"].includes(f.id)),
-      ...faqExtra.filter((f) => ["pembayaran", "pembatalan", "overtime"].includes(f.id)),
-    ],
-  },
-  {
-    id: "pemesanan",
-    label: "Pemesanan",
-    Icon: Calendar,
-    items: [
-      faqMain.find((f) => f.id === "cara-reservasi")!,
-      ...faqExtra.filter((f) => ["area-coverage", "stasiun-bandara"].includes(f.id)),
-    ],
-  },
-  {
-    id: "armada",
-    label: "Armada & Driver",
-    Icon: Users,
-    items: faqExtra.filter((f) =>
-      ["driver-menginap", "kapasitas-hiace"].includes(f.id),
-    ),
-  },
-];
+type Props = {
+  faqMain: FaqItem[];
+  faqExtra: FaqItem[];
+};
 
-const ALL_FAQS: FaqItem[] = [...faqMain, ...faqExtra];
+function getCategories(faqMain: FaqItem[], faqExtra: FaqItem[]): Category[] {
+  return [
+    {
+      id: "layanan",
+      label: "Layanan",
+      Icon: CarFront,
+      items: faqMain.filter((f) =>
+        ["mobil-dengan-driver", "antar-jemput-kcic", "perjalanan-luar-kota"].includes(f.id),
+      ),
+    },
+    {
+      id: "harga",
+      label: "Harga & Pembayaran",
+      Icon: Wallet,
+      items: [
+        ...faqMain.filter((f) => ["harga-termasuk-bbm", "biaya-tambahan"].includes(f.id)),
+        ...faqExtra.filter((f) => ["pembayaran", "pembatalan", "overtime"].includes(f.id)),
+      ],
+    },
+    {
+      id: "pemesanan",
+      label: "Pemesanan",
+      Icon: Calendar,
+      items: [
+        ...faqMain.filter((f) => f.id === "cara-reservasi"),
+        ...faqExtra.filter((f) => ["area-coverage", "stasiun-bandara"].includes(f.id)),
+      ],
+    },
+    {
+      id: "armada",
+      label: "Armada & Driver",
+      Icon: Users,
+      items: faqExtra.filter((f) =>
+        ["driver-menginap", "kapasitas-hiace"].includes(f.id),
+      ),
+    },
+  ];
+}
 
-export default function FaqPageClient() {
+export default function FaqPageClient({ faqMain, faqExtra }: Props) {
   const reduce = useReducedMotion();
   const [active, setActive] = useState<string>("layanan");
   const [open, setOpen] = useState<string>("mobil-dengan-driver");
   const [query, setQuery] = useState("");
 
+  const categories = getCategories(faqMain, faqExtra);
+  const ALL_FAQS: FaqItem[] = [...faqMain, ...faqExtra];
+
   const items = useMemo(() => {
-    const cat = CATEGORIES.find((c) => c.id === active);
+    const cat = categories.find((c) => c.id === active);
     const base = cat?.items ?? ALL_FAQS;
     if (!query.trim()) return base;
     const q = query.toLowerCase();
@@ -84,7 +88,7 @@ export default function FaqPageClient() {
         f.question.toLowerCase().includes(q) ||
         f.answer.toLowerCase().includes(q),
     );
-  }, [active, query]);
+  }, [active, query, faqMain, faqExtra]);
 
   return (
     <div className="mx-auto w-full max-w-[1300px] px-5 py-12 sm:px-8 md:px-12 md:py-16">
@@ -95,7 +99,7 @@ export default function FaqPageClient() {
               Kategori
             </p>
             <div className="space-y-0.5">
-              {CATEGORIES.map((c) => {
+              {categories.map((c) => {
                 const isActive = c.id === active;
                 return (
                   <button
