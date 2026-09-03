@@ -18,7 +18,6 @@ import {
   ChevronDown,
   ExternalLink,
   Activity,
-  BarChart3,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
@@ -37,9 +36,6 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'FAQ', href: '/admin/dashboard/faq', icon: MessageCircle },
   { label: 'Log', href: '/admin/dashboard/log', icon: Activity },
 ];
-
-const VERCEL_ANALYTICS_URL =
-  'https://vercel.com/andhkx-gmailcoms-projects/mahessa-trans-holiday/analytics';
 
 function getBreadcrumb(pathname: string) {
   const segments = pathname.split('/').filter(Boolean);
@@ -70,6 +66,7 @@ export default function AdminDashboardLayout({
     icon: React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>;
     label: string;
     value: number;
+    total?: number;
     tone?: string;
   }>;
   title?: string;
@@ -166,16 +163,6 @@ export default function AdminDashboardLayout({
               {/* Right actions */}
               <div className="flex items-center gap-2">
                 <Link
-                  href={VERCEL_ANALYTICS_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-line bg-white text-xs font-bold text-heading hover:bg-accent/10 hover:border-accent transition"
-                  title="Buka Vercel Analytics"
-                >
-                  <BarChart3 size={12} />
-                  Analytics
-                </Link>
-                <Link
                   href="/"
                   target="_blank"
                   className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-line bg-white text-xs font-bold text-heading hover:bg-accent/10 hover:border-accent transition"
@@ -214,14 +201,6 @@ export default function AdminDashboardLayout({
                           <p className="text-[10px] text-muted">Administrator</p>
                         </div>
                         <div className="p-1">
-                          <Link
-                            href={VERCEL_ANALYTICS_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="md:hidden flex w-full items-center gap-2 px-3 py-2 text-xs font-medium text-heading hover:bg-accent/10 rounded-xl transition"
-                          >
-                            <BarChart3 size={14} /> Vercel Analytics
-                          </Link>
                           <button
                             onClick={handleLogout}
                             className="flex w-full items-center gap-2 px-3 py-2 text-xs font-medium text-error hover:bg-error/10 rounded-xl transition"
@@ -293,18 +272,7 @@ export default function AdminDashboardLayout({
                   </Link>
                 );
               })}
-              <Link
-                href={VERCEL_ANALYTICS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-heading hover:bg-accent/10"
-              >
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-accent">
-                  <BarChart3 size={16} />
-                </div>
-                <span className="flex-1">Vercel Analytics</span>
-              </Link>
-            </nav>
+              </nav>
 
             <div className="p-3 border-t border-line space-y-1">
               <Link
@@ -378,9 +346,16 @@ export default function AdminDashboardLayout({
                     >
                       <Icon size={18} strokeWidth={1.8} />
                     </div>
-                    <span className="text-xl sm:text-2xl font-extrabold text-heading">
-                      {s.value}
-                    </span>
+                    <div className="text-right">
+                      <span className="text-xl sm:text-2xl font-extrabold text-heading block">
+                        {s.value}
+                      </span>
+                      {typeof s.total === 'number' && s.total > 0 && (
+                        <span className="text-[10px] font-bold text-muted">
+                          / {s.total}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <p className="text-[10px] sm:text-xs text-muted uppercase tracking-[0.16em] font-bold truncate">
                     {s.label}

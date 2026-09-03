@@ -21,6 +21,7 @@ export default function FaqList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filterGroup, setFilterGroup] = useState<'all' | 'main' | 'extra'>('all');
+  const [statusFilter, setStatusFilter] = useState<'active' | 'inactive' | 'all'>('active');
   const supabase = createClient();
 
   const fetchFaqs = async () => {
@@ -29,13 +30,12 @@ export default function FaqList() {
       let query = supabase
         .from('faq_items')
         .select('*')
-        .eq('is_active', true)
         .order('group_name')
         .order('display_order');
 
-      if (filterGroup !== 'all') {
-        query = query.eq('group_name', filterGroup);
-      }
+      if (statusFilter === 'active') query = query.eq('is_active', true);
+      if (statusFilter === 'inactive') query = query.eq('is_active', false);
+      if (filterGroup !== 'all') query = query.eq('group_name', filterGroup);
 
       const { data, error } = await query;
       if (error) throw error;
@@ -49,15 +49,25 @@ export default function FaqList() {
 
   useEffect(() => {
     fetchFaqs();
-  }, [filterGroup]);
+  }, [filterGroup, statusFilter]);
+
+  const toggleActive = async (f: FaqItem) => {
+    try {
+      const { error } = await supabase
+        .from('faq_items')
+        .update({ is_active: !f.is_active })
+        .eq('id', f.id);
+      if (error) throw error;
+      await fetchFaqs();
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : String(err));
+    }
+  };
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('Yakin ingin menghapus FAQ ini?')) return;
     try {
-      const { error } = await supabase
-        .from('faq_items')
-        .update({ is_active: false })
-        .eq('id', id);
+      const { error } = await supabase.from('faq_items').delete().eq('id', id);
       if (error) throw error;
       await fetchFaqs();
     } catch (err: unknown) {
@@ -71,17 +81,32 @@ export default function FaqList() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
           <div>
             <h1 className="text-xl sm:text-2xl font-extrabold text-heading">Kelola FAQ</h1>
-            <p className="text-sm text-muted mt-1">Total {faqs.length} pertanyaan aktif</p>
+            <p className="text-sm text-muted mt-1">
+              {statusFilter === 'active'
+                ? `${faqs.length} FAQ aktif`
+                : statusFilter === 'inactive'
+                ? `${faqs.length} FAQ nonaktif`
+                : `${faqs.length} total FAQ`}
+            </p>
           </div>
           <div className="flex items-center gap-3 flex-wrap">
             <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as 'active' | 'inactive' | 'all')}
+              className="px-4 py-2.5 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
+            >
+              <option value="active">Aktif</option>
+              <option value="inactive">Nonaktif</option>
+              <option value="all">Semua</option>
+            </select>
+            <select
               value={filterGroup}
               onChange={(e) => setFilterGroup(e.target.value as 'all' | 'main' | 'extra')}
-              className="px-4 py-2.5 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15 w-full sm:w-auto"
+              className="px-4 py-2.5 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
             >
               <option value="all">Semua Grup</option>
-              <option value="main">Main (6)</option>
-              <option value="extra">Extra (7)</option>
+              <option value="main">Main</option>
+              <option value="extra">Extra</option>
             </select>
             <Link
               href="/admin/dashboard/faq/new"

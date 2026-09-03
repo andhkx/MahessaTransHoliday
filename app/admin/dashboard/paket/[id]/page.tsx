@@ -5,10 +5,22 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import ImageUpload from '@/components/admin/ImageUpload';
-import { Check, Loader2 } from 'lucide-react';
+import { Check } from 'lucide-react';
 import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
 
-const DESTINATIONS = ['Bandung', 'Garut', 'Jakarta', 'Yogyakarta', 'Bali', 'Pangalengan', 'Ciwidey', 'Pangandaran', 'Bromo', 'Semarang'] as const;
+const DESTINATIONS = [
+  'Bandung',
+  'Garut',
+  'Jakarta',
+  'Yogyakarta',
+  'Bali',
+  'Pangalengan',
+  'Ciwidey',
+  'Pangandaran',
+  'Bromo',
+  'Semarang',
+];
+
 const INCLUDES = [
   'Mobil Toyota Hiace',
   'Driver Berpengalaman',
@@ -19,7 +31,8 @@ const INCLUDES = [
   'Makan',
   'Tiket Penyeberangan',
   'Akomodasi Hotel',
-] as const;
+];
+
 const SUITABLE_FOR = [
   'Wisata Keluarga',
   'Perjalanan Dinas',
@@ -30,7 +43,8 @@ const SUITABLE_FOR = [
   'Family Gathering',
   'Team Outing',
   'Charter',
-] as const;
+];
+
 const EXCLUDED_OPTIONS = ['Tol', 'Parkir', 'Retribusi Wisata', 'Makan Driver', 'Overtime'];
 
 type Package = {
@@ -49,6 +63,19 @@ type Package = {
   cover_image_url: string | null;
   badge: string | null;
   is_active: boolean;
+  is_featured: boolean;
+};
+
+const toStringArray = (v: unknown): string[] => {
+  if (Array.isArray(v)) return v.filter((x): x is string => typeof x === 'string');
+  if (typeof v === 'string' && v.trim()) {
+    try {
+      const parsed = JSON.parse(v);
+      if (Array.isArray(parsed)) return parsed.filter((x) => typeof x === 'string');
+    } catch {}
+    return [v];
+  }
+  return [];
 };
 
 export default function PaketEdit() {
@@ -66,27 +93,6 @@ export default function PaketEdit() {
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
   const supabase = createClient();
 
-  const loadPaket = async () => {
-    setLoading(true);
-    try {
-      const { data, error } = await supabase.from('packages').select('*').eq('id', id).single();
-      if (error) throw error;
-      if (!data) {
-        router.push('/admin/dashboard/paket');
-        return;
-      }
-      setPkg(data);
-      setIncludes(data.includes || []);
-      setExcluded(data.excluded || []);
-      setSuitableFor(data.suitable_for || []);
-      setCoverImageUrl(data.cover_image_url);
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : String(err));
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
     if (!id) {
       router.push('/admin/dashboard/paket');
@@ -95,6 +101,28 @@ export default function PaketEdit() {
     loadPaket();
   }, [id]);
 
+  const loadPaket = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const { data, error } = await supabase.from('packages').select('*').eq('id', id).single();
+      if (error) throw error;
+      if (!data) {
+        router.push('/admin/dashboard/paket');
+        return;
+      }
+      setPkg(data as Package);
+      setIncludes(toStringArray(data.includes));
+      setExcluded(toStringArray(data.excluded));
+      setSuitableFor(toStringArray(data.suitable_for));
+      setCoverImageUrl(data.cover_image_url ?? null);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!pkg) return;
@@ -102,12 +130,13 @@ export default function PaketEdit() {
     setError(null);
     setSuccess(false);
     try {
+      const descriptionArr = (pkg.description || []).filter((s) => s && s.trim());
       const { error } = await supabase
         .from('packages')
         .update({
           name: pkg.name,
           slug: pkg.slug,
-          description: pkg.description,
+          description: descriptionArr,
           destination: pkg.destination,
           duration_days: pkg.duration_days,
           duration_text: pkg.duration_text,
@@ -119,6 +148,7 @@ export default function PaketEdit() {
           cover_image_url: coverImageUrl,
           badge: pkg.badge,
           is_active: pkg.is_active,
+          is_featured: pkg.is_featured,
         })
         .eq('id', id);
       if (error) throw error;
@@ -131,20 +161,40 @@ export default function PaketEdit() {
     }
   };
 
-  if (loading) return <div className="p-8 text-center text-muted">Loading...</div>;
-  if (error) return <div className="p-8 text-center text-error">{error}</div>;
+  if (loading)
+    return (
+      <AdminDashboardLayout title="Edit Paket">
+        <div className="p-8 text-center">
+          <div className="animate-spin rounded-full h-6 w-6 border-3 border-accent border-t-transparent mx-auto" />
+          <p className="text-muted text-sm mt-3">Memuat paket...</p>
+        </div>
+      </AdminDashboardLayout>
+    );
+
+  if (error && !pkg)
+    return (
+      <AdminDashboardLayout title="Edit Paket">
+        <div className="bg-error/10 border border-error/30 text-error p-4 rounded-xl m-6">
+          {error}
+        </div>
+      </AdminDashboardLayout>
+    );
+
   if (!pkg) return null;
 
   return (
-    <AdminDashboardLayout title={`Edit: ${pkg.name}`}>
-      <div className="bg-white rounded-[18px] border border-line shadow-card p-6 max-w-3xl">
+    <AdminDashboardLayout
+      eyebrow="Paket"
+      title={`Edit: ${pkg.name}`}
+      subtitle="Perbarui detail paket perjalanan."
+    >
+      <div className="bg-white rounded-2xl border border-line shadow-card p-4 sm:p-6 max-w-4xl">
         <form onSubmit={handleSave} className="space-y-6">
           {error && (
             <div className="bg-error/10 border border-error/30 text-error p-4 rounded-xl">
               {error}
             </div>
           )}
-
           {success && (
             <div className="bg-success/10 border border-success/30 text-success p-4 rounded-xl flex items-center gap-2">
               <Check size={16} /> Perubahan disimpan
@@ -153,7 +203,9 @@ export default function PaketEdit() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Nama Paket *</label>
+              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+                Nama Paket *
+              </label>
               <input
                 type="text"
                 value={pkg.name}
@@ -163,7 +215,9 @@ export default function PaketEdit() {
               />
             </div>
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Slug</label>
+              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+                Slug *
+              </label>
               <input
                 type="text"
                 value={pkg.slug}
@@ -175,7 +229,9 @@ export default function PaketEdit() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Badge</label>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Badge
+            </label>
             <input
               type="text"
               value={pkg.badge || ''}
@@ -186,10 +242,20 @@ export default function PaketEdit() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Deskripsi</label>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Deskripsi (satu paragraf per baris)
+            </label>
             <textarea
               value={(pkg.description || []).join('\n\n')}
-              onChange={(e) => setPkg({ ...pkg, description: e.target.value ? [e.target.value] : [] })}
+              onChange={(e) =>
+                setPkg({
+                  ...pkg,
+                  description: e.target.value
+                    .split(/\n\n+/)
+                    .map((s) => s.trim())
+                    .filter(Boolean),
+                })
+              }
               rows={4}
               className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 resize-none"
             />
@@ -197,37 +263,59 @@ export default function PaketEdit() {
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Destinasi</label>
-              <select
+              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+                Destinasi *
+              </label>
+              <input
+                list="destinations-list"
+                type="text"
                 value={pkg.destination}
                 onChange={(e) => setPkg({ ...pkg, destination: e.target.value })}
                 className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
-              >
-                {DESTINATIONS.map((d) => <option key={d} value={d}>{d}</option>)}
-              </select>
+                placeholder="Pilih atau ketik baru"
+                required
+              />
+              <datalist id="destinations-list">
+                {DESTINATIONS.map((d) => (
+                  <option key={d} value={d} />
+                ))}
+              </datalist>
             </div>
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Hari</label>
+              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+                Hari
+              </label>
               <input
                 type="number"
                 value={pkg.duration_days}
-                onChange={(e) => setPkg({ ...pkg, duration_days: parseInt(e.target.value) || 1 })}
+                onChange={(e) =>
+                  setPkg({ ...pkg, duration_days: parseInt(e.target.value) || 1 })
+                }
                 min={1}
                 className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Jam</label>
+              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+                Jam
+              </label>
               <input
                 type="number"
                 value={pkg.duration_hours || ''}
-                onChange={(e) => setPkg({ ...pkg, duration_hours: parseInt(e.target.value) || null })}
+                onChange={(e) =>
+                  setPkg({
+                    ...pkg,
+                    duration_hours: e.target.value ? parseInt(e.target.value) : null,
+                  })
+                }
                 min={1}
                 className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
               />
             </div>
             <div>
-              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Label</label>
+              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+                Label
+              </label>
               <input
                 type="text"
                 value={pkg.duration_text || ''}
@@ -239,93 +327,101 @@ export default function PaketEdit() {
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Harga (Rp)</label>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Harga (Rp) *
+            </label>
             <input
               type="number"
               value={pkg.price}
               onChange={(e) => setPkg({ ...pkg, price: parseInt(e.target.value) || 0 })}
               min={0}
               className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
+              required
             />
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Termasuk</label>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Termasuk
+            </label>
             <div className="flex flex-wrap gap-2">
               {INCLUDES.map((item) => (
-                <div key={item} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id={`inc-${item}`}
-                    checked={includes.includes(item)}
-                    onChange={(e) => {
-                      if (e.target.checked) setIncludes([...includes, item]);
-                      else setIncludes(includes.filter((i) => i !== item));
-                    }}
-                    className="h-4 w-4 text-accent"
-                  />
-                  <label className="text-sm text-heading" htmlFor={`inc-${item}`}>{item}</label>
-                </div>
+                <CheckboxChip
+                  key={item}
+                  id={`inc-${item}`}
+                  label={item}
+                  checked={includes.includes(item)}
+                  onChange={(c) =>
+                    setIncludes(c ? [...includes, item] : includes.filter((i) => i !== item))
+                  }
+                />
               ))}
             </div>
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Tidak Termasuk</label>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Tidak Termasuk
+            </label>
             <div className="flex flex-wrap gap-2">
               {EXCLUDED_OPTIONS.map((item) => (
-                <div key={item} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id={`exc-${item}`}
-                    checked={excluded.includes(item)}
-                    onChange={(e) => {
-                      if (e.target.checked) setExcluded([...excluded, item]);
-                      else setExcluded(excluded.filter((i) => i !== item));
-                    }}
-                    className="h-4 w-4 text-accent"
-                  />
-                  <label className="text-sm text-heading" htmlFor={`exc-${item}`}>{item}</label>
-                </div>
+                <CheckboxChip
+                  key={item}
+                  id={`exc-${item}`}
+                  label={item}
+                  checked={excluded.includes(item)}
+                  onChange={(c) =>
+                    setExcluded(c ? [...excluded, item] : excluded.filter((i) => i !== item))
+                  }
+                />
               ))}
             </div>
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Cocok Untuk</label>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Cocok Untuk
+            </label>
             <div className="flex flex-wrap gap-2">
               {SUITABLE_FOR.map((item) => (
-                <div key={item} className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    id={`suit-${item}`}
-                    checked={suitableFor.includes(item)}
-                    onChange={(e) => {
-                      if (e.target.checked) setSuitableFor([...suitableFor, item]);
-                      else setSuitableFor(suitableFor.filter((i) => i !== item));
-                    }}
-                    className="h-4 w-4 text-accent"
-                  />
-                  <label className="text-sm text-heading" htmlFor={`suit-${item}`}>{item}</label>
-                </div>
+                <CheckboxChip
+                  key={item}
+                  id={`suit-${item}`}
+                  label={item}
+                  checked={suitableFor.includes(item)}
+                  onChange={(c) =>
+                    setSuitableFor(c ? [...suitableFor, item] : suitableFor.filter((i) => i !== item))
+                  }
+                />
               ))}
             </div>
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Cover</label>
-            <ImageUpload bucket="packages" onUpload={setCoverImageUrl} currentUrl={coverImageUrl} label="Cover Paket" />
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Cover
+            </label>
+            <ImageUpload
+              bucket="packages"
+              onUpload={(url) => setCoverImageUrl(url || null)}
+              currentUrl={coverImageUrl}
+              label="Cover Paket"
+            />
           </div>
 
-          <div className="flex items-center gap-3">
-            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">Aktif</label>
-            <input
-              type="checkbox"
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-line">
+            <ToggleField
+              label="Tampilkan di Website"
+              description="Paket muncul di halaman publik"
               checked={pkg.is_active}
-              onChange={(e) => setPkg({ ...pkg, is_active: e.target.checked })}
-              className="h-4 w-4 text-accent"
+              onChange={(c) => setPkg({ ...pkg, is_active: c })}
             />
-            <span className="text-sm text-heading">Tampilkan di website</span>
+            <ToggleField
+              label="Tampilkan di Beranda"
+              description="Paket muncul di section utama"
+              checked={pkg.is_featured}
+              onChange={(c) => setPkg({ ...pkg, is_featured: c })}
+            />
           </div>
 
           <div className="flex justify-end gap-3 pt-4 border-t border-line">
@@ -347,5 +443,73 @@ export default function PaketEdit() {
         </form>
       </div>
     </AdminDashboardLayout>
+  );
+}
+
+function CheckboxChip({
+  id,
+  label,
+  checked,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  checked: boolean;
+  onChange: (c: boolean) => void;
+}) {
+  return (
+    <label
+      htmlFor={id}
+      className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border cursor-pointer transition select-none ${
+        checked
+          ? 'bg-accent text-white border-accent'
+          : 'bg-white text-heading border-line hover:border-accent'
+      }`}
+    >
+      <input
+        type="checkbox"
+        id={id}
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="sr-only"
+      />
+      <span className="text-xs font-bold">{label}</span>
+    </label>
+  );
+}
+
+function ToggleField({
+  label,
+  description,
+  checked,
+  onChange,
+}: {
+  label: string;
+  description: string;
+  checked: boolean;
+  onChange: (c: boolean) => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onChange(!checked)}
+      className="flex items-start gap-3 p-3 rounded-xl border border-line hover:bg-accent/5 hover:border-accent transition text-left"
+    >
+      <div
+        className={`flex h-5 w-9 items-center rounded-full p-0.5 transition ${
+          checked ? 'bg-accent' : 'bg-line'
+        }`}
+      >
+        <div
+          className={`h-4 w-4 rounded-full bg-white transition-transform ${
+            checked ? 'translate-x-4' : 'translate-x-0'
+          }`}
+        />
+      </div>
+      <div className="flex-1">
+        <p className="text-sm font-bold text-heading">{label}</p>
+        <p className="text-[11px] text-muted">{description}</p>
+      </div>
+    </button>
   );
 }

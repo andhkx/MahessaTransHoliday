@@ -21,7 +21,7 @@ export default function TestimoniList() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [filterActive, setFilterActive] = useState<'all' | 'active' | 'inactive'>('all');
+  const [filterActive, setFilterActive] = useState<'all' | 'active' | 'inactive'>('active');
   const supabase = createClient();
 
   const fetchTestimonials = async () => {
@@ -47,6 +47,19 @@ export default function TestimoniList() {
     fetchTestimonials();
   }, [filterActive]);
 
+  const toggleActive = async (t: Testimonial) => {
+    try {
+      const { error } = await supabase
+        .from('testimonials')
+        .update({ is_active: !t.is_active })
+        .eq('id', t.id);
+      if (error) throw error;
+      await fetchTestimonials();
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : String(err));
+    }
+  };
+
   const handleDelete = async (id: string) => {
     if (!window.confirm('Yakin ingin menghapus testimoni ini?')) return;
     try {
@@ -64,7 +77,13 @@ export default function TestimoniList() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
           <div>
             <h1 className="text-xl sm:text-2xl font-extrabold text-heading">Kelola Testimoni</h1>
-            <p className="text-sm text-muted mt-1">Total {testimonials.length} testimoni aktif</p>
+            <p className="text-sm text-muted mt-1">
+              {filterActive === 'active'
+                ? `${testimonials.length} testimoni aktif`
+                : filterActive === 'inactive'
+                ? `${testimonials.length} testimoni nonaktif`
+                : `${testimonials.length} total testimoni`}
+            </p>
           </div>
           <div className="flex items-center gap-3 flex-wrap">
             <select
@@ -103,6 +122,7 @@ export default function TestimoniList() {
                     <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Peran</th>
                     <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Rating</th>
                     <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Layanan</th>
+                    <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Status</th>
                     <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Aksi</th>
                   </tr>
                 </thead>
@@ -131,6 +151,14 @@ export default function TestimoniList() {
                             {t.service_type}
                           </span>
                         )}
+                      </td>
+                      <td className="px-4 py-3">
+                        <button
+                          onClick={() => toggleActive(t)}
+                          className="px-2.5 py-1 rounded-full bg-success/15 text-success text-xs font-bold"
+                        >
+                          {t.is_active ? 'Aktif' : 'Nonaktif'}
+                        </button>
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-2">
