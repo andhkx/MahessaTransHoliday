@@ -30,23 +30,25 @@ type Props = {
   faqExtra: FaqItem[];
 };
 
+// Since Supabase FAQ items use UUID as id, we distribute by index across categories
 function getCategories(faqMain: FaqItem[], faqExtra: FaqItem[]): Category[] {
+  // Split faqMain into 3 chunks: layanan (3), harga (2), pemesanan (1)
+  // Split faqExtra into 4 chunks: harga (3), pemesanan (2), armada (2)
+  // Total 6 main + 7 extra = 13
   return [
     {
       id: "layanan",
       label: "Layanan",
       Icon: CarFront,
-      items: faqMain.filter((f) =>
-        ["mobil-dengan-driver", "antar-jemput-kcic", "perjalanan-luar-kota"].includes(f.id),
-      ),
+      items: faqMain.slice(0, 3),
     },
     {
       id: "harga",
       label: "Harga & Pembayaran",
       Icon: Wallet,
       items: [
-        ...faqMain.filter((f) => ["harga-termasuk-bbm", "biaya-tambahan"].includes(f.id)),
-        ...faqExtra.filter((f) => ["pembayaran", "pembatalan", "overtime"].includes(f.id)),
+        ...faqMain.slice(3, 5),
+        ...faqExtra.slice(0, 3),
       ],
     },
     {
@@ -54,17 +56,15 @@ function getCategories(faqMain: FaqItem[], faqExtra: FaqItem[]): Category[] {
       label: "Pemesanan",
       Icon: Calendar,
       items: [
-        ...faqMain.filter((f) => f.id === "cara-reservasi"),
-        ...faqExtra.filter((f) => ["area-coverage", "stasiun-bandara"].includes(f.id)),
+        ...faqMain.slice(5, 6),
+        ...faqExtra.slice(3, 5),
       ],
     },
     {
       id: "armada",
       label: "Armada & Driver",
       Icon: Users,
-      items: faqExtra.filter((f) =>
-        ["driver-menginap", "kapasitas-hiace"].includes(f.id),
-      ),
+      items: faqExtra.slice(5, 7),
     },
   ];
 }
@@ -72,11 +72,17 @@ function getCategories(faqMain: FaqItem[], faqExtra: FaqItem[]): Category[] {
 export default function FaqPageClient({ faqMain, faqExtra }: Props) {
   const reduce = useReducedMotion();
   const [active, setActive] = useState<string>("layanan");
-  const [open, setOpen] = useState<string>("mobil-dengan-driver");
+  const [open, setOpen] = useState<string>("");
   const [query, setQuery] = useState("");
 
-  const categories = getCategories(faqMain, faqExtra);
-  const ALL_FAQS: FaqItem[] = [...faqMain, ...faqExtra];
+  const categories = useMemo(
+    () => getCategories(faqMain, faqExtra),
+    [faqMain, faqExtra]
+  );
+  const ALL_FAQS: FaqItem[] = useMemo(
+    () => [...faqMain, ...faqExtra],
+    [faqMain, faqExtra]
+  );
 
   const items = useMemo(() => {
     const cat = categories.find((c) => c.id === active);
@@ -86,9 +92,17 @@ export default function FaqPageClient({ faqMain, faqExtra }: Props) {
     return base.filter(
       (f) =>
         f.question.toLowerCase().includes(q) ||
-        f.answer.toLowerCase().includes(q),
+        f.answer.toLowerCase().includes(q)
     );
-  }, [active, query, faqMain, faqExtra]);
+  }, [active, query, categories, ALL_FAQS]);
+
+  if (ALL_FAQS.length === 0) {
+    return (
+      <div className="mx-auto w-full max-w-[1300px] px-5 py-12 sm:px-8 md:px-12 md:py-16 text-center">
+        <p className="text-sm text-muted">Belum ada FAQ.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto w-full max-w-[1300px] px-5 py-12 sm:px-8 md:px-12 md:py-16">
@@ -111,13 +125,13 @@ export default function FaqPageClient({ faqMain, faqExtra }: Props) {
                       "flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-[13px] font-extrabold transition-all duration-300",
                       isActive
                         ? "bg-accent text-white shadow-[0_8px_20px_-8px_rgba(0,86,145,0.55)]"
-                        : "text-body-text hover:bg-surface",
+                        : "text-body-text hover:bg-surface"
                     )}
                   >
                     <span
                       className={cn(
                         "flex h-7 w-7 items-center justify-center rounded-lg transition-colors",
-                        isActive ? "bg-white/20" : "bg-surface text-accent",
+                        isActive ? "bg-white/20" : "bg-surface text-accent"
                       )}
                     >
                       <c.Icon size={14} aria-hidden="true" />
@@ -126,7 +140,7 @@ export default function FaqPageClient({ faqMain, faqExtra }: Props) {
                     <span
                       className={cn(
                         "rounded-full px-1.5 py-0.5 text-[10px] font-bold",
-                        isActive ? "bg-white/20 text-white" : "bg-surface text-muted",
+                        isActive ? "bg-white/20 text-white" : "bg-surface text-muted"
                       )}
                     >
                       {c.items.length}
@@ -200,7 +214,7 @@ export default function FaqPageClient({ faqMain, faqExtra }: Props) {
             >
               {items.length > 0 ? (
                 items.map((f, i) => {
-                  const k = f.id;
+                  const k = `${f.id}-${i}`;
                   const isOpen = open === k;
                   return (
                     <motion.div
@@ -212,7 +226,7 @@ export default function FaqPageClient({ faqMain, faqExtra }: Props) {
                         "rounded-[18px] border bg-white transition-all duration-300",
                         isOpen
                           ? "border-accent/40 shadow-elevated"
-                          : "border-line hover:border-primary/30 shadow-card",
+                          : "border-line hover:border-primary/30 shadow-card"
                       )}
                     >
                       <button
@@ -225,7 +239,7 @@ export default function FaqPageClient({ faqMain, faqExtra }: Props) {
                           <span
                             className={cn(
                               "flex h-7 w-7 shrink-0 items-center justify-center rounded-lg transition-colors",
-                              isOpen ? "bg-accent text-white" : "bg-surface text-accent",
+                              isOpen ? "bg-accent text-white" : "bg-surface text-accent"
                             )}
                           >
                             <HelpCircle size={14} aria-hidden="true" />
@@ -238,7 +252,7 @@ export default function FaqPageClient({ faqMain, faqExtra }: Props) {
                           size={16}
                           className={cn(
                             "shrink-0 text-muted transition-transform duration-300",
-                            isOpen && "rotate-180 text-accent",
+                            isOpen && "rotate-180 text-accent"
                           )}
                           aria-hidden="true"
                         />

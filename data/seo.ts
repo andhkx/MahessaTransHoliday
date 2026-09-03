@@ -5,7 +5,7 @@ export const seoMetadata = {
   homepage: {
     title: "Rental Mobil Cimahi, Bandung & Padalarang | Mahessa Trans Holiday",
     description:
-      "Sewa mobil dengan driver profesional. 13+ unit terawat mulai Rp350rb/12 jam. Avanza, Innova, Hiace, Alphard, dan lainnya. Booking 24/7 via WhatsApp.",
+      "Sewa mobil dengan driver profesional. 12+ unit terawat mulai Rp650rb/12 jam. Avanza, Innova, Hiace, Alphard, dan lainnya. Booking 24/7 via WhatsApp.",
     keywords:
       "sewa mobil bandung, rental mobil driver cimahi, charter mobil bandung, sewa hiace bandung, mahessa trans holiday",
   },

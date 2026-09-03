@@ -6,8 +6,8 @@ import { CarFront, MapPin, Star, Wallet } from "lucide-react";
 const EASE = [0.4, 0, 0.2, 1] as const;
 
 const STATS = [
-  { value: "Rp350rb", label: "Tarif Mulai", sub: "Dengan driver, 12 jam", Icon: Wallet },
-  { value: "15+", label: "Armada Pilihan", sub: "Compact sampai Hiace", Icon: CarFront },
+  { value: "Rp650rb", label: "Tarif Mulai", sub: "Dengan driver, 12 jam", Icon: Wallet },
+  { value: "12+", label: "Armada Pilihan", sub: "Compact sampai Hiace", Icon: CarFront },
   { value: "10", label: "Paket Wisata", sub: "All-in tanpa ribet", Icon: MapPin },
   { value: "5★", label: "Rating Pelanggan", sub: "Layanan profesional", Icon: Star },
 ];

@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Compass } from "lucide-react";
 import ProgressIndicator from "./ProgressIndicator";
 import Step1Budget from "./Step1Budget";
 import Step2People from "./Step2People";
@@ -10,7 +9,6 @@ import Step3Journey from "./Step3Journey";
 import Step4Result from "./Step4Result";
 import { BUDGET_MAX, BUDGET_MIN, BUDGET_STEP } from "@/data/finder";
 import type { JourneyType } from "@/data/finder";
-import { cn } from "@/lib/cn";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 const STEP_LABELS = ["Budget", "Orang", "Perjalanan", "Rekomendasi"];
@@ -31,22 +29,8 @@ export default function VehicleFinder() {
   };
 
   return (
-    <section className="mx-auto w-full max-w-[800px] px-5 pb-16 pt-28 sm:px-8 md:px-12 md:pb-20 md:pt-32">
-      <header className="mb-10 text-center">
-        <span className="mb-3 inline-flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-primary">
-          <Compass size={13} aria-hidden="true" />
-          Vehicle Finder
-        </span>
-        <h1 className="mb-3 text-3xl font-extrabold leading-[1.05] tracking-[-0.03em] text-heading md:text-[40px]">
-          Temukan mobil cocok untukmu.
-        </h1>
-        <p className="mx-auto max-w-xl text-sm leading-relaxed text-body-text md:text-base">
-          Jawab 3 pertanyaan singkat, kami rekomendasikan armada yang pas untuk perjalananmu.
-        </p>
-      </header>
-
-      <div className="rounded-[24px] border border-line bg-white p-6 shadow-card md:p-8">
-        <ProgressIndicator current={step} total={4} labels={STEP_LABELS} />
+    <div className="rounded-[24px] border border-line bg-white p-6 shadow-card md:p-8">
+      <ProgressIndicator current={step} total={4} labels={STEP_LABELS} />
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -98,6 +82,5 @@ export default function VehicleFinder() {
           </motion.div>
         </AnimatePresence>
       </div>
-    </section>
   );
 }

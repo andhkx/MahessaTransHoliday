@@ -122,7 +122,7 @@ export default function Hero() {
                   Mulai Dari
                 </p>
                 <p className="text-[14px] font-extrabold tracking-tight text-accent sm:text-[18px]">
-                  Rp 350rb
+                  Rp 650rb
                   <span className="ml-1 text-[10px] font-bold text-muted sm:text-[11px]">/ 12 jam</span>
                 </p>
               </div>
@@ -142,7 +142,7 @@ export default function Hero() {
                   Armada
                 </p>
                 <p className="text-[12px] font-extrabold tracking-tight text-heading sm:text-[14px]">
-                  15+ Unit Tersedia
+                  12+ Unit Tersedia
                 </p>
               </div>
             </motion.div>

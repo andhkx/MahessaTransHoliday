@@ -16,7 +16,7 @@ export const BUDGET_TIERS: BudgetTier[] = [
   {
     id: "hemat",
     label: "Hemat",
-    range: "Rp350rb - 600rb",
+    range: "Rp650rb - 600rb",
     min: 350000,
     max: 600000,
     color: "#27AE60",

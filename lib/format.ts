@@ -2,7 +2,7 @@ export function formatIDR(amount: number): string {
   return `Rp${amount.toLocaleString("id-ID")}`;
 }
 
-/** Versi pendek untuk kartu: 350000 -> "Rp350rb", 12750000 -> "Rp12,75jt" */
+/** Versi pendek untuk kartu: 350000 -> "Rp650rb", 12750000 -> "Rp12,75jt" */
 export function formatShort(amount: number): string {
   if (amount >= 1_000_000) {
     const jt = amount / 1_000_000;
