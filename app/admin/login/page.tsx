@@ -1,32 +1,46 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, ShieldCheck } from 'lucide-react';
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
+
+const TURNSTILE_SITE_KEY =
+  process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAAElc0pMsz_IJ6dhA';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const captchaRef = useRef<TurnstileInstance>(null);
   const router = useRouter();
   const supabase = createClient();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!captchaToken) {
+      setError('Selesaikan verifikasi captcha terlebih dahulu.');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
+      options: { captchaToken },
     });
 
     if (error) {
       setError(error.message);
+      captchaRef.current?.reset();
+      setCaptchaToken(null);
       setLoading(false);
     } else {
       router.push('/admin/dashboard');
@@ -47,10 +61,14 @@ export default function LoginPage() {
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-heading">Admin Login</h1>
             <p className="mt-2 text-sm text-muted">Masuk ke dashboard Mahessa Trans Holiday</p>
+            <div className="mt-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/10 text-success text-[10px] font-bold uppercase tracking-[0.16em]">
+              <ShieldCheck size={12} strokeWidth={2} />
+              Protected by Turnstile
+            </div>
           </div>
 
           {error && (
-            <div className="bg-error/10 border border-error/30 text-error p-4 rounded-xl mb-6">
+            <div className="bg-error/10 border border-error/30 text-error p-4 rounded-xl mb-6 text-sm">
               {error}
             </div>
           )}
@@ -99,10 +117,24 @@ export default function LoginPage() {
               </div>
             </div>
 
+            <div className="flex justify-center">
+              <Turnstile
+                ref={captchaRef}
+                siteKey={TURNSTILE_SITE_KEY}
+                onSuccess={(token) => setCaptchaToken(token)}
+                onError={() => setCaptchaToken(null)}
+                onExpire={() => setCaptchaToken(null)}
+                options={{
+                  theme: 'light',
+                  appearance: 'always',
+                }}
+              />
+            </div>
+
             <button
               type="submit"
-              disabled={loading}
-              className="w-full bg-accent text-white py-3 rounded-xl font-extrabold hover:bg-accent-hover transition disabled:opacity-50 shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)]"
+              disabled={loading || !captchaToken}
+              className="w-full bg-accent text-white py-3 rounded-xl font-extrabold hover:bg-accent-hover transition disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)]"
             >
               {loading ? 'Logging in...' : 'Login'}
             </button>

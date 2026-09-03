@@ -10,6 +10,7 @@
     "upload:images": "tsx scripts/bulk-upload-images.ts"
   },
   "dependencies": {
+    "@marsidev/react-turnstile": "^1.6.1",
     "@supabase/ssr": "^0.12.5",
     "@supabase/supabase-js": "^2.112.4",
     "@vercel/analytics": "^2.0.1",
