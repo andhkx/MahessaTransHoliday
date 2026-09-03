@@ -32,7 +32,6 @@ type Vehicle = {
   badge: string | null;
   image_url: string | null;
   is_active: boolean;
-  is_featured: boolean;
 };
 
 type StatusFilter = 'active' | 'inactive' | 'all';
@@ -55,7 +54,7 @@ export default function ArmadaList() {
       let query = supabase
         .from('vehicles')
         .select(
-          'id,name,slug,category,transmission,fuel_type,price_per_day,capacity,badge,image_url,is_active,is_featured'
+          'id,name,slug,category,transmission,fuel_type,price_per_day,capacity,badge,image_url,is_active'
         )
         .order('category')
         .order('price_per_day');
@@ -223,7 +222,6 @@ export default function ArmadaList() {
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-sm font-bold text-heading">{v.name}</span>
                           {v.badge && <Badge tone="warning">{v.badge}</Badge>}
-                          {v.is_featured && <Badge tone="primary">Featured</Badge>}
                         </div>
                         <p className="text-xs text-muted font-mono mt-0.5">{v.slug}</p>
                       </td>
@@ -293,7 +291,6 @@ export default function ArmadaList() {
                       <div className="flex items-center gap-2 flex-wrap">
                         <h3 className="font-bold text-heading truncate">{v.name}</h3>
                         {v.badge && <Badge tone="warning">{v.badge}</Badge>}
-                        {v.is_featured && <Badge tone="primary">Featured</Badge>}
                       </div>
                       <p className="text-xs text-muted font-mono mt-0.5 truncate">{v.slug}</p>
                       <div className="flex items-center gap-1.5 mt-2 flex-wrap">

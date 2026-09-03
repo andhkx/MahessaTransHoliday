@@ -117,7 +117,7 @@ export default function AdminDashboardLayout({
   const showStats = !hideStats && stats && stats.length > 0;
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-background">
       {/* Top Navbar (floating pill, glass) */}
       <header className="sticky top-0 z-50">
         <div className="mx-auto max-w-[1300px] px-3 sm:px-5 pt-3 sm:pt-4">
@@ -299,7 +299,7 @@ export default function AdminDashboardLayout({
       )}
 
       {/* Sub-hero (matches public PageHero style) */}
-      <div className="relative overflow-hidden bg-gradient-to-b from-surface to-background pb-10 pt-8 md:pb-14 md:pt-10">
+      <div className="relative overflow-hidden bg-gradient-to-b from-[#EFF5F9] via-[#F4F8FB] to-background pb-10 pt-8 md:pb-14 md:pt-10">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute -right-32 top-10 h-72 w-72 rounded-full bg-accent/[0.08] blur-3xl"

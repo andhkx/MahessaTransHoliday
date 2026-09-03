@@ -57,7 +57,6 @@ type Vehicle = {
   image_url: string | null;
   badge: string | null;
   is_active: boolean;
-  is_featured: boolean;
 };
 
 export default function ArmadaEdit() {

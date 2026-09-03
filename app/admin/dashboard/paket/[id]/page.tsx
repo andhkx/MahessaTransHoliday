@@ -63,7 +63,6 @@ type Package = {
   cover_image_url: string | null;
   badge: string | null;
   is_active: boolean;
-  is_featured: boolean;
 };
 
 const toStringArray = (v: unknown): string[] => {
@@ -148,7 +147,6 @@ export default function PaketEdit() {
           cover_image_url: coverImageUrl,
           badge: pkg.badge,
           is_active: pkg.is_active,
-          is_featured: pkg.is_featured,
         })
         .eq('id', id);
       if (error) throw error;
@@ -409,18 +407,12 @@ export default function PaketEdit() {
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-line">
+          <div className="pt-4 border-t border-line">
             <ToggleField
-              label="Tampilkan di Website"
-              description="Paket muncul di halaman publik"
+              label="Tampilkan di Website & Beranda"
+              description="Paket muncul di halaman publik dan section utama"
               checked={pkg.is_active}
               onChange={(c) => setPkg({ ...pkg, is_active: c })}
-            />
-            <ToggleField
-              label="Tampilkan di Beranda"
-              description="Paket muncul di section utama"
-              checked={pkg.is_featured}
-              onChange={(c) => setPkg({ ...pkg, is_featured: c })}
             />
           </div>
 

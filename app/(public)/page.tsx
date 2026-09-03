@@ -21,8 +21,8 @@ import FaqAccordion from "@/components/FaqAccordion";
 import CtaSection from "@/components/CtaSection";
 import SectionHeading from "@/components/SectionHeading";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
-import { getFeaturedVehicles } from "@/lib/data/supabase/vehicles";
-import { getFeaturedPackages, getAllPackages } from "@/lib/data/supabase/packages";
+import { getAllVehicles } from "@/lib/data/supabase/vehicles";
+import { getAllPackages } from "@/lib/data/supabase/packages";
 import { getFeaturedTestimonials } from "@/lib/data/supabase/testimonials";
 import { getFeaturedGallery } from "@/lib/data/supabase/gallery";
 import { galleryImages as staticGallery } from "@/lib/gallery";
@@ -129,13 +129,14 @@ function Advantages() {
 }
 
 export default async function HomePage() {
-  const [vehicles, packages, testimonials, allPackages, gallery] = await Promise.all([
-    getFeaturedVehicles(),
-    getFeaturedPackages(),
+  const [vehicles, testimonials, allPackages, gallery] = await Promise.all([
+    getAllVehicles(),
     getFeaturedTestimonials(8),
     getAllPackages(),
     getFeaturedGallery(5),
   ]);
+
+  const packages = allPackages.slice(0, 4);
 
   const galleryItems = gallery.length > 0
     ? gallery.map((g) => ({
@@ -152,7 +153,7 @@ export default async function HomePage() {
       <Stats />
       <ServiceCards />
       <Advantages />
-      <FeaturedArmada vehicles={vehicles} />
+      <FeaturedArmada vehicles={vehicles.slice(0, 4)} />
       <FeaturedPackages packages={packages} allPackages={allPackages} />
       <section className="py-8 bg-wa-surface/40 text-center">
         <p className="text-sm font-semibold text-heading mb-4">Tidak tahu mobil mana yang cocok?</p>
@@ -169,7 +170,7 @@ export default async function HomePage() {
   );
 }
 
-function FeaturedArmada({ vehicles }: { vehicles: Awaited<ReturnType<typeof getFeaturedVehicles>> }) {
+function FeaturedArmada({ vehicles }: { vehicles: Awaited<ReturnType<typeof getAllVehicles>> }) {
   return (
     <section
       id="armada"
@@ -196,7 +197,7 @@ function FeaturedArmada({ vehicles }: { vehicles: Awaited<ReturnType<typeof getF
   );
 }
 
-function FeaturedPackages({ packages, allPackages }: { packages: Awaited<ReturnType<typeof getFeaturedPackages>>; allPackages: Awaited<ReturnType<typeof getAllPackages>> }) {
+function FeaturedPackages({ packages, allPackages }: { packages: Awaited<ReturnType<typeof getAllPackages>>; allPackages: Awaited<ReturnType<typeof getAllPackages>> }) {
   return (
     <section className="border-y border-line bg-surface/60 py-16 md:py-24">
       <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
