@@ -47,7 +47,7 @@ export const packages: TravelPackage[] = [
     duration: "1 Hari",
     durationHours: 9,
     price: 1300000,
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/packages/hiace-bandung/hiace-bandung.webp`,
     description: [
       "Paket ini dirancang untuk perjalanan city tour atau wisata dalam Kota Bandung. Dengan durasi 1 hari (8-10 jam), Anda dapat mengunjungi berbagai tempat menarik seperti Taman Hutan Raya Ir. Djuanda, kawasan Braga, atau pabrik-pabrik kerajinan.",
       "Termasuk pickup dari lokasi Anda, driver yang ramah dan tahu tempat-tempat menarik, serta perjalanan sesuai itinerary yang kamu inginkan.",
@@ -78,7 +78,7 @@ export const packages: TravelPackage[] = [
     duration: "1 Hari",
     durationHours: 10,
     price: 1500000,
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/packages/hiace-garut/hiace-garut.webp`,
     description: [
       "Garut menyimpan banyak destinasi favorit: Kawah Kamojang, Situ Bagendit, Pantai Santolo, hingga kuliner legendaris Burayang Dapanget. Paket 1 hari ini cukup untuk menjelajahi spot-spot terbaiknya.",
       "Berangkat pagi dari Bandung/Cimahi, pulang malam dengan perjalanan aman bersama driver berpengalaman rute Garut.",
@@ -108,7 +108,7 @@ export const packages: TravelPackage[] = [
     duration: "1 Hari",
     durationHours: 12,
     price: 1850000,
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/packages/hiace-jakarta/hiace-jakarta.webp`,
     description: [
       "Perjalanan Bandung–Jakarta bolak-balik dalam sehari jadi mudah dengan paket ini. Cocok untuk keperluan dinas, acara keluarga, hingga city tour Jakarta seperti Kota Tua, Monas, atau Ancol.",
       "Durasi hingga 12 jam memberi waktu cukup untuk urusan di Jakarta tanpa harus menginap.",
@@ -138,7 +138,7 @@ export const packages: TravelPackage[] = [
     duration: "1 Hari",
     durationHours: 9,
     price: 1350000,
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/packages/hiace-ciwidey/hiace-ciwidey.webp`,
     description: [
       "Kawah Putih, Ranca Upas, Rancabali, dan kebun stroberi adalah ikon Ciwidey. Paket 1 hari ini membawa rombonganmu menyusuri jalur selatan Bandung yang sejuk.",
       "Cocok untuk keluarga besar atau komunitas yang ingin wisata alam tanpa perencanaan rumit.",
@@ -168,7 +168,7 @@ export const packages: TravelPackage[] = [
     duration: "1 Hari",
     durationHours: 10,
     price: 1450000,
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/packages/hiace-pangalengan/hiace-pangalengan.webp`,
     description: [
       "Pangalengan menawarkan udara pegunungan, kebun teh lebar, dan danau yang tenang seperti Situ Cileunca. Rute ini juga populer untuk camping ground dan agrowisata.",
       "Paket 1 hari dengan Hiace membuat rombonganmu bisa fokus menikmati suasana tanpa mikir perjalanan.",
@@ -198,7 +198,7 @@ export const packages: TravelPackage[] = [
     duration: "2 Hari 1 Malam",
     durationHours: 30,
     price: 4250000,
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/packages/hiace-pangandaran/hiace-pangandaran.webp`,
     description: [
       "Dua hari satu malam di Pangandaran: Pantai Pasir Putih dan Barat, Green Canyon (Cukang Taneuh), Batu Karas, hingga sunset di karang Naga. Pantai timur untuk sunrise, pantai barat untuk sunset.",
       "Paket sudah termasuk tiket penyeberangan untuk rute alternatif, sehingga perjalanan lebih efisien.",
@@ -247,7 +247,7 @@ export const packages: TravelPackage[] = [
     duration: "2 Hari 1 Malam",
     durationHours: 48,
     price: 10000000,
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/packages/hiace-bromo/hiace-bromo.webp`,
     description: [
       "Sunrise di Penanjakan, lautan pasir, dan kawah Gunung Bromo adalah pengalaman wajib sekali seumur hidup. Perjalanan dari Bandung ditempuh nyaman dengan Hiace via tol trans-Jawa.",
       "Driver kami hafal timing terbaik agar rombonganmu tiba tepat sebelum matahari terbit.",
@@ -295,7 +295,7 @@ export const packages: TravelPackage[] = [
     duration: "2 Hari 1 Malam",
     durationHours: 34,
     price: 4500000,
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/packages/hiace-semarang/hiace-semarang.webp`,
     description: [
       "Semarang punya Kota Lama yang instagramable, Sam Poo Kong, Lawang Sewu, hingga kuliner lumpia legendaris. Dua hari cukup untuk menjelajah santai.",
       "Ideal juga untuk perjalanan dinas rombongan ke kota ini.",
@@ -325,7 +325,7 @@ export const packages: TravelPackage[] = [
     duration: "3 Hari 2 Malam",
     durationHours: 66,
     price: 5500000,
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/packages/hiace-yogyakarta/hiace-yogyakarta.webp`,
     description: [
       "Tiga hari dua malam menjelajah Jogja: Candi Prambanan, Keraton, Malioboro, hingga Pantai Parangtritis dan kaki Gunung Merapi. Waktu cukup longgar untuk kulineran juga.",
       "Itinerary fleksibel sesuai request rombonganmu, dengan driver yang paham rute dan spot terbaik.",
@@ -381,7 +381,7 @@ export const packages: TravelPackage[] = [
     duration: "4 Hari 3 Malam",
     durationHours: 90,
     price: 18000000,
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/packages/hiace-bali/hiace-bali.webp`,
     description: [
       "Paket premium Bali 4 hari 3 malam: dari pantai Kuta, Uluwatu, Tanah Lot, hingga Ubud dan Bedugul. Tiket penyeberangan Ketapang–Gilimanuk sudah termasuk.",
       "Perjalanan darat dengan Hiace membuat rombonganmu tetap satu kendaraan dari Bandung sampai Bali — hemat biaya dan praktis.",

@@ -10,7 +10,7 @@ export const vehicles: Vehicle[] = [
     transmission: "Manual",
     capacity: 7,
     fuelType: "Bensin",
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/toyota-calya/toyota-calya.webp`,
     gallery: [
       "" ,
       "" ,
@@ -59,7 +59,7 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin",
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/daihatsu-terios/daihatsu-terios.webp`,
     gallery: [
       "" ,
       "" ,
@@ -109,7 +109,7 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin",
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/toyota-avanza/toyota-avanza.webp`,
     gallery: [
       "" ,
       "" ,
@@ -158,7 +158,7 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin",
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/toyota-rush/toyota-rush.webp`,
     gallery: [
       "" ,
       "" ,
@@ -207,7 +207,7 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Diesel",
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/toyota-innova-reborn/toyota-innova-reborn.webp`,
     gallery: [
       "" ,
       "" ,
@@ -256,7 +256,7 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin Hybrid",
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/toyota-innova-zenix/toyota-innova-zenix.webp`,
     gallery: [
       "" ,
       "" ,
@@ -305,7 +305,7 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Diesel",
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/mitsubishi-pajero-sport/mitsubishi-pajero-sport.webp`,
     gallery: [
       "" ,
       "" ,
@@ -354,7 +354,7 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Diesel",
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/toyota-fortuner/toyota-fortuner.webp`,
     gallery: [
       "" ,
       "" ,
@@ -404,7 +404,7 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin",
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/toyota-alphard/toyota-alphard.webp`,
     gallery: [
       "" ,
       "" ,
@@ -454,7 +454,7 @@ export const vehicles: Vehicle[] = [
     transmission: "Manual",
     capacity: 15,
     fuelType: "Diesel",
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/toyota-hiace-premio/toyota-hiace-premio.webp`,
     gallery: [
       "" ,
       "" ,
@@ -503,7 +503,7 @@ export const vehicles: Vehicle[] = [
     transmission: "Manual",
     capacity: 16,
     fuelType: "Diesel",
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/toyota-hiace-commuter/toyota-hiace-commuter.webp`,
     gallery: [
       "" ,
       "" ,
@@ -552,7 +552,7 @@ export const vehicles: Vehicle[] = [
     transmission: "Manual",
     capacity: 16,
     fuelType: "Diesel",
-    image: "",
+    image: `https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/isuzu-elf/isuzu-elf.webp`,
     gallery: [
       "" ,
       "" ,

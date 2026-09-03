@@ -9,6 +9,12 @@ import { vehicles } from "@/data/vehicles";
 import { formatIDR } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
+const FALLBACK_IMG =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8F1F5"/><stop offset="1" stop-color="#D9E6EE"/></linearGradient></defs><rect width="800" height="500" fill="url(#g)"/><g fill="#005691" opacity="0.4"><circle cx="200" cy="250" r="36"/><rect x="280" y="200" width="240" height="100" rx="14"/><circle cx="600" cy="250" r="36"/></g><text x="400" y="380" font-family="sans-serif" font-size="22" font-weight="700" fill="#42596B" text-anchor="middle">Foto belum tersedia</text></svg>`
+  );
+
 const EASE = [0.4, 0, 0.2, 1] as const;
 
 type Step1BudgetProps = {
@@ -141,8 +147,8 @@ export default function Step1Budget({
       {previewVehicles.length > 0 && (
         <div className="space-y-3">
           <p className="text-sm font-bold text-muted">Mobil yang cocok di budget ini:</p>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            {previewVehicles.map((v) => (
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+            {previewVehicles.slice(0, 4).map((v) => (
               <Link key={v.id} href={`/armada/${v.slug}`} className="group">
                 <motion.article
                   initial={reduce ? false : { opacity: 0, y: 16 }}
@@ -153,7 +159,7 @@ export default function Step1Budget({
                 >
                   <div className="aspect-video relative overflow-hidden bg-surface">
                     <img
-                      src={v.image}
+                      src={v.image || FALLBACK_IMG}
                       alt={v.name}
                       className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.05]"
                       loading="lazy"
