@@ -130,7 +130,7 @@ export default function PaketEdit() {
     setError(null);
     setSuccess(false);
     try {
-      const descriptionArr = (pkg.description || []).filter((s) => s && s.trim());
+      const descriptionArr = toStringArray(pkg.description).filter((s) => s.trim());
       const { error } = await supabase
         .from('packages')
         .update({
@@ -246,7 +246,7 @@ export default function PaketEdit() {
               Deskripsi (satu paragraf per baris)
             </label>
             <textarea
-              value={(pkg.description || []).join('\n\n')}
+              value={toStringArray(pkg.description).join('\n\n')}
               onChange={(e) =>
                 setPkg({
                   ...pkg,
