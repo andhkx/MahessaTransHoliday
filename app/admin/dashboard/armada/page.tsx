@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 import {
@@ -9,6 +9,8 @@ import {
   Edit,
   Trash2,
   Image as ImageIcon,
+  Search,
+  ArrowUpDown,
 } from 'lucide-react';
 import { formatIDR } from '@/lib/format';
 import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
@@ -43,6 +45,9 @@ export default function ArmadaList() {
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('active');
+  const [query, setQuery] = useState('');
+  const [sortBy, setSortBy] = useState<'name' | 'price' | 'created'>('name');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const supabase = createClient();
 
   useEffect(() => {
@@ -105,6 +110,25 @@ export default function ArmadaList() {
     { value: 'all', label: 'Semua' },
   ];
 
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    let list = vehicles;
+    if (q) {
+      list = list.filter(
+        (v) =>
+          v.name.toLowerCase().includes(q) ||
+          v.slug.toLowerCase().includes(q) ||
+          (v.badge || '').toLowerCase().includes(q)
+      );
+    }
+    const sorted = [...list].sort((a, b) => {
+      if (sortBy === 'name') return a.name.localeCompare(b.name);
+      if (sortBy === 'price') return a.price_per_day - b.price_per_day;
+      return 0;
+    });
+    return sortDir === 'asc' ? sorted : sorted.reverse();
+  }, [vehicles, query, sortBy, sortDir]);
+
   return (
     <AdminDashboardLayout
       eyebrow="Armada"
@@ -160,6 +184,46 @@ export default function ArmadaList() {
                 ))}
               </select>
           </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 flex-wrap">
+            <div className="relative flex-1 min-w-[200px]">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Cari nama, slug, atau badge..."
+                className="w-full pl-9 pr-3 py-2 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
+              />
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted">Urut</span>
+              {(
+                [
+                  { value: 'name', label: 'Nama' },
+                  { value: 'price', label: 'Harga' },
+                ] as const
+              ).map((s) => (
+                <button
+                  key={s.value}
+                  onClick={() => {
+                    if (sortBy === s.value) setSortDir(sortDir === 'asc' ? 'desc' : 'asc');
+                    else {
+                      setSortBy(s.value);
+                      setSortDir('asc');
+                    }
+                  }}
+                  className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold border transition ${
+                    sortBy === s.value
+                      ? 'bg-accent text-white border-accent'
+                      : 'bg-white text-heading border-line hover:border-accent'
+                  }`}
+                >
+                  {s.label}
+                  {sortBy === s.value && <ArrowUpDown size={10} />}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {loading && (
@@ -172,6 +236,10 @@ export default function ArmadaList() {
 
         {vehicles.length === 0 && !loading && !error && (
           <p className="text-center text-muted py-8">Belum ada armada yang tersedia.</p>
+        )}
+
+        {vehicles.length > 0 && filtered.length === 0 && !loading && (
+          <p className="text-center text-muted py-8">Tidak ada armada yang cocok dengan "{query}"</p>
         )}
 
         {vehicles.length > 0 && (
@@ -204,7 +272,7 @@ export default function ArmadaList() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line">
-                  {vehicles.map((v) => (
+                  {filtered.map((v) => (
                     <tr key={v.id} className="hover:bg-surface/50 transition">
                       <td className="px-4 py-3">
                         {v.image_url ? (
@@ -272,7 +340,7 @@ export default function ArmadaList() {
             </div>
 
             <div className="lg:hidden space-y-3">
-              {vehicles.map((v) => (
+              {filtered.map((v) => (
                 <div
                   key={v.id}
                   className="p-3 rounded-xl border border-line bg-white hover:bg-accent/5 transition"

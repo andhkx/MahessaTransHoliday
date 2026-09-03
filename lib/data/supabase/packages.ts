@@ -1,6 +1,12 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import type { TravelPackage, PackageItineraryStep } from '@/lib/types';
 
+const PLACEHOLDER_IMG =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8F1F5"/><stop offset="1" stop-color="#D9E6EE"/></linearGradient></defs><rect width="800" height="500" fill="url(#g)"/><g fill="#005691" opacity="0.5"><path d="M120 320 L240 200 L560 200 L680 320 L680 360 L120 360 Z"/><circle cx="220" cy="360" r="32"/><circle cx="580" cy="360" r="32"/></g><text x="400" y="430" font-family="Plus Jakarta Sans, sans-serif" font-size="22" font-weight="700" fill="#42596B" text-anchor="middle">Foto belum tersedia</text></svg>`
+  );
+
 function getPublicClient() {
   return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -43,7 +49,7 @@ function mapSupabasePackage(p: any): TravelPackage {
     duration: p.duration_text || `${p.duration_days} Hari`,
     durationHours: p.duration_hours || 0,
     price: p.price,
-    image: p.cover_image_url || '/images/packages/placeholder.webp',
+    image: p.cover_image_url || PLACEHOLDER_IMG,
     description: toArray(p.description),
     included: toArray(p.includes),
     excluded: toArray(p.excluded),

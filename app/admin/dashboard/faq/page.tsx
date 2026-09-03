@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
-import { Trash2, Plus, Edit, MessageCircle } from 'lucide-react';
+import { Trash2, Plus, Edit, MessageCircle, Search } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
 
@@ -22,6 +22,7 @@ export default function FaqList() {
   const [error, setError] = useState<string | null>(null);
   const [filterGroup, setFilterGroup] = useState<'all' | 'main' | 'extra'>('all');
   const [statusFilter, setStatusFilter] = useState<'active' | 'inactive' | 'all'>('active');
+  const [query, setQuery] = useState('');
   const supabase = createClient();
 
   const fetchFaqs = async () => {
@@ -50,6 +51,14 @@ export default function FaqList() {
   useEffect(() => {
     fetchFaqs();
   }, [filterGroup, statusFilter]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return faqs;
+    return faqs.filter(
+      (f) => f.question.toLowerCase().includes(q) || f.answer.toLowerCase().includes(q)
+    );
+  }, [faqs, query]);
 
   const toggleActive = async (f: FaqItem) => {
     try {
@@ -108,6 +117,15 @@ export default function FaqList() {
               <option value="main">Main</option>
               <option value="extra">Extra</option>
             </select>
+            <div className="relative flex-1 min-w-[200px]">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Cari pertanyaan atau jawaban..."
+                className="w-full pl-9 pr-3 py-2 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
+              />
+            </div>
             <Link
               href="/admin/dashboard/faq/new"
               className="flex items-center gap-2 bg-accent text-white px-4 py-2.5 rounded-xl font-extrabold hover:bg-accent-hover transition shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)] whitespace-nowrap"
@@ -124,6 +142,10 @@ export default function FaqList() {
           <p className="text-center text-muted py-8">Belum ada FAQ yang tersedia.</p>
         )}
 
+        {faqs.length > 0 && filtered.length === 0 && !loading && (
+          <p className="text-center text-muted py-8">Tidak ada FAQ yang cocok dengan "{query}"</p>
+        )}
+
         {faqs.length > 0 && (
           <>
             {/* Desktop Table */}
@@ -138,7 +160,7 @@ export default function FaqList() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line">
-                  {faqs.map((f) => (
+                  {filtered.map((f) => (
                     <tr key={f.id} className="hover:bg-surface/50 transition">
                       <td className="px-4 py-3 text-sm font-mono text-muted">{f.display_order}</td>
                       <td className="px-4 py-3 text-sm font-bold text-heading max-w-xl truncate">{f.question}</td>
@@ -176,7 +198,7 @@ export default function FaqList() {
 
             {/* Mobile Cards */}
             <div className="lg:hidden space-y-3">
-              {faqs.map((f) => (
+              {filtered.map((f) => (
                 <Link
                   key={f.id}
                   href={`/admin/dashboard/faq/${f.id}`}

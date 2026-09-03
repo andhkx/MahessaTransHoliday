@@ -1,6 +1,12 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 import type { Vehicle } from '@/lib/types';
 
+const PLACEHOLDER_IMG =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8F1F5"/><stop offset="1" stop-color="#D9E6EE"/></linearGradient></defs><rect width="800" height="500" fill="url(#g)"/><g fill="#005691" opacity="0.5"><circle cx="180" cy="250" r="36"/><rect x="260" y="200" width="280" height="100" rx="14"/><circle cx="620" cy="250" r="36"/></g><text x="400" y="380" font-family="Plus Jakarta Sans, sans-serif" font-size="22" font-weight="700" fill="#42596B" text-anchor="middle">Foto belum tersedia</text></svg>`
+  );
+
 function getPublicClient() {
   return createSupabaseClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -43,7 +49,7 @@ function mapSupabaseVehicle(v: any): Vehicle {
     transmission: v.transmission,
     capacity: v.capacity,
     fuelType: v.fuel_type || v.fuel_type_extra || 'Bensin',
-    image: v.image_url || '/images/vehicles/placeholder.webp',
+    image: v.image_url || PLACEHOLDER_IMG,
     gallery: v.gallery || (v.image_url ? [v.image_url] : []),
     badge: v.badge,
     pricing: { startingPrice: v.price_per_day },

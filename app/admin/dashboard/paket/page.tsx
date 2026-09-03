@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
-import { Trash2, Plus, Edit, Image as ImageIcon } from 'lucide-react';
+import { Trash2, Plus, Edit, Image as ImageIcon, Search, ArrowUpDown } from 'lucide-react';
 import { formatIDR } from '@/lib/format';
 import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
 import { Badge, ACTIVE_TONE, INACTIVE_TONE } from '@/components/admin/badge';
@@ -42,6 +42,9 @@ export default function PaketList() {
   const [error, setError] = useState<string | null>(null);
   const [selectedDestination, setSelectedDestination] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('active');
+  const [query, setQuery] = useState('');
+  const [sortBy, setSortBy] = useState<'name' | 'price'>('name');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
   const supabase = createClient();
 
   useEffect(() => {
@@ -115,6 +118,24 @@ export default function PaketList() {
     { value: 'all', label: 'Semua' },
   ];
 
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    let list = packages;
+    if (q) {
+      list = list.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.destination.toLowerCase().includes(q) ||
+          (p.badge || '').toLowerCase().includes(q)
+      );
+    }
+    const sorted = [...list].sort((a, b) => {
+      if (sortBy === 'name') return a.name.localeCompare(b.name);
+      return a.price - b.price;
+    });
+    return sortDir === 'asc' ? sorted : sorted.reverse();
+  }, [packages, query, sortBy, sortDir]);
+
   return (
     <AdminDashboardLayout
       eyebrow="Paket"
@@ -168,6 +189,46 @@ export default function PaketList() {
               ))}
             </select>
           </div>
+
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 flex-wrap">
+            <div className="relative flex-1 min-w-[200px]">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Cari nama, destinasi, atau badge..."
+                className="w-full pl-9 pr-3 py-2 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
+              />
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted">Urut</span>
+              {(
+                [
+                  { value: 'name', label: 'Nama' },
+                  { value: 'price', label: 'Harga' },
+                ] as const
+              ).map((s) => (
+                <button
+                  key={s.value}
+                  onClick={() => {
+                    if (sortBy === s.value) setSortDir(sortDir === 'asc' ? 'desc' : 'asc');
+                    else {
+                      setSortBy(s.value);
+                      setSortDir('asc');
+                    }
+                  }}
+                  className={`flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold border transition ${
+                    sortBy === s.value
+                      ? 'bg-accent text-white border-accent'
+                      : 'bg-white text-heading border-line hover:border-accent'
+                  }`}
+                >
+                  {s.label}
+                  {sortBy === s.value && <ArrowUpDown size={10} />}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         {loading && (
@@ -180,6 +241,10 @@ export default function PaketList() {
 
         {packages.length === 0 && !loading && !error && (
           <p className="text-center text-muted py-8">Belum ada paket yang tersedia.</p>
+        )}
+
+        {packages.length > 0 && filtered.length === 0 && !loading && (
+          <p className="text-center text-muted py-8">Tidak ada paket yang cocok dengan "{query}"</p>
         )}
 
         {packages.length > 0 && (
@@ -212,7 +277,7 @@ export default function PaketList() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line">
-                  {packages.map((p) => (
+                  {filtered.map((p) => (
                     <tr key={p.id} className="hover:bg-surface/50 transition">
                       <td className="px-4 py-3">
                         {p.cover_image_url ? (
@@ -278,7 +343,7 @@ export default function PaketList() {
             </div>
 
             <div className="lg:hidden space-y-3">
-              {packages.map((p) => (
+              {filtered.map((p) => (
                 <div
                   key={p.id}
                   className="p-3 rounded-xl border border-line bg-white hover:bg-accent/5 transition"

@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
-import { Trash2, Plus, Edit, Star } from 'lucide-react';
+import { Trash2, Plus, Edit, Star, Search } from 'lucide-react';
 import { cn } from '@/lib/cn';
 import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
 
@@ -22,6 +22,7 @@ export default function TestimoniList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filterActive, setFilterActive] = useState<'all' | 'active' | 'inactive'>('active');
+  const [query, setQuery] = useState('');
   const supabase = createClient();
 
   const fetchTestimonials = async () => {
@@ -46,6 +47,17 @@ export default function TestimoniList() {
   useEffect(() => {
     fetchTestimonials();
   }, [filterActive]);
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return testimonials;
+    return testimonials.filter(
+      (t) =>
+        t.name.toLowerCase().includes(q) ||
+        (t.role || '').toLowerCase().includes(q) ||
+        t.quote.toLowerCase().includes(q)
+    );
+  }, [testimonials, query]);
 
   const toggleActive = async (t: Testimonial) => {
     try {
@@ -95,6 +107,15 @@ export default function TestimoniList() {
               <option value="active">Aktif</option>
               <option value="inactive">Tidak Aktif</option>
             </select>
+            <div className="relative flex-1 min-w-[200px]">
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Cari nama, peran, atau testimoni..."
+                className="w-full pl-9 pr-3 py-2 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
+              />
+            </div>
             <Link
               href="/admin/dashboard/testimoni/new"
               className="flex items-center gap-2 bg-accent text-white px-4 py-2.5 rounded-xl font-extrabold hover:bg-accent-hover transition shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)] whitespace-nowrap"
@@ -109,6 +130,10 @@ export default function TestimoniList() {
 
         {testimonials.length === 0 && !loading && !error && (
           <p className="text-center text-muted py-8">Belum ada testimoni yang tersedia.</p>
+        )}
+
+        {testimonials.length > 0 && filtered.length === 0 && !loading && (
+          <p className="text-center text-muted py-8">Tidak ada testimoni yang cocok dengan "{query}"</p>
         )}
 
         {testimonials.length > 0 && (
@@ -127,7 +152,7 @@ export default function TestimoniList() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line">
-                  {testimonials.map((t) => (
+                  {filtered.map((t) => (
                     <tr key={t.id} className="hover:bg-surface/50 transition">
                       <td className="px-4 py-3">
                         <div className="text-sm font-bold text-heading">{t.name}</div>
@@ -184,7 +209,7 @@ export default function TestimoniList() {
 
             {/* Mobile Cards */}
             <div className="lg:hidden space-y-3">
-              {testimonials.map((t) => (
+              {filtered.map((t) => (
                 <Link
                   key={t.id}
                   href={`/admin/dashboard/testimoni/${t.id}`}

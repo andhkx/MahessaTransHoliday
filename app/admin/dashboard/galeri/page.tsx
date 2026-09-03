@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 import {
@@ -9,6 +9,7 @@ import {
   Edit,
   Image as ImageIcon,
   MapPin,
+  Search,
 } from 'lucide-react';
 import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
 import { Badge, ACTIVE_TONE, INACTIVE_TONE, Tone } from '@/components/admin/badge';
@@ -45,6 +46,7 @@ export default function GaleriList() {
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('active');
+  const [query, setQuery] = useState('');
   const supabase = createClient();
 
   useEffect(() => {
@@ -104,6 +106,16 @@ export default function GaleriList() {
     { value: 'all', label: 'Semua' },
   ];
 
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return items;
+    return items.filter(
+      (i) =>
+        i.caption.toLowerCase().includes(q) ||
+        (i.location || '').toLowerCase().includes(q)
+    );
+  }, [items, query]);
+
   return (
     <AdminDashboardLayout
       eyebrow="Galeri"
@@ -158,6 +170,16 @@ export default function GaleriList() {
               ))}
             </select>
           </div>
+
+          <div className="relative flex-1 min-w-[200px]">
+            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Cari caption atau lokasi..."
+              className="w-full pl-9 pr-3 py-2 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15"
+            />
+          </div>
         </div>
 
         {loading && (
@@ -179,6 +201,10 @@ export default function GaleriList() {
               <Plus size={14} /> Upload foto pertama
             </Link>
           </div>
+        )}
+
+        {items.length > 0 && filtered.length === 0 && !loading && (
+          <p className="text-center text-muted py-8">Tidak ada foto yang cocok dengan "{query}"</p>
         )}
 
         {items.length > 0 && (
@@ -211,7 +237,7 @@ export default function GaleriList() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line">
-                  {items.map((g) => (
+                  {filtered.map((g) => (
                     <tr key={g.id} className="hover:bg-surface/50 transition">
                       <td className="px-4 py-3">
                         <img
@@ -274,7 +300,7 @@ export default function GaleriList() {
             </div>
 
             <div className="lg:hidden grid grid-cols-2 gap-3">
-              {items.map((g) => (
+              {filtered.map((g) => (
                 <div
                   key={g.id}
                   className="rounded-xl border border-line bg-white overflow-hidden"
