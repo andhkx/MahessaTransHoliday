@@ -1,4 +1,4 @@
-﻿import type { Vehicle } from "@/lib/types";
+import type { Vehicle } from "@/lib/types";
 import { SERVICE_AREAS } from "@/lib/constants";
 
 export const vehicles: Vehicle[] = [
@@ -10,10 +10,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Manual",
     capacity: 7,
     fuelType: "Bensin",
-    image: "/images/vehicles/toyota-calya.webp",
+    image: "",
     gallery: [
-      "/images/vehicles/toyota-calya.webp",
-      "/images/vehicles/toyota-calya-2.webp",
+      "" ,
+      "" ,
     ],
     pricing: {
       startingPrice: 650000,
@@ -59,10 +59,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin",
-    image: "/images/vehicles/daihatsu-terios.webp",
+    image: "",
     gallery: [
-      "/images/vehicles/daihatsu-terios.webp",
-      "/images/vehicles/daihatsu-terios-2.webp",
+      "" ,
+      "" ,
     ],
     pricing: {
       startingPrice: 800000,
@@ -109,17 +109,17 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin",
-    image: "/images/vehicles/toyota-avanza.webp",
+    image: "",
     gallery: [
-      "/images/vehicles/toyota-avanza.webp",
-      "/images/vehicles/toyota-avanza-2.webp",
+      "" ,
+      "" ,
     ],
     pricing: {
       startingPrice: 750000,
     },
     description: [
       "Toyota Avanza adalah pilihan tepat untuk keluarga atau rombongan kecil. Dengan kapasitas 7 penumpang dan konsumsi bahan bakar yang irit, Avanza cocok untuk perjalanan dalam kota maupun luar kota.",
-      "Mobil ini terawat, bersih, dan siap untuk petualangan Anda — dari city tour Bandung hingga perjalanan dinas antar kota.",
+      "Mobil ini terawat, bersih, dan siap untuk petualangan Anda � dari city tour Bandung hingga perjalanan dinas antar kota.",
     ],
     suitableFor: [
       "Perjalanan keluarga",
@@ -158,10 +158,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin",
-    image: "/images/vehicles/toyota-rush.webp",
+    image: "",
     gallery: [
-      "/images/vehicles/toyota-rush.webp",
-      "/images/vehicles/toyota-rush-2.webp",
+      "" ,
+      "" ,
     ],
     pricing: {
       startingPrice: 800000,
@@ -207,10 +207,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Diesel",
-    image: "/images/vehicles/toyota-innova-reborn.webp",
+    image: "",
     gallery: [
-      "/images/vehicles/toyota-innova-reborn.webp",
-      "/images/vehicles/toyota-innova-reborn-2.webp",
+      "" ,
+      "" ,
     ],
     pricing: {
       startingPrice: 1300000,
@@ -256,10 +256,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin Hybrid",
-    image: "/images/vehicles/toyota-innova-zenix.webp",
+    image: "",
     gallery: [
-      "/images/vehicles/toyota-innova-zenix.webp",
-      "/images/vehicles/toyota-innova-zenix-2.webp",
+      "" ,
+      "" ,
     ],
     pricing: {
       startingPrice: 1500000,
@@ -305,10 +305,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Diesel",
-    image: "/images/vehicles/mitsubishi-pajero-sport.webp",
+    image: "",
     gallery: [
-      "/images/vehicles/mitsubishi-pajero-sport.webp",
-      "/images/vehicles/mitsubishi-pajero-sport-2.webp",
+      "" ,
+      "" ,
     ],
     pricing: {
       startingPrice: 2200000,
@@ -354,10 +354,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Diesel",
-    image: "/images/vehicles/toyota-fortuner.webp",
+    image: "",
     gallery: [
-      "/images/vehicles/toyota-fortuner.webp",
-      "/images/vehicles/toyota-fortuner-2.webp",
+      "" ,
+      "" ,
     ],
     pricing: {
       startingPrice: 2200000,
@@ -404,10 +404,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Automatic",
     capacity: 7,
     fuelType: "Bensin",
-    image: "/images/vehicles/toyota-alphard.webp",
+    image: "",
     gallery: [
-      "/images/vehicles/toyota-alphard.webp",
-      "/images/vehicles/toyota-alphard-2.webp",
+      "" ,
+      "" ,
     ],
     pricing: {
       startingPrice: 2500000,
@@ -454,17 +454,17 @@ export const vehicles: Vehicle[] = [
     transmission: "Manual",
     capacity: 15,
     fuelType: "Diesel",
-    image: "/images/vehicles/toyota-hiace-premio.webp",
+    image: "",
     gallery: [
-      "/images/vehicles/toyota-hiace-premio.webp",
-      "/images/vehicles/toyota-hiace-premio-2.webp",
+      "" ,
+      "" ,
     ],
     pricing: {
       startingPrice: 1800000,
     },
     description: [
-      "Toyota Hiace Premio adalah kendaraan andalan untuk rombongan. Kapasitas 14â€“15 penumpang dengan kabin tinggi yang memungkinkan gerakan bebas selama perjalanan.",
-      "Hanya tersedia dengan driver berpengalaman, sehingga kamu cukup duduk dan nikmati perjalanan â€” dalam kota maupun antar kota.",
+      "Toyota Hiace Premio adalah kendaraan andalan untuk rombongan. Kapasitas 14–15 penumpang dengan kabin tinggi yang memungkinkan gerakan bebas selama perjalanan.",
+      "Hanya tersedia dengan driver berpengalaman, sehingga kamu cukup duduk dan nikmati perjalanan — dalam kota maupun antar kota.",
     ],
     suitableFor: [
       "Rombongan keluarga",
@@ -503,17 +503,17 @@ export const vehicles: Vehicle[] = [
     transmission: "Manual",
     capacity: 16,
     fuelType: "Diesel",
-    image: "/images/vehicles/toyota-hiace-commuter.webp",
+    image: "",
     gallery: [
-      "/images/vehicles/toyota-hiace-commuter.webp",
-      "/images/vehicles/toyota-hiace-commuter-2.webp",
+      "" ,
+      "" ,
     ],
     pricing: {
       startingPrice: 1500000,
     },
     description: [
       "Toyota Hiace Commuter adalah pilihan ekonomis untuk angkutan rombongan besar. Kapasitas hingga 16 penumpang dengan konfigurasi kursi efisien.",
-      "Cocok untuk shuttle event, ziarah, atau perjalanan wisata grup dengan budget terkendali â€” selalu dengan driver profesional Mahessa.",
+      "Cocok untuk shuttle event, ziarah, atau perjalanan wisata grup dengan budget terkendali — selalu dengan driver profesional Mahessa.",
     ],
     suitableFor: [
       "Shuttle event",
@@ -552,10 +552,10 @@ export const vehicles: Vehicle[] = [
     transmission: "Manual",
     capacity: 16,
     fuelType: "Diesel",
-    image: "/images/vehicles/isuzu-elf.webp",
+    image: "",
     gallery: [
-      "/images/vehicles/isuzu-elf.webp",
-      "/images/vehicles/isuzu-elf-2.webp",
+      "" ,
+      "" ,
     ],
     pricing: {
       startingPrice: 1800000,

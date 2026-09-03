@@ -20,10 +20,16 @@ function getPublicClient() {
 function toArray(value: any): string[] {
   if (Array.isArray(value)) return value;
   if (typeof value === 'string' && value.trim()) {
+    // Try real JSON array first: '["a","b"]'
     try {
       const parsed = JSON.parse(value);
-      if (Array.isArray(parsed)) return parsed;
+      if (Array.isArray(parsed)) return parsed.filter((x) => typeof x === 'string');
     } catch {}
+    // Fallback: split pseudo-JSON-array '{\"a\",\"b\"}' used in seed data
+    const pseudo = value.match(/"((?:[^"\\]|\\.)*)"/g);
+    if (pseudo && pseudo.length > 0) {
+      return pseudo.map((s) => s.slice(1, -1).replace(/\\"/g, '"').replace(/\\\\/g, '\\'));
+    }
     return [value];
   }
   return [];

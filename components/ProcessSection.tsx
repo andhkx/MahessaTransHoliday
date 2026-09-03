@@ -16,7 +16,7 @@ const STEPS = [
   {
     step: "02",
     title: "Kita Pilih-in",
-    time: "10â€“30 menit",
+    time: "10–30 menit",
     desc: "Tim kami rekomendasikan unit & harga terbaik sesuai budget dan jadwalmu.",
   },
   {

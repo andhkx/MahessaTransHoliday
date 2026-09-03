@@ -566,7 +566,7 @@ function VehiclePicker({
               type="button"
               onClick={() => onSelect(v.name)}
               className={cn(
-                "flex-shrink-0 w-[180px] snap-start rounded-2xl border-2 overflow-hidden text-left transition-all",
+                "flex-shrink-0 w-[160px] sm:w-[180px] snap-start rounded-2xl border-2 overflow-hidden text-left transition-all",
                 isActive
                   ? "border-accent shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)]"
                   : "border-line hover:border-accent/50"
@@ -658,7 +658,7 @@ function PackagePicker({
               type="button"
               onClick={() => onSelect(p.destination)}
               className={cn(
-                "flex-shrink-0 w-[180px] snap-start rounded-2xl border-2 overflow-hidden text-left transition-all",
+                "flex-shrink-0 w-[160px] sm:w-[180px] snap-start rounded-2xl border-2 overflow-hidden text-left transition-all",
                 isActive
                   ? "border-accent shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)]"
                   : "border-line hover:border-accent/50"
