@@ -18,6 +18,7 @@ type Package = {
   badge: string | null;
   cover_image_url: string | null;
   is_active: boolean;
+  is_featured: boolean;
 };
 
 type StatusFilter = 'active' | 'inactive' | 'all';
@@ -53,7 +54,7 @@ export default function PaketList() {
       let query = supabase
         .from('packages')
         .select(
-          'id,name,slug,destination,duration_text,price,badge,cover_image_url,is_active'
+          'id,name,slug,destination,duration_text,price,badge,cover_image_url,is_active,is_featured'
         )
         .order('price');
 
@@ -230,6 +231,7 @@ export default function PaketList() {
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-sm font-bold text-heading">{p.name}</span>
                           {p.badge && <Badge tone="warning">{p.badge}</Badge>}
+                          {p.is_featured && <Badge tone="primary">Beranda</Badge>}
                         </div>
                         <p className="text-xs text-muted font-mono mt-0.5">{p.slug}</p>
                       </td>
@@ -297,6 +299,7 @@ export default function PaketList() {
                       <div className="flex items-center gap-2 flex-wrap">
                         <h3 className="font-bold text-heading truncate">{p.name}</h3>
                         {p.badge && <Badge tone="warning">{p.badge}</Badge>}
+                        {p.is_featured && <Badge tone="primary">Beranda</Badge>}
                       </div>
                       <p className="text-xs text-muted font-mono mt-0.5 truncate">{p.slug}</p>
                       <div className="flex items-center gap-1.5 mt-2 flex-wrap">

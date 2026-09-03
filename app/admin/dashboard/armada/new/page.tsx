@@ -4,8 +4,7 @@ import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import ImageUpload from '@/components/admin/ImageUpload';
-import { formatIDR } from '@/lib/format';
-import { cn } from '@/lib/cn';
+import MultiImageUpload from '@/components/admin/MultiImageUpload';
 import AdminForm from '@/components/admin/AdminForm';
 import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
 
@@ -54,6 +53,8 @@ export default function ArmadaCreate() {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [badge, setBadge] = useState('');
   const [is_active, setIsActive] = useState(true);
+  const [is_featured, setIsFeatured] = useState(false);
+  const [gallery, setGallery] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const supabase = createClient();
@@ -76,7 +77,9 @@ export default function ArmadaCreate() {
         features,
         badge: badge || null,
         image_url: previewUrl,
+        gallery,
         is_active,
+        is_featured,
       });
 
       if (error) throw error;
@@ -278,46 +281,74 @@ export default function ArmadaCreate() {
 
         <div>
           <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-            Gambar Armada
+            Gambar Utama Armada
           </label>
           <ImageUpload
             bucket="vehicles"
-            onUpload={(url) => setPreviewUrl(url)}
+            onUpload={(url) => setPreviewUrl(url || null)}
             currentUrl={previewUrl}
             label="Gambar Utama Armada"
           />
         </div>
 
-        <div className="flex items-center gap-3">
-          <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-            Status Aktif
-          </label>
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={is_active}
-              onChange={(e) => setIsActive(e.target.checked)}
-              className="h-4 w-4 text-accent"
-            />
-            <span className="text-sm text-heading">Tampilkan di website</span>
-          </div>
-        </div>
+        <MultiImageUpload
+          bucket="vehicles"
+          images={gallery}
+          onChange={setGallery}
+          label="Foto Interior & Detail"
+        />
 
-        <div className="flex items-center gap-3">
-          <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
-            Tampilkan di Website
-          </label>
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={is_active}
-              onChange={(e) => setIsActive(e.target.checked)}
-              className="h-4 w-4 text-accent"
-            />
-            <span className="text-sm text-heading">Aktif (muncul di beranda & halaman armada)</span>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-line">
+          <ToggleField
+            label="Tampilkan di Website"
+            description="Armada muncul di halaman publik /armada"
+            checked={is_active}
+            onChange={setIsActive}
+          />
+          <ToggleField
+            label="Tampilkan di Beranda"
+            description="Armada muncul di section utama homepage"
+            checked={is_featured}
+            onChange={setIsFeatured}
+          />
         </div>
       </AdminForm>
     </AdminDashboardLayout>
+  );
+}
+
+function ToggleField({
+  label,
+  description,
+  checked,
+  onChange,
+}: {
+  label: string;
+  description: string;
+  checked: boolean;
+  onChange: (c: boolean) => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onChange(!checked)}
+      className="flex items-start gap-3 p-3 rounded-xl border border-line hover:bg-accent/5 hover:border-accent transition text-left"
+    >
+      <div
+        className={`flex h-5 w-9 items-center rounded-full p-0.5 transition ${
+          checked ? 'bg-accent' : 'bg-line'
+        }`}
+      >
+        <div
+          className={`h-4 w-4 rounded-full bg-white transition-transform ${
+            checked ? 'translate-x-4' : 'translate-x-0'
+          }`}
+        />
+      </div>
+      <div className="flex-1">
+        <p className="text-sm font-bold text-heading">{label}</p>
+        <p className="text-[11px] text-muted">{description}</p>
+      </div>
+    </button>
   );
 }

@@ -64,6 +64,7 @@ export default function PaketCreate() {
   const [cover_image_url, setCoverImageUrl] = useState<string | null>(null);
   const [badge, setBadge] = useState('');
   const [is_active, setIsActive] = useState(true);
+  const [is_featured, setIsFeatured] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const supabase = createClient();
@@ -100,6 +101,7 @@ export default function PaketCreate() {
         cover_image_url,
         badge: badge || null,
         is_active,
+        is_featured,
       });
 
       if (error) throw error;
@@ -286,12 +288,18 @@ export default function PaketCreate() {
             />
           </div>
 
-          <div className="pt-4 border-t border-line">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-line">
             <ToggleField
-              label="Tampilkan di Website & Beranda"
-              description="Paket muncul di halaman publik dan section utama"
+              label="Tampilkan di Website"
+              description="Paket muncul di halaman /paket"
               checked={is_active}
               onChange={setIsActive}
+            />
+            <ToggleField
+              label="Tampilkan di Beranda"
+              description="Paket muncul di section utama homepage"
+              checked={is_featured}
+              onChange={setIsFeatured}
             />
           </div>
 
