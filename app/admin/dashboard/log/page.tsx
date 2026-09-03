@@ -131,25 +131,12 @@ export default function ActivityLogPage() {
   ];
 
   return (
-    <AdminDashboardLayout title="Log Aktivitas" stats={statsData}>
-      <section className="relative overflow-hidden rounded-3xl border border-line bg-gradient-to-br from-accent via-[#0069a8] to-[#004a7c] p-5 sm:p-7 mb-6 sm:mb-8 shadow-elevated">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-24 -top-16 h-72 w-72 rounded-full bg-white/10 blur-3xl"
-        />
-        <div className="relative">
-          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-white/70 mb-2">
-            Audit Trail
-          </p>
-          <h2 className="text-2xl sm:text-[28px] font-extrabold leading-[1.05] tracking-[-0.03em] text-white">
-            Log Aktivitas
-          </h2>
-          <p className="text-sm sm:text-base text-white/80 mt-1.5 max-w-md">
-            Rekap otomatis setiap login dan perubahan data di website Mahessa.
-          </p>
-        </div>
-      </section>
-
+    <AdminDashboardLayout
+      eyebrow="Audit Trail"
+      title="Log Aktivitas"
+      subtitle="Rekap otomatis setiap login dan perubahan data di website Mahessa."
+      stats={statsData}
+    >
       {/* Filters */}
       <div className="bg-white rounded-2xl border border-line shadow-card p-4 sm:p-5 mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center gap-3">

@@ -299,35 +299,12 @@ export default function DashboardPage() {
   const firstName = user?.email?.split('@')[0] || 'Admin';
 
   return (
-    <AdminDashboardLayout title="Dashboard" stats={statsData}>
-      {/* Welcome banner — matches public PageHero vibe */}
-      <section className="relative overflow-hidden rounded-3xl border border-line bg-gradient-to-br from-accent via-[#0069a8] to-[#004a7c] p-5 sm:p-7 mb-6 sm:mb-8 shadow-elevated">
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-24 -top-16 h-72 w-72 rounded-full bg-white/10 blur-3xl"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -left-16 -bottom-20 h-60 w-60 rounded-full bg-white/[0.06] blur-3xl"
-        />
-        <div className="relative flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
-          <div>
-            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-white/70 mb-2">
-              {greeting}
-            </p>
-            <h2 className="text-2xl sm:text-[28px] font-extrabold leading-[1.05] tracking-[-0.03em] text-white">
-              Halo, {firstName} 👋
-            </h2>
-            <p className="text-sm sm:text-base text-white/80 mt-1.5 max-w-md">
-              Kelola armada, paket perjalanan, dan konten website dari satu tempat.
-            </p>
-          </div>
-          <div className="flex items-center gap-2 text-white/70 text-[11px] font-mono uppercase tracking-[0.2em]">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse" />
-            Live · Vercel Analytics aktif
-          </div>
-        </div>
-      </section>
+    <AdminDashboardLayout
+      eyebrow={`${greeting}`}
+      subtitle={`Halo, ${firstName} 👋 Kelola armada, paket perjalanan, dan konten website dari satu tempat.`}
+      title="Dashboard"
+      stats={statsData}
+    >
 
       {/* Quick Actions */}
       <section className="mb-6 sm:mb-8">
