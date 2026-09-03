@@ -17,7 +17,7 @@ import {
   X,
   ChevronDown,
   ExternalLink,
-  Settings,
+  Activity,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
@@ -34,6 +34,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Galeri', href: '/admin/dashboard/galeri', icon: ImageIcon },
   { label: 'Testimoni', href: '/admin/dashboard/testimoni', icon: Star },
   { label: 'FAQ', href: '/admin/dashboard/faq', icon: MessageCircle },
+  { label: 'Log', href: '/admin/dashboard/log', icon: Activity },
 ];
 
 function getBreadcrumb(pathname: string) {
@@ -58,7 +59,12 @@ export default function AdminDashboardLayout({
   title,
 }: {
   children: React.ReactNode;
-  stats?: Array<{ icon: React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>; label: string; value: number }>;
+  stats?: Array<{
+    icon: React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>;
+    label: string;
+    value: number;
+    tone?: string;
+  }>;
   title?: string;
 }) {
   const supabase = createClient();
@@ -321,13 +327,25 @@ export default function AdminDashboardLayout({
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
               {stats.map((s) => {
                 const Icon = s.icon;
+                const toneBg =
+                  (
+                    {
+                      accent: 'bg-accent/10 text-accent',
+                      success: 'bg-success/10 text-success',
+                      primary: 'bg-primary/10 text-primary',
+                      warning: 'bg-warning/10 text-warning',
+                      error: 'bg-error/10 text-error',
+                    } as Record<string, string>
+                  )[s.tone || 'accent'] || 'bg-accent/10 text-accent';
                 return (
                   <div
                     key={s.label}
-                    className="bg-white rounded-2xl border border-line shadow-card p-4 sm:p-5"
+                    className="relative bg-white rounded-2xl border border-line shadow-card p-4 sm:p-5 overflow-hidden"
                   >
                     <div className="flex items-center justify-between mb-2 sm:mb-3">
-                      <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-accent/10 text-accent">
+                      <div
+                        className={`flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl ${toneBg}`}
+                      >
                         <Icon size={18} strokeWidth={1.8} />
                       </div>
                       <span className="text-xl sm:text-2xl font-extrabold text-heading">
