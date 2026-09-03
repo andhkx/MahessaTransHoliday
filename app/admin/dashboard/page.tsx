@@ -17,6 +17,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
+import ActivityChart from '@/components/admin/ActivityChart';
 
 type EntityStats = {
   vehicles: { total: number; active: number };
@@ -91,6 +92,7 @@ export default function DashboardPage() {
     gallery: { total: 0, active: 0 },
   });
   const [activities, setActivities] = useState<ActivityLog[]>([]);
+  const [chartData, setChartData] = useState<{ day: string; count: number }[]>([]);
   const supabase = createClient();
 
   useEffect(() => {
@@ -143,6 +145,33 @@ export default function DashboardPage() {
       .order('created_at', { ascending: false })
       .limit(8);
     if (data) setActivities(data);
+
+    const since = new Date();
+    since.setDate(since.getDate() - 6);
+    since.setHours(0, 0, 0, 0);
+    const { data: all } = await supabase
+      .from('activity_logs')
+      .select('created_at')
+      .gte('created_at', since.toISOString());
+    const buckets: Record<string, number> = {};
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(since);
+      d.setDate(since.getDate() + i);
+      buckets[d.toISOString().slice(0, 10)] = 0;
+    }
+    (all || []).forEach((r: any) => {
+      const k = r.created_at.slice(0, 10);
+      if (k in buckets) buckets[k] += 1;
+    });
+    setChartData(
+      Object.entries(buckets).map(([day, count]) => ({
+        day: new Date(day).toLocaleDateString('id-ID', {
+          day: '2-digit',
+          month: 'short',
+        }),
+        count,
+      }))
+    );
   };
 
   if (loading) {
@@ -243,6 +272,26 @@ export default function DashboardPage() {
             );
           })}
         </div>
+      </section>
+
+      {/* Activity chart */}
+      <section className="bg-white rounded-2xl border border-line shadow-card p-4 sm:p-5 mb-6 sm:mb-8">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 text-accent">
+              <TrendingUp size={16} strokeWidth={2} />
+            </div>
+            <div>
+              <p className="font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-primary mb-0.5">
+                7 Hari Terakhir
+              </p>
+              <h3 className="text-base font-extrabold text-heading">
+                Aktivitas Admin
+              </h3>
+            </div>
+          </div>
+        </div>
+        <ActivityChart data={chartData} />
       </section>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">

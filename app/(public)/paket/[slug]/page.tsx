@@ -23,6 +23,13 @@ export async function generateMetadata({
   const { slug } = await params;
   const packageItem = await getPackageBySlug(slug);
   if (!packageItem) return {};
+  const ogParams = new URLSearchParams({
+    title: packageItem.destination,
+    subtitle: `Paket ${packageItem.destination} · ${packageItem.duration}`,
+    price: packageItem.price > 0 ? `Mulai Rp ${(packageItem.price / 1000).toFixed(0)}rb` : '',
+    badge: packageItem.badge || '',
+  });
+  const ogImage = `/api/og?${ogParams.toString()}`;
   return {
     title: packageItem.seo.title,
     description: packageItem.seo.description,
@@ -31,7 +38,7 @@ export async function generateMetadata({
     openGraph: {
       title: packageItem.seo.title,
       description: packageItem.seo.description,
-      images: [packageItem.image],
+      images: [{ url: ogImage, width: 1200, height: 630 }],
     },
   };
 }
