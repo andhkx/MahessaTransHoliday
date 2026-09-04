@@ -53,13 +53,33 @@ export default function RouteMap({
 
   useEffect(() => {
     if (!ref.current || map.current) return;
-    const initial = center ?? (pins[0] ? [pins[0].lon, pins[0].lat] : [106.8456, -6.2088]);
+    const firstValid = pins.find(
+      (p) => Number.isFinite(p.lat) && Number.isFinite(p.lon),
+    );
+    const initial: [number, number] = center
+      ? center
+      : firstValid
+        ? [firstValid.lon, firstValid.lat]
+        : [106.8456, -6.2088];
     const m = new MlMap({
       container: ref.current,
       style: STYLE,
       center: initial,
       zoom,
       attributionControl: false,
+      fadeDuration: 0,
+      transformRequest: (url) => {
+        if (url.includes("openstreetmap.org")) {
+          return {
+            url,
+            headers: { Referer: "https://mahessatransholiday.web.id" },
+          };
+        }
+        return { url };
+      },
+    });
+    m.on("error", (e) => {
+      console.warn("[RouteMap]", e?.error?.message || e);
     });
     m.addControl(new NavigationControl({ showCompass: false }), "top-right");
     m.addControl(
@@ -71,7 +91,7 @@ export default function RouteMap({
       m.remove();
       map.current = null;
     };
-  }, [center, zoom]);
+  }, [center, zoom, pins]);
 
   useEffect(() => {
     const m = map.current;
