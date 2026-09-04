@@ -1,0 +1,12 @@
+# CodeQL
+distribution:
+  languages:
+    - javascript
+    - typescript
+queries:
+  - uses: security-and-quality
+paths-ignore:
+  - node_modules
+  - .next
+  - public
+  - supabase/migrations
