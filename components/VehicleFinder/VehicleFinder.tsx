@@ -17,7 +17,7 @@ type WizardStep = 1 | 2 | 3 | 4;
 
 export default function VehicleFinder() {
   const [step, setStep] = useState<WizardStep>(1);
-  const [budget, setBudget] = useState<number>(800000);
+  const [budget, setBudget] = useState<number>(650000);
   const [people, setPeople] = useState<number>(5);
   const [journey, setJourney] = useState<JourneyType | null>(null);
 

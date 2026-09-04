@@ -117,8 +117,8 @@ export default function Step1Budget({
           aria-label="Budget slider"
         />
         <div className="mt-4 flex justify-between text-sm font-bold text-muted">
-          <span>{formatCompact(350000)}</span>
-          <span>{formatCompact(12750000)}</span>
+          <span>{formatCompact(650000)}</span>
+          <span>{formatCompact(2500000)}</span>
         </div>
       </div>
 

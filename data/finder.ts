@@ -1,5 +1,5 @@
-export const BUDGET_MIN = 350000;
-export const BUDGET_MAX = 12750000;
+export const BUDGET_MIN = 650000;
+export const BUDGET_MAX = 2500000;
 export const BUDGET_STEP = 50000;
 
 export type BudgetTier = {
@@ -16,36 +16,36 @@ export const BUDGET_TIERS: BudgetTier[] = [
   {
     id: "hemat",
     label: "Hemat",
-    range: "Rp350rb - Rp600rb",
-    min: 350000,
-    max: 600000,
+    range: "Rp650rb - Rp700rb",
+    min: 650000,
+    max: 700000,
     color: "#27AE60",
     bgClass: "bg-success",
   },
   {
     id: "menengah",
     label: "Menengah",
-    range: "Rp600rb - Rp1,5jt",
-    min: 600001,
-    max: 1500000,
+    range: "Rp750rb - Rp1,3jt",
+    min: 750000,
+    max: 1300000,
     color: "#F39C12",
     bgClass: "bg-warning",
   },
   {
     id: "premium",
     label: "Premium",
-    range: "Rp1,5jt - Rp4,5jt",
-    min: 1500001,
-    max: 4500000,
+    range: "Rp1,3jt - Rp2,2jt",
+    min: 1300001,
+    max: 2200000,
     color: "#0F4C75",
     bgClass: "bg-accent",
   },
   {
     id: "grup",
     label: "Grup / Wisata",
-    range: "Rp4,5jt+",
-    min: 4500001,
-    max: 12750000,
+    range: "Rp2,2jt+",
+    min: 2200001,
+    max: 2500000,
     color: "#7B2CBF",
     bgClass: "bg-[#7B2CBF]",
   },
