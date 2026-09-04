@@ -5,8 +5,6 @@ import {
   ArrowRight,
   CarFront,
   Check,
-  ChevronLeft,
-  ChevronRight,
   Clock,
   Mail,
   MapPin,
@@ -18,10 +16,12 @@ import {
   AlertCircle,
   Calendar,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/cn";
 import { EMAIL_DISPLAY, WHATSAPP_NUMBER } from "@/lib/constants";
 import type { Vehicle, TravelPackage } from "@/lib/types";
+import VehicleCards from "@/components/VehicleCards";
+import PackageCards from "@/components/PackageCards";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -106,8 +106,6 @@ export default function KontakPageClient() {
   const [pickup, setPickup] = useState("");
   const [tujuan, setTujuan] = useState("");
   const [tanggal, setTanggal] = useState("");
-  const carRef = useRef<HTMLDivElement>(null);
-  const pkgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     fetch("/api/contact-options")
@@ -120,18 +118,13 @@ export default function KontakPageClient() {
   }, []);
 
   const selectedVehicleObj = useMemo(
-    () => vehicles.find((v) => v.name === selectedVehicle),
+    () => vehicles.find((v) => v.id === selectedVehicle) || null,
     [vehicles, selectedVehicle]
   );
   const selectedPackageObj = useMemo(
-    () => packages.find((p) => p.destination === selectedPackage),
+    () => packages.find((p) => p.id === selectedPackage) || null,
     [packages, selectedPackage]
   );
-
-  const scroll = (ref: React.RefObject<HTMLDivElement | null>, dir: "left" | "right") => {
-    if (!ref.current) return;
-    ref.current.scrollBy({ left: dir === "left" ? -280 : 280, behavior: "smooth" });
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -178,21 +171,17 @@ export default function KontakPageClient() {
       lines.push(`Titik Jemput: ${pickup}`);
       lines.push(`Titik Tujuan: ${tujuan}`);
     }
-    if (topic === "Sewa Mobil" && selectedVehicle) {
-      lines.push(`Armada: ${selectedVehicle}`);
-      if (selectedVehicleObj) {
-        lines.push(
-          `Estimasi: ${formatRupiah(selectedVehicleObj.pricing.startingPrice || 0)} / 12 jam`
-        );
-      }
+    if (topic === "Sewa Mobil" && selectedVehicleObj) {
+      lines.push(`Armada: ${selectedVehicleObj.name}`);
+      lines.push(
+        `Estimasi: ${formatRupiah(selectedVehicleObj.pricing.startingPrice || 0)} / 12 jam`
+      );
     }
-    if (topic === "Paket Wisata" && selectedPackage) {
-      lines.push(`Paket: ${selectedPackage}`);
-      if (selectedPackageObj) {
-        lines.push(
-          `Estimasi: ${formatRupiah(selectedPackageObj.price || 0)} (${selectedPackageObj.duration})`
-        );
-      }
+    if (topic === "Paket Wisata" && selectedPackageObj) {
+      lines.push(`Paket: ${selectedPackageObj.destination}`);
+      lines.push(
+        `Estimasi: ${formatRupiah(selectedPackageObj.price || 0)} (${selectedPackageObj.duration})`
+      );
     }
     lines.push(`Pesan: ${pesan}`);
     lines.push("", "Terima kasih.");
@@ -268,6 +257,8 @@ export default function KontakPageClient() {
                         onClick={() => {
                           setTopic(id);
                           setErrors({});
+                          setSelectedVehicle(null);
+                          setSelectedPackage(null);
                         }}
                         aria-pressed={isActive}
                         className={cn(
@@ -318,8 +309,74 @@ export default function KontakPageClient() {
                 </div>
               )}
 
-              {topic === "Sewa Mobil" && null}
-              {topic === "Paket Wisata" && null}
+              {topic === "Sewa Mobil" && (
+                <div className="mt-5">
+                  <div className="mb-2 flex items-center justify-between">
+                    <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-muted">
+                      Pilih Armada
+                    </p>
+                    {selectedVehicleObj && (
+                      <span className="text-[11px] font-extrabold text-accent">
+                        {selectedVehicleObj.name} ·{" "}
+                        {formatRupiah(selectedVehicleObj.pricing.startingPrice || 0)} / 12 jam
+                      </span>
+                    )}
+                  </div>
+                  {vehicles.length > 0 ? (
+                    <div className="-mx-5 md:mx-0">
+                      <VehicleCards
+                        vehicles={vehicles}
+                        forceMode="single"
+                        showYearPill={false}
+                        selectedId={selectedVehicle}
+                        onSelect={(v) => setSelectedVehicle(v.id)}
+                      />
+                    </div>
+                  ) : (
+                    <p className="text-[12px] text-muted">Memuat armada…</p>
+                  )}
+                  {errors.selectedVehicle && (
+                    <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-error">
+                      <AlertCircle size={11} aria-hidden="true" />
+                      {errors.selectedVehicle}
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {topic === "Paket Wisata" && (
+                <div className="mt-5">
+                  <div className="mb-2 flex items-center justify-between">
+                    <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-muted">
+                      Pilih Paket
+                    </p>
+                    {selectedPackageObj && (
+                      <span className="text-[11px] font-extrabold text-accent">
+                        {selectedPackageObj.destination} ·{" "}
+                        {formatRupiah(selectedPackageObj.price || 0)}
+                      </span>
+                    )}
+                  </div>
+                  {packages.length > 0 ? (
+                    <div className="-mx-5 md:mx-0">
+                      <PackageCards
+                        packages={packages}
+                        forceMode="single"
+                        selectedId={selectedPackage}
+                        onSelect={(p) => setSelectedPackage(p.id)}
+                      />
+                    </div>
+                  ) : (
+                    <p className="text-[12px] text-muted">Memuat paket…</p>
+                  )}
+                  {errors.selectedPackage && (
+                    <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-error">
+                      <AlertCircle size={11} aria-hidden="true" />
+                      {errors.selectedPackage}
+                    </span>
+                  )}
+                </div>
+              )}
 
               {topic === "Antar Jemput" && (
                 <div className="mt-4 space-y-3">
@@ -484,190 +541,6 @@ export default function KontakPageClient() {
           </motion.div>
         </div>
       </div>
-    </div>
-  );
-}
-
-function VehiclePicker({
-  ref,
-  vehicles,
-  selected,
-  onSelect,
-  onScroll,
-  error,
-}: {
-  ref?: React.RefObject<HTMLDivElement | null>;
-  vehicles: Vehicle[];
-  selected: string | null;
-  onSelect: (name: string) => void;
-  onScroll: (dir: "left" | "right") => void;
-  error?: string;
-}) {
-  if (vehicles.length === 0) return null;
-  return (
-    <div className="mt-4">
-      <div className="mb-2 flex items-center justify-between">
-        <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-muted">
-          Pilih Armada
-        </p>
-        <div className="hidden sm:flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => onScroll("left")}
-            className="flex h-7 w-7 items-center justify-center rounded-full border border-line hover:bg-accent hover:text-white hover:border-accent transition"
-            aria-label="Geser kiri"
-          >
-            <ChevronLeft size={14} />
-          </button>
-          <button
-            type="button"
-            onClick={() => onScroll("right")}
-            className="flex h-7 w-7 items-center justify-center rounded-full border border-line hover:bg-accent hover:text-white hover:border-accent transition"
-            aria-label="Geser kanan"
-          >
-            <ChevronRight size={14} />
-          </button>
-        </div>
-      </div>
-      <div
-        ref={ref}
-        className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto pb-2 scrollbar-none"
-      >
-        {vehicles.map((v) => {
-          const isActive = selected === v.name;
-          return (
-            <button
-              key={v.id}
-              type="button"
-              onClick={() => onSelect(v.name)}
-              className={cn(
-                "flex-shrink-0 w-[160px] sm:w-[180px] snap-start rounded-2xl border-2 overflow-hidden text-left transition-all",
-                isActive
-                  ? "border-accent shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)]"
-                  : "border-line hover:border-accent/50"
-              )}
-            >
-              <div className="aspect-[16/10] relative bg-surface overflow-hidden">
-                <img
-                  src={v.image}
-                  alt={v.name}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-              <div className={cn("p-2.5", isActive && "bg-accent/[0.04]")}>
-                <p className="text-[12px] font-extrabold text-heading truncate">
-                  {v.name}
-                </p>
-                <p className="text-[10px] text-muted">
-                  {v.category} · {v.capacity} kursi
-                </p>
-                <p className="text-[11px] font-extrabold text-accent mt-1">
-                  {formatRupiah(v.pricing.startingPrice || 0)} / 12 jam
-                </p>
-              </div>
-            </button>
-          );
-        })}
-      </div>
-      {error && (
-        <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-error">
-          <AlertCircle size={11} aria-hidden="true" />
-          {error}
-        </span>
-      )}
-    </div>
-  );
-}
-
-function PackagePicker({
-  ref,
-  packages,
-  selected,
-  onSelect,
-  onScroll,
-  error,
-}: {
-  ref?: React.RefObject<HTMLDivElement | null>;
-  packages: TravelPackage[];
-  selected: string | null;
-  onSelect: (name: string) => void;
-  onScroll: (dir: "left" | "right") => void;
-  error?: string;
-}) {
-  if (packages.length === 0) return null;
-  return (
-    <div className="mt-4">
-      <div className="mb-2 flex items-center justify-between">
-        <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-muted">
-          Pilih Paket
-        </p>
-        <div className="hidden sm:flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => onScroll("left")}
-            className="flex h-7 w-7 items-center justify-center rounded-full border border-line hover:bg-accent hover:text-white hover:border-accent transition"
-            aria-label="Geser kiri"
-          >
-            <ChevronLeft size={14} />
-          </button>
-          <button
-            type="button"
-            onClick={() => onScroll("right")}
-            className="flex h-7 w-7 items-center justify-center rounded-full border border-line hover:bg-accent hover:text-white hover:border-accent transition"
-            aria-label="Geser kanan"
-          >
-            <ChevronRight size={14} />
-          </button>
-        </div>
-      </div>
-      <div
-        ref={ref}
-        className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto pb-2 scrollbar-none"
-      >
-        {packages.map((p) => {
-          const isActive = selected === p.destination;
-          return (
-            <button
-              key={p.id}
-              type="button"
-              onClick={() => onSelect(p.destination)}
-              className={cn(
-                "flex-shrink-0 w-[160px] sm:w-[180px] snap-start rounded-2xl border-2 overflow-hidden text-left transition-all",
-                isActive
-                  ? "border-accent shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)]"
-                  : "border-line hover:border-accent/50"
-              )}
-            >
-              <div className="aspect-[16/10] relative bg-surface overflow-hidden">
-                <img
-                  src={p.image}
-                  alt={p.destination}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-              <div className={cn("p-2.5", isActive && "bg-accent/[0.04]")}>
-                <p className="text-[12px] font-extrabold text-heading truncate">
-                  {p.destination}
-                </p>
-                <p className="text-[10px] text-muted truncate">
-                  {p.destination} · {p.duration}
-                </p>
-                <p className="text-[11px] font-extrabold text-accent mt-1">
-                  {formatRupiah(p.price || 0)}
-                </p>
-              </div>
-            </button>
-          );
-        })}
-      </div>
-      {error && (
-        <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-error">
-          <AlertCircle size={11} aria-hidden="true" />
-          {error}
-        </span>
-      )}
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, Fuel, Settings2, Users } from "lucide-react";
+import { ArrowUpRight, Check, Fuel, Settings2, Users } from "lucide-react";
 import type { Vehicle } from "@/lib/types";
 import { cn } from "@/lib/cn";
 import { formatIDR } from "@/lib/format";
@@ -15,6 +15,8 @@ type VehicleCardsProps = {
   vehicles: Vehicle[];
   showYearPill?: boolean;
   forceMode?: "grid" | "single";
+  selectedId?: string | null;
+  onSelect?: (vehicle: Vehicle) => void;
 };
 
 export function vehiclePriceLabel(vehicle: Vehicle): string {
@@ -27,6 +29,8 @@ export default function VehicleCards({
   vehicles,
   showYearPill = true,
   forceMode,
+  selectedId,
+  onSelect,
 }: VehicleCardsProps) {
   const reduce = useReducedMotion();
   const [rowRef, activeIdx] = useSnapActive();
@@ -34,6 +38,7 @@ export default function VehicleCards({
   // Default: grid 2-col on mobile (kayak desktop biar keliatan banyak kecil-kecil).
   // forceMode="single" → carousel 1-satu.
   const useCarousel = forceMode === "single";
+  const selectable = !!onSelect;
 
   return (
     <div className="relative md:mx-0">
@@ -64,10 +69,11 @@ export default function VehicleCards({
                 : "scale-100 opacity-100",
             )}
           >
-            <Link
-              href={`/armada/${vehicle.slug}`}
-              aria-label={`Lihat detail ${vehicle.name}`}
-              className="group flex h-full flex-col overflow-hidden rounded-[20px] border border-line bg-white shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-elevated"
+            <Wrapper
+              selectable={selectable}
+              selected={selectable && selectedId === vehicle.id}
+              vehicle={vehicle}
+              onSelect={onSelect}
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-surface">
                 <Image
@@ -124,7 +130,7 @@ export default function VehicleCards({
                   </span>
                 </div>
               </div>
-            </Link>
+            </Wrapper>
           </motion.div>
         );
       })}
@@ -162,5 +168,58 @@ function Spec({ Icon, label }: { Icon: React.ComponentType<{ size?: number; clas
         {label}
       </span>
     </li>
+  );
+}
+
+function Wrapper({
+  selectable,
+  selected,
+  vehicle,
+  onSelect,
+  children,
+}: {
+  selectable: boolean;
+  selected: boolean;
+  vehicle: Vehicle;
+  onSelect?: (v: Vehicle) => void;
+  children: React.ReactNode;
+}) {
+  const baseCard =
+    "group flex h-full flex-col overflow-hidden rounded-[20px] border bg-white shadow-card transition-all duration-300";
+  if (selectable) {
+    return (
+      <button
+        type="button"
+        onClick={() => onSelect?.(vehicle)}
+        aria-pressed={selected}
+        aria-label={`Pilih ${vehicle.name}`}
+        className={cn(
+          baseCard,
+          "text-left w-full",
+          selected
+            ? "border-accent ring-2 ring-accent/40 shadow-elevated"
+            : "border-line hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-elevated"
+        )}
+      >
+        {children}
+        {selected && (
+          <span className="absolute right-3 bottom-3 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-accent text-white shadow-card">
+            <Check size={14} strokeWidth={3} />
+          </span>
+        )}
+      </button>
+    );
+  }
+  return (
+    <Link
+      href={`/armada/${vehicle.slug}`}
+      aria-label={`Lihat detail ${vehicle.name}`}
+      className={cn(
+        baseCard,
+        "border-line hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-elevated"
+      )}
+    >
+      {children}
+    </Link>
   );
 }

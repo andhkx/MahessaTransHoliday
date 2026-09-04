@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
-import { ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowUpRight, Check, MapPin } from "lucide-react";
 import type { TravelPackage } from "@/lib/types";
 import { cn } from "@/lib/cn";
 import { formatShort } from "@/lib/format";
@@ -14,12 +14,20 @@ const EASE = [0.4, 0, 0.2, 1] as const;
 type PackageCardsProps = {
   packages: TravelPackage[];
   forceMode?: "grid" | "single";
+  selectedId?: string | null;
+  onSelect?: (pkg: TravelPackage) => void;
 };
 
-export default function PackageCards({ packages, forceMode }: PackageCardsProps) {
+export default function PackageCards({
+  packages,
+  forceMode,
+  selectedId,
+  onSelect,
+}: PackageCardsProps) {
   const reduce = useReducedMotion();
   const [rowRef, activeIdx] = useSnapActive();
   const useCarousel = forceMode === "single";
+  const selectable = !!onSelect;
 
   return (
     <div className="relative md:mx-0">
@@ -48,10 +56,11 @@ export default function PackageCards({ packages, forceMode }: PackageCardsProps)
               : "scale-100 opacity-100",
           )}
         >
-          <Link
-            href={`/paket/${p.slug}`}
-            aria-label={`Lihat detail paket Hiace ${p.destination}`}
-            className="group flex h-full flex-col overflow-hidden rounded-[18px] border border-line bg-white shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-elevated"
+          <Wrapper
+            selectable={selectable}
+            selected={selectable && selectedId === p.id}
+            pkg={p}
+            onSelect={onSelect}
           >
             <div className="relative aspect-[16/10] overflow-hidden bg-surface">
               <Image
@@ -100,7 +109,7 @@ export default function PackageCards({ packages, forceMode }: PackageCardsProps)
                 </span>
               </div>
             </div>
-          </Link>
+          </Wrapper>
         </motion.div>
       ))}
       </div>
@@ -111,5 +120,58 @@ export default function PackageCards({ packages, forceMode }: PackageCardsProps)
         />
       )}
     </div>
+  );
+}
+
+function Wrapper({
+  selectable,
+  selected,
+  pkg,
+  onSelect,
+  children,
+}: {
+  selectable: boolean;
+  selected: boolean;
+  pkg: TravelPackage;
+  onSelect?: (p: TravelPackage) => void;
+  children: React.ReactNode;
+}) {
+  const baseCard =
+    "group relative flex h-full flex-col overflow-hidden rounded-[18px] border bg-white shadow-card transition-all duration-300";
+  if (selectable) {
+    return (
+      <button
+        type="button"
+        onClick={() => onSelect?.(pkg)}
+        aria-pressed={selected}
+        aria-label={`Pilih paket ${pkg.destination}`}
+        className={cn(
+          baseCard,
+          "text-left w-full",
+          selected
+            ? "border-accent ring-2 ring-accent/40 shadow-elevated"
+            : "border-line hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-elevated"
+        )}
+      >
+        {children}
+        {selected && (
+          <span className="absolute right-2.5 top-2.5 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-accent text-white shadow-card">
+            <Check size={12} strokeWidth={3} />
+          </span>
+        )}
+      </button>
+    );
+  }
+  return (
+    <Link
+      href={`/paket/${pkg.slug}`}
+      aria-label={`Lihat detail paket Hiace ${pkg.destination}`}
+      className={cn(
+        baseCard,
+        "border-line hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-elevated"
+      )}
+    >
+      {children}
+    </Link>
   );
 }
