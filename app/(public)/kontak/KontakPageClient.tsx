@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
+import { formatIDR, formatCompact } from "@/lib/format";
 import { EMAIL_DISPLAY, WHATSAPP_NUMBER } from "@/lib/constants";
 import type { Vehicle, TravelPackage } from "@/lib/types";
 import LocationAutocomplete, { type LocationResult } from "@/components/LocationAutocomplete";
@@ -92,9 +93,6 @@ function validateWa(input: string): boolean {
   const digits = input.replace(/\D/g, "");
   return digits.length >= 10 && digits.length <= 15;
 }
-
-const formatRupiah = (n: number) =>
-  n > 0 ? `Rp ${(n / 1000).toFixed(0)}rb` : "";
 
 export default function KontakPageClient() {
   const reduce = useReducedMotion();
@@ -178,13 +176,13 @@ export default function KontakPageClient() {
     if (topic === "Sewa Mobil" && selectedVehicleObj) {
       lines.push(`Armada: ${selectedVehicleObj.name}`);
       lines.push(
-        `Estimasi: ${formatRupiah(selectedVehicleObj.pricing.startingPrice || 0)} / 12 jam`
+        `Estimasi: ${formatIDR(selectedVehicleObj.pricing.startingPrice || 0)} / 12 jam`
       );
     }
     if (topic === "Paket Wisata" && selectedPackageObj) {
       lines.push(`Paket: ${selectedPackageObj.destination}`);
       lines.push(
-        `Estimasi: ${formatRupiah(selectedPackageObj.price || 0)} (${selectedPackageObj.duration})`
+        `Estimasi: ${formatIDR(selectedPackageObj.price || 0)} (${selectedPackageObj.duration})`
       );
     }
     lines.push(`Pesan: ${pesan}`);
@@ -328,7 +326,7 @@ export default function KontakPageClient() {
                     {selectedVehicleObj && (
                       <span className="text-[11px] font-extrabold text-accent">
                         {selectedVehicleObj.name} ·{" "}
-                        {formatRupiah(selectedVehicleObj.pricing.startingPrice || 0)} / 12 jam
+                        {formatIDR(selectedVehicleObj.pricing.startingPrice || 0)} / 12 jam
                       </span>
                     )}
                   </div>
@@ -360,7 +358,7 @@ export default function KontakPageClient() {
                     {selectedPackageObj && (
                       <span className="text-[11px] font-extrabold text-accent">
                         {selectedPackageObj.destination} ·{" "}
-                        {formatRupiah(selectedPackageObj.price || 0)}
+                        {formatIDR(selectedPackageObj.price || 0)}
                       </span>
                     )}
                   </div>
@@ -544,7 +542,7 @@ export default function KontakPageClient() {
                   Estimasi Harga
                 </p>
                 <p className="mt-1 text-[14px] font-extrabold text-heading">
-                  Mulai Rp 350.000 / 12 jam
+                  Mulai Rp350rb / 12 jam
                 </p>
                 <p className="mt-1 text-[12px] leading-relaxed text-body-text">
                   Harga final tergantung armada, durasi, dan tujuan. Konfirmasi
@@ -610,9 +608,9 @@ function PickerSlide<T extends { id: string; name?: string; destination?: string
       ? `${p.duration}`
       : "";
   const price = v
-    ? `${formatRupiah(v.pricing.startingPrice || 0)} / 12 jam`
+    ? `${formatCompact(v.pricing.startingPrice || 0)} / 12 jam`
     : p
-      ? `${formatRupiah(p.price || 0)}`
+      ? `${formatCompact(p.price || 0)}`
       : "";
 
   const onTouchStart = (e: React.TouchEvent) => {

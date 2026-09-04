@@ -26,7 +26,7 @@ export async function generateMetadata({
   const ogParams = new URLSearchParams({
     title: packageItem.destination,
     subtitle: `Paket ${packageItem.destination} · ${packageItem.duration}`,
-    price: packageItem.price > 0 ? `Mulai Rp ${(packageItem.price / 1000).toFixed(0)}rb` : '',
+    price: packageItem.price > 0 ? `Mulai ${formatIDR(packageItem.price)}` : '',
     badge: packageItem.badge || '',
   });
   const ogImage = `/api/og?${ogParams.toString()}`;

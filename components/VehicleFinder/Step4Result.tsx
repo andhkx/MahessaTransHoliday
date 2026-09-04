@@ -17,7 +17,7 @@ import {
 import { buildFinderResult, getJourneyLabel } from "./finder";
 import type { JourneyType } from "@/data/finder";
 import { waLink } from "@/lib/whatsapp";
-import { formatIDR } from "@/lib/format";
+import { formatCompact } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
@@ -51,7 +51,7 @@ export default function Step4Result({
           Ini mobil yang cocok buat kamu
         </h3>
         <p className="text-sm text-muted">
-          Berdasarkan budget {formatIDR(budget)} · {people} orang · {getJourneyLabel(journey)}
+          Berdasarkan budget {formatCompact(budget)} · {people} orang · {getJourneyLabel(journey)}
         </p>
       </div>
 
@@ -117,7 +117,7 @@ export default function Step4Result({
                 {vehicle.name}
               </h4>
               <p className="mb-4 text-base font-extrabold text-accent md:text-[20px]">
-                Mulai {formatIDR(vehicle.pricing.startingPrice ?? 0)} / 12 jam
+                Mulai {formatCompact(vehicle.pricing.startingPrice ?? 0)} / 12 jam
               </p>
 
               <div className="mb-5 grid grid-cols-2 gap-3 md:grid-cols-1">
@@ -148,7 +148,7 @@ export default function Step4Result({
                     Paket {pkg.destination}
                   </p>
                   <p className="text-[12px] text-muted">
-                    {pkg.duration} · {formatIDR(pkg.price)}
+                    {pkg.duration} · {formatCompact(pkg.price)}
                   </p>
                   <p className="mt-1 text-[11px] text-body-text">
                     Include: {pkg.included.slice(0, 3).join(", ")}
@@ -210,7 +210,7 @@ export default function Step4Result({
                   {alt.name}
                 </p>
                 <p className="text-[11px] font-bold text-accent">
-                  {formatIDR(alt.pricing.startingPrice ?? 0)} / 12 jam
+                  {formatCompact(alt.pricing.startingPrice ?? 0)} / 12 jam
                 </p>
               </Link>
             ))}

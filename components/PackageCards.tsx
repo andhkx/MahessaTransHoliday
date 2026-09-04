@@ -6,7 +6,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, Check, MapPin } from "lucide-react";
 import type { TravelPackage } from "@/lib/types";
 import { cn } from "@/lib/cn";
-import { formatShort } from "@/lib/format";
+import { formatCompact } from "@/lib/format";
 import useSnapActive from "./useSnapActive";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
@@ -95,7 +95,7 @@ export default function PackageCards({
               <div className="mt-auto flex items-end justify-between gap-2 border-t border-line pt-3">
                 <div>
                   <p className="text-sm font-extrabold tracking-tight text-accent">
-                    Mulai {formatShort(p.price)}
+                    Mulai {formatCompact(p.price)}
                   </p>
                   <p className="text-[10px] font-semibold text-muted">
                     {p.durationHours} jam · {p.duration}

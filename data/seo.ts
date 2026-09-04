@@ -23,7 +23,7 @@ export const seoMetadata = {
     title:
       "Paket Wisata & Tour Hiace All-In: Bandung, Garut, Jakarta, Yogya, Bali",
     description:
-      "Paket perjalanan all-in: mobil, driver, BBM. Berangkat dari Cimahi, Bandung & Padalarang. Mulai Rp1.3jt untuk city tour Bandung.",
+      "Paket perjalanan all-in: mobil, driver, BBM. Berangkat dari Cimahi, Bandung & Padalarang. Mulai Rp1,3jt untuk city tour Bandung.",
     keywords:
       "paket tour bandung, sewa hiace wisata, charter hiace pangandaran, paket wisata garut, tour bali dari bandung",
   },

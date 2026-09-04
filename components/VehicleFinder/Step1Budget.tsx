@@ -6,7 +6,7 @@ import Link from "next/link";
 import { BUDGET_TIERS, BUDGET_MIN, BUDGET_MAX, BUDGET_STEP } from "@/data/finder";
 import type { Vehicle } from "@/lib/types";
 import { vehicles } from "@/data/vehicles";
-import { formatIDR } from "@/lib/format";
+import { formatCompact } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
 const FALLBACK_IMG =
@@ -55,9 +55,7 @@ export default function Step1Budget({
   // Find active tier
   const activeTier = BUDGET_TIERS.find((t) => budget >= t.min && budget <= t.max);
 
-  const displayBudget = budget >= 1000000
-    ? `Rp ${(budget / 1000000).toFixed(1)} jt`
-    : `Rp ${Math.round(budget / 1000)} rb`;
+  const displayBudget = formatCompact(budget);
 
   return (
     <motion.div
@@ -119,8 +117,8 @@ export default function Step1Budget({
           aria-label="Budget slider"
         />
         <div className="mt-4 flex justify-between text-sm font-bold text-muted">
-          <span>Rp 350 rb</span>
-          <span>Rp 12.75 jt</span>
+          <span>{formatCompact(350000)}</span>
+          <span>{formatCompact(12750000)}</span>
         </div>
       </div>
 
@@ -169,7 +167,7 @@ export default function Step1Budget({
                   <div className="p-3">
                     <p className="text-sm font-extrabold text-heading line-clamp-1">{v.name}</p>
                     <p className="text-[11px] font-bold text-accent">
-                      {formatIDR(v.pricing.startingPrice ?? 0)} / 12 jam
+                      {formatCompact(v.pricing.startingPrice ?? 0)} / 12 jam
                     </p>
                   </div>
                 </motion.article>

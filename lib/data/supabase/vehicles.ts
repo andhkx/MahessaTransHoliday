@@ -68,7 +68,7 @@ function mapSupabaseVehicle(v: any): Vehicle {
       : ['Cimahi', 'Bandung', 'Padalarang'],
     seo: v.seo || {
       title: `Rental ${v.name} Cimahi & Bandung`,
-      description: `Sewa ${v.name} di Cimahi, Bandung dan Padalarang mulai Rp${v.price_per_day?.toLocaleString()}/ 12 jam.`,
+      description: `Sewa ${v.name} di Cimahi, Bandung dan Padalarang mulai Rp. ${(v.price_per_day ?? 0).toLocaleString("id-ID")}/ 12 jam.`,
       keywords: [],
     },
   };

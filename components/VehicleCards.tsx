@@ -6,7 +6,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, Check, Fuel, Settings2, Users } from "lucide-react";
 import type { Vehicle } from "@/lib/types";
 import { cn } from "@/lib/cn";
-import { formatIDR } from "@/lib/format";
+import { formatCompact } from "@/lib/format";
 import useSnapActive from "./useSnapActive";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
@@ -21,7 +21,7 @@ type VehicleCardsProps = {
 
 export function vehiclePriceLabel(vehicle: Vehicle): string {
   return vehicle.pricing.startingPrice
-    ? formatIDR(vehicle.pricing.startingPrice)
+    ? formatCompact(vehicle.pricing.startingPrice)
     : "Hubungi Kami";
 }
 

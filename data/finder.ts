@@ -16,7 +16,7 @@ export const BUDGET_TIERS: BudgetTier[] = [
   {
     id: "hemat",
     label: "Hemat",
-    range: "Rp650rb - 600rb",
+    range: "Rp350rb - Rp600rb",
     min: 350000,
     max: 600000,
     color: "#27AE60",
@@ -25,7 +25,7 @@ export const BUDGET_TIERS: BudgetTier[] = [
   {
     id: "menengah",
     label: "Menengah",
-    range: "Rp600rb - 1.5jt",
+    range: "Rp600rb - Rp1,5jt",
     min: 600001,
     max: 1500000,
     color: "#F39C12",
@@ -34,7 +34,7 @@ export const BUDGET_TIERS: BudgetTier[] = [
   {
     id: "premium",
     label: "Premium",
-    range: "Rp1.5jt - 4.5jt",
+    range: "Rp1,5jt - Rp4,5jt",
     min: 1500001,
     max: 4500000,
     color: "#0F4C75",
@@ -43,7 +43,7 @@ export const BUDGET_TIERS: BudgetTier[] = [
   {
     id: "grup",
     label: "Grup / Wisata",
-    range: "Rp4.5jt+",
+    range: "Rp4,5jt+",
     min: 4500001,
     max: 12750000,
     color: "#7B2CBF",

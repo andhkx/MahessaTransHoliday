@@ -20,6 +20,6 @@ export function waVehicleLink(vehicleName: string): string {
 
 export function waPackageLink(packageName: string, price: number): string {
   return waLink(
-    `Halo ${SITE_NAME}, saya tertarik dengan Paket ${packageName} mulai Rp${price.toLocaleString("id-ID")}.`,
+    `Halo ${SITE_NAME}, saya tertarik dengan Paket ${packageName} mulai Rp. ${price.toLocaleString("id-ID")}.`,
   );
 }

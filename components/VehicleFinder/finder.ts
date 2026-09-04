@@ -3,6 +3,7 @@ import { journeyKeywords, BUDGET_TIERS } from "@/data/finder";
 import { vehicles } from "@/data/vehicles";
 import { packages } from "@/data/packages";
 import type { Vehicle, TravelPackage } from "@/lib/types";
+import { formatIDR } from "@/lib/format";
 
 export type FinderResult = {
   vehicle: Vehicle | null;
@@ -112,13 +113,10 @@ export function buildFinderResult(
     : [];
   const pkg = findBestPackage(people, budget, journey);
 
-  const budgetShort =
-    budget >= 1000000
-      ? `${(budget / 1000000).toFixed(1)}jt`
-      : `${Math.round(budget / 1000)}rb`;
+  const budgetLabel = formatIDR(budget);
 
   const vehicleName = vehicle ? vehicle.name : "kendaraan rekomendasi";
-  const message = `Halo Mahessa Trans Holiday! Saya ingin sewa ${vehicleName} untuk ${people} orang, budget Rp${budgetShort}, tujuan ${JOURNEY_LABELS[journey]}. Tersedia kapan? Berapa harganya?`;
+  const message = `Halo Mahessa Trans Holiday! Saya ingin sewa ${vehicleName} untuk ${people} orang, budget ${budgetLabel}, tujuan ${JOURNEY_LABELS[journey]}. Tersedia kapan? Berapa harganya?`;
 
   return {
     vehicle,
