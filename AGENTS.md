@@ -78,7 +78,19 @@ NEXT_PUBLIC_SUPABASE_URL=https://rxhibmwhkjpfwirzvojt.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 SUPABASE_SERVICE_ROLE_KEY=eyJ...   # for bulk-upload script only
 NEXT_PUBLIC_TURNSTILE_SITE_KEY=0x4AAAAAAElc0pMsz_IJ6dhA   # optional, has fallback
+GOOGLE_MAPS_API_KEY=AIza...        # server-only, for Places autocomplete proxy
 ```
+
+## Maps & places (/kontak form)
+
+The **Antar Jemput** topik uses two services:
+
+- **Autocomplete**: Google Places API (New). Server-proxied via `app/api/places/{autocomplete,details}/route.ts`. Session token groups autocomplete + details into a single billable session. Key lives in `GOOGLE_MAPS_API_KEY` (server-only, not `NEXT_PUBLIC_`). Restrict the key in Google Cloud Console to "Places API (New)" only.
+- **Map preview**: `components/RouteMap.tsx` uses MapLibre GL with OpenStreetMap raster tiles. No API key required. Markers A (pickup) and B (destination) auto-fit bounds. Attribution kept on the map.
+
+**Picker for Sewa Mobil / Paket Wisata**: `PickerSlide` (in `app/(public)/kontak/KontakPageClient.tsx`) — state-based single-card with prev/next + dot nav + touch swipe gesture. Card tappable to select (ring accent + check badge). Replaces earlier grid/snap-carousel approaches that overflowed in form-embed context.
+
+**Cloudflare note**: Bot Fight Mode is on. OSM tiles can occasionally return 403. If that happens, whitelist `*.tile.openstreetmap.org` in Cloudflare WAF → Tools → IP Access Rules.
 
 ## Data shapes
 
@@ -266,6 +278,11 @@ Every CRUD write (vehicles, packages, articles, testimonials, faq_items, gallery
 If user reports old data: Vercel Dashboard → Deployments → "..." → "Redeploy" with **uncheck "Use existing Build Cache"**.
 
 ## Known issues (already fixed)
+
+- ~~`/kontak` picker rendered all cards as horizontal scroll~~ — fixed by state-based `PickerSlide` (1 card at a time, swipe + nav)
+- ~~`/kontak` form-embed picker overflowed form border~~ — fixed by replacing `VehicleCards`/`PackageCards` `forceMode="single"` with custom compact slide
+- ~~`whileInView` animation stuck at opacity 0 in carousel mode~~ — fixed by skipping entrance animation in `selectable || useCarousel` mode
+- ~~Sitemap used legacy `data/*.ts` (didn't reflect new vehicles/packages/artikel)~~ — fixed in `app/sitemap.ts`, now reads from Supabase dynamically
 
 - ~~`force-dynamic` placed BEFORE imports in `[slug]/page.tsx`~~ — moved after imports
 - ~~`unstable_cache` returned stale data after DB changes~~ — removed entirely
