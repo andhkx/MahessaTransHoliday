@@ -22,6 +22,7 @@ import { EMAIL_DISPLAY, WHATSAPP_NUMBER } from "@/lib/constants";
 import type { Vehicle, TravelPackage } from "@/lib/types";
 import VehicleCards from "@/components/VehicleCards";
 import PackageCards from "@/components/PackageCards";
+import LocationAutocomplete from "@/components/LocationAutocomplete";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -380,23 +381,24 @@ export default function KontakPageClient() {
 
               {topic === "Antar Jemput" && (
                 <div className="mt-4 space-y-3">
-                  <Field
+                  <LocationAutocomplete
                     name="pickup"
                     label="Titik Jemput"
-                    placeholder="Alamat lengkap atau tempat terkenal"
+                    placeholder="Cari alamat jemput..."
                     value={pickup}
                     onChange={setPickup}
                     error={errors.pickup}
-                    icon={<MapPin size={14} />}
+                    required
                   />
-                  <Field
+                  <LocationAutocomplete
                     name="tujuan"
                     label="Titik Tujuan"
-                    placeholder="Alamat lengkap atau tempat terkenal"
+                    placeholder="Cari alamat tujuan..."
                     value={tujuan}
                     onChange={setTujuan}
                     error={errors.tujuan}
-                    icon={<MapPin size={14} className="text-error" />}
+                    iconColor="#ef4444"
+                    required
                   />
                   {pickup && tujuan && (
                     <a

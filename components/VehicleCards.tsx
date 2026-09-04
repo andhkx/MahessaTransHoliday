@@ -55,8 +55,8 @@ export default function VehicleCards({
         return (
           <motion.div
             key={vehicle.id}
-            initial={reduce ? false : { opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={reduce || selectable || useCarousel ? false : { opacity: 0, y: 24 }}
+            whileInView={reduce || selectable || useCarousel ? undefined : { opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.05 }}
             transition={{ duration: 0.5, delay: i * 0.07, ease: EASE }}
             className={cn(
