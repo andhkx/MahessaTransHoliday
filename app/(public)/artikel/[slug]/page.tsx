@@ -11,10 +11,10 @@ import { waGeneralLink } from "@/lib/whatsapp";
 
 
 export const dynamic = 'force-dynamic';
-export async function generateMetadata({
-  params,
-}: { params: Promise<{ slug: string }> }: Promise<Metadata> {
-  const { slug } = await params;
+export async function generateMetadata(
+  params: { params: Promise<{ slug: string }> },
+): Promise<Metadata> {
+  const { slug } = await params.params;
   const article = await getArticleBySlug(slug);
   if (!article) return {};
   return {
