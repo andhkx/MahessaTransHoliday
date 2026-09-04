@@ -21,6 +21,8 @@ import { cn } from "@/lib/cn";
 import { EMAIL_DISPLAY, WHATSAPP_NUMBER } from "@/lib/constants";
 import type { Vehicle, TravelPackage } from "@/lib/types";
 import LocationAutocomplete from "@/components/LocationAutocomplete";
+import VehicleCards from "@/components/VehicleCards";
+import PackageCards from "@/components/PackageCards";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -322,11 +324,15 @@ export default function KontakPageClient() {
                     )}
                   </div>
                   {vehicles.length > 0 ? (
-                    <PilihArmada
-                      vehicles={vehicles}
-                      selectedId={selectedVehicle}
-                      onSelect={(v) => setSelectedVehicle(v.id)}
-                    />
+                    <div className="-mx-1 overflow-hidden">
+                      <VehicleCards
+                        vehicles={vehicles}
+                        forceMode="single"
+                        showYearPill={false}
+                        selectedId={selectedVehicle}
+                        onSelect={(v) => setSelectedVehicle(v.id)}
+                      />
+                    </div>
                   ) : (
                     <p className="text-[12px] text-muted">Memuat armada…</p>
                   )}
@@ -353,11 +359,14 @@ export default function KontakPageClient() {
                     )}
                   </div>
                   {packages.length > 0 ? (
-                    <PilihPaket
-                      packages={packages}
-                      selectedId={selectedPackage}
-                      onSelect={(p) => setSelectedPackage(p.id)}
-                    />
+                    <div className="-mx-1 overflow-hidden">
+                      <PackageCards
+                        packages={packages}
+                        forceMode="single"
+                        selectedId={selectedPackage}
+                        onSelect={(p) => setSelectedPackage(p.id)}
+                      />
+                    </div>
                   ) : (
                     <p className="text-[12px] text-muted">Memuat paket…</p>
                   )}
