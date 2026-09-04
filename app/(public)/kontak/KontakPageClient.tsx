@@ -5,6 +5,8 @@ import {
   ArrowRight,
   CarFront,
   Check,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   Mail,
   MapPin,
@@ -16,13 +18,11 @@ import {
   AlertCircle,
   Calendar,
 } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 import { EMAIL_DISPLAY, WHATSAPP_NUMBER } from "@/lib/constants";
 import type { Vehicle, TravelPackage } from "@/lib/types";
 import LocationAutocomplete from "@/components/LocationAutocomplete";
-import VehicleCards from "@/components/VehicleCards";
-import PackageCards from "@/components/PackageCards";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -324,15 +324,12 @@ export default function KontakPageClient() {
                     )}
                   </div>
                   {vehicles.length > 0 ? (
-                    <div className="-mx-1 overflow-hidden">
-                      <VehicleCards
-                        vehicles={vehicles}
-                        forceMode="single"
-                        showYearPill={false}
-                        selectedId={selectedVehicle}
-                        onSelect={(v) => setSelectedVehicle(v.id)}
-                      />
-                    </div>
+                    <PickerSlide
+                      items={vehicles}
+                      selectedId={selectedVehicle}
+                      onSelect={(v) => setSelectedVehicle(v.id)}
+                      kind="vehicle"
+                    />
                   ) : (
                     <p className="text-[12px] text-muted">Memuat armada…</p>
                   )}
@@ -359,14 +356,12 @@ export default function KontakPageClient() {
                     )}
                   </div>
                   {packages.length > 0 ? (
-                    <div className="-mx-1 overflow-hidden">
-                      <PackageCards
-                        packages={packages}
-                        forceMode="single"
-                        selectedId={selectedPackage}
-                        onSelect={(p) => setSelectedPackage(p.id)}
-                      />
-                    </div>
+                    <PickerSlide
+                      items={packages}
+                      selectedId={selectedPackage}
+                      onSelect={(p) => setSelectedPackage(p.id)}
+                      kind="package"
+                    />
                   ) : (
                     <p className="text-[12px] text-muted">Memuat paket…</p>
                   )}
@@ -547,123 +542,145 @@ export default function KontakPageClient() {
   );
 }
 
-function PilihArmada({
-  vehicles,
+function PickerSlide<T extends { id: string; name?: string; destination?: string; image: string }>({
+  items,
   selectedId,
   onSelect,
+  kind,
 }: {
-  vehicles: Vehicle[];
+  items: T[];
   selectedId: string | null;
-  onSelect: (v: Vehicle) => void;
+  onSelect: (item: T) => void;
+  kind: "vehicle" | "package";
 }) {
-  return (
-    <div className="-mx-1 flex snap-x snap-mandatory gap-2.5 overflow-x-auto pb-1 scrollbar-none sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0">
-      {vehicles.map((v) => {
-        const isActive = selectedId === v.id;
-        return (
-          <button
-            key={v.id}
-            type="button"
-            onClick={() => onSelect(v)}
-            aria-pressed={isActive}
-            aria-label={`Pilih ${v.name}`}
-            className={cn(
-              "group relative flex w-[170px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border bg-white text-left shadow-card transition-all duration-300 sm:w-auto",
-              isActive
-                ? "border-accent ring-2 ring-accent/40"
-                : "border-line hover:border-accent/50"
-            )}
-          >
-            <div className="relative aspect-[4/3] overflow-hidden bg-surface">
-              <img
-                src={v.image}
-                alt={v.name}
-                loading="lazy"
-                className="h-full w-full object-cover"
-              />
-              {v.badge && (
-                <span className="absolute left-1.5 top-1.5 rounded-full bg-accent/95 px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wide text-white">
-                  {v.badge}
-                </span>
-              )}
-              {isActive && (
-                <span className="absolute right-1.5 top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-white">
-                  <Check size={11} strokeWidth={3} />
-                </span>
-              )}
-            </div>
-            <div className="flex flex-1 flex-col gap-1 p-2.5">
-              <p className="text-[12px] font-extrabold leading-tight text-heading line-clamp-1">
-                {v.name}
-              </p>
-              <p className="text-[9px] font-bold uppercase tracking-wide text-muted">
-                {categoryLabel(v.category)} · {v.capacity} kursi
-              </p>
-              <p className="mt-auto text-[12px] font-extrabold text-accent">
-                {formatRupiah(v.pricing.startingPrice || 0)} / 12 jam
-              </p>
-            </div>
-          </button>
-        );
-      })}
-    </div>
-  );
-}
+  const [idx, setIdx] = useState(() => {
+    const found = items.findIndex((i) => i.id === selectedId);
+    return found >= 0 ? found : 0;
+  });
+  const touch = useRef<{ x: number; y: number } | null>(null);
 
-function PilihPaket({
-  packages,
-  selectedId,
-  onSelect,
-}: {
-  packages: TravelPackage[];
-  selectedId: string | null;
-  onSelect: (p: TravelPackage) => void;
-}) {
+  useEffect(() => {
+    const found = items.findIndex((i) => i.id === selectedId);
+    if (found >= 0) setIdx(found);
+  }, [selectedId, items]);
+
+  if (items.length === 0) return null;
+  const current = items[idx];
+  const goPrev = () => setIdx((i) => (i - 1 + items.length) % items.length);
+  const goNext = () => setIdx((i) => (i + 1) % items.length);
+
+  const isVehicle = kind === "vehicle";
+  const v = isVehicle ? (current as unknown as Vehicle) : null;
+  const p = !isVehicle ? (current as unknown as TravelPackage) : null;
+  const isActive = selectedId === current.id;
+  const title = v?.name ?? p?.destination ?? "";
+  const subtitle = v
+    ? `${categoryLabel(v.category)} · ${v.capacity} kursi`
+    : p
+      ? `${p.duration}`
+      : "";
+  const price = v
+    ? `${formatRupiah(v.pricing.startingPrice || 0)} / 12 jam`
+    : p
+      ? `${formatRupiah(p.price || 0)}`
+      : "";
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    touch.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (!touch.current) return;
+    const dx = e.changedTouches[0].clientX - touch.current.x;
+    const dy = e.changedTouches[0].clientY - touch.current.y;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx < 0) goNext();
+      else goPrev();
+    }
+    touch.current = null;
+  };
+
   return (
-    <div className="-mx-1 flex snap-x snap-mandatory gap-2.5 overflow-x-auto pb-1 scrollbar-none sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0">
-      {packages.map((p) => {
-        const isActive = selectedId === p.id;
-        return (
-          <button
-            key={p.id}
-            type="button"
-            onClick={() => onSelect(p)}
-            aria-pressed={isActive}
-            aria-label={`Pilih paket ${p.destination}`}
-            className={cn(
-              "group relative flex w-[170px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border bg-white text-left shadow-card transition-all duration-300 sm:w-auto",
-              isActive
-                ? "border-accent ring-2 ring-accent/40"
-                : "border-line hover:border-accent/50"
-            )}
-          >
-            <div className="relative aspect-[16/10] overflow-hidden bg-surface">
-              <img
-                src={p.image}
-                alt={p.destination}
-                loading="lazy"
-                className="h-full w-full object-cover"
-              />
-              <span className="absolute bottom-1.5 left-1.5 rounded-full bg-white/90 px-1.5 py-0.5 text-[9px] font-bold text-heading backdrop-blur">
-                {p.duration}
-              </span>
-              {isActive && (
-                <span className="absolute right-1.5 top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-white">
-                  <Check size={11} strokeWidth={3} />
-                </span>
+    <div
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+      className="select-none"
+    >
+      <button
+        type="button"
+        onClick={() => onSelect(current)}
+        aria-pressed={isActive}
+        aria-label={`Pilih ${title}`}
+        className={cn(
+          "group relative block w-full overflow-hidden rounded-2xl border bg-white text-left shadow-card transition-all",
+          isActive
+            ? "border-accent ring-2 ring-accent/40"
+            : "border-line hover:border-accent/50"
+        )}
+      >
+        <div className="relative aspect-[16/10] overflow-hidden bg-surface">
+          <img
+            src={current.image}
+            alt={title}
+            loading="lazy"
+            className="h-full w-full object-cover"
+          />
+          {isVehicle && v?.badge && (
+            <span className="absolute left-2 top-2 rounded-full bg-accent/95 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wide text-white">
+              {v.badge}
+            </span>
+          )}
+          {!isVehicle && p?.badge && (
+            <span className="absolute right-2 top-2 rounded-full bg-accent px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wide text-white">
+              {p.badge}
+            </span>
+          )}
+          {isActive && (
+            <span className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-accent text-white shadow-card">
+              <Check size={12} strokeWidth={3} />
+            </span>
+          )}
+        </div>
+        <div className="p-3">
+          <p className="truncate text-[13px] font-extrabold leading-tight text-heading">
+            {title}
+          </p>
+          <p className="mt-0.5 text-[10px] font-bold uppercase tracking-wide text-muted">
+            {subtitle}
+          </p>
+          <p className="mt-1.5 text-[12px] font-extrabold text-accent">{price}</p>
+        </div>
+      </button>
+
+      <div className="mt-2 flex items-center justify-between gap-2">
+        <button
+          type="button"
+          onClick={goPrev}
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-white text-muted transition hover:border-accent hover:text-accent"
+          aria-label="Sebelumnya"
+        >
+          <ChevronLeft size={14} />
+        </button>
+        <div className="flex flex-1 items-center justify-center gap-1.5">
+          {items.map((it, i) => (
+            <span
+              key={it.id}
+              aria-hidden="true"
+              className={cn(
+                "h-1.5 rounded-full transition-all",
+                i === idx ? "w-5 bg-accent" : "w-1.5 bg-line"
               )}
-            </div>
-            <div className="flex flex-1 flex-col gap-1 p-2.5">
-              <p className="text-[12px] font-extrabold leading-tight text-heading line-clamp-1">
-                {p.destination}
-              </p>
-              <p className="mt-auto text-[12px] font-extrabold text-accent">
-                {formatRupiah(p.price || 0)}
-              </p>
-            </div>
-          </button>
-        );
-      })}
+            />
+          ))}
+        </div>
+        <button
+          type="button"
+          onClick={goNext}
+          className="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-white text-muted transition hover:border-accent hover:text-accent"
+          aria-label="Selanjutnya"
+        >
+          <ChevronRight size={14} />
+        </button>
+      </div>
     </div>
   );
 }
