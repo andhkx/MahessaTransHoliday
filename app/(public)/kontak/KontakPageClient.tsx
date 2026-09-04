@@ -20,8 +20,6 @@ import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/cn";
 import { EMAIL_DISPLAY, WHATSAPP_NUMBER } from "@/lib/constants";
 import type { Vehicle, TravelPackage } from "@/lib/types";
-import VehicleCards from "@/components/VehicleCards";
-import PackageCards from "@/components/PackageCards";
 import LocationAutocomplete from "@/components/LocationAutocomplete";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
@@ -324,15 +322,11 @@ export default function KontakPageClient() {
                     )}
                   </div>
                   {vehicles.length > 0 ? (
-                    <div className="-mx-5 md:mx-0">
-                      <VehicleCards
-                        vehicles={vehicles}
-                        forceMode="single"
-                        showYearPill={false}
-                        selectedId={selectedVehicle}
-                        onSelect={(v) => setSelectedVehicle(v.id)}
-                      />
-                    </div>
+                    <PilihArmada
+                      vehicles={vehicles}
+                      selectedId={selectedVehicle}
+                      onSelect={(v) => setSelectedVehicle(v.id)}
+                    />
                   ) : (
                     <p className="text-[12px] text-muted">Memuat armada…</p>
                   )}
@@ -359,14 +353,11 @@ export default function KontakPageClient() {
                     )}
                   </div>
                   {packages.length > 0 ? (
-                    <div className="-mx-5 md:mx-0">
-                      <PackageCards
-                        packages={packages}
-                        forceMode="single"
-                        selectedId={selectedPackage}
-                        onSelect={(p) => setSelectedPackage(p.id)}
-                      />
-                    </div>
+                    <PilihPaket
+                      packages={packages}
+                      selectedId={selectedPackage}
+                      onSelect={(p) => setSelectedPackage(p.id)}
+                    />
                   ) : (
                     <p className="text-[12px] text-muted">Memuat paket…</p>
                   )}
@@ -545,6 +536,142 @@ export default function KontakPageClient() {
       </div>
     </div>
   );
+}
+
+function PilihArmada({
+  vehicles,
+  selectedId,
+  onSelect,
+}: {
+  vehicles: Vehicle[];
+  selectedId: string | null;
+  onSelect: (v: Vehicle) => void;
+}) {
+  return (
+    <div className="-mx-1 flex snap-x snap-mandatory gap-2.5 overflow-x-auto pb-1 scrollbar-none sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0">
+      {vehicles.map((v) => {
+        const isActive = selectedId === v.id;
+        return (
+          <button
+            key={v.id}
+            type="button"
+            onClick={() => onSelect(v)}
+            aria-pressed={isActive}
+            aria-label={`Pilih ${v.name}`}
+            className={cn(
+              "group relative flex w-[170px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border bg-white text-left shadow-card transition-all duration-300 sm:w-auto",
+              isActive
+                ? "border-accent ring-2 ring-accent/40"
+                : "border-line hover:border-accent/50"
+            )}
+          >
+            <div className="relative aspect-[4/3] overflow-hidden bg-surface">
+              <img
+                src={v.image}
+                alt={v.name}
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+              {v.badge && (
+                <span className="absolute left-1.5 top-1.5 rounded-full bg-accent/95 px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wide text-white">
+                  {v.badge}
+                </span>
+              )}
+              {isActive && (
+                <span className="absolute right-1.5 top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-white">
+                  <Check size={11} strokeWidth={3} />
+                </span>
+              )}
+            </div>
+            <div className="flex flex-1 flex-col gap-1 p-2.5">
+              <p className="text-[12px] font-extrabold leading-tight text-heading line-clamp-1">
+                {v.name}
+              </p>
+              <p className="text-[9px] font-bold uppercase tracking-wide text-muted">
+                {categoryLabel(v.category)} · {v.capacity} kursi
+              </p>
+              <p className="mt-auto text-[12px] font-extrabold text-accent">
+                {formatRupiah(v.pricing.startingPrice || 0)} / 12 jam
+              </p>
+            </div>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function PilihPaket({
+  packages,
+  selectedId,
+  onSelect,
+}: {
+  packages: TravelPackage[];
+  selectedId: string | null;
+  onSelect: (p: TravelPackage) => void;
+}) {
+  return (
+    <div className="-mx-1 flex snap-x snap-mandatory gap-2.5 overflow-x-auto pb-1 scrollbar-none sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0">
+      {packages.map((p) => {
+        const isActive = selectedId === p.id;
+        return (
+          <button
+            key={p.id}
+            type="button"
+            onClick={() => onSelect(p)}
+            aria-pressed={isActive}
+            aria-label={`Pilih paket ${p.destination}`}
+            className={cn(
+              "group relative flex w-[170px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border bg-white text-left shadow-card transition-all duration-300 sm:w-auto",
+              isActive
+                ? "border-accent ring-2 ring-accent/40"
+                : "border-line hover:border-accent/50"
+            )}
+          >
+            <div className="relative aspect-[16/10] overflow-hidden bg-surface">
+              <img
+                src={p.image}
+                alt={p.destination}
+                loading="lazy"
+                className="h-full w-full object-cover"
+              />
+              <span className="absolute bottom-1.5 left-1.5 rounded-full bg-white/90 px-1.5 py-0.5 text-[9px] font-bold text-heading backdrop-blur">
+                {p.duration}
+              </span>
+              {isActive && (
+                <span className="absolute right-1.5 top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-accent text-white">
+                  <Check size={11} strokeWidth={3} />
+                </span>
+              )}
+            </div>
+            <div className="flex flex-1 flex-col gap-1 p-2.5">
+              <p className="text-[12px] font-extrabold leading-tight text-heading line-clamp-1">
+                {p.destination}
+              </p>
+              <p className="mt-auto text-[12px] font-extrabold text-accent">
+                {formatRupiah(p.price || 0)}
+              </p>
+            </div>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function categoryLabel(category: Vehicle["category"]): string {
+  switch (category) {
+    case "entry":
+      return "City Car";
+    case "midrange":
+      return "MPV";
+    case "premium":
+      return "SUV";
+    case "luxury":
+      return "Luxury";
+    case "group":
+      return "Bus & Van";
+  }
 }
 
 function Field({
