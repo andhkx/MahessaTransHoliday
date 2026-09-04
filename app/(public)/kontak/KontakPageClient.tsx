@@ -22,7 +22,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 import { EMAIL_DISPLAY, WHATSAPP_NUMBER } from "@/lib/constants";
 import type { Vehicle, TravelPackage } from "@/lib/types";
-import LocationAutocomplete from "@/components/LocationAutocomplete";
+import LocationAutocomplete, { type LocationResult } from "@/components/LocationAutocomplete";
+import RouteMap from "@/components/RouteMap";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -106,6 +107,8 @@ export default function KontakPageClient() {
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
   const [pickup, setPickup] = useState("");
   const [tujuan, setTujuan] = useState("");
+  const [pickupCoords, setPickupCoords] = useState<{ lat: number; lon: number } | null>(null);
+  const [tujuanCoords, setTujuanCoords] = useState<{ lat: number; lon: number } | null>(null);
   const [tanggal, setTanggal] = useState("");
 
   useEffect(() => {
@@ -226,6 +229,8 @@ export default function KontakPageClient() {
                   setSelectedPackage(null);
                   setPickup("");
                   setTujuan("");
+                  setPickupCoords(null);
+                  setTujuanCoords(null);
                   setTanggal("");
                 }}
                 className="text-sm font-extrabold text-accent hover:underline"
@@ -260,6 +265,10 @@ export default function KontakPageClient() {
                           setErrors({});
                           setSelectedVehicle(null);
                           setSelectedPackage(null);
+                          setPickup("");
+                          setTujuan("");
+                          setPickupCoords(null);
+                          setTujuanCoords(null);
                         }}
                         aria-pressed={isActive}
                         className={cn(
@@ -381,7 +390,11 @@ export default function KontakPageClient() {
                     label="Titik Jemput"
                     placeholder="Cari alamat jemput..."
                     value={pickup}
+                    coords={pickupCoords}
                     onChange={setPickup}
+                    onPlace={(r: LocationResult) =>
+                      setPickupCoords(r.lat ? { lat: r.lat, lon: r.lon } : null)
+                    }
                     error={errors.pickup}
                     required
                   />
@@ -390,11 +403,30 @@ export default function KontakPageClient() {
                     label="Titik Tujuan"
                     placeholder="Cari alamat tujuan..."
                     value={tujuan}
+                    coords={tujuanCoords}
                     onChange={setTujuan}
+                    onPlace={(r: LocationResult) =>
+                      setTujuanCoords(r.lat ? { lat: r.lat, lon: r.lon } : null)
+                    }
                     error={errors.tujuan}
                     iconColor="#ef4444"
                     required
                   />
+                  {(pickupCoords || tujuanCoords) && (
+                    <div className="mt-2 overflow-hidden rounded-2xl border border-line">
+                      <RouteMap
+                        pins={[
+                          ...(pickupCoords
+                            ? [{ ...pickupCoords, color: "#005691", label: "A" }]
+                            : []),
+                          ...(tujuanCoords
+                            ? [{ ...tujuanCoords, color: "#ef4444", label: "B" }]
+                            : []),
+                        ]}
+                        className="h-[220px] w-full"
+                      />
+                    </div>
+                  )}
                   {pickup && tujuan && (
                     <a
                       href={`https://www.google.com/maps/dir/${encodeURIComponent(pickup)}/${encodeURIComponent(tujuan)}`}
@@ -402,7 +434,7 @@ export default function KontakPageClient() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 text-[12px] font-extrabold text-accent hover:underline"
                     >
-                      Lihat rute di Google Maps <ArrowRight size={12} />
+                      Lihat rute detail di Google Maps <ArrowRight size={12} />
                     </a>
                   )}
                 </div>
