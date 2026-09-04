@@ -318,33 +318,8 @@ export default function KontakPageClient() {
                 </div>
               )}
 
-              {topic === "Sewa Mobil" && (
-                <VehiclePicker
-                  ref={carRef}
-                  vehicles={vehicles}
-                  selected={selectedVehicle}
-                  onSelect={(name) => {
-                    setSelectedVehicle(name);
-                    setErrors((e) => ({ ...e, selectedVehicle: undefined }));
-                  }}
-                  onScroll={(d) => scroll(carRef, d)}
-                  error={errors.selectedVehicle}
-                />
-              )}
-
-              {topic === "Paket Wisata" && (
-                <PackagePicker
-                  ref={pkgRef}
-                  packages={packages}
-                  selected={selectedPackage}
-                  onSelect={(name) => {
-                    setSelectedPackage(name);
-                    setErrors((e) => ({ ...e, selectedPackage: undefined }));
-                  }}
-                  onScroll={(d) => scroll(pkgRef, d)}
-                  error={errors.selectedPackage}
-                />
-              )}
+              {topic === "Sewa Mobil" && null}
+              {topic === "Paket Wisata" && null}
 
               {topic === "Antar Jemput" && (
                 <div className="mt-4 space-y-3">
