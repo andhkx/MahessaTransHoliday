@@ -8,12 +8,13 @@ export type LocationResult = {
   description: string;
   lat: number;
   lon: number;
+  placeId?: string;
 };
 
 type Suggestion = {
-  displayName: string;
-  lat: number;
-  lon: number;
+  placeId: string;
+  mainText: string;
+  secondaryText: string;
 };
 
 type Props = {
@@ -21,7 +22,6 @@ type Props = {
   label: string;
   placeholder?: string;
   value: string;
-  coords?: { lat: number; lon: number } | null;
   onChange: (v: string) => void;
   onPlace?: (r: LocationResult) => void;
   error?: string;
@@ -29,6 +29,13 @@ type Props = {
   iconColor?: string;
   className?: string;
 };
+
+function newSession() {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+  return Math.random().toString(36).slice(2) + Date.now().toString(36);
+}
 
 export default function LocationAutocomplete({
   name,
@@ -46,7 +53,9 @@ export default function LocationAutocomplete({
   const [items, setItems] = useState<Suggestion[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeIdx, setActiveIdx] = useState(-1);
+  const [apiError, setApiError] = useState<string | null>(null);
   const lastQ = useRef("");
+  const sessionRef = useRef(newSession());
   const debounce = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
@@ -61,46 +70,80 @@ export default function LocationAutocomplete({
   useEffect(() => {
     if (debounce.current) clearTimeout(debounce.current);
     const q = value.trim();
-    if (q.length < 3) {
+    if (q.length < 2) {
       setItems([]);
       setLoading(false);
+      setApiError(null);
       return;
     }
     if (q === lastQ.current) return;
     setLoading(true);
+    setApiError(null);
     debounce.current = setTimeout(() => {
       lastQ.current = q;
       fetch(
-        `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=5&countrycodes=id&addressdetails=0`,
-        { headers: { Accept: "application/json" } },
+        `/api/places/autocomplete?q=${encodeURIComponent(q)}&session=${sessionRef.current}`,
       )
-        .then((r) => r.json())
-        .then((data: Array<{ display_name: string; lat: string; lon: string }>) => {
-          setItems(
-            data.map((d) => ({
-              displayName: d.display_name,
-              lat: parseFloat(d.lat),
-              lon: parseFloat(d.lon),
-            })),
-          );
+        .then(async (r) => {
+          if (!r.ok) {
+            const d = await r.json().catch(() => ({}));
+            throw new Error(d.error || `HTTP ${r.status}`);
+          }
+          return r.json();
+        })
+        .then((data: { suggestions?: Array<{ placePrediction?: { placeId?: string; text?: { text?: string }; structuredFormat?: { mainText?: { text?: string }; secondaryText?: { text?: string } } } }> }) => {
+          const next: Suggestion[] = [];
+          for (const s of data.suggestions ?? []) {
+            const p = s.placePrediction;
+            if (!p?.placeId) continue;
+            const main =
+              p.structuredFormat?.mainText?.text ??
+              p.text?.text ??
+              "";
+            const sub = p.structuredFormat?.secondaryText?.text ?? "";
+            if (!main) continue;
+            next.push({ placeId: p.placeId, mainText: main, secondaryText: sub });
+          }
+          setItems(next);
           setLoading(false);
           setActiveIdx(-1);
         })
-        .catch(() => {
+        .catch((e: Error) => {
           setItems([]);
           setLoading(false);
+          setApiError(e.message);
         });
-    }, 350);
+    }, 250);
     return () => {
       if (debounce.current) clearTimeout(debounce.current);
     };
   }, [value]);
 
   const pick = (s: Suggestion) => {
-    onChange(s.displayName);
-    onPlace?.({ description: s.displayName, lat: s.lat, lon: s.lon });
-    setItems([]);
     setOpen(false);
+    setItems([]);
+    const session = sessionRef.current;
+    fetch(`/api/places/details?placeId=${encodeURIComponent(s.placeId)}&session=${session}`)
+      .then(async (r) => {
+        if (!r.ok) {
+          const d = await r.json().catch(() => ({}));
+          throw new Error(d.error || `HTTP ${r.status}`);
+        }
+        return r.json();
+      })
+      .then((d: { description?: string; lat?: number; lon?: number; placeId?: string }) => {
+        const desc = d.description ?? s.mainText;
+        onChange(desc);
+        onPlace?.({
+          description: desc,
+          lat: d.lat ?? 0,
+          lon: d.lon ?? 0,
+          placeId: d.placeId ?? s.placeId,
+        });
+        sessionRef.current = newSession();
+        lastQ.current = "";
+      })
+      .catch((e: Error) => setApiError(e.message));
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -166,6 +209,8 @@ export default function LocationAutocomplete({
                 onChange("");
                 onPlace?.({ description: "", lat: 0, lon: 0 });
                 setItems([]);
+                sessionRef.current = newSession();
+                lastQ.current = "";
               }}
               aria-label="Hapus"
               className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-full text-muted hover:bg-surface hover:text-heading"
@@ -176,14 +221,19 @@ export default function LocationAutocomplete({
         </div>
       </label>
 
-      {open && (loading || items.length > 0) && (
+      {open && (loading || items.length > 0 || apiError) && (
         <div className="absolute left-0 right-0 top-full z-30 mt-1.5 max-h-60 overflow-y-auto rounded-xl border border-line bg-white shadow-elevated">
-          {loading && items.length === 0 && (
+          {loading && items.length === 0 && !apiError && (
             <div className="px-3.5 py-2.5 text-[12px] text-muted">Mencari…</div>
+          )}
+          {apiError && (
+            <div className="px-3.5 py-2.5 text-[12px] font-bold text-error">
+              {apiError}
+            </div>
           )}
           {items.map((s, i) => (
             <button
-              key={`${s.lat}-${s.lon}-${i}`}
+              key={s.placeId}
               type="button"
               onMouseEnter={() => setActiveIdx(i)}
               onClick={() => pick(s)}
@@ -193,7 +243,16 @@ export default function LocationAutocomplete({
               )}
             >
               <MapPin size={12} className="mt-0.5 shrink-0 text-accent" />
-              <span className="line-clamp-2 text-body-text">{s.displayName}</span>
+              <span className="min-w-0">
+                <span className="block truncate font-extrabold text-heading">
+                  {s.mainText}
+                </span>
+                {s.secondaryText && (
+                  <span className="block truncate text-[11px] text-muted">
+                    {s.secondaryText}
+                  </span>
+                )}
+              </span>
             </button>
           ))}
         </div>

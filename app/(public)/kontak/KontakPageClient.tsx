@@ -390,7 +390,6 @@ export default function KontakPageClient() {
                     label="Titik Jemput"
                     placeholder="Cari alamat jemput..."
                     value={pickup}
-                    coords={pickupCoords}
                     onChange={setPickup}
                     onPlace={(r: LocationResult) =>
                       setPickupCoords(r.lat ? { lat: r.lat, lon: r.lon } : null)
@@ -403,7 +402,6 @@ export default function KontakPageClient() {
                     label="Titik Tujuan"
                     placeholder="Cari alamat tujuan..."
                     value={tujuan}
-                    coords={tujuanCoords}
                     onChange={setTujuan}
                     onPlace={(r: LocationResult) =>
                       setTujuanCoords(r.lat ? { lat: r.lat, lon: r.lon } : null)
