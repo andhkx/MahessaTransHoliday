@@ -21,10 +21,12 @@ import FaqAccordion from "@/components/FaqAccordion";
 import CtaSection from "@/components/CtaSection";
 import SectionHeading from "@/components/SectionHeading";
 import TestimonialCarousel from "@/components/TestimonialCarousel";
+import ArticleCards from "@/components/ArticleCards";
 import { getFeaturedVehicles, getAllVehicles } from "@/lib/data/supabase/vehicles";
 import { getFeaturedPackages, getAllPackages } from "@/lib/data/supabase/packages";
 import { getFeaturedTestimonials } from "@/lib/data/supabase/testimonials";
 import { getFeaturedGallery } from "@/lib/data/supabase/gallery";
+import { getLatestArticles } from "@/lib/data/supabase/articles";
 import { galleryImages as staticGallery } from "@/lib/gallery";
 import ArmadaShowcaseClient from "./ArmadaShowcaseClient";
 
@@ -129,12 +131,13 @@ function Advantages() {
 }
 
 export default async function HomePage() {
-  const [vehicles, packages, testimonials, allPackages, gallery] = await Promise.all([
+  const [vehicles, packages, testimonials, allPackages, gallery, articles] = await Promise.all([
     getFeaturedVehicles(),
     getFeaturedPackages(),
     getFeaturedTestimonials(8),
     getAllPackages(),
     getFeaturedGallery(5),
+    getLatestArticles(4),
   ]);
 
   const galleryItems = gallery.length > 0
@@ -160,6 +163,7 @@ export default async function HomePage() {
           Temukan Mobil Cocok Untukmu ?
         </Link>
       </section>
+      <FeaturedArticles articles={articles} />
       <ProcessSection />
       <GalleryShowcase items={galleryItems} />
       <FaqHome />
@@ -203,12 +207,34 @@ function FeaturedPackages({ packages, allPackages }: { packages: Awaited<ReturnT
         <SectionHeading
           eyebrow="Harga Paket"
           title="Perjalanan tanpa ribet."
-          subtitle="Mobil, driver, BBM, tol, parkir � semua sudah termasuk. Pilih tujuannya, sisanya biar kami."
+          subtitle="Mobil, driver, BBM, tol, parkir semua sudah termasuk. Pilih tujuannya, sisanya biar kami."
         />
         <PackageCards packages={packages} forceMode="single" />
         <div className="mt-10 text-center">
           <Link href="/paket" className="text-link">
             Lihat Semua Paket ({allPackages.length})
+            <span aria-hidden="true">?</span>
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FeaturedArticles({ articles }: { articles: Awaited<ReturnType<typeof getLatestArticles>> }) {
+  if (articles.length === 0) return null;
+  return (
+    <section className="bg-background py-16 md:py-24">
+      <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
+        <SectionHeading
+          eyebrow="Tips &amp; Panduan"
+          title="Insight untuk perjalananmu."
+          subtitle="Artikel pilihan dari tim kami: itinerary, tips rental, dan rekomendasi destinasi favorit pelanggan."
+        />
+        <ArticleCards articles={articles} forceMode="single" />
+        <div className="mt-10 text-center">
+          <Link href="/artikel" className="text-link">
+            Lihat Semua Artikel
             <span aria-hidden="true">?</span>
           </Link>
         </div>
