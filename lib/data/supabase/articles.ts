@@ -14,8 +14,6 @@ export type Article = {
   meta_title: string | null;
   meta_description: string | null;
   is_featured: boolean;
-  title_en: string | null;
-  excerpt_en: string | null;
   created_at: string;
   updated_at: string;
 };

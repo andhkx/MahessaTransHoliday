@@ -10,7 +10,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # Mahessa Trans Holiday
 
-Next.js 16 App Router + Tailwind v4 marketing site + admin dashboard for an Indonesian car-rental / travel business. UI copy, URLs, and metadata are all in **Bahasa Indonesia**.
+Next.js 16 App Router + Tailwind v4 marketing site + admin dashboard for an Indonesian car-rental / travel business. UI bilingual **ID/EN** via `lib/i18n` (single route `/`, cookie `lang` + `localStorage`); DB content tetap **ID**.
 
 - **Live**: <https://mahessatransholiday.web.id>
 - **Admin**: <https://mahessatransholiday.web.id/admin/login>
@@ -34,7 +34,7 @@ npm run upload:images    # one-time bulk upload to Supabase Storage
 
 **Single repo, single Vercel project, single Supabase project.**
 
-- **Public site** — `app/(public)/**` route group. Server components read from Supabase via `lib/data/supabase/*`. All pages use `export const dynamic = 'force-dynamic'`. If Supabase returns empty → empty state (no static fallback).
+  - **Public site** — `app/(public)/**` single route `/` (no `/en` subtree, 301 redirect in `next.config.ts`). Locale from cookie `lang` (`id`/`en`, default `id`) + `localStorage` for instant client switch; server reads via `lib/i18n/server.ts`, client via `lib/i18n/client.tsx` + `lib/i18n/dict.ts` (~986 lines, `as const`). All `page.tsx` use `hreflang()` from `lib/i18n/seo.ts` (`id`/`en`/`x-default` canonical). Server components read from Supabase via `lib/data/supabase/*`. All pages use `export const dynamic = 'force-dynamic'`. If Supabase returns empty → empty state (no static fallback).
 - **Admin dashboard** — `app/admin/**` behind `/admin/*` middleware. `AdminDashboardLayout` provides floating-pill glass navbar + PageHero-style sub-header.
 - **Data layer** — `lib/data/supabase/*` is source of truth. Legacy `data/*.ts` retained only for sitemap slugs and the VehicleFinder wizard config (no images from there).
 - **Image optimization** — `next.config.ts` has `images.unoptimized: false` + `minimumCacheTTL: 1y` + AVIF/WebP. Vercel CDN compresses Supabase Storage URLs.

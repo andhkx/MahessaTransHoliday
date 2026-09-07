@@ -1,7 +1,7 @@
 # Mahessa Trans Holiday
 
 > **Rental mobil & paket wisata** — Cimahi, Bandung, Padalarang, dan se-Jawa.
-> Marketing site + admin dashboard built with Next.js 16, Tailwind v4, and Supabase.
+> Marketing site + admin dashboard — Next.js 16, Tailwind v4, Supabase. UI bilingual **ID/EN** (single route `/`, cookie `lang` + `localStorage`, `hreflang` `id/en/x-default`); konten DB tetap **ID**.
 
 🌐 **Live**: [mahessatransholiday.web.id](https://mahessatransholiday.web.id)
 🔐 **Admin**: [mahessatransholiday.web.id/admin/login](https://mahessatransholiday.web.id/admin/login)
@@ -55,7 +55,7 @@ A complete business platform for an Indonesian car-rental and travel agency:
 | Charts | [Recharts](https://recharts.org) |
 | OG image | [@vercel/og](https://vercel.com/docs/functions/og-image-generation) |
 | Analytics | Vercel Analytics + Speed Insights |
-| Hosting | Vercel (auto-deploy on `main`) |
+| Hosting | Vercel (auto-deploy on `main`, redirect 301 `/en/*` → `/*`) |
 | DNS | Cloudflare (proxied for free WAF + DDoS + Bot Fight) |
 | Domain | `.web.id` |
 
@@ -98,6 +98,15 @@ npm run upload:images   # one-time bulk upload to Supabase Storage
 ```
 
 Push to `main` → Vercel auto-deploys.
+
+---
+
+## 🌐 Bilingual (ID/EN) — single route
+
+- **Satu URL** (`/` tanpa `/en` subtree). Redirect permanen 301 `/en/*` → `/*` di `next.config.ts` (SEO juice tetap).
+- **Locale** cookie `lang` (`id`/`en`, default `id`) + `localStorage` untuk switch instan di client; server baca via `lib/i18n/server.ts`, client via `lib/i18n/client.tsx` + `lib/i18n/dict.ts` (~986 baris, `as const`).
+- **SEO** `hreflang` `id`/`en`/`x-default` di tiap `page.tsx` via `lib/i18n/seo.ts`; `app/layout.tsx` pakai `suppressHydrationWarning` + inline script anti-kedip baca `localStorage` sebelum hydration.
+- Konten DB (armada/paket/artikel/FAQ/testimoni/galeri) tetap **ID** — tanpa kolom `_en`.
 
 ---
 
