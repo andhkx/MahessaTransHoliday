@@ -269,7 +269,7 @@ export default async function EnHomePage() {
                       </p>
                       <div className="mt-auto flex items-end justify-between gap-2 border-t border-line pt-3">
                         <p className="text-sm font-extrabold text-accent">
-                          From {formatCompact(v.pricing.startingPrice)}
+                          From {formatCompact(v.pricing.startingPrice ?? 0)}
                         </p>
                         <span className="text-[10px] font-semibold text-muted">/ 12 hours</span>
                       </div>
