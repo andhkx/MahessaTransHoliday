@@ -16,7 +16,7 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mahessaholiday.my.id"),
+  metadataBase: new URL("https://mahessatransholiday.web.id"),
   title: {
     default: "Mahessa Trans Holiday | Rental Mobil & Paket Perjalanan",
     template: "%s | Mahessa Trans Holiday",

@@ -21,6 +21,9 @@ type Article = {
   meta_description: string | null;
   cover_image_url: string | null;
   published_at: string | null;
+  is_featured: boolean;
+  title_en: string | null;
+  excerpt_en: string | null;
 };
 
 export default function ArtikelEdit() {
@@ -88,6 +91,9 @@ export default function ArtikelEdit() {
           meta_description: article.meta_description,
           cover_image_url: coverImageUrl,
           published_at: nowPublished ? article.published_at || new Date().toISOString() : null,
+          is_featured: article.is_featured,
+          title_en: article.title_en,
+          excerpt_en: article.excerpt_en,
           updated_at: new Date().toISOString(),
         })
         .eq('id', id);
@@ -238,6 +244,57 @@ export default function ArtikelEdit() {
               currentUrl={coverImageUrl}
               label="Cover Artikel"
             />
+          </div>
+
+          <div className="flex items-start gap-3 rounded-xl border border-line bg-wa-surface/40 p-4">
+            <input
+              id="edit_is_featured"
+              type="checkbox"
+              checked={article.is_featured ?? false}
+              onChange={(e) => setArticle({ ...article, is_featured: e.target.checked })}
+              className="mt-1 h-5 w-5 rounded border-line text-accent focus:ring-accent"
+            />
+            <label htmlFor="edit_is_featured" className="flex-1 cursor-pointer">
+              <span className="block text-sm font-extrabold text-heading">Tampilkan di Beranda</span>
+              <span className="block text-xs leading-relaxed text-muted">
+                Centang untuk memunculkan artikel ini di section &quot;Tips &amp; Panduan&quot; di homepage publik.
+              </span>
+            </label>
+          </div>
+
+          <div className="space-y-4 rounded-xl border border-line bg-wa-surface/40 p-4">
+            <div>
+              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-primary">
+                Versi Bahasa Inggris (Opsional)
+              </p>
+              <p className="mt-1 text-xs leading-relaxed text-muted">
+                Untuk turis asing. Kosongkan jika artikel hanya untuk pasar Indonesia.
+              </p>
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+                Judul (EN)
+              </label>
+              <input
+                type="text"
+                value={article.title_en || ''}
+                onChange={(e) => setArticle({ ...article, title_en: e.target.value })}
+                className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
+                placeholder="English title"
+              />
+            </div>
+            <div>
+              <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+                Excerpt (EN)
+              </label>
+              <textarea
+                value={article.excerpt_en || ''}
+                onChange={(e) => setArticle({ ...article, excerpt_en: e.target.value })}
+                rows={2}
+                className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 resize-none"
+                placeholder="Short summary in English..."
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-line">

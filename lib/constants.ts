@@ -3,7 +3,7 @@ export const SITE_TAGLINE =
   "Rental mobil, charter, wisata, dan perjalanan untuk berbagai kebutuhan.";
 export const SITE_DESCRIPTION =
   "Rental mobil dengan driver, charter, hingga perjalanan wisata dan perjalanan dinas dari Cimahi, Bandung & Padalarang.";
-export const SITE_URL = "https://mahessaholiday.my.id";
+export const SITE_URL = "https://mahessatransholiday.web.id";
 
 export const WHATSAPP_NUMBER = "62895327077214";
 export const WHATSAPP_DISPLAY = "+62 895-3270-77214";

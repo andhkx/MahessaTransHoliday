@@ -13,6 +13,9 @@ export type Article = {
   published_at: string | null;
   meta_title: string | null;
   meta_description: string | null;
+  is_featured: boolean;
+  title_en: string | null;
+  excerpt_en: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -63,6 +66,22 @@ export async function getLatestArticles(limit = 6): Promise<Article[]> {
     .limit(limit);
   if (error) {
     console.error('Error fetching latest articles:', error);
+    return [];
+  }
+  return data || [];
+}
+
+export async function getFeaturedArticles(limit = 4): Promise<Article[]> {
+  const supabase = getPublicClient();
+  const { data, error } = await supabase
+    .from('articles')
+    .select('*')
+    .eq('status', 'published')
+    .eq('is_featured', true)
+    .order('published_at', { ascending: false })
+    .limit(limit);
+  if (error) {
+    console.error('Error fetching featured articles:', error);
     return [];
   }
   return data || [];

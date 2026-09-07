@@ -20,6 +20,9 @@ export default function ArtikelCreate() {
   const [status, setStatus] = useState<'draft' | 'published' | 'archived'>('draft');
   const [published_at, setPublishedAt] = useState('');
   const [cover_image_url, setCoverImageUrl] = useState<string | null>(null);
+  const [is_featured, setIsFeatured] = useState(false);
+  const [titleEn, setTitleEn] = useState('');
+  const [excerptEn, setExcerptEn] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const supabase = createClient();
@@ -42,6 +45,9 @@ export default function ArtikelCreate() {
         status,
         published_at: status === 'published' ? new Date().toISOString() : null,
         cover_image_url,
+        is_featured,
+        title_en: titleEn || null,
+        excerpt_en: excerptEn || null,
       });
 
       if (error) throw error;
@@ -204,6 +210,57 @@ export default function ArtikelCreate() {
               value={published_at}
               onChange={(e) => setPublishedAt(e.target.value)}
               className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
+            />
+          </div>
+        </div>
+
+        <div className="flex items-start gap-3 rounded-xl border border-line bg-wa-surface/40 p-4">
+          <input
+            id="is_featured"
+            type="checkbox"
+            checked={is_featured}
+            onChange={(e) => setIsFeatured(e.target.checked)}
+            className="mt-1 h-5 w-5 rounded border-line text-accent focus:ring-accent"
+          />
+          <label htmlFor="is_featured" className="flex-1 cursor-pointer">
+            <span className="block text-sm font-extrabold text-heading">Tampilkan di Beranda</span>
+            <span className="block text-xs leading-relaxed text-muted">
+              Centang untuk memunculkan artikel ini di section &quot;Tips &amp; Panduan&quot; di homepage publik. Maks 4 artikel tampil.
+            </span>
+          </label>
+        </div>
+
+        <div className="space-y-4 rounded-xl border border-line bg-wa-surface/40 p-4">
+          <div>
+            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-primary">
+              Versi Bahasa Inggris (Opsional)
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-muted">
+              Untuk turis asing. Kosongkan jika artikel hanya untuk pasar Indonesia.
+            </p>
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Judul (EN)
+            </label>
+            <input
+              type="text"
+              value={titleEn}
+              onChange={(e) => setTitleEn(e.target.value)}
+              className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15"
+              placeholder="English title (auto-translated to /en landing page later)"
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-[0.16em] text-muted mb-2">
+              Excerpt (EN)
+            </label>
+            <textarea
+              value={excerptEn}
+              onChange={(e) => setExcerptEn(e.target.value)}
+              rows={2}
+              className="w-full px-4 py-3 border border-line rounded-xl text-sm font-bold text-heading outline-none focus:border-accent focus:ring-2 focus:ring-accent/15 resize-none"
+              placeholder="Short summary in English..."
             />
           </div>
         </div>

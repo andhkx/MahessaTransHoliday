@@ -8,12 +8,17 @@ import { motion, useMotionValueEvent, useScroll } from "motion/react";
 import { Menu, MessageCircle, X } from "lucide-react";
 import { NAV_LINKS, SITE_NAME } from "@/lib/constants";
 import { waGeneralLink } from "@/lib/whatsapp";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const { scrollY } = useScroll();
+
+  const isEn = pathname.startsWith("/en");
+  const localePrefix = isEn ? "" : "/en";
+  const switchHref = isEn ? pathname.replace(/^\/en/, "") || "/" : `${localePrefix}${pathname === "/" ? "" : pathname}`;
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setScrolled(latest > 24);
@@ -68,6 +73,7 @@ export default function Navbar() {
           </div>
 
           <div className="hidden items-center gap-3 md:flex">
+            <LocaleSwitcher isEn={isEn} switchHref={switchHref} variant="desktop" />
             <a
               href="tel:+62895327077214"
               className="hidden items-center gap-2 text-sm font-bold text-body-text transition-colors hover:text-accent lg:flex"
@@ -136,6 +142,7 @@ export default function Navbar() {
               </Link>
             );
           })}
+          <LocaleSwitcher isEn={isEn} switchHref={switchHref} variant="mobile" />
           <a
             href={waGeneralLink()}
             target="_blank"

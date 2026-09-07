@@ -26,7 +26,7 @@ import { getFeaturedVehicles, getAllVehicles } from "@/lib/data/supabase/vehicle
 import { getFeaturedPackages, getAllPackages } from "@/lib/data/supabase/packages";
 import { getFeaturedTestimonials } from "@/lib/data/supabase/testimonials";
 import { getFeaturedGallery } from "@/lib/data/supabase/gallery";
-import { getLatestArticles } from "@/lib/data/supabase/articles";
+import { getFeaturedArticles, getLatestArticles } from "@/lib/data/supabase/articles";
 import { galleryImages as staticGallery } from "@/lib/gallery";
 import ArmadaShowcaseClient from "./ArmadaShowcaseClient";
 
@@ -137,7 +137,7 @@ export default async function HomePage() {
     getFeaturedTestimonials(8),
     getAllPackages(),
     getFeaturedGallery(5),
-    getLatestArticles(4),
+    getFeaturedArticles(4),
   ]);
 
   const galleryItems = gallery.length > 0
