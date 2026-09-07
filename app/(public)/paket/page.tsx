@@ -5,6 +5,7 @@ import PaketListClient from "./PaketListClient";
 import CtaSection from "@/components/CtaSection";
 import { getAllPackages } from "@/lib/data/supabase/packages";
 import { getLocale, getDict } from "@/lib/i18n/server";
+import { hreflang } from "@/lib/i18n/seo";
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   title: seoMetadata.paket.title,
   description: seoMetadata.paket.description,
   keywords: seoMetadata.paket.keywords,
-  alternates: { canonical: "/paket" },
+  alternates: hreflang("/paket"),
 };
 
 export default async function PaketPage() {

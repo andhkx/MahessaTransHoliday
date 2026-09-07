@@ -14,6 +14,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { waVehicleLink } from "@/lib/whatsapp";
 import { Check, MessageCircle } from "lucide-react";
 import { getLocale, getDict } from "@/lib/i18n/server";
+import { hreflang } from "@/lib/i18n/seo";
 
 
 export const dynamic = 'force-dynamic';
@@ -33,7 +34,7 @@ export async function generateMetadata({
     title,
     description,
     keywords: vehicle.seo.keywords,
-    alternates: { canonical: `/armada/${vehicle.slug}` },
+    alternates: hreflang(`/armada/${vehicle.slug}`),
     openGraph: {
       title,
       description,

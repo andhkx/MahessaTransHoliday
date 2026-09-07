@@ -4,6 +4,7 @@ import CtaSection from "@/components/CtaSection";
 import KontakPageClient from "./KontakPageClient";
 import { SERVICE_AREAS } from "@/lib/constants";
 import { getLocale } from "@/lib/i18n/server";
+import { hreflang } from "@/lib/i18n/seo";
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
   title: seoMetadata.kontak.title,
   description: seoMetadata.kontak.description,
   keywords: seoMetadata.kontak.keywords,
-  alternates: { canonical: "/kontak" },
+  alternates: hreflang("/kontak"),
 };
 
 export default async function KontakPage() {

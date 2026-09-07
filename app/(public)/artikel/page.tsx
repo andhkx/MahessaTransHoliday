@@ -5,6 +5,7 @@ import { FileText } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import { getAllArticles } from "@/lib/data/supabase/articles";
 import { getLocale } from "@/lib/i18n/server";
+import { hreflang } from "@/lib/i18n/seo";
 
 export const metadata: Metadata = {
   title: "Artikel, Tips Rental & Panduan Wisata Bandung | Mahessa Trans Holiday",
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
     "family gathering bandung",
     "tips memilih rental mobil",
   ].join(", "),
-  alternates: { canonical: "/artikel" },
+  alternates: hreflang("/artikel"),
   openGraph: {
     title: "Artikel, Tips Rental & Panduan Wisata Bandung | Mahessa Trans Holiday",
     description:

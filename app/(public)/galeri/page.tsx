@@ -5,6 +5,7 @@ import CtaSection from "@/components/CtaSection";
 import { getAllGallery } from "@/lib/data/supabase/gallery";
 import { galleryImages as staticGallery } from "@/lib/gallery";
 import { getLocale } from "@/lib/i18n/server";
+import { hreflang } from "@/lib/i18n/seo";
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   title: seoMetadata.galeri.title,
   description: seoMetadata.galeri.description,
   keywords: seoMetadata.galeri.keywords,
-  alternates: { canonical: "/galeri" },
+  alternates: hreflang("/galeri"),
 };
 
 export default async function GaleriPage() {

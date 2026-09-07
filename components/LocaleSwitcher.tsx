@@ -4,21 +4,22 @@ import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Globe } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { useLocale, useT } from "@/lib/i18n/client";
-import { LOCALE_COOKIE, type Locale } from "@/lib/i18n/dict";
+import { useLocale, useSetLocale, useT } from "@/lib/i18n/client";
+import type { Locale } from "@/lib/i18n/dict";
 
 type Props = { variant: "desktop" | "mobile" };
 
 export default function LocaleSwitcher({ variant }: Props) {
   const router = useRouter();
   const locale = useLocale();
+  const setLocale = useSetLocale();
   const t = useT();
   const [pending, startTransition] = useTransition();
   const isEn = locale === "en";
   const next: Locale = isEn ? "id" : "en";
 
   const switchLocale = () => {
-    document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
+    setLocale(next);
     startTransition(() => router.refresh());
   };
 

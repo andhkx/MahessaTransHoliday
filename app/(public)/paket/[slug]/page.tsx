@@ -15,6 +15,7 @@ import { SITE_URL } from "@/lib/constants";
 import { waPackageLink } from "@/lib/whatsapp";
 import { Check, MessageCircle, X } from "lucide-react";
 import { getLocale, getDict } from "@/lib/i18n/server";
+import { hreflang } from "@/lib/i18n/seo";
 
 
 export const dynamic = 'force-dynamic';
@@ -39,7 +40,7 @@ export async function generateMetadata({
     title: packageItem.seo.title,
     description: packageItem.seo.description,
     keywords: packageItem.seo.keywords,
-    alternates: { canonical: `/paket/${packageItem.slug}` },
+    alternates: hreflang(`/paket/${packageItem.slug}`),
     openGraph: {
       title: packageItem.seo.title,
       description: packageItem.seo.description,

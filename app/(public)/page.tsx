@@ -29,6 +29,7 @@ import { getFeaturedGallery } from "@/lib/data/supabase/gallery";
 import { getFeaturedArticles, getLatestArticles } from "@/lib/data/supabase/articles";
 import { galleryImages as staticGallery } from "@/lib/gallery";
 import { getLocale, getDict } from "@/lib/i18n/server";
+import { hreflang } from "@/lib/i18n/seo";
 import ArmadaShowcaseClient from "./ArmadaShowcaseClient";
 
 export const dynamic = 'force-dynamic';
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
   title: seoMetadata.homepage.title,
   description: seoMetadata.homepage.description,
   keywords: seoMetadata.homepage.keywords,
-  alternates: { canonical: "/" },
+  alternates: hreflang("/"),
   openGraph: {
     title: seoMetadata.homepage.title,
     description: seoMetadata.homepage.description,

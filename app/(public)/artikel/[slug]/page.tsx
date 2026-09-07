@@ -9,6 +9,7 @@ import { SITE_URL } from "@/lib/constants";
 import { Calendar, Eye, FileText, ArrowLeft, Share2, MessageCircle, ArrowUpRight } from "lucide-react";
 import { waGeneralLink } from "@/lib/whatsapp";
 import { getLocale, getDict } from "@/lib/i18n/server";
+import { hreflang } from "@/lib/i18n/seo";
 
 
 export const dynamic = 'force-dynamic';
@@ -21,7 +22,7 @@ export async function generateMetadata(
   return {
     title: article.meta_title || article.title,
     description: article.meta_description || article.excerpt || undefined,
-    alternates: { canonical: `/artikel/${article.slug}` },
+    alternates: hreflang(`/artikel/${article.slug}`),
     openGraph: {
       title: article.meta_title || article.title,
       description: article.meta_description || article.excerpt || undefined,

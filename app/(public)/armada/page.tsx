@@ -5,6 +5,7 @@ import ArmadaListClient from "./ArmadaListClient";
 import CtaSection from "@/components/CtaSection";
 import { getAllVehicles } from "@/lib/data/supabase/vehicles";
 import { getLocale, getDict } from "@/lib/i18n/server";
+import { hreflang } from "@/lib/i18n/seo";
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   title: seoMetadata.armada.title,
   description: seoMetadata.armada.description,
   keywords: seoMetadata.armada.keywords,
-  alternates: { canonical: "/armada" },
+  alternates: hreflang("/armada"),
 };
 
 export default async function ArmadaPage() {

@@ -3,6 +3,7 @@ import { seoMetadata } from "@/data/seo";
 import PageHero from "@/components/PageHero";
 import VehicleFinder from "@/components/VehicleFinder/VehicleFinder";
 import { getLocale } from "@/lib/i18n/server";
+import { hreflang } from "@/lib/i18n/seo";
 
 export const dynamic = 'force-dynamic';
 
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
   title: seoMetadata.temukan.title,
   description: seoMetadata.temukan.description,
   keywords: seoMetadata.temukan.keywords,
-  alternates: { canonical: "/temukan" },
+  alternates: hreflang("/temukan"),
 };
 
 export default async function TemukanPage() {

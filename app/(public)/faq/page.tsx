@@ -5,6 +5,7 @@ import CtaSection from "@/components/CtaSection";
 import FaqPageClient from "./FaqPageClient";
 import { getMainFaqs, getExtraFaqs } from "@/lib/data/supabase/faq";
 import { getLocale } from "@/lib/i18n/server";
+import { hreflang } from "@/lib/i18n/seo";
 
 export const dynamic = 'force-dynamic';
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
   title: seoMetadata.faq.title,
   description: seoMetadata.faq.description,
   keywords: seoMetadata.faq.keywords,
-  alternates: { canonical: "/faq" },
+  alternates: hreflang("/faq"),
 };
 
 export default async function FaqPage() {
