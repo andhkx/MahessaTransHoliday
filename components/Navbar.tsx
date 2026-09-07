@@ -123,15 +123,18 @@ export default function Navbar() {
             </a>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setOpen((v) => !v)}
-            aria-label={open ? t.navbar.closeMenu : t.navbar.openMenu}
-            aria-expanded={open}
-            className="flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-wa-surface/60 text-heading md:hidden"
-          >
-            {open ? <X size={18} /> : <Menu size={18} />}
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <LocaleSwitcher variant="desktop" />
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              aria-label={open ? t.navbar.closeMenu : t.navbar.openMenu}
+              aria-expanded={open}
+              className="flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-wa-surface/60 text-heading"
+            >
+              {open ? <X size={18} /> : <Menu size={18} />}
+            </button>
+          </div>
         </nav>
       </motion.header>
 
