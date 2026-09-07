@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import TestimonialCard from "./TestimonialCard";
+import { useLocale, useT } from "@/lib/i18n/client";
 
 type Testimonial = {
   id: string | number;
@@ -18,6 +19,9 @@ export default function TestimonialCarousel({ testimonials }: { testimonials: Te
   const [isHovered, setIsHovered] = useState(false);
   const [offset, setOffset] = useState(0);
   const [listWidth, setListWidth] = useState(0);
+  const locale = useLocale();
+  const t = useT();
+  const isEn = locale === "en";
 
   useEffect(() => {
     if (listRef.current) {
@@ -58,7 +62,7 @@ export default function TestimonialCarousel({ testimonials }: { testimonials: Te
     return (
       <div className="border-y border-line bg-surface/60 py-16 md:py-24">
         <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12 text-center">
-          <p className="text-sm text-muted">Belum ada testimoni.</p>
+          <p className="text-sm text-muted">{isEn ? "No testimonials yet." : "Belum ada testimoni."}</p>
         </div>
       </div>
     );
@@ -73,14 +77,23 @@ export default function TestimonialCarousel({ testimonials }: { testimonials: Te
       <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
         <div className="mb-10 text-center md:mb-12">
           <span className="mb-2 inline-block font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-primary">
-            Testimoni
+            {t.testimonial.eyebrow}
           </span>
           <h2 className="mb-3 text-2xl font-extrabold leading-[1.05] tracking-[-0.03em] text-heading sm:text-3xl md:text-4xl">
-            Kata Mereka tentang{" "}
-            <span className="text-accent">Mahessa</span>
+            {isEn ? (
+              <>
+                What they say about{" "}
+                <span className="text-accent">Mahessa</span>
+              </>
+            ) : (
+              <>
+                Kata Mereka tentang{" "}
+                <span className="text-accent">Mahessa</span>
+              </>
+            )}
           </h2>
           <p className="mx-auto max-w-xl text-sm leading-relaxed text-body-text md:text-base">
-            Ribuan pelanggan telah mempercayai layanan kami untuk berbagai kebutuhan perjalanan.
+            {t.testimonial.subtitle}
           </p>
         </div>
 

@@ -4,6 +4,7 @@ import GaleriPageClient from "./GaleriPageClient";
 import CtaSection from "@/components/CtaSection";
 import { getAllGallery } from "@/lib/data/supabase/gallery";
 import { galleryImages as staticGallery } from "@/lib/gallery";
+import { getLocale } from "@/lib/i18n/server";
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
@@ -16,14 +17,15 @@ export const metadata: Metadata = {
 
 export default async function GaleriPage() {
   const supabaseGallery = await getAllGallery();
+  const locale = await getLocale();
+  const isEn = locale === "en";
 
-  // Use Supabase data if available, otherwise fall back to static
   const gallery = supabaseGallery.length > 0
     ? supabaseGallery.map((g) => ({
         src: g.image_url,
         alt: g.caption,
         title: g.caption,
-        location: (g.location || "Umum") as any,
+        location: g.location || (isEn ? "General" : "Umum"),
         category: g.category,
       }))
     : staticGallery.map((g) => ({
@@ -42,8 +44,10 @@ export default async function GaleriPage() {
     <>
       <GaleriPageClient items={gallery} />
       <CtaSection
-        title="Mau jadi bagian dari cerita berikutnya?"
-        text="Rencanakan perjalananmu bersama kami dan dapatkan pengalaman yang menyenangkan."
+        title={isEn ? "Want to be part of the next story?" : "Mau jadi bagian dari cerita berikutnya?"}
+        text={isEn
+          ? "Plan your trip with us and enjoy a delightful experience."
+          : "Rencanakan perjalananmu bersama kami dan dapatkan pengalaman yang menyenangkan."}
       />
     </>
   );

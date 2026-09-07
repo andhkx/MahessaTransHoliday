@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion, useReducedMotion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/cn";
+import { useLocale } from "@/lib/i18n/client";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -19,7 +20,7 @@ type Props = {
   items: GalleryClientItem[];
 };
 
-function PageHeaderClient({ title, subtitle }: { title: string; subtitle: string }) {
+function PageHeaderClient({ title, subtitle, eyebrow }: { title: string; subtitle: string; eyebrow: string }) {
   return (
     <header className="relative overflow-hidden bg-gradient-to-b from-surface to-background pb-12 pt-32 md:pb-16 md:pt-40">
       <div
@@ -28,7 +29,7 @@ function PageHeaderClient({ title, subtitle }: { title: string; subtitle: string
       />
       <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12 relative">
         <span className="mb-3 inline-block font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-primary">
-          Galeri
+          {eyebrow}
         </span>
         <h1 className="mb-3 max-w-3xl text-3xl font-extrabold leading-[1.05] tracking-[-0.03em] text-heading md:text-[44px]">
           {title}
@@ -49,18 +50,27 @@ function aspectFor(idx: number) {
 
 export default function GaleriPageClient({ items }: Props) {
   const reduce = useReducedMotion();
+  const locale = useLocale();
+  const isEn = locale === "en";
+
+  const eyebrow = isEn ? "Gallery" : "Galeri";
+  const title = isEn ? "Travel stories with Mahessa." : "Cerita perjalanan bersama Mahessa.";
+  const subtitle = isEn
+    ? "Real documentation from our passengers — from short city tours to out-of-town trips."
+    : "Dokumentasi nyata perjalanan para penumpang kami — dari city tour singkat hingga perjalanan luar kota.";
+  const emptyTitle = isEn ? "No photos in the gallery yet." : "Belum ada foto di galeri.";
+  const emptySubtitle = isEn
+    ? "Our team is preparing the latest travel documentation."
+    : "Tim kami sedang menyiapkan dokumentasi perjalanan terbaru.";
 
   if (items.length === 0) {
     return (
       <>
-        <PageHeaderClient
-          title="Cerita perjalanan bersama Mahessa"
-          subtitle="Dokumentasi nyata perjalanan para penumpang kami — dari city tour singkat hingga perjalanan luar kota."
-        />
+        <PageHeaderClient title={title} subtitle={subtitle} eyebrow={eyebrow} />
         <section className="pb-16 md:pb-24">
           <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12 text-center py-20">
-            <p className="text-base font-extrabold text-heading">Belum ada foto di galeri.</p>
-            <p className="mt-1 text-sm text-muted">Tim kami sedang menyiapkan dokumentasi perjalanan terbaru.</p>
+            <p className="text-base font-extrabold text-heading">{emptyTitle}</p>
+            <p className="mt-1 text-sm text-muted">{emptySubtitle}</p>
           </div>
         </section>
       </>
@@ -69,10 +79,7 @@ export default function GaleriPageClient({ items }: Props) {
 
   return (
     <>
-      <PageHeaderClient
-        title="Cerita perjalanan bersama Mahessa"
-        subtitle="Dokumentasi nyata perjalanan para penumpang kami — dari city tour singkat hingga perjalanan luar kota."
-      />
+      <PageHeaderClient title={title} subtitle={subtitle} eyebrow={eyebrow} />
 
       <section className="pb-16 md:pb-24">
         <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">

@@ -1,22 +1,17 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { LayoutGrid, Rows3, MapPin, Search } from "lucide-react";
 import PackageCards from "@/components/PackageCards";
 import type { TravelPackage } from "@/lib/types";
 import { cn } from "@/lib/cn";
+import { useLocale, useT, format } from "@/lib/i18n/client";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
 type Region = "Semua" | "Jawa" | "Luar Jawa";
 type ViewMode = "grid" | "single";
-
-const REGIONS: Array<{ id: Region; label: string }> = [
-  { id: "Semua", label: "Semua" },
-  { id: "Jawa", label: "Jawa" },
-  { id: "Luar Jawa", label: "Luar Jawa" },
-];
 
 const JAWA = ["Bandung", "Ciwidey", "Lembang", "Garut", "Jakarta", "Yogyakarta", "Semarang", "Bromo"];
 
@@ -26,14 +21,20 @@ type Props = {
 
 export default function PaketListClient({ packages }: Props) {
   const reduce = useReducedMotion();
+  const locale = useLocale();
+  const t = useT();
+  const isEn = locale === "en";
   const [active, setActive] = useState<Region>("Semua");
   const [query, setQuery] = useState("");
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [manualView, setManualView] = useState<ViewMode | null>(null);
 
-  useEffect(() => {
-    if (active !== "Semua") setViewMode("single");
-    else setViewMode("grid");
-  }, [active]);
+  const viewMode: ViewMode = manualView ?? (active === "Semua" ? "grid" : "single");
+
+  const REGIONS: Array<{ id: Region; label: string }> = [
+    { id: "Semua", label: isEn ? "All" : "Semua" },
+    { id: "Jawa", label: isEn ? "Java" : "Jawa" },
+    { id: "Luar Jawa", label: isEn ? "Outside Java" : "Luar Jawa" },
+  ];
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -57,7 +58,7 @@ export default function PaketListClient({ packages }: Props) {
           <div className="flex flex-1 flex-wrap items-center gap-2">
             <span className="hidden items-center gap-1.5 pr-2 text-[11px] font-bold uppercase tracking-[0.18em] text-muted sm:flex">
               <MapPin size={13} aria-hidden="true" />
-              Area
+              {t.list.filterArea}
             </span>
             {REGIONS.map((r) => {
               const isActive = r.id === active;
@@ -98,9 +99,9 @@ export default function PaketListClient({ packages }: Props) {
             <div className="flex items-center rounded-full border border-line bg-white p-0.5">
               <button
                 type="button"
-                onClick={() => setViewMode("grid")}
+                onClick={() => setManualView("grid")}
                 aria-pressed={viewMode === "grid"}
-                title="Lihat banyak"
+                title={t.list.viewMany}
                 className={cn(
                   "flex h-8 w-8 items-center justify-center rounded-full transition-colors",
                   viewMode === "grid"
@@ -112,9 +113,9 @@ export default function PaketListClient({ packages }: Props) {
               </button>
               <button
                 type="button"
-                onClick={() => setViewMode("single")}
+                onClick={() => setManualView("single")}
                 aria-pressed={viewMode === "single"}
-                title="Lihat satu-satu"
+                title={t.list.viewSingle}
                 className={cn(
                   "flex h-8 w-8 items-center justify-center rounded-full transition-colors",
                   viewMode === "single"
@@ -136,7 +137,7 @@ export default function PaketListClient({ packages }: Props) {
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Cari paket (Bandung, Bali...)"
+                placeholder={t.list.searchPackagePlaceholder}
                 className="w-full rounded-full border border-line bg-white py-2.5 pl-9 pr-3 text-[13px] font-bold text-body-text outline-none transition-all placeholder:font-normal placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/15"
               />
             </label>
@@ -164,17 +165,17 @@ export default function PaketListClient({ packages }: Props) {
             className="rounded-2xl border border-dashed border-line bg-white p-12 text-center"
           >
             <p className="text-base font-extrabold text-heading">
-              Tidak ada paket yang cocok.
+              {t.list.emptyPackageTitle}
             </p>
             <p className="mt-1 text-sm text-muted">
-              Coba ubah filter atau kata kunci pencarianmu.
+              {t.list.emptyPackageDesc}
             </p>
           </motion.div>
         )}
       </AnimatePresence>
 
       <p className="mt-6 text-center text-[11px] font-bold uppercase tracking-[0.18em] text-muted">
-        Menampilkan {filtered.length} dari {packages.length} paket
+        {format(t.list.showingPackage, { shown: String(filtered.length), total: String(packages.length) })}
       </p>
     </div>
   );

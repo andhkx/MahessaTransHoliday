@@ -8,6 +8,7 @@ import type { Vehicle } from "@/lib/types";
 import { vehicles } from "@/data/vehicles";
 import { formatCompact } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { useLocale, useT } from "@/lib/i18n/client";
 
 const FALLBACK_IMG =
   "data:image/svg+xml;utf8," +
@@ -29,6 +30,9 @@ export default function Step1Budget({
   onNext,
 }: Step1BudgetProps) {
   const reduce = useReducedMotion();
+  const locale = useLocale();
+  const t = useT();
+  const isEn = locale === "en";
   const [previewVehicles, setPreviewVehicles] = useState<Vehicle[]>([]);
   const sliderRef = useRef<HTMLInputElement>(null);
 
@@ -56,6 +60,7 @@ export default function Step1Budget({
   const activeTier = BUDGET_TIERS.find((t) => budget >= t.min && budget <= t.max);
 
   const displayBudget = formatCompact(budget);
+  const priceUnitShort = isEn ? t.common.per : "/ 12 jam";
 
   return (
     <motion.div
@@ -65,8 +70,8 @@ export default function Step1Budget({
       className="space-y-6"
     >
       <div>
-        <h3 className="mb-1 text-xl font-extrabold text-heading">Berapa budget kamu?</h3>
-        <p className="text-sm text-muted">Geser slider atau pilih kategori cepat</p>
+        <h3 className="mb-1 text-xl font-extrabold text-heading">{t.finder.step1Title}</h3>
+        <p className="text-sm text-muted">{t.finder.step1Sub}</p>
       </div>
 
       {/* Quick Pick Buttons */}
@@ -114,7 +119,7 @@ export default function Step1Budget({
             "w-full appearance-none h-2 rounded-full bg-line accent-accent cursor-pointer",
             "focus:outline-none focus:ring-2 focus:ring-accent/20",
           )}
-          aria-label="Budget slider"
+          aria-label={t.finder.sliderAria}
         />
         <div className="mt-4 flex justify-between text-sm font-bold text-muted">
           <span>{formatCompact(650000)}</span>
@@ -129,14 +134,14 @@ export default function Step1Budget({
         transition={{ duration: 0.3, ease: EASE }}
         className="rounded-[16px] border border-accent/20 bg-accent/5 p-4 text-center"
       >
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">Budget Terpilih</p>
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">{t.finder.budgetLabel}</p>
         <p className="mt-1 text-2xl font-extrabold text-heading">{displayBudget}</p>
-        <p className="mt-2 text-[11px] text-muted">per 12 jam dengan driver</p>
+        <p className="mt-2 text-[11px] text-muted">{t.finder.budgetUnit}</p>
         {activeTier && (
           <span className="mt-2 inline-flex items-center gap-1 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.18em] text-white rounded-full"
             style={{ backgroundColor: activeTier.color }}
           >
-            Kategori: {activeTier.label}
+            {t.finder.budgetTierLabel} {activeTier.label}
           </span>
         )}
       </motion.div>
@@ -144,7 +149,7 @@ export default function Step1Budget({
       {/* Preview Vehicles */}
       {previewVehicles.length > 0 && (
         <div className="space-y-3">
-          <p className="text-sm font-bold text-muted">Mobil yang cocok di budget ini:</p>
+          <p className="text-sm font-bold text-muted">{t.finder.previewLabel}</p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {previewVehicles.slice(0, 4).map((v) => (
               <Link key={v.id} href={`/armada/${v.slug}`} className="group">
@@ -167,7 +172,7 @@ export default function Step1Budget({
                   <div className="p-3">
                     <p className="text-sm font-extrabold text-heading line-clamp-1">{v.name}</p>
                     <p className="text-[11px] font-bold text-accent">
-                      {formatCompact(v.pricing.startingPrice ?? 0)} / 12 jam
+                      {formatCompact(v.pricing.startingPrice ?? 0)} {priceUnitShort}
                     </p>
                   </div>
                 </motion.article>
@@ -181,7 +186,7 @@ export default function Step1Budget({
         onClick={onNext}
         className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-5 py-3.5 text-sm font-extrabold text-white shadow-[0_10px_24px_-10px_rgba(0,86,145,0.6)] transition-all hover:scale-[1.01] hover:bg-accent-hover active:scale-[0.98]"
       >
-        Lanjut ke Step 2
+        {t.finder.nextStep2}
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M5 12h14" />
           <path d="m12 5 7 7-7 7" />

@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -6,38 +8,16 @@ import {
   MAPS_LINK_URL,
   OPERATING_HOURS,
   SERVICE_AREAS,
-  SITE_NAME,
-  SITE_TAGLINE,
   WHATSAPP_DISPLAY,
 } from "@/lib/constants";
 import { waGeneralLink } from "@/lib/whatsapp";
-
-const NAV = [
-  { href: "/armada", label: "Armada" },
-  { href: "/paket", label: "Paket Perjalanan" },
-  { href: "/artikel", label: "Artikel" },
-  { href: "/galeri", label: "Galeri" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/kontak", label: "Kontak" },
-];
-
-const LAYANAN = [
-  { href: "/armada", label: "Sewa Mobil + Sopir" },
-  { href: "/paket", label: "Paket Wisata" },
-  { href: "/kontak", label: "Antar Jemput Bandara" },
-  { href: "/kontak", label: "City Tour Bandung" },
-  { href: "/kontak", label: "Transportasi Korporat" },
-];
-
-const ARMADA = [
-  { href: "/armada/toyota-avanza", label: "Toyota Avanza" },
-  { href: "/armada/toyota-innova-reborn", label: "Innova Reborn" },
-  { href: "/armada/toyota-hiace-premio", label: "Hiace Premio" },
-  { href: "/armada/toyota-alphard", label: "Toyota Alphard" },
-  { href: "/armada", label: "Lihat Semua →" },
-];
+import { useT } from "@/lib/i18n/client";
 
 export default function Footer() {
+  const t = useT();
+  const siteName = t.site.name;
+  const tagline = t.site.tagline;
+
   return (
     <footer className="bg-heading text-white">
       <div className="mx-auto w-full max-w-[1300px] px-5 py-14 sm:px-8 md:px-12 md:py-16">
@@ -46,14 +26,14 @@ export default function Footer() {
             <Link href="/" className="flex items-center">
               <Image
                 src="/images/logo_mahessa.png"
-                alt={SITE_NAME}
+                alt={siteName}
                 width={200}
                 height={56}
                 className="h-10 w-auto object-contain brightness-0 invert"
               />
             </Link>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/70">
-              {SITE_TAGLINE}
+              {tagline}
             </p>
             <div className="mt-5 flex flex-wrap gap-2">
               {SERVICE_AREAS.map((area) => (
@@ -119,10 +99,10 @@ export default function Footer() {
 
           <div>
             <h3 className="mb-4 font-mono text-[11px] uppercase tracking-[0.2em] text-primary">
-              Halaman
+              {t.footer.pages}
             </h3>
             <ul className="space-y-2.5">
-              {NAV.map((link) => (
+              {t.footer.pagesItems.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
@@ -137,10 +117,10 @@ export default function Footer() {
 
           <div>
             <h3 className="mb-4 font-mono text-[11px] uppercase tracking-[0.2em] text-primary">
-              Layanan
+              {t.footer.services}
             </h3>
             <ul className="space-y-2.5">
-              {LAYANAN.map((link) => (
+              {t.footer.layananItems.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
@@ -155,10 +135,10 @@ export default function Footer() {
 
           <div>
             <h3 className="mb-4 font-mono text-[11px] uppercase tracking-[0.2em] text-primary">
-              Pilihan Armada
+              {t.footer.fleet}
             </h3>
             <ul className="space-y-2.5">
-              {ARMADA.map((link) => (
+              {t.footer.fleetItems.map((link) => (
                 <li key={link.label}>
                   <Link
                     href={link.href}
@@ -168,12 +148,20 @@ export default function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link
+                  href="/armada"
+                  className="text-sm text-white/75 transition-colors hover:text-white hover:underline"
+                >
+                  {t.footer.viewAllFleet}
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div>
             <h3 className="mb-4 font-mono text-[11px] uppercase tracking-[0.2em] text-primary">
-              Hubungi Kami
+              {t.footer.contact}
             </h3>
             <a
               href={waGeneralLink()}
@@ -183,14 +171,14 @@ export default function Footer() {
             >
               <span className="min-w-0">
                 <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">
-                  WhatsApp Admin
+                  {t.footer.wa}
                 </span>
                 <span className="mt-0.5 block truncate text-[14px] font-extrabold text-white">
                   {WHATSAPP_DISPLAY}
                 </span>
               </span>
               <span className="inline-flex shrink-0 items-center gap-1.5 text-[12px] font-bold text-primary group-hover:underline">
-                Chat
+                {t.footer.chat}
                 <svg
                   width="12"
                   height="12"
@@ -214,14 +202,14 @@ export default function Footer() {
             >
               <span className="min-w-0">
                 <span className="block text-[10px] font-bold uppercase tracking-[0.2em] text-white/50">
-                  Email
+                  {t.footer.email}
                 </span>
                 <span className="mt-0.5 block truncate text-[13px] font-extrabold text-white">
                   {EMAIL_DISPLAY}
                 </span>
               </span>
               <span className="inline-flex shrink-0 items-center gap-1.5 text-[12px] font-bold text-primary group-hover:underline">
-                Kirim
+                {t.footer.send}
                 <svg
                   width="12"
                   height="12"
@@ -249,7 +237,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="mt-3 inline-block text-sm font-bold text-primary transition-colors hover:text-white hover:underline"
             >
-              Lihat di Google Maps →
+              {t.footer.directions}
             </a>
           </div>
         </div>
@@ -258,14 +246,15 @@ export default function Footer() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex w-full max-w-[1300px] flex-col items-center justify-between gap-2 px-5 py-5 text-xs text-white/50 sm:flex-row sm:px-8 md:px-12">
           <p>
-            © {new Date().getFullYear()} {SITE_NAME}. Hak cipta dilindungi.
+            © {new Date().getFullYear()} {siteName}. {t.footer.copyright}
           </p>
           <p className="flex items-center gap-3">
-            <span>Rental mobil</span>
-            <span className="text-white/30">·</span>
-            <span>Charter</span>
-            <span className="text-white/30">·</span>
-            <span>Paket wisata</span>
+            {t.footer.tags.map((tag, i) => (
+              <span key={tag} className="flex items-center gap-3">
+                <span>{tag}</span>
+                {i < t.footer.tags.length - 1 && <span className="text-white/30">·</span>}
+              </span>
+            ))}
           </p>
         </div>
         <div className="mx-auto flex w-full max-w-[1300px] items-center justify-center gap-1.5 px-5 pb-4 text-[11px] font-bold uppercase tracking-[0.18em] text-white/30 sm:px-8 md:px-12">

@@ -7,6 +7,7 @@ import { ArrowUpRight, Check, Fuel, Settings2, Users } from "lucide-react";
 import type { Vehicle } from "@/lib/types";
 import { cn } from "@/lib/cn";
 import { formatCompact } from "@/lib/format";
+import { useLocale, useT, format } from "@/lib/i18n/client";
 import useSnapActive from "./useSnapActive";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
@@ -19,10 +20,10 @@ type VehicleCardsProps = {
   onSelect?: (vehicle: Vehicle) => void;
 };
 
-export function vehiclePriceLabel(vehicle: Vehicle): string {
+export function vehiclePriceLabel(vehicle: Vehicle, contactUsLabel: string): string {
   return vehicle.pricing.startingPrice
     ? formatCompact(vehicle.pricing.startingPrice)
-    : "Hubungi Kami";
+    : contactUsLabel;
 }
 
 export default function VehicleCards({
@@ -33,6 +34,9 @@ export default function VehicleCards({
   onSelect,
 }: VehicleCardsProps) {
   const reduce = useReducedMotion();
+  const locale = useLocale();
+  const t = useT();
+  const isEn = locale === "en";
   const [rowRef, activeIdx] = useSnapActive();
 
   // Default: grid 2-col on mobile (kayak desktop biar keliatan banyak kecil-kecil).
@@ -51,7 +55,7 @@ export default function VehicleCards({
         )}
       >
       {vehicles.map((vehicle, i) => {
-        const price = vehiclePriceLabel(vehicle);
+        const price = vehiclePriceLabel(vehicle, t.common.contactUs);
         return (
           <motion.div
             key={vehicle.id}
@@ -74,6 +78,10 @@ export default function VehicleCards({
               selected={selectable && selectedId === vehicle.id}
               vehicle={vehicle}
               onSelect={onSelect}
+              isEn={isEn}
+              categoryLabels={t.common.category}
+              selectLabel={t.common.selectLabel}
+              viewDetailLabel={t.common.viewDetailLabel}
             >
               <div className="relative aspect-[4/3] overflow-hidden bg-surface">
                 <Image
@@ -104,11 +112,11 @@ export default function VehicleCards({
                   </h3>
                 </div>
                 <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.16em] text-muted">
-                  {categoryLabel(vehicle.category)}
+                  {categoryLabel(vehicle.category, t.common.category)}
                 </p>
 
                 <ul className="mb-5 grid grid-cols-3 gap-2 border-y border-line py-3">
-                  <Spec Icon={Users} label={`${vehicle.capacity} Kursi`} />
+                  <Spec Icon={Users} label={isEn ? `${vehicle.capacity} ${t.common.seatsUnit}` : `${vehicle.capacity} ${t.common.seats}`} />
                   <Spec Icon={Settings2} label={vehicle.transmission} />
                   <Spec Icon={Fuel} label={vehicle.fuelType} />
                 </ul>
@@ -116,7 +124,7 @@ export default function VehicleCards({
                 <div className="mt-auto flex items-end justify-between gap-2">
                   <div>
                     <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted">
-                      Sewa Harian
+                      {t.common.rentalLabel}
                     </p>
                     <p className="text-[18px] font-extrabold tracking-tight text-accent">
                       {price}
@@ -145,18 +153,21 @@ export default function VehicleCards({
   );
 }
 
-function categoryLabel(category: Vehicle["category"]): string {
+function categoryLabel(
+  category: Vehicle["category"],
+  labels: { entry: string; midrange: string; premium: string; luxury: string; group: string },
+): string {
   switch (category) {
     case "entry":
-      return "City Car";
+      return labels.entry;
     case "midrange":
-      return "MPV";
+      return labels.midrange;
     case "premium":
-      return "SUV & Premium";
+      return labels.premium;
     case "luxury":
-      return "Luxury";
+      return labels.luxury;
     case "group":
-      return "Bus & Van";
+      return labels.group;
   }
 }
 
@@ -177,22 +188,32 @@ function Wrapper({
   vehicle,
   onSelect,
   children,
+  isEn,
+  categoryLabels,
+  selectLabel,
+  viewDetailLabel,
 }: {
   selectable: boolean;
   selected: boolean;
   vehicle: Vehicle;
   onSelect?: (v: Vehicle) => void;
   children: React.ReactNode;
+  isEn: boolean;
+  categoryLabels: { entry: string; midrange: string; premium: string; luxury: string; group: string };
+  selectLabel: string;
+  viewDetailLabel: string;
 }) {
   const baseCard =
     "group flex h-full flex-col overflow-hidden rounded-[20px] border bg-white shadow-card transition-all duration-300";
+  const selectAria = isEn ? `${selectLabel} ${vehicle.name}` : `Pilih ${vehicle.name}`;
+  const detailAria = isEn ? `${viewDetailLabel}: ${vehicle.name}` : `Lihat detail ${vehicle.name}`;
   if (selectable) {
     return (
       <button
         type="button"
         onClick={() => onSelect?.(vehicle)}
         aria-pressed={selected}
-        aria-label={`Pilih ${vehicle.name}`}
+        aria-label={selectAria}
         className={cn(
           baseCard,
           "text-left w-full",
@@ -213,7 +234,7 @@ function Wrapper({
   return (
     <Link
       href={`/armada/${vehicle.slug}`}
-      aria-label={`Lihat detail ${vehicle.name}`}
+      aria-label={detailAria}
       className={cn(
         baseCard,
         "border-line hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-elevated"

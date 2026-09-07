@@ -4,6 +4,7 @@ import JsonLd from "@/components/JsonLd";
 import CtaSection from "@/components/CtaSection";
 import FaqPageClient from "./FaqPageClient";
 import { getMainFaqs, getExtraFaqs } from "@/lib/data/supabase/faq";
+import { getLocale } from "@/lib/i18n/server";
 
 export const dynamic = 'force-dynamic';
 
@@ -16,6 +17,8 @@ export const metadata: Metadata = {
 
 export default async function FaqPage() {
   const [faqMain, faqExtra] = await Promise.all([getMainFaqs(), getExtraFaqs()]);
+  const locale = await getLocale();
+  const isEn = locale === "en";
 
   const faqPageLd = {
     "@context": "https://schema.org",
@@ -43,11 +46,12 @@ export default async function FaqPage() {
             FAQ
           </span>
           <h1 className="mb-3 max-w-3xl text-3xl font-extrabold leading-[1.05] tracking-[-0.03em] text-heading md:text-[44px]">
-            Pertanyaan yang sering ditanyakan.
+            {isEn ? "Frequently asked questions." : "Pertanyaan yang sering ditanyakan."}
           </h1>
           <p className="max-w-2xl text-[15px] leading-relaxed text-body-text md:text-base">
-            Semua yang perlu kamu tahu sebelum reservasi. Tidak menemukan jawabannya?
-            Hubungi kami via WhatsApp.
+            {isEn
+              ? "Everything you need to know before booking. Can't find your answer? Reach us on WhatsApp."
+              : "Semua yang perlu kamu tahu sebelum reservasi. Tidak menemukan jawabannya? Hubungi kami via WhatsApp."}
           </p>
         </div>
       </header>

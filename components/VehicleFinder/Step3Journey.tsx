@@ -5,6 +5,7 @@ import { Building2, Briefcase, Mountain, Plane, ArrowLeft } from "lucide-react";
 import { JOURNEY_TYPES } from "@/data/finder";
 import type { JourneyType } from "@/data/finder";
 import { cn } from "@/lib/cn";
+import { useLocale, useT } from "@/lib/i18n/client";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -29,7 +30,11 @@ export default function Step3Journey({
   onNext,
 }: Step3JourneyProps) {
   const reduce = useReducedMotion();
+  const locale = useLocale();
+  const t = useT();
+  const isEn = locale === "en";
   const selected = journey ? JOURNEY_TYPES.find((j) => j.id === journey) : null;
+  const selectedLabel = journey ? t.finder.journeyLabels[journey] : "";
 
   return (
     <motion.div
@@ -39,14 +44,16 @@ export default function Step3Journey({
       className="space-y-6"
     >
       <div>
-        <h3 className="mb-1 text-xl font-extrabold text-heading">Untuk perjalanan apa?</h3>
-        <p className="text-sm text-muted">Pilih jenis perjalanan yang sesuai</p>
+        <h3 className="mb-1 text-xl font-extrabold text-heading">{t.finder.step3Title}</h3>
+        <p className="text-sm text-muted">{t.finder.step3Sub}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {JOURNEY_TYPES.map((j) => {
           const Icon = ICON_MAP[j.Icon] ?? Plane;
           const isActive = j.id === journey;
+          const label = t.finder.journeyLabels[j.id];
+          const desc = isEn ? t.finder.journeyDescriptions[`${j.id}En` as keyof typeof t.finder.journeyDescriptions] : t.finder.journeyDescriptions[j.id];
           return (
             <button
               key={j.id}
@@ -62,10 +69,10 @@ export default function Step3Journey({
               <Icon size={48} className={isActive ? "text-accent shrink-0" : "text-primary shrink-0"} aria-hidden="true" />
               <div>
                 <p className="text-[16px] font-extrabold leading-tight text-heading md:text-[17px]">
-                  {j.label}
+                  {label}
                 </p>
                 <p className="mt-1 text-[12px] leading-relaxed text-muted md:text-[13px]">
-                  {j.description}
+                  {desc}
                 </p>
               </div>
             </button>
@@ -75,8 +82,8 @@ export default function Step3Journey({
 
       {selected && (
         <div className="rounded-[12px] border border-accent/20 bg-accent/5 p-4 text-center">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">Kamu pilih</p>
-          <p className="mt-1 text-base font-extrabold text-heading">{selected.label}</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">{t.finder.youPick}</p>
+          <p className="mt-1 text-base font-extrabold text-heading">{selectedLabel}</p>
         </div>
       )}
 
@@ -87,7 +94,7 @@ export default function Step3Journey({
           className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-5 py-3 text-sm font-extrabold text-heading transition-all hover:bg-accent hover:text-white"
         >
           <ArrowLeft size={14} aria-hidden="true" />
-          Kembali
+          {t.finder.back}
         </button>
         <button
           type="button"
@@ -100,7 +107,7 @@ export default function Step3Journey({
               : "bg-muted cursor-not-allowed opacity-50",
           )}
         >
-          Lihat Rekomendasi
+          {t.finder.viewRec}
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 12h14" />
             <path d="m12 5 7 7-7 7" />

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { ChevronDown } from "lucide-react";
+import { useLocale, useT } from "@/lib/i18n/client";
 import type { FaqItem } from "@/lib/types";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
@@ -14,10 +15,18 @@ type FaqAccordionProps = {
 
 export default function FaqAccordion({ items }: FaqAccordionProps) {
   const reduce = useReducedMotion();
+  const locale = useLocale();
+  const t = useT();
   const [open, setOpen] = useState<string>("");
   const [showAll, setShowAll] = useState(false);
 
   const visible = showAll ? items : items.slice(0, VISIBLE);
+  const remaining = items.length - VISIBLE;
+  const closeLabel = locale === "id" ? "Tutup" : "Close";
+  const moreLabel =
+    locale === "id"
+      ? `Lihat ${remaining} pertanyaan lainnya`
+      : `See ${remaining} more questions`;
 
   return (
     <div>
@@ -74,7 +83,7 @@ export default function FaqAccordion({ items }: FaqAccordionProps) {
           onClick={() => setShowAll((p) => !p)}
           className="mt-3 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-primary"
         >
-          {showAll ? "Tutup" : `Lihat ${items.length - VISIBLE} pertanyaan lainnya`}
+          {showAll ? closeLabel : moreLabel}
         </button>
       )}
     </div>

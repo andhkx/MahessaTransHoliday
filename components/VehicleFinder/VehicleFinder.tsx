@@ -9,17 +9,20 @@ import Step3Journey from "./Step3Journey";
 import Step4Result from "./Step4Result";
 import { BUDGET_MAX, BUDGET_MIN, BUDGET_STEP } from "@/data/finder";
 import type { JourneyType } from "@/data/finder";
+import { useT } from "@/lib/i18n/client";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
-const STEP_LABELS = ["Budget", "Orang", "Perjalanan", "Rekomendasi"];
 
 type WizardStep = 1 | 2 | 3 | 4;
 
 export default function VehicleFinder() {
+  const t = useT();
   const [step, setStep] = useState<WizardStep>(1);
   const [budget, setBudget] = useState<number>(650000);
   const [people, setPeople] = useState<number>(5);
   const [journey, setJourney] = useState<JourneyType | null>(null);
+
+  const STEP_LABELS: string[] = [...t.finder.steps];
 
   const handleReset = () => {
     setStep(1);

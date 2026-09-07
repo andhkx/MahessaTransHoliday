@@ -4,6 +4,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { User, Users, Users2, Bus, ArrowLeft } from "lucide-react";
 import { PEOPLE_OPTIONS } from "@/data/finder";
 import { cn } from "@/lib/cn";
+import { useT } from "@/lib/i18n/client";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -28,7 +29,9 @@ export default function Step2People({
   onNext,
 }: Step2PeopleProps) {
   const reduce = useReducedMotion();
+  const t = useT();
   const selectedBucket = PEOPLE_OPTIONS.find((opt) => opt.capacity === people) ?? PEOPLE_OPTIONS[2];
+  const selectedLabel = t.finder.peopleLabels[selectedBucket.id];
 
   return (
     <motion.div
@@ -39,9 +42,9 @@ export default function Step2People({
     >
       <div>
         <h3 className="mb-1 text-xl font-extrabold text-heading">
-          Berapa orang yang bepergian?
+          {t.finder.step2Title}
         </h3>
-        <p className="text-sm text-muted">Pilih kategori yang sesuai dengan jumlah penumpang</p>
+        <p className="text-sm text-muted">{t.finder.step2Sub}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-2">
@@ -61,15 +64,15 @@ export default function Step2People({
               )}
             >
               <Icon size={48} className={isActive ? "text-accent" : "text-primary"} aria-hidden="true" />
-              <span className="text-base font-extrabold">{opt.label}</span>
+              <span className="text-base font-extrabold">{t.finder.peopleLabels[opt.id]}</span>
             </button>
           );
         })}
       </div>
 
       <div className="rounded-[12px] border border-accent/20 bg-accent/5 p-4 text-center">
-        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">Kamu pilih</p>
-        <p className="mt-1 text-lg font-extrabold text-heading">{selectedBucket.label}</p>
+        <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">{t.finder.youPick}</p>
+        <p className="mt-1 text-lg font-extrabold text-heading">{selectedLabel}</p>
       </div>
 
       <div className="mt-8 flex items-center justify-between gap-3">
@@ -79,14 +82,14 @@ export default function Step2People({
           className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-5 py-3 text-sm font-extrabold text-heading transition-all hover:bg-accent hover:text-white"
         >
           <ArrowLeft size={14} aria-hidden="true" />
-          Kembali
+          {t.finder.back}
         </button>
         <button
           type="button"
           onClick={onNext}
           className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-extrabold text-white transition-all hover:bg-accent-hover"
         >
-          Lanjut ke Step 3
+          {t.finder.nextStep3}
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M5 12h14" />
             <path d="m12 5 7 7-7 7" />

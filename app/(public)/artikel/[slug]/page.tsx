@@ -8,6 +8,7 @@ import { getArticleBySlug, getLatestArticles } from "@/lib/data/supabase/article
 import { SITE_URL } from "@/lib/constants";
 import { Calendar, Eye, FileText, ArrowLeft, Share2, MessageCircle, ArrowUpRight } from "lucide-react";
 import { waGeneralLink } from "@/lib/whatsapp";
+import { getLocale, getDict } from "@/lib/i18n/server";
 
 
 export const dynamic = 'force-dynamic';
@@ -34,8 +35,15 @@ export default async function ArticleDetailPage({
   params,
 }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const locale = await getLocale();
+  const isEn = locale === "en";
+  const t = getDict(locale);
+  const tArt = t.detail.artikel;
   const article = await getArticleBySlug(slug);
-  if (!article) notFound();
+  if (!article) {
+    console.error(`[artikel/[slug]] ${tArt.notFound}: "${slug}"`);
+    notFound();
+  }
 
   const latest = await getLatestArticles(5);
   const related = latest.filter((a) => a.id !== article.id).slice(0, 4);
@@ -44,8 +52,8 @@ export default async function ArticleDetailPage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Beranda", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Artikel", item: `${SITE_URL}/artikel` },
+      { "@type": "ListItem", position: 1, name: isEn ? "Home" : "Beranda", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: tArt.breadcrumbArticle, item: `${SITE_URL}/artikel` },
       {
         "@type": "ListItem",
         position: 3,
@@ -82,7 +90,9 @@ export default async function ArticleDetailPage({
   };
 
   const shareUrl = `${SITE_URL}/artikel/${article.slug}`;
-  const shareText = `${article.title} – baca selengkapnya di Mahessa Trans Holiday`;
+  const shareText = isEn
+    ? `${article.title}${tArt.shareTextSuffix}`
+    : `${article.title} – baca selengkapnya di Mahessa Trans Holiday`;
 
   return (
     <>
@@ -92,11 +102,11 @@ export default async function ArticleDetailPage({
       <article className="mx-auto max-w-5xl px-5 py-28 sm:px-8 md:px-12 md:pt-32">
         <header className="mb-8 md:mb-10">
           <nav aria-label="Breadcrumb" className="mb-6 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-muted">
-            <Link href="/" className="transition-colors hover:text-primary">Beranda</Link>
+            <Link href="/" className="transition-colors hover:text-primary">{isEn ? "Home" : "Beranda"}</Link>
             <span className="mx-2 text-line">/</span>
-            <Link href="/artikel" className="transition-colors hover:text-primary">Artikel</Link>
+            <Link href="/artikel" className="transition-colors hover:text-primary">{tArt.breadcrumbArticle}</Link>
             <span className="mx-2 text-line">/</span>
-            <span className="text-primary truncate max-w-[300px] inline-block align-bottom">{article.category || "Artikel"}</span>
+            <span className="text-primary truncate max-w-[300px] inline-block align-bottom">{article.category || tArt.breadcrumbArticle}</span>
           </nav>
 
           <h1 className="mb-5 text-3xl font-extrabold leading-[1.1] tracking-[-0.03em] text-heading md:text-[44px] md:leading-[1.05]">
@@ -113,7 +123,7 @@ export default async function ArticleDetailPage({
             <span className="flex items-center gap-1.5">
               <Calendar size={14} aria-hidden="true" />
               {article.published_at
-                ? new Date(article.published_at).toLocaleDateString("id-ID", {
+                ? new Date(article.published_at).toLocaleDateString(isEn ? "en-US" : "id-ID", {
                     day: "2-digit",
                     month: "long",
                     year: "numeric",
@@ -122,7 +132,7 @@ export default async function ArticleDetailPage({
             </span>
             <span className="flex items-center gap-1.5">
               <Eye size={14} aria-hidden="true" />
-              {article.view_count} views
+              {article.view_count} {tArt.viewsSuffix}
             </span>
             {article.category && (
               <span className="flex items-center gap-1.5">
@@ -131,12 +141,12 @@ export default async function ArticleDetailPage({
               </span>
             )}
             <span className="ml-auto flex items-center gap-2">
-              <span className="hidden sm:inline">Bagikan:</span>
+              <span className="hidden sm:inline">{tArt.shareLabel}</span>
               <a
                 href={`https://wa.me/?text=${encodeURIComponent(shareText + " " + shareUrl)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Bagikan ke WhatsApp"
+                aria-label={tArt.shareWaLabel}
                 className="flex h-7 w-7 items-center justify-center rounded-full border border-line text-muted transition-all hover:border-accent hover:bg-accent hover:text-white"
               >
                 <MessageCircle size={13} aria-hidden="true" />
@@ -145,7 +155,7 @@ export default async function ArticleDetailPage({
                 href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${shareUrl}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Bagikan ke X"
+                aria-label={tArt.shareXLabel}
                 className="flex h-7 w-7 items-center justify-center rounded-full border border-line text-muted transition-all hover:border-accent hover:bg-accent hover:text-white text-[11px] font-extrabold"
               >
                 X
@@ -167,7 +177,9 @@ export default async function ArticleDetailPage({
             />
             {article.category && (
               <figcaption className="mt-2 px-1 text-xs text-muted">
-                Ilustrasi {article.category} &mdash; {article.title}
+                {isEn
+                  ? `Illustration: ${article.category} — ${article.title}`
+                  : `Ilustrasi ${article.category} — ${article.title}`}
               </figcaption>
             )}
           </figure>
@@ -183,13 +195,13 @@ export default async function ArticleDetailPage({
             href="/artikel"
             className="inline-flex items-center gap-1.5 text-sm font-bold text-primary transition-colors hover:text-accent"
           >
-            <ArrowLeft size={14} aria-hidden="true" /> Kembali ke semua artikel
+            <ArrowLeft size={14} aria-hidden="true" /> {tArt.backAll}
           </Link>
           <Link
             href="/kontak"
             className="inline-flex items-center gap-1.5 text-sm font-bold text-primary transition-colors hover:text-accent"
           >
-            <Share2 size={14} aria-hidden="true" /> Konsultasi via WhatsApp
+            <Share2 size={14} aria-hidden="true" /> {tArt.consultWa}
           </Link>
         </footer>
       </article>
@@ -198,29 +210,28 @@ export default async function ArticleDetailPage({
         <div className="mx-auto max-w-5xl px-5 sm:px-8 md:px-12">
           <div className="rounded-2xl border border-line bg-white p-6 shadow-card md:p-8">
             <p className="font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-primary">
-              Tertarik dengan artikel ini?
+              {tArt.ctaEyebrow}
             </p>
             <h3 className="mt-2 text-2xl font-extrabold tracking-tight text-heading md:text-3xl">
-              Cari mobil yang pas untuk perjalananmu.
+              {tArt.ctaTitle}
             </h3>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-body-text md:text-base">
-              Paket wisata, charter Hiace, atau rental harian &mdash; tim kami
-              bantu rekomendasikan unit dan itinerary sesuai budget. Lihat
-              semua armada dan paket di website, atau hubungi admin untuk
-              konsultasi gratis.
+              {isEn
+                ? "Tour packages, Hiace charter, or daily rental — our team helps recommend the right unit and itinerary for your budget. See all fleet and packages on the site, or contact admin for a free consultation."
+                : "Paket wisata, charter Hiace, atau rental harian — tim kami bantu rekomendasikan unit dan itinerary sesuai budget. Lihat semua armada dan paket di website, atau hubungi admin untuk konsultasi gratis."}
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/armada"
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-accent px-5 py-3.5 text-sm font-extrabold text-white shadow-[0_8px_20px_-8px_rgba(0,86,145,0.55)] transition-all hover:scale-[1.02] hover:bg-accent-hover active:scale-[0.98]"
               >
-                Lihat Semua Armada <ArrowUpRight size={14} aria-hidden="true" />
+                {tArt.ctaAllFleet} <ArrowUpRight size={14} aria-hidden="true" />
               </Link>
               <Link
                 href="/paket"
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border-2 border-accent bg-white px-5 py-3.5 text-sm font-extrabold text-accent transition-all hover:scale-[1.02] hover:bg-accent/5 active:scale-[0.98]"
               >
-                Lihat Paket Wisata
+                {tArt.ctaAllPackages}
               </Link>
               <a
                 href={waGeneralLink()}
@@ -228,7 +239,7 @@ export default async function ArticleDetailPage({
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-full px-5 py-3.5 text-sm font-bold text-primary transition-colors hover:text-accent"
               >
-                <MessageCircle size={14} aria-hidden="true" /> Chat Admin
+                <MessageCircle size={14} aria-hidden="true" /> {tArt.ctaChatAdmin}
               </a>
             </div>
           </div>
@@ -241,14 +252,14 @@ export default async function ArticleDetailPage({
             <div className="mb-8 flex flex-col items-start gap-3 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <span className="mb-2 inline-block font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-primary">
-                  Baca Juga
+                  {tArt.relatedEyebrow}
                 </span>
                 <h2 className="text-2xl font-extrabold tracking-tight text-heading md:text-3xl">
-                  Artikel terkait untukmu.
+                  {tArt.relatedTitle}
                 </h2>
               </div>
               <Link href="/artikel" className="text-link">
-                Lihat semua artikel <span aria-hidden="true">?</span>
+                {tArt.relatedViewAll} <span aria-hidden="true">→</span>
               </Link>
             </div>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -286,7 +297,7 @@ export default async function ArticleDetailPage({
                       <span className="flex items-center gap-1">
                         <Calendar size={10} aria-hidden="true" />
                         {a.published_at
-                          ? new Date(a.published_at).toLocaleDateString("id-ID", {
+                          ? new Date(a.published_at).toLocaleDateString(isEn ? "en-US" : "id-ID", {
                               day: "2-digit",
                               month: "short",
                               year: "numeric",
@@ -295,7 +306,7 @@ export default async function ArticleDetailPage({
                       </span>
                       <span className="flex items-center gap-1">
                         <Eye size={10} aria-hidden="true" />
-                        {a.view_count} views
+                        {a.view_count} {tArt.viewsSuffix}
                       </span>
                     </div>
                   </div>

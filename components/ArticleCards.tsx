@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, FileText, Eye, Calendar } from "lucide-react";
 import type { Article } from "@/lib/data/supabase/articles";
 import { cn } from "@/lib/cn";
+import { useLocale, useT } from "@/lib/i18n/client";
 import useSnapActive from "./useSnapActive";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
@@ -17,6 +18,9 @@ type ArticleCardsProps = {
 
 export default function ArticleCards({ articles, forceMode = "single" }: ArticleCardsProps) {
   const reduce = useReducedMotion();
+  const locale = useLocale();
+  const t = useT();
+  const isEn = locale === "en";
   const [rowRef, activeIdx] = useSnapActive();
   const useCarousel = forceMode === "single";
 
@@ -51,7 +55,7 @@ export default function ArticleCards({ articles, forceMode = "single" }: Article
           >
             <Link
               href={`/artikel/${a.slug}`}
-              aria-label={`Baca artikel: ${a.title}`}
+              aria-label={isEn ? `${t.common.readArticleLabel}: ${a.title}` : `Baca artikel: ${a.title}`}
               className="group relative flex h-full flex-col overflow-hidden rounded-[18px] border border-line bg-white shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-elevated"
             >
               <div className="relative aspect-[16/10] overflow-hidden bg-surface">
@@ -90,7 +94,7 @@ export default function ArticleCards({ articles, forceMode = "single" }: Article
                     <span className="flex items-center gap-1">
                       <Calendar size={10} aria-hidden="true" />
                       {a.published_at
-                        ? new Date(a.published_at).toLocaleDateString("id-ID", {
+                        ? new Date(a.published_at).toLocaleDateString(isEn ? "en-GB" : "id-ID", {
                             day: "2-digit",
                             month: "short",
                             year: "numeric",
@@ -99,7 +103,7 @@ export default function ArticleCards({ articles, forceMode = "single" }: Article
                     </span>
                     <span className="flex items-center gap-1">
                       <Eye size={10} aria-hidden="true" />
-                      {a.view_count} views
+                      {a.view_count} {t.common.viewsLabel}
                     </span>
                   </div>
                   <span

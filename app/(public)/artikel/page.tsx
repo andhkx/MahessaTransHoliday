@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FileText } from "lucide-react";
 import PageHero from "@/components/PageHero";
 import { getAllArticles } from "@/lib/data/supabase/articles";
+import { getLocale } from "@/lib/i18n/server";
 
 export const metadata: Metadata = {
   title: "Artikel, Tips Rental & Panduan Wisata Bandung | Mahessa Trans Holiday",
@@ -44,13 +45,19 @@ export const dynamic = 'force-dynamic';
 
 export default async function ArtikelPage() {
   const articles = await getAllArticles();
+  const locale = await getLocale();
+  const isEn = locale === "en";
 
   return (
     <>
       <PageHero
-        eyebrow="Blog & Artikel"
-        title="Tips & panduan perjalanan."
-        subtitle="Insight dari tim kami untuk perjalanan yang lebih lancar — dari rental harian sampai paket multi-kota."
+        eyebrow={isEn ? "Blog & Articles" : "Blog & Artikel"}
+        title={isEn ? "Tips & travel guides." : "Tips & panduan perjalanan."}
+        subtitle={
+          isEn
+            ? "Insights from our team for smoother trips — from daily rentals to multi-city packages."
+            : "Insight dari tim kami untuk perjalanan yang lebih lancar — dari rental harian sampai paket multi-kota."
+        }
       />
 
       <section className="mx-auto w-full max-w-[1300px] px-5 py-12 sm:px-8 md:px-12 md:py-16">
@@ -58,10 +65,12 @@ export default async function ArtikelPage() {
           <div className="rounded-2xl border border-dashed border-line bg-white p-12 text-center">
             <FileText size={32} className="mx-auto text-muted" />
             <p className="mt-3 text-base font-extrabold text-heading">
-              Belum ada artikel.
+              {isEn ? "No articles yet." : "Belum ada artikel."}
             </p>
             <p className="mt-1 text-sm text-muted">
-              Tim kami sedang menyiapkan konten terbaru. Cek lagi nanti.
+              {isEn
+                ? "Our team is preparing fresh content. Check back soon."
+                : "Tim kami sedang menyiapkan konten terbaru. Cek lagi nanti."}
             </p>
           </div>
         ) : (
@@ -102,13 +111,13 @@ export default async function ArtikelPage() {
                   )}
                   <p className="mt-3 text-xs text-muted">
                     {a.published_at
-                      ? new Date(a.published_at).toLocaleDateString("id-ID", {
+                      ? new Date(a.published_at).toLocaleDateString(isEn ? "en-US" : "id-ID", {
                           day: "2-digit",
                           month: "short",
                           year: "numeric",
                         })
                       : "—"}{" "}
-                    • {a.view_count} views
+                    • {a.view_count} {isEn ? "views" : "views"}
                   </p>
                 </div>
               </Link>

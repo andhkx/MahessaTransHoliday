@@ -6,6 +6,7 @@ import { ArrowRight, CarFront, MapPinned, Plane, UserRound } from "lucide-react"
 import { services } from "@/data/services";
 import SectionHeading from "./SectionHeading";
 import useSnapActive from "./useSnapActive";
+import { useT } from "@/lib/i18n/client";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 const ICONS: Record<string, React.ComponentType<{ size?: number; className?: string; strokeWidth?: number }>> = {
@@ -25,17 +26,18 @@ const SERVICE_IMAGES: Record<string, string> = {
 export default function ServiceCards() {
   const reduce = useReducedMotion();
   const [rowRef, activeIdx] = useSnapActive();
+  const t = useT();
 
   return (
     <section className="relative z-10 mx-auto w-full max-w-[1300px] px-5 py-16 sm:px-8 md:px-12 md:py-24">
       <SectionHeading
-        eyebrow="Layanan Kami"
-        title="Butuh perjalanan seperti apa?"
-        subtitle="Pilih layanan yang sesuai dengan kebutuhan perjalanan kamu."
+        eyebrow={t.services.eyebrow}
+        title={t.services.title}
+        subtitle={t.services.subtitle}
       />
 
       <div className="mb-5 flex items-center justify-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-primary md:hidden">
-        <span>Geser untuk melihat layanan lainnya</span>
+        <span>{t.services.swipeHint}</span>
         <ArrowRight size={13} aria-hidden="true" />
       </div>
 
@@ -47,7 +49,6 @@ export default function ServiceCards() {
         {services.map((item, i) => {
           const Icon = ICONS[item.id] ?? CarFront;
           const isActive = i === activeIdx;
-          const isPaket = item.id === "paket-wisata";
           const imageUrl = SERVICE_IMAGES[item.id];
           return (
             <motion.div
@@ -72,7 +73,7 @@ export default function ServiceCards() {
                     <div className="mb-3 flex items-center justify-between gap-2">
                       <Icon size={20} strokeWidth={1.6} className="text-primary" aria-hidden="true" />
                       <span className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-muted">
-                        Layanan
+                        {t.services.tag}
                       </span>
                     </div>
                     <h3 className="mb-2 text-xl font-extrabold leading-tight text-heading md:text-2xl">

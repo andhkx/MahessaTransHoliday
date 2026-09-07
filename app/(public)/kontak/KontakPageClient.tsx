@@ -22,80 +22,20 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { cn } from "@/lib/cn";
 import { formatIDR, formatCompact } from "@/lib/format";
 import { EMAIL_DISPLAY, WHATSAPP_NUMBER } from "@/lib/constants";
-import type { Vehicle, TravelPackage } from "@/lib/types";
+import type { Vehicle, TravelPackage, VehicleCategory } from "@/lib/types";
 import LocationAutocomplete, { type LocationResult } from "@/components/LocationAutocomplete";
 import RouteMap from "@/components/RouteMap";
+import { useLocale, useT } from "@/lib/i18n/client";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
 type Topic = "Sewa Mobil" | "Paket Wisata" | "Antar Jemput" | "Lainnya";
 
-const TOPICS: { id: Topic; label: string; Icon: typeof CarFront }[] = [
-  { id: "Sewa Mobil", label: "Sewa Mobil", Icon: CarFront },
-  { id: "Paket Wisata", label: "Paket Wisata", Icon: MapPin },
-  { id: "Antar Jemput", label: "Antar Jemput", Icon: Send },
-  { id: "Lainnya", label: "Lainnya", Icon: Sparkles },
-];
-
-const TRUST = [
-  "Respon di bawah 10 menit",
-  "Tanpa komitmen",
-  "Harga jelas di awal",
-];
-
-const CONTACT = [
-  {
-    Icon: MessageCircle,
-    title: "WhatsApp",
-    value: "+62 895-3270-77214",
-    href: "https://wa.me/62895327077214",
-    cta: "Chat Sekarang",
-    accent: true,
-  },
-  {
-    Icon: Phone,
-    title: "Telepon",
-    value: "+62 895-3270-77214",
-    href: "tel:+62895327077214",
-    cta: "Hubungi",
-  },
-  {
-    Icon: Mail,
-    title: "Email",
-    value: EMAIL_DISPLAY,
-    href: `mailto:${EMAIL_DISPLAY}`,
-    cta: "Kirim Email",
-  },
-  {
-    Icon: Clock,
-    title: "Jam Operasional",
-    value: "Setiap hari, 07.00 – 21.00 WIB",
-    href: null,
-    cta: null,
-  },
-];
-
-type Errors = Partial<
-  Record<
-    | "nama"
-    | "wa"
-    | "tanggal"
-    | "pickup"
-    | "tujuan"
-    | "pesan"
-    | "selectedVehicle"
-    | "selectedPackage",
-    string
-  >
->;
-
-function validateWa(input: string): boolean {
-  const digits = input.replace(/\D/g, "");
-  return digits.length >= 10 && digits.length <= 15;
-}
-
 export default function KontakPageClient() {
   const reduce = useReducedMotion();
+  const locale = useLocale();
+  const t = useT();
+  const isEn = locale === "en";
   const [topic, setTopic] = useState<Topic>("Sewa Mobil");
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Errors>({});
@@ -108,6 +48,51 @@ export default function KontakPageClient() {
   const [pickupCoords, setPickupCoords] = useState<{ lat: number; lon: number } | null>(null);
   const [tujuanCoords, setTujuanCoords] = useState<{ lat: number; lon: number } | null>(null);
   const [tanggal, setTanggal] = useState("");
+
+  const TOPICS: { id: Topic; label: string; Icon: typeof CarFront }[] = [
+    { id: "Sewa Mobil", label: t.contactForm.topics.rental, Icon: CarFront },
+    { id: "Paket Wisata", label: t.contactForm.topics.package, Icon: MapPin },
+    { id: "Antar Jemput", label: t.contactForm.topics.transfer, Icon: Send },
+    { id: "Lainnya", label: t.contactForm.topics.other, Icon: Sparkles },
+  ];
+
+  const TRUST = [
+    t.trust.reply,
+    t.trust.noCommit,
+    t.trust.clearPrice,
+  ];
+
+  const CONTACT = [
+    {
+      Icon: MessageCircle,
+      title: t.contactCard.whatsapp,
+      value: "+62 895-3270-77214",
+      href: "https://wa.me/62895327077214",
+      cta: t.contactCard.chatNow,
+      accent: true,
+    },
+    {
+      Icon: Phone,
+      title: t.contactCard.call,
+      value: "+62 895-3270-77214",
+      href: "tel:+62895327077214",
+      cta: t.contactCard.callCta,
+    },
+    {
+      Icon: Mail,
+      title: t.contactCard.email,
+      value: EMAIL_DISPLAY,
+      href: `mailto:${EMAIL_DISPLAY}`,
+      cta: t.contactCard.sendEmail,
+    },
+    {
+      Icon: Clock,
+      title: t.contactCard.hours,
+      value: isEn ? t.contactCard.hoursValueEn : t.contactCard.hoursValue,
+      href: null,
+      cta: null,
+    },
+  ];
 
   useEffect(() => {
     fetch("/api/contact-options")
@@ -137,22 +122,22 @@ export default function KontakPageClient() {
     const pesan = String(fd.get("pesan") || "").trim();
 
     const next: Errors = {};
-    if (nama.length < 3) next.nama = "Nama minimal 3 karakter.";
-    if (!wa) next.wa = "Nomor WhatsApp wajib diisi.";
-    else if (!validateWa(wa)) next.wa = "Nomor WhatsApp tidak valid (10-15 digit).";
-    if (pesan.length < 10) next.pesan = "Pesan minimal 10 karakter.";
+    if (nama.length < 3) next.nama = t.contactForm.errors.nama;
+    if (!wa) next.wa = t.contactForm.errors.waRequired;
+    else if (!validateWa(wa)) next.wa = t.contactForm.errors.waInvalid;
+    if (pesan.length < 10) next.pesan = t.contactForm.errors.pesan;
     if (topic === "Antar Jemput") {
-      if (!pickup) next.pickup = "Titik jemput wajib diisi.";
-      if (!tujuan) next.tujuan = "Titik tujuan wajib diisi.";
+      if (!pickup) next.pickup = t.contactForm.errors.pickup;
+      if (!tujuan) next.tujuan = t.contactForm.errors.tujuan;
     }
     if (topic === "Sewa Mobil" && vehicles.length > 0 && !selectedVehicle) {
-      next.selectedVehicle = "Pilih armada yang diinginkan.";
+      next.selectedVehicle = t.contactForm.errors.selectVehicle;
     }
     if (topic === "Paket Wisata" && packages.length > 0 && !selectedPackage) {
-      next.selectedPackage = "Pilih paket yang diinginkan.";
+      next.selectedPackage = t.contactForm.errors.selectPackage;
     }
     if (topic !== "Lainnya" && !tanggal) {
-      next.tanggal = "Tanggal keberangkatan wajib diisi.";
+      next.tanggal = t.contactForm.errors.tanggal;
     }
 
     if (Object.keys(next).length > 0) {
@@ -161,37 +146,43 @@ export default function KontakPageClient() {
     }
 
     setErrors({});
+    const topicLabel = TOPICS.find((tt) => tt.id === topic)?.label ?? topic;
+    const estimateUnit = isEn ? "/ 12 hours" : "/ 12 jam";
     const lines: string[] = [
-      "Halo Mahessa Trans Holiday, saya ingin reservasi.",
+      t.contactForm.waTemplate.intro,
       "",
-      `Topik: ${topic}`,
-      `Nama: ${nama}`,
-      `No. WA: ${wa}`,
+      `${t.contactForm.waTemplate.topic} ${topicLabel}`,
+      `${t.contactForm.waTemplate.nama} ${nama}`,
+      `${t.contactForm.waTemplate.wa} ${wa}`,
     ];
-    if (tanggal) lines.push(`Tanggal: ${tanggal}`);
+    if (tanggal) lines.push(`${t.contactForm.waTemplate.tanggal} ${tanggal}`);
     if (topic === "Antar Jemput") {
-      lines.push(`Titik Jemput: ${pickup}`);
-      lines.push(`Titik Tujuan: ${tujuan}`);
+      lines.push(`${t.contactForm.waTemplate.pickup} ${pickup}`);
+      lines.push(`${t.contactForm.waTemplate.tujuan} ${tujuan}`);
     }
     if (topic === "Sewa Mobil" && selectedVehicleObj) {
-      lines.push(`Armada: ${selectedVehicleObj.name}`);
+      lines.push(`${t.contactForm.waTemplate.vehicle} ${selectedVehicleObj.name}`);
       lines.push(
-        `Estimasi: ${formatIDR(selectedVehicleObj.pricing.startingPrice || 0)} / 12 jam`
+        `${t.contactForm.waTemplate.estimate} ${formatIDR(selectedVehicleObj.pricing.startingPrice || 0)} ${estimateUnit}`
       );
     }
     if (topic === "Paket Wisata" && selectedPackageObj) {
-      lines.push(`Paket: ${selectedPackageObj.destination}`);
+      lines.push(`${t.contactForm.waTemplate.pkg} ${selectedPackageObj.destination}`);
       lines.push(
-        `Estimasi: ${formatIDR(selectedPackageObj.price || 0)} (${selectedPackageObj.duration})`
+        `${t.contactForm.waTemplate.estimate} ${formatIDR(selectedPackageObj.price || 0)} (${selectedPackageObj.duration})`
       );
     }
-    lines.push(`Pesan: ${pesan}`);
-    lines.push("", "Terima kasih.");
+    lines.push(`${t.contactForm.waTemplate.pesan} ${pesan}`);
+    lines.push("", t.contactForm.waTemplate.thanks);
 
     const msg = encodeURIComponent(lines.join("\n"));
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`, "_blank");
     setSubmitted(true);
   };
+
+  const estimateValue = isEn ? t.estimate.valueEn : t.estimate.value;
+  const estimateDesc = isEn ? t.estimate.descEn : t.estimate.desc;
+  const priceUnitLong = isEn ? "/ 12 hours" : "/ 12 jam";
 
   return (
     <div className="mx-auto w-full max-w-[1300px] px-5 py-12 sm:px-8 md:px-12 md:py-16">
@@ -215,9 +206,9 @@ export default function KontakPageClient() {
               <span className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-success/10 text-success">
                 <Check size={26} strokeWidth={2.5} aria-hidden="true" />
               </span>
-              <h2 className="mb-2 text-xl font-extrabold text-heading">Terima kasih!</h2>
+              <h2 className="mb-2 text-xl font-extrabold text-heading">{t.contactForm.successTitle}</h2>
               <p className="mb-5 max-w-sm text-sm text-body-text">
-                Chat akan terbuka di WhatsApp. Tim kami balas dalam beberapa menit.
+                {t.contactForm.successDesc}
               </p>
               <button
                 type="button"
@@ -233,23 +224,23 @@ export default function KontakPageClient() {
                 }}
                 className="text-sm font-extrabold text-accent hover:underline"
               >
-                Kirim pesan lain →
+                {t.contactForm.sendAnother}
               </button>
             </motion.div>
           ) : (
             <>
               <div className="mb-5">
                 <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-primary">
-                  Form Reservasi
+                  {t.contactForm.formLabel}
                 </p>
                 <h2 className="mt-1 text-xl font-extrabold text-heading md:text-2xl">
-                  Ceritakan kebutuhan perjalananmu
+                  {t.contactForm.formTitle}
                 </h2>
               </div>
 
               <div className="mb-5">
                 <p className="mb-2 text-[12px] font-bold uppercase tracking-[0.16em] text-muted">
-                  Topik
+                  {t.contactForm.topicLabel}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {TOPICS.map(({ id, label, Icon }) => {
@@ -287,15 +278,15 @@ export default function KontakPageClient() {
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field
                   name="nama"
-                  label="Nama Lengkap"
-                  placeholder="Nama kamu"
+                  label={t.contactForm.fields.namaLabel}
+                  placeholder={t.contactForm.fields.namaPlaceholder}
                   required
                   error={errors.nama}
                 />
                 <Field
                   name="wa"
-                  label="Nomor WhatsApp"
-                  placeholder="08xxx"
+                  label={t.contactForm.fields.waLabel}
+                  placeholder={t.contactForm.fields.waPlaceholder}
                   type="tel"
                   required
                   error={errors.wa}
@@ -306,7 +297,7 @@ export default function KontakPageClient() {
                 <div className="mt-4">
                   <Field
                     name="tanggal"
-                    label="Tanggal Keberangkatan"
+                    label={t.contactForm.fields.tanggalLabel}
                     type="date"
                     required
                     value={tanggal}
@@ -321,12 +312,12 @@ export default function KontakPageClient() {
                 <div className="mt-5">
                   <div className="mb-2 flex items-center justify-between">
                     <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-muted">
-                      Pilih Armada
+                      {t.contactForm.pickers.selectVehicle}
                     </p>
                     {selectedVehicleObj && (
                       <span className="text-[11px] font-extrabold text-accent">
                         {selectedVehicleObj.name} ·{" "}
-                        {formatIDR(selectedVehicleObj.pricing.startingPrice || 0)} / 12 jam
+                        {formatIDR(selectedVehicleObj.pricing.startingPrice || 0)} {priceUnitLong}
                       </span>
                     )}
                   </div>
@@ -336,9 +327,15 @@ export default function KontakPageClient() {
                       selectedId={selectedVehicle}
                       onSelect={(v) => setSelectedVehicle(v.id)}
                       kind="vehicle"
+                      selectLabel={t.contactForm.pickerAria.select}
+                      prevLabel={t.contactForm.pickerAria.prev}
+                      nextLabel={t.contactForm.pickerAria.next}
+                      categoryLabels={t.common.category}
+                      seatsUnit={isEn ? t.common.seatsUnit : t.common.seats}
+                      priceUnit={priceUnitLong}
                     />
                   ) : (
-                    <p className="text-[12px] text-muted">Memuat armada…</p>
+                    <p className="text-[12px] text-muted">{t.contactForm.pickers.loadingVehicles}</p>
                   )}
                   {errors.selectedVehicle && (
                     <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-error">
@@ -353,7 +350,7 @@ export default function KontakPageClient() {
                 <div className="mt-5">
                   <div className="mb-2 flex items-center justify-between">
                     <p className="text-[12px] font-bold uppercase tracking-[0.16em] text-muted">
-                      Pilih Paket
+                      {t.contactForm.pickers.selectPackage}
                     </p>
                     {selectedPackageObj && (
                       <span className="text-[11px] font-extrabold text-accent">
@@ -368,9 +365,15 @@ export default function KontakPageClient() {
                       selectedId={selectedPackage}
                       onSelect={(p) => setSelectedPackage(p.id)}
                       kind="package"
+                      selectLabel={t.contactForm.pickerAria.select}
+                      prevLabel={t.contactForm.pickerAria.prev}
+                      nextLabel={t.contactForm.pickerAria.next}
+                      categoryLabels={t.common.category}
+                      seatsUnit={isEn ? t.common.seatsUnit : t.common.seats}
+                      priceUnit={priceUnitLong}
                     />
                   ) : (
-                    <p className="text-[12px] text-muted">Memuat paket…</p>
+                    <p className="text-[12px] text-muted">{t.contactForm.pickers.loadingPackages}</p>
                   )}
                   {errors.selectedPackage && (
                     <span className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-error">
@@ -385,8 +388,8 @@ export default function KontakPageClient() {
                 <div className="mt-4 space-y-3">
                   <LocationAutocomplete
                     name="pickup"
-                    label="Titik Jemput"
-                    placeholder="Cari alamat jemput..."
+                    label={t.contactForm.fields.pickupLabel}
+                    placeholder={t.contactForm.fields.pickupPlaceholder}
                     value={pickup}
                     onChange={setPickup}
                     onPlace={(r: LocationResult) =>
@@ -397,8 +400,8 @@ export default function KontakPageClient() {
                   />
                   <LocationAutocomplete
                     name="tujuan"
-                    label="Titik Tujuan"
-                    placeholder="Cari alamat tujuan..."
+                    label={t.contactForm.fields.tujuanLabel}
+                    placeholder={t.contactForm.fields.tujuanPlaceholder}
                     value={tujuan}
                     onChange={setTujuan}
                     onPlace={(r: LocationResult) =>
@@ -430,7 +433,7 @@ export default function KontakPageClient() {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 text-[12px] font-extrabold text-accent hover:underline"
                     >
-                      Lihat rute detail di Google Maps <ArrowRight size={12} />
+                      {t.contactForm.routeGoogleMaps} <ArrowRight size={12} />
                     </a>
                   )}
                 </div>
@@ -439,8 +442,8 @@ export default function KontakPageClient() {
               <div className="mt-4">
                 <Field
                   name="pesan"
-                  label="Pesan Tambahan"
-                  placeholder="Jumlah penumpang, detail lain, atau pertanyaan..."
+                  label={t.contactForm.fields.pesanLabel}
+                  placeholder={t.contactForm.fields.pesanPlaceholder}
                   multiline
                   required
                   error={errors.pesan}
@@ -452,11 +455,11 @@ export default function KontakPageClient() {
                 className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-5 py-3.5 text-sm font-extrabold text-white shadow-[0_10px_24px_-10px_rgba(0,86,145,0.6)] transition-all hover:scale-[1.01] hover:bg-accent-hover active:scale-[0.98]"
               >
                 <Send size={15} aria-hidden="true" />
-                Kirim via WhatsApp
+                {t.contactForm.submit}
               </button>
 
               <p className="mt-3 text-center text-[11px] text-muted">
-                Atau lebih cepat via{" "}
+                {t.contactForm.orFastWa}{" "}
                 <a
                   href="https://wa.me/62895327077214"
                   target="_blank"
@@ -539,27 +542,26 @@ export default function KontakPageClient() {
               </span>
               <div className="min-w-0">
                 <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted">
-                  Estimasi Harga
+                  {t.estimate.label}
                 </p>
                 <p className="mt-1 text-[14px] font-extrabold text-heading">
-                  Mulai Rp350rb / 12 jam
+                  {estimateValue}
                 </p>
                 <p className="mt-1 text-[12px] leading-relaxed text-body-text">
-                  Harga final tergantung armada, durasi, dan tujuan. Konfirmasi
-                  di awal tanpa biaya siluman.
+                  {estimateDesc}
                 </p>
               </div>
             </div>
             <ul className="mt-4 space-y-1.5 border-t border-line pt-4">
-              {TRUST.map((t) => (
+              {TRUST.map((tr) => (
                 <li
-                  key={t}
+                  key={tr}
                   className="flex items-center gap-2 text-[12px] font-bold text-body-text"
                 >
                   <span className="flex h-4 w-4 items-center justify-center rounded-full bg-success/10 text-success">
                     <Check size={10} strokeWidth={3} aria-hidden="true" />
                   </span>
-                  {t}
+                  {tr}
                 </li>
               ))}
             </ul>
@@ -575,11 +577,23 @@ function PickerSlide<T extends { id: string; name?: string; destination?: string
   selectedId,
   onSelect,
   kind,
+  selectLabel,
+  prevLabel,
+  nextLabel,
+  categoryLabels,
+  seatsUnit,
+  priceUnit,
 }: {
   items: T[];
   selectedId: string | null;
   onSelect: (item: T) => void;
   kind: "vehicle" | "package";
+  selectLabel: string;
+  prevLabel: string;
+  nextLabel: string;
+  categoryLabels: { entry: string; midrange: string; premium: string; luxury: string; group: string };
+  seatsUnit: string;
+  priceUnit: string;
 }) {
   const [idx, setIdx] = useState(() => {
     const found = items.findIndex((i) => i.id === selectedId);
@@ -587,15 +601,18 @@ function PickerSlide<T extends { id: string; name?: string; destination?: string
   });
   const touch = useRef<{ x: number; y: number } | null>(null);
 
-  useEffect(() => {
-    const found = items.findIndex((i) => i.id === selectedId);
-    if (found >= 0) setIdx(found);
-  }, [selectedId, items]);
-
   if (items.length === 0) return null;
-  const current = items[idx];
-  const goPrev = () => setIdx((i) => (i - 1 + items.length) % items.length);
-  const goNext = () => setIdx((i) => (i + 1) % items.length);
+  const externalIdx = items.findIndex((i) => i.id === selectedId);
+  const currentIdx = externalIdx >= 0 ? externalIdx : idx;
+  const current = items[currentIdx];
+  const goPrev = () => setIdx((i) => {
+    const next = (i - 1 + items.length) % items.length;
+    return next;
+  });
+  const goNext = () => setIdx((i) => {
+    const next = (i + 1) % items.length;
+    return next;
+  });
 
   const isVehicle = kind === "vehicle";
   const v = isVehicle ? (current as unknown as Vehicle) : null;
@@ -603,12 +620,12 @@ function PickerSlide<T extends { id: string; name?: string; destination?: string
   const isActive = selectedId === current.id;
   const title = v?.name ?? p?.destination ?? "";
   const subtitle = v
-    ? `${categoryLabel(v.category)} · ${v.capacity} kursi`
+    ? `${categoryLabel(v.category, categoryLabels)} · ${v.capacity} ${seatsUnit}`
     : p
       ? `${p.duration}`
       : "";
   const price = v
-    ? `${formatCompact(v.pricing.startingPrice || 0)} / 12 jam`
+    ? `${formatCompact(v.pricing.startingPrice || 0)} ${priceUnit}`
     : p
       ? `${formatCompact(p.price || 0)}`
       : "";
@@ -637,7 +654,7 @@ function PickerSlide<T extends { id: string; name?: string; destination?: string
         type="button"
         onClick={() => onSelect(current)}
         aria-pressed={isActive}
-        aria-label={`Pilih ${title}`}
+        aria-label={`${selectLabel} ${title}`}
         className={cn(
           "group relative block w-full overflow-hidden rounded-2xl border bg-white text-left shadow-card transition-all",
           isActive
@@ -684,7 +701,7 @@ function PickerSlide<T extends { id: string; name?: string; destination?: string
           type="button"
           onClick={goPrev}
           className="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-white text-muted transition hover:border-accent hover:text-accent"
-          aria-label="Sebelumnya"
+          aria-label={prevLabel}
         >
           <ChevronLeft size={14} />
         </button>
@@ -704,7 +721,7 @@ function PickerSlide<T extends { id: string; name?: string; destination?: string
           type="button"
           onClick={goNext}
           className="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-white text-muted transition hover:border-accent hover:text-accent"
-          aria-label="Selanjutnya"
+          aria-label={nextLabel}
         >
           <ChevronRight size={14} />
         </button>
@@ -713,18 +730,21 @@ function PickerSlide<T extends { id: string; name?: string; destination?: string
   );
 }
 
-function categoryLabel(category: Vehicle["category"]): string {
+function categoryLabel(
+  category: VehicleCategory,
+  labels: { entry: string; midrange: string; premium: string; luxury: string; group: string },
+): string {
   switch (category) {
     case "entry":
-      return "City Car";
+      return labels.entry;
     case "midrange":
-      return "MPV";
+      return labels.midrange;
     case "premium":
-      return "SUV";
+      return labels.premium;
     case "luxury":
-      return "Luxury";
+      return labels.luxury;
     case "group":
-      return "Bus & Van";
+      return labels.group;
   }
 }
 
@@ -777,7 +797,7 @@ function Field({
           placeholder={placeholder}
           aria-invalid={error ? "true" : undefined}
           value={value}
-          onChange={(e: any) => onChange?.(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => onChange?.(e.target.value)}
           className={cn(baseInput, borderClass, icon ? "pl-9" : "", multiline && "resize-none")}
         />
       </div>
@@ -789,4 +809,23 @@ function Field({
       )}
     </label>
   );
+}
+
+type Errors = Partial<
+  Record<
+    | "nama"
+    | "wa"
+    | "tanggal"
+    | "pickup"
+    | "tujuan"
+    | "pesan"
+    | "selectedVehicle"
+    | "selectedPackage",
+    string
+  >
+>;
+
+function validateWa(input: string): boolean {
+  const digits = input.replace(/\D/g, "");
+  return digits.length >= 10 && digits.length <= 15;
 }

@@ -4,6 +4,7 @@ import { vehicles } from "@/data/vehicles";
 import { packages } from "@/data/packages";
 import type { Vehicle, TravelPackage } from "@/lib/types";
 import { formatIDR } from "@/lib/format";
+import type { Locale } from "@/lib/i18n/dict";
 
 export type FinderResult = {
   vehicle: Vehicle | null;
@@ -87,15 +88,22 @@ function findBestPackage(
   return candidates.sort((a, b) => a.price - b.price)[0];
 }
 
-const JOURNEY_LABELS: Record<JourneyType, string> = {
+const JOURNEY_LABELS_ID: Record<JourneyType, string> = {
   city: "City tour / Wisata lokal",
   dinas: "Perjalanan dinas",
   outcity: "Perjalanan luar kota (Multi-hari)",
   transfer: "Transfer bandara",
 };
 
-export function getJourneyLabel(jt: JourneyType): string {
-  return JOURNEY_LABELS[jt];
+const JOURNEY_LABELS_EN: Record<JourneyType, string> = {
+  city: "City tour / Local trips",
+  dinas: "Business trip",
+  outcity: "Out-of-town trip (Multi-day)",
+  transfer: "Airport transfer",
+};
+
+export function getJourneyLabel(jt: JourneyType, locale: Locale = "id"): string {
+  return (locale === "en" ? JOURNEY_LABELS_EN : JOURNEY_LABELS_ID)[jt];
 }
 
 export function getBudgetTier(budget: number): BudgetTier | null {
@@ -106,6 +114,7 @@ export function buildFinderResult(
   budget: number,
   people: number,
   journey: JourneyType,
+  locale: Locale = "id",
 ): FinderResult {
   const vehicle = findBestVehicle(people, budget, journey);
   const alternatives = vehicle
@@ -114,15 +123,19 @@ export function buildFinderResult(
   const pkg = findBestPackage(people, budget, journey);
 
   const budgetLabel = formatIDR(budget);
+  const journeyLabel = getJourneyLabel(journey, locale);
 
-  const vehicleName = vehicle ? vehicle.name : "kendaraan rekomendasi";
-  const message = `Halo Mahessa Trans Holiday! Saya ingin sewa ${vehicleName} untuk ${people} orang, budget ${budgetLabel}, tujuan ${JOURNEY_LABELS[journey]}. Tersedia kapan? Berapa harganya?`;
+  const vehicleName = vehicle ? vehicle.name : (locale === "en" ? "a recommended vehicle" : "kendaraan rekomendasi");
+  const peopleLabel = locale === "en" ? `${people} people` : `${people} orang`;
+  const greeting = locale === "en"
+    ? `Hello Mahessa Trans Holiday! I'd like to rent ${vehicleName} for ${peopleLabel}, budget ${budgetLabel}, purpose ${journeyLabel}. When is it available? How much?`
+    : `Halo Mahessa Trans Holiday! Saya ingin sewa ${vehicleName} untuk ${peopleLabel}, budget ${budgetLabel}, tujuan ${journeyLabel}. Tersedia kapan? Berapa harganya?`;
 
   return {
     vehicle,
     alternatives,
     package: pkg,
-    whatsappMessage: message,
+    whatsappMessage: greeting,
     tier: getBudgetTier(budget),
   };
 }

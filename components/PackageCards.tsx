@@ -7,6 +7,7 @@ import { ArrowUpRight, Check, MapPin } from "lucide-react";
 import type { TravelPackage } from "@/lib/types";
 import { cn } from "@/lib/cn";
 import { formatCompact } from "@/lib/format";
+import { useLocale, useT, format } from "@/lib/i18n/client";
 import useSnapActive from "./useSnapActive";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
@@ -25,6 +26,9 @@ export default function PackageCards({
   onSelect,
 }: PackageCardsProps) {
   const reduce = useReducedMotion();
+  const locale = useLocale();
+  const t = useT();
+  const isEn = locale === "en";
   const [rowRef, activeIdx] = useSnapActive();
   const useCarousel = forceMode === "single";
   const selectable = !!onSelect;
@@ -61,11 +65,14 @@ export default function PackageCards({
             selected={selectable && selectedId === p.id}
             pkg={p}
             onSelect={onSelect}
+            isEn={isEn}
+            selectLabel={t.common.selectLabel}
+            detailAria={format(t.packageCard.detailAria, { destination: p.destination })}
           >
             <div className="relative aspect-[16/10] overflow-hidden bg-surface">
               <Image
                 src={p.image}
-                alt={`Paket Hiace ${p.destination}`}
+                alt={isEn ? `Hiace package to ${p.destination}` : `Paket Hiace ${p.destination}`}
                 fill
                 sizes="(max-width: 640px) 65vw, (max-width: 1024px) 50vw, 25vw"
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.06]"
@@ -83,22 +90,22 @@ export default function PackageCards({
 
             <div className="flex flex-1 flex-col p-4">
               <p className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-primary">
-                Paket Hiace · All-In
+                {t.packageCard.tag}
               </p>
               <h3 className="mt-1 text-base font-bold leading-snug text-heading transition-colors duration-300 group-hover:text-accent md:text-lg">
                 {p.destination}
               </h3>
               <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted">
-                Mobil, driver, BBM, tol, dan parkir sudah termasuk.
+                {t.packageCard.includedShort}
               </p>
 
               <div className="mt-auto flex items-end justify-between gap-2 border-t border-line pt-3">
                 <div>
                   <p className="text-sm font-extrabold tracking-tight text-accent">
-                    Mulai {formatCompact(p.price)}
+                    {t.common.from} {formatCompact(p.price)}
                   </p>
                   <p className="text-[10px] font-semibold text-muted">
-                    {p.durationHours} jam · {p.duration}
+                    {p.durationHours} {isEn ? "hours" : "jam"} · {p.duration}
                   </p>
                 </div>
                 <span
@@ -129,22 +136,29 @@ function Wrapper({
   pkg,
   onSelect,
   children,
+  isEn,
+  selectLabel,
+  detailAria,
 }: {
   selectable: boolean;
   selected: boolean;
   pkg: TravelPackage;
   onSelect?: (p: TravelPackage) => void;
   children: React.ReactNode;
+  isEn: boolean;
+  selectLabel: string;
+  detailAria: string;
 }) {
   const baseCard =
     "group relative flex h-full flex-col overflow-hidden rounded-[18px] border bg-white shadow-card transition-all duration-300";
+  const selectAria = isEn ? `${selectLabel}: ${pkg.destination}` : `Pilih paket ${pkg.destination}`;
   if (selectable) {
     return (
       <button
         type="button"
         onClick={() => onSelect?.(pkg)}
         aria-pressed={selected}
-        aria-label={`Pilih paket ${pkg.destination}`}
+        aria-label={selectAria}
         className={cn(
           baseCard,
           "text-left w-full",
@@ -165,7 +179,7 @@ function Wrapper({
   return (
     <Link
       href={`/paket/${pkg.slug}`}
-      aria-label={`Lihat detail paket Hiace ${pkg.destination}`}
+      aria-label={detailAria}
       className={cn(
         baseCard,
         "border-line hover:-translate-y-1.5 hover:border-primary/40 hover:shadow-elevated"

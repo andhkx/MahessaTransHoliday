@@ -1,25 +1,17 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Search, SlidersHorizontal, LayoutGrid, Rows3 } from "lucide-react";
 import VehicleCards from "@/components/VehicleCards";
 import type { Vehicle, VehicleCategory } from "@/lib/types";
 import { cn } from "@/lib/cn";
+import { useLocale, useT, format } from "@/lib/i18n/client";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
 type Filter = "Semua" | VehicleCategory;
 type ViewMode = "grid" | "single";
-
-const CATEGORIES: Array<{ id: Filter; label: string }> = [
-  { id: "Semua", label: "Semua" },
-  { id: "entry", label: "City Car" },
-  { id: "midrange", label: "MPV" },
-  { id: "premium", label: "SUV" },
-  { id: "luxury", label: "Luxury" },
-  { id: "group", label: "Group" },
-];
 
 type Props = {
   vehicles: Vehicle[];
@@ -27,18 +19,24 @@ type Props = {
 
 export default function ArmadaListClient({ vehicles }: Props) {
   const reduce = useReducedMotion();
+  const locale = useLocale();
+  const t = useT();
+  const isEn = locale === "en";
   const [active, setActive] = useState<Filter>("Semua");
   const [query, setQuery] = useState("");
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
+  const [manualView, setManualView] = useState<ViewMode | null>(null);
 
-  // Auto-switch to single view when a category filter is applied
-  useEffect(() => {
-    if (active !== "Semua") {
-      setViewMode("single");
-    } else {
-      setViewMode("grid");
-    }
-  }, [active]);
+  // Auto: filter applied → single view; "Semua" → grid. Manual override takes priority.
+  const viewMode: ViewMode = manualView ?? (active === "Semua" ? "grid" : "single");
+
+  const CATEGORIES: Array<{ id: Filter; label: string }> = [
+    { id: "Semua", label: isEn ? "All" : "Semua" },
+    { id: "entry", label: t.common.category.entry },
+    { id: "midrange", label: t.common.category.midrange },
+    { id: "premium", label: t.common.category.premium },
+    { id: "luxury", label: t.common.category.luxury },
+    { id: "group", label: t.common.category.group },
+  ];
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -60,7 +58,7 @@ export default function ArmadaListClient({ vehicles }: Props) {
           <div className="flex flex-1 flex-wrap items-center gap-2">
             <span className="hidden items-center gap-1.5 pr-2 text-[11px] font-bold uppercase tracking-[0.18em] text-muted sm:flex">
               <SlidersHorizontal size={13} aria-hidden="true" />
-              Tipe
+              {t.list.filterType}
             </span>
             {CATEGORIES.map((c) => {
               const isActive = c.id === active;
@@ -99,9 +97,9 @@ export default function ArmadaListClient({ vehicles }: Props) {
             <div className="flex items-center rounded-full border border-line bg-white p-0.5">
               <button
                 type="button"
-                onClick={() => setViewMode("grid")}
+                onClick={() => setManualView("grid")}
                 aria-pressed={viewMode === "grid"}
-                title="Lihat banyak"
+                title={t.list.viewMany}
                 className={cn(
                   "flex h-8 w-8 items-center justify-center rounded-full transition-colors",
                   viewMode === "grid"
@@ -113,9 +111,9 @@ export default function ArmadaListClient({ vehicles }: Props) {
               </button>
               <button
                 type="button"
-                onClick={() => setViewMode("single")}
+                onClick={() => setManualView("single")}
                 aria-pressed={viewMode === "single"}
-                title="Lihat satu-satu"
+                title={t.list.viewSingle}
                 className={cn(
                   "flex h-8 w-8 items-center justify-center rounded-full transition-colors",
                   viewMode === "single"
@@ -137,7 +135,7 @@ export default function ArmadaListClient({ vehicles }: Props) {
                 type="search"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Cari unit (Avanza, Innova...)"
+                placeholder={t.list.searchUnitPlaceholder}
                 className="w-full rounded-full border border-line bg-white py-2.5 pl-9 pr-3 text-[13px] font-bold text-body-text outline-none transition-all placeholder:font-normal placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/15"
               />
             </label>
@@ -168,17 +166,17 @@ export default function ArmadaListClient({ vehicles }: Props) {
             className="rounded-2xl border border-dashed border-line bg-white p-12 text-center"
           >
             <p className="text-base font-extrabold text-heading">
-              Tidak ada unit yang cocok.
+              {t.list.emptyUnitTitle}
             </p>
             <p className="mt-1 text-sm text-muted">
-              Coba ubah filter atau kata kunci pencarianmu.
+              {t.list.emptyUnitDesc}
             </p>
           </motion.div>
         )}
       </AnimatePresence>
 
       <p className="mt-6 text-center text-[11px] font-bold uppercase tracking-[0.18em] text-muted">
-        Menampilkan {filtered.length} dari {vehicles.length} unit
+        {format(t.list.showingUnit, { shown: String(filtered.length), total: String(vehicles.length) })}
       </p>
     </div>
   );

@@ -19,6 +19,7 @@ import type { JourneyType } from "@/data/finder";
 import { waLink } from "@/lib/whatsapp";
 import { formatCompact } from "@/lib/format";
 import { cn } from "@/lib/cn";
+import { useLocale, useT, format } from "@/lib/i18n/client";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -36,8 +37,18 @@ export default function Step4Result({
   onReset,
 }: Step4ResultProps) {
   const reduce = useReducedMotion();
-  const result = buildFinderResult(budget, people, journey);
+  const locale = useLocale();
+  const t = useT();
+  const isEn = locale === "en";
+  const result = buildFinderResult(budget, people, journey, locale);
   const { vehicle, alternatives, package: pkg, whatsappMessage } = result;
+
+  const peopleUnit = isEn ? t.finder.capValueEn : t.finder.capValue;
+  const availValue = isEn ? t.finder.availValueEn : t.finder.availValue;
+  const pricePrefix = isEn ? "From" : "Mulai";
+  const priceUnitShort = isEn ? "/ 12 hours" : "/ 12 jam";
+  const journeyLabel = isEn ? t.finder.journeyLabels[journey] : getJourneyLabel(journey);
+  const altPriceUnit = isEn ? "/ 12 hours" : "/ 12 jam";
 
   return (
     <motion.div
@@ -48,10 +59,14 @@ export default function Step4Result({
     >
       <div className="text-center">
         <h3 className="mb-1 text-xl font-extrabold text-heading md:text-2xl">
-          Ini mobil yang cocok buat kamu
+          {t.finder.step4Title}
         </h3>
         <p className="text-sm text-muted">
-          Berdasarkan budget {formatCompact(budget)} · {people} orang · {getJourneyLabel(journey)}
+          {format(t.finder.step4SubBefore, {
+            budget: formatCompact(budget),
+            people: String(people),
+            journey: journeyLabel,
+          })}
         </p>
       </div>
 
@@ -96,7 +111,7 @@ export default function Step4Result({
               )}
               <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between gap-2">
                 <div className="rounded-full border border-white/30 bg-white/90 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-accent shadow-card backdrop-blur">
-                  Rekomendasi
+                  {t.finder.recBadge}
                 </div>
                 <div className="flex items-center gap-0.5 rounded-full border border-white/30 bg-white/90 px-2.5 py-1 shadow-card backdrop-blur">
                   {Array.from({ length: 5 }).map((_, i) => (
@@ -117,22 +132,22 @@ export default function Step4Result({
                 {vehicle.name}
               </h4>
               <p className="mb-4 text-base font-extrabold text-accent md:text-[20px]">
-                Mulai {formatCompact(vehicle.pricing.startingPrice ?? 0)} / 12 jam
+                {pricePrefix} {formatCompact(vehicle.pricing.startingPrice ?? 0)} {priceUnitShort}
               </p>
 
               <div className="mb-5 grid grid-cols-2 gap-3 md:grid-cols-1">
-                <SpecRow Icon={Users} label="Kapasitas" value={`${vehicle.capacity} orang`} />
-                <SpecRow Icon={Settings2} label="Transmisi" value={vehicle.transmission} />
-                <SpecRow Icon={Fuel} label="Bahan Bakar" value={vehicle.fuelType} />
-                <SpecRow Icon={Calendar} label="Tersedia" value="12 / 24 jam" />
+                <SpecRow Icon={Users} label={t.finder.capLabel} value={format(peopleUnit, { n: String(vehicle.capacity) })} />
+                <SpecRow Icon={Settings2} label={t.finder.transLabel} value={vehicle.transmission} />
+                <SpecRow Icon={Fuel} label={t.finder.fuelLabel} value={vehicle.fuelType} />
+                <SpecRow Icon={Calendar} label={t.finder.availLabel} value={availValue} />
               </div>
 
               <div className="mb-5">
                 <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.18em] text-muted">
-                  Cocok untuk
+                  {t.finder.suitableFor}
                 </p>
                 <p className="text-[13px] text-body-text">
-                  {getJourneyLabel(journey)} · {vehicle.suitableFor.slice(0, 3).join(", ")}
+                  {journeyLabel} · {vehicle.suitableFor.slice(0, 3).join(", ")}
                 </p>
               </div>
 
@@ -141,23 +156,23 @@ export default function Step4Result({
                   <div className="mb-2 flex items-center gap-2">
                     <Sparkles size={14} className="text-accent" aria-hidden="true" />
                     <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">
-                      Paket Cocok
+                      {t.finder.packageRec}
                     </p>
                   </div>
                   <p className="text-sm font-extrabold text-heading">
-                    Paket {pkg.destination}
+                    {isEn ? `${pkg.destination} Package` : `Paket ${pkg.destination}`}
                   </p>
                   <p className="text-[12px] text-muted">
                     {pkg.duration} · {formatCompact(pkg.price)}
                   </p>
                   <p className="mt-1 text-[11px] text-body-text">
-                    Include: {pkg.included.slice(0, 3).join(", ")}
+                    {t.finder.include} {pkg.included.slice(0, 3).join(", ")}
                   </p>
                   <Link
                     href={`/paket/${pkg.slug}`}
                     className="mt-2 inline-flex items-center gap-1 text-[12px] font-extrabold text-accent hover:underline"
                   >
-                    Lihat Detail Paket
+                    {t.finder.viewPkg}
                     <ArrowRight size={11} aria-hidden="true" />
                   </Link>
                 </div>
@@ -168,7 +183,7 @@ export default function Step4Result({
                   href={`/armada/${vehicle.slug}`}
                   className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-line bg-white px-5 py-3 text-sm font-extrabold text-heading transition-all hover:border-accent/50 hover:text-accent"
                 >
-                  Lihat Detail Mobil
+                  {t.finder.viewVehicle}
                 </Link>
                 <a
                   href={waLink(whatsappMessage)}
@@ -177,7 +192,7 @@ export default function Step4Result({
                   className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-extrabold text-white shadow-[0_10px_24px_-10px_rgba(0,86,145,0.6)] transition-all hover:scale-[1.01] hover:bg-accent-hover active:scale-[0.98]"
                 >
                   <MessageCircle size={15} aria-hidden="true" />
-                  Chat WhatsApp
+                  {t.finder.chatWa}
                 </a>
               </div>
             </div>
@@ -189,15 +204,15 @@ export default function Step4Result({
           animate={{ opacity: 1 }}
           className="rounded-[20px] border border-dashed border-line bg-white p-8 text-center"
         >
-          <p className="text-sm font-bold text-heading">Tidak ada kendaraan yang cocok.</p>
-          <p className="mt-1 text-[12px] text-muted">Coba sesuaikan budget atau jumlah orang.</p>
+          <p className="text-sm font-bold text-heading">{t.finder.emptyTitle}</p>
+          <p className="mt-1 text-[12px] text-muted">{t.finder.emptyDesc}</p>
         </motion.div>
       )}
 
       {alternatives.length > 0 && (
         <div>
           <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-muted">
-            Pilihan lain
+            {t.finder.otherChoices}
           </p>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             {alternatives.map((alt) => (
@@ -210,7 +225,7 @@ export default function Step4Result({
                   {alt.name}
                 </p>
                 <p className="text-[11px] font-bold text-accent">
-                  {formatCompact(alt.pricing.startingPrice ?? 0)} / 12 jam
+                  {formatCompact(alt.pricing.startingPrice ?? 0)} {altPriceUnit}
                 </p>
               </Link>
             ))}
@@ -224,7 +239,7 @@ export default function Step4Result({
         className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-line bg-white px-5 py-3 text-sm font-extrabold text-heading transition-all hover:border-accent/50 hover:text-accent"
       >
         <RefreshCcw size={14} aria-hidden="true" />
-        Coba Lagi
+        {t.finder.tryAgain}
       </button>
     </motion.div>
   );

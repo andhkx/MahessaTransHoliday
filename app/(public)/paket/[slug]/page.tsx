@@ -14,6 +14,7 @@ import { formatIDR } from "@/lib/format";
 import { SITE_URL } from "@/lib/constants";
 import { waPackageLink } from "@/lib/whatsapp";
 import { Check, MessageCircle, X } from "lucide-react";
+import { getLocale, getDict } from "@/lib/i18n/server";
 
 
 export const dynamic = 'force-dynamic';
@@ -21,12 +22,16 @@ export async function generateMetadata({
   params,
 }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
+  const locale = await getLocale();
+  const isEn = locale === "en";
   const packageItem = await getPackageBySlug(slug);
   if (!packageItem) return {};
   const ogParams = new URLSearchParams({
     title: packageItem.destination,
-    subtitle: `Paket ${packageItem.destination} · ${packageItem.duration}`,
-    price: packageItem.price > 0 ? `Mulai ${formatIDR(packageItem.price)}` : '',
+    subtitle: isEn
+      ? `Hiace Package ${packageItem.destination} · ${packageItem.duration}`
+      : `Paket ${packageItem.destination} · ${packageItem.duration}`,
+    price: packageItem.price > 0 ? (isEn ? `From ${formatIDR(packageItem.price)}` : `Mulai ${formatIDR(packageItem.price)}`) : '',
     badge: packageItem.badge || '',
   });
   const ogImage = `/api/og?${ogParams.toString()}`;
@@ -47,8 +52,15 @@ export default async function PackageDetailPage({
   params,
 }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const locale = await getLocale();
+  const isEn = locale === "en";
+  const t = getDict(locale);
+  const tPaket = t.detail.paket;
   const packageItem = await getPackageBySlug(slug);
-  if (!packageItem) notFound();
+  if (!packageItem) {
+    console.error(`[paket/[slug]] ${tPaket.notFound}: "${slug}"`);
+    notFound();
+  }
 
   const related = await getRelatedPackages(packageItem.slug);
 
@@ -56,12 +68,12 @@ export default async function PackageDetailPage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Beranda", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Paket", item: `${SITE_URL}/paket` },
+      { "@type": "ListItem", position: 1, name: isEn ? "Home" : "Beranda", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: tPaket.breadcrumbPackage, item: `${SITE_URL}/paket` },
       {
         "@type": "ListItem",
         position: 3,
-        name: `Sewa Hiace ${packageItem.destination}`,
+        name: isEn ? `Hiace Rental ${packageItem.destination}` : `Sewa Hiace ${packageItem.destination}`,
         item: `${SITE_URL}/paket/${packageItem.slug}`,
       },
     ],
@@ -77,11 +89,11 @@ export default async function PackageDetailPage({
           className="mb-6 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-muted"
         >
           <Link href="/" className="transition-colors hover:text-primary">
-            Beranda
+            {isEn ? "Home" : "Beranda"}
           </Link>
           <span className="mx-2 text-line">/</span>
           <Link href="/paket" className="transition-colors hover:text-primary">
-            Paket
+            {tPaket.breadcrumbPackage}
           </Link>
           <span className="mx-2 text-line">/</span>
           <span className="text-primary">Hiace {packageItem.destination}</span>
@@ -90,18 +102,17 @@ export default async function PackageDetailPage({
         <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
           <div>
             <h1 className="mb-4 text-[clamp(26px,4vw,40px)] font-extrabold leading-[1.1] tracking-tight text-heading">
-              Sewa Hiace {packageItem.destination} {packageItem.duration}
+              {isEn
+                ? `Hiace Rental ${packageItem.destination} ${packageItem.duration}`
+                : `Sewa Hiace ${packageItem.destination} ${packageItem.duration}`}
             </h1>
             <p className="mb-5 max-w-xl text-sm leading-relaxed text-body-text md:text-base">
-              Paket perjalanan all-in dari {packageItem.serviceAreas.join(", ")}.
-              Mobil, driver, BBM
-              {packageItem.included.includes("Tiket Penyeberangan")
-                ? ", dan tiket penyeberangan"
-                : ""}{" "}
-              sudah termasuk.
+              {isEn
+                ? `All-in travel package from ${packageItem.serviceAreas.join(", ")}. Vehicle, driver, fuel${packageItem.included.includes("Tiket Penyeberangan") ? ", and ferry tickets" : ""} included.`
+                : `Paket perjalanan all-in dari ${packageItem.serviceAreas.join(", ")}. Mobil, driver, BBM${packageItem.included.includes("Tiket Penyeberangan") ? ", dan tiket penyeberangan" : ""} sudah termasuk.`}
             </p>
             <p className="mb-6 text-xl font-extrabold tracking-tight text-primary">
-              Mulai {formatIDR(packageItem.price)}
+              {isEn ? `From ${formatIDR(packageItem.price)}` : `Mulai ${formatIDR(packageItem.price)}`}
             </p>
             <div className="flex flex-wrap gap-3">
               <a
@@ -114,19 +125,19 @@ export default async function PackageDetailPage({
                 className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3.5 text-sm font-extrabold text-white transition-all hover:scale-[1.02] hover:bg-accent-hover active:scale-[0.98]"
               >
                 <MessageCircle size={16} aria-hidden="true" />
-                Tanya via WhatsApp
+                {tPaket.askWa}
               </a>
               <Link
                 href="#detail-paket"
                 className="inline-flex items-center gap-2 rounded-full border border-line px-5 py-3.5 text-sm font-bold text-heading transition-all hover:border-primary/50 hover:text-primary"
               >
-                Detail Paket
+                {tPaket.seeDetails}
               </Link>
             </div>
           </div>
           <Image
             src={packageItem.image}
-            alt={`Paket Hiace ${packageItem.destination}`}
+            alt={isEn ? `Hiace Package ${packageItem.destination}` : `Paket Hiace ${packageItem.destination}`}
             width={1200}
             height={800}
             priority
@@ -145,7 +156,7 @@ export default async function PackageDetailPage({
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <div className="rounded-[24px] border border-line bg-white p-6 shadow-card">
                 <h2 className="text-h6 mb-4 uppercase tracking-wide text-success">
-                  Sudah Termasuk
+                  {tPaket.includedTitle}
                 </h2>
                 <ul className="space-y-2.5">
                   {packageItem.included.map((item) => (
@@ -161,7 +172,7 @@ export default async function PackageDetailPage({
               </div>
               <div className="rounded-[24px] border border-line bg-white p-6 shadow-card">
                 <h2 className="text-h6 mb-4 uppercase tracking-wide text-error">
-                  Belum Termasuk
+                  {tPaket.excludedTitle}
                 </h2>
                 <ul className="space-y-2.5">
                   {packageItem.excluded.map((item) => (
@@ -178,26 +189,28 @@ export default async function PackageDetailPage({
             </div>
 
             <div>
-              <h2 className="text-h5 mb-3 text-heading">Deskripsi Paket</h2>
+              <h2 className="text-h5 mb-3 text-heading">{tPaket.descriptionTitle}</h2>
               {packageItem.description.map((paragraph, i) => (
                 <p key={i} className="mt-3 text-sm leading-relaxed text-body-text md:text-base">
                   {paragraph}
                 </p>
               ))}
               <p className="mt-4 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-muted">
-                Durasi: {packageItem.duration} � {packageItem.durationHours} jam dari pickup
+                {isEn
+                  ? `Duration: ${packageItem.duration} · ${packageItem.durationHours} hours from pickup`
+                  : `Durasi: ${packageItem.duration} · ${packageItem.durationHours} jam dari pickup`}
               </p>
             </div>
 
             <div>
-              <h2 className="text-h5 mb-4 text-heading">Cocok Untuk</h2>
+              <h2 className="text-h5 mb-4 text-heading">{tPaket.suitableTitle}</h2>
               <ul className="flex flex-wrap gap-2">
                 {packageItem.suitableFor.map((item) => (
                   <li
                     key={item}
                     className="rounded-full border border-line bg-white px-3 py-1.5 text-xs font-bold text-body-text transition-colors duration-300 hover:border-primary/50 hover:text-primary"
                   >
-                    ? {item}
+                    ✓ {item}
                   </li>
                 ))}
               </ul>
@@ -205,7 +218,7 @@ export default async function PackageDetailPage({
 
             {packageItem.itinerary && (
               <div>
-                <h2 className="text-h5 mb-4 text-heading">Rute &amp; Itinerary</h2>
+                <h2 className="text-h5 mb-4 text-heading">{tPaket.itineraryTitle}</h2>
                 <ol className="space-y-5 border-l-2 border-dashed border-primary/40 pl-6">
                   {packageItem.itinerary.map((day) => (
                     <li key={day.day} className="relative">
@@ -214,7 +227,7 @@ export default async function PackageDetailPage({
                       <ul className="mt-2 space-y-1.5">
                         {day.activities.map((activity) => (
                           <li key={activity} className="text-sm leading-relaxed text-body-text">
-                            � {activity}
+                            – {activity}
                           </li>
                         ))}
                       </ul>
@@ -226,9 +239,9 @@ export default async function PackageDetailPage({
 
             {packageItem.faq.length > 0 && (
               <div id="faq-paket">
-                <h2 className="text-h5 mb-4 text-heading">Pertanyaan Umum Paket Ini</h2>
+                <h2 className="text-h5 mb-4 text-heading">{tPaket.faqTitle}</h2>
                 <FaqAccordion
-                  items={packageItem.faq.map((f: any, i: number) => ({
+                  items={packageItem.faq.map((f: { q: string; a: string }, i: number) => ({
                     id: `${packageItem.slug}-${i}`,
                     question: f.q,
                     answer: f.a,
@@ -241,17 +254,16 @@ export default async function PackageDetailPage({
           <aside className="lg:col-span-2">
             <div className="card sticky top-24 p-6 shadow-card">
               <p className="font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-primary">
-                Tertarik dengan
+                {tPaket.interestedLead}
               </p>
               <h2 className="mt-2 text-xl font-extrabold tracking-tight text-heading md:text-2xl">
-                Paket Hiace {packageItem.destination}?
+                {isEn ? `Hiace Package ${packageItem.destination}?` : `Paket Hiace ${packageItem.destination}?`}
               </h2>
               <p className="mt-2 text-2xl font-extrabold tracking-tight text-primary">
-                Mulai {formatIDR(packageItem.price)}
+                {isEn ? `From ${formatIDR(packageItem.price)}` : `Mulai ${formatIDR(packageItem.price)}`}
               </p>
               <p className="mt-3 text-sm leading-relaxed text-body-text">
-                Sebutkan tanggal keberangkatan dan jumlah penumpang, tim kami cek
-                ketersediaan.
+                {tPaket.interestedSub}
               </p>
               <a
                 href={waPackageLink(
@@ -263,12 +275,12 @@ export default async function PackageDetailPage({
                 className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-5 py-3.5 text-sm font-extrabold text-white transition-all hover:scale-[1.02] hover:bg-accent-hover active:scale-[0.98]"
               >
                 <MessageCircle size={16} aria-hidden="true" />
-                Tanya via WhatsApp
+                {tPaket.askWa}
               </a>
               <ul className="mt-5 space-y-2 text-xs font-bold text-muted">
-                <li>? Biaya jelas di awal</li>
-                <li>? Driver berpengalaman rute ini</li>
-                <li>? Bisa request itinerary custom</li>
+                <li>✓ {tPaket.perkClear}</li>
+                <li>✓ {tPaket.perkDriver}</li>
+                <li>✓ {tPaket.perkCustom}</li>
               </ul>
             </div>
           </aside>
@@ -277,14 +289,14 @@ export default async function PackageDetailPage({
 
       <section className="border-t border-line bg-wa-surface/40 py-16 md:py-20">
         <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
-          <SectionHeading eyebrow="Paket lain" title="Mungkin juga cocok buatmu." />
+          <SectionHeading eyebrow={tPaket.relatedEyebrow} title={tPaket.relatedTitle} />
           <PackageCards packages={related} />
         </div>
       </section>
 
       <CtaSection
-        title={`Pesan paket ${packageItem.destination} sekarang`}
-        text="Kuota unit terbatas, terutama saat high season. Amankan jadwal perjalananmu lewat WhatsApp."
+        title={isEn ? `Book ${packageItem.destination} package now` : `Pesan paket ${packageItem.destination} sekarang`}
+        text={tPaket.ctaText}
       />
     </>
   );

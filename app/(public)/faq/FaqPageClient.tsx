@@ -15,6 +15,7 @@ import {
 import type { FaqItem } from "@/lib/types";
 import { cn } from "@/lib/cn";
 import { waGeneralLink } from "@/lib/whatsapp";
+import { useLocale } from "@/lib/i18n/client";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -30,21 +31,31 @@ type Props = {
   faqExtra: FaqItem[];
 };
 
-// Since Supabase FAQ items use UUID as id, we distribute by index across categories
-function getCategories(faqMain: FaqItem[], faqExtra: FaqItem[]): Category[] {
-  // Split faqMain into 3 chunks: layanan (3), harga (2), pemesanan (1)
-  // Split faqExtra into 4 chunks: harga (3), pemesanan (2), armada (2)
-  // Total 6 main + 7 extra = 13
+function getCategories(faqMain: FaqItem[], faqExtra: FaqItem[], locale: string): Category[] {
+  const labels =
+    locale === "en"
+      ? {
+          layanan: "Service",
+          harga: "Pricing & Payment",
+          pemesanan: "Booking",
+          armada: "Fleet & Drivers",
+        }
+      : {
+          layanan: "Layanan",
+          harga: "Harga & Pembayaran",
+          pemesanan: "Pemesanan",
+          armada: "Armada & Driver",
+        };
   return [
     {
       id: "layanan",
-      label: "Layanan",
+      label: labels.layanan,
       Icon: CarFront,
       items: faqMain.slice(0, 3),
     },
     {
       id: "harga",
-      label: "Harga & Pembayaran",
+      label: labels.harga,
       Icon: Wallet,
       items: [
         ...faqMain.slice(3, 5),
@@ -53,7 +64,7 @@ function getCategories(faqMain: FaqItem[], faqExtra: FaqItem[]): Category[] {
     },
     {
       id: "pemesanan",
-      label: "Pemesanan",
+      label: labels.pemesanan,
       Icon: Calendar,
       items: [
         ...faqMain.slice(5, 6),
@@ -62,7 +73,7 @@ function getCategories(faqMain: FaqItem[], faqExtra: FaqItem[]): Category[] {
     },
     {
       id: "armada",
-      label: "Armada & Driver",
+      label: labels.armada,
       Icon: Users,
       items: faqExtra.slice(5, 7),
     },
@@ -71,13 +82,15 @@ function getCategories(faqMain: FaqItem[], faqExtra: FaqItem[]): Category[] {
 
 export default function FaqPageClient({ faqMain, faqExtra }: Props) {
   const reduce = useReducedMotion();
+  const locale = useLocale();
+  const isEn = locale === "en";
   const [active, setActive] = useState<string>("layanan");
   const [open, setOpen] = useState<string>("");
   const [query, setQuery] = useState("");
 
   const categories = useMemo(
-    () => getCategories(faqMain, faqExtra),
-    [faqMain, faqExtra]
+    () => getCategories(faqMain, faqExtra, locale),
+    [faqMain, faqExtra, locale]
   );
   const ALL_FAQS: FaqItem[] = useMemo(
     () => [...faqMain, ...faqExtra],
@@ -99,7 +112,7 @@ export default function FaqPageClient({ faqMain, faqExtra }: Props) {
   if (ALL_FAQS.length === 0) {
     return (
       <div className="mx-auto w-full max-w-[1300px] px-5 py-12 sm:px-8 md:px-12 md:py-16 text-center">
-        <p className="text-sm text-muted">Belum ada FAQ.</p>
+        <p className="text-sm text-muted">{isEn ? "No FAQs yet." : "Belum ada FAQ."}</p>
       </div>
     );
   }
@@ -110,7 +123,7 @@ export default function FaqPageClient({ faqMain, faqExtra }: Props) {
         <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-[20px] border border-line bg-white p-2 shadow-card">
             <p className="px-3 py-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
-              Kategori
+              {isEn ? "Category" : "Kategori"}
             </p>
             <div className="space-y-0.5">
               {categories.map((c) => {
@@ -165,10 +178,12 @@ export default function FaqPageClient({ faqMain, faqExtra }: Props) {
               <MessageCircle size={18} aria-hidden="true" />
             </span>
             <p className="mb-1 text-[14px] font-extrabold text-heading">
-              Masih ada pertanyaan?
+              {isEn ? "Still have a question?" : "Masih ada pertanyaan?"}
             </p>
             <p className="mb-4 text-[12px] leading-relaxed text-muted">
-              Tim kami siap bantu jawab via WhatsApp, respon di bawah 10 menit.
+              {isEn
+                ? "Our team replies on WhatsApp, usually in under 10 minutes."
+                : "Tim kami siap bantu jawab via WhatsApp, respon di bawah 10 menit."}
             </p>
             <a
               href={waGeneralLink()}
@@ -177,7 +192,7 @@ export default function FaqPageClient({ faqMain, faqExtra }: Props) {
               className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-accent px-4 py-2.5 text-[12px] font-extrabold text-white shadow-[0_8px_20px_-8px_rgba(0,86,145,0.55)] transition-all hover:scale-[1.02] hover:bg-accent-hover active:scale-[0.98]"
             >
               <MessageCircle size={13} aria-hidden="true" />
-              Chat Admin
+              {isEn ? "Chat Admin" : "Chat Admin"}
             </a>
           </motion.div>
         </aside>
@@ -198,7 +213,7 @@ export default function FaqPageClient({ faqMain, faqExtra }: Props) {
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Cari pertanyaan..."
+              placeholder={isEn ? "Search questions..." : "Cari pertanyaan..."}
               className="w-full rounded-full border border-line bg-white py-3 pl-10 pr-4 text-[13px] font-bold text-body-text outline-none transition-all placeholder:font-normal placeholder:text-muted focus:border-accent focus:ring-2 focus:ring-accent/15"
             />
           </motion.div>
@@ -278,10 +293,12 @@ export default function FaqPageClient({ faqMain, faqExtra }: Props) {
               ) : (
                 <div className="rounded-[18px] border border-dashed border-line bg-white p-10 text-center">
                   <p className="text-sm font-extrabold text-heading">
-                    Tidak ada pertanyaan yang cocok.
+                    {isEn ? "No matching questions." : "Tidak ada pertanyaan yang cocok."}
                   </p>
                   <p className="mt-1 text-xs text-muted">
-                    Coba ubah kata kunci atau hubungi kami via WhatsApp.
+                    {isEn
+                      ? "Try different keywords or contact us on WhatsApp."
+                      : "Coba ubah kata kunci atau hubungi kami via WhatsApp."}
                   </p>
                 </div>
               )}

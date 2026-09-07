@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { waGeneralLink } from "@/lib/whatsapp";
 import { MAPS_EMBED_URL, MAPS_LINK_URL, WHATSAPP_DISPLAY } from "@/lib/constants";
+import { useT } from "@/lib/i18n/client";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
@@ -20,10 +21,13 @@ type CtaSectionProps = {
 };
 
 export default function CtaSection({
-  title = "Siap berangkat bersama Mahessa?",
-  text = "Ceritakan kebutuhan perjalananmu — kami bantu pilihkan kendaraan dan layanan yang sesuai target dan anggaran.",
+  title,
+  text,
 }: CtaSectionProps) {
   const reduce = useReducedMotion();
+  const t = useT();
+  const finalTitle = title ?? t.cta.title;
+  const finalText = text ?? t.cta.text;
 
   return (
     <section className="relative z-10 mx-auto w-full max-w-[1300px] px-5 py-16 sm:px-8 md:px-12 md:py-24">
@@ -48,30 +52,26 @@ export default function CtaSection({
             <div className="relative">
               <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/15 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-white">
                 <span className="h-1.5 w-1.5 rounded-full bg-white" />
-                Konsultasi Gratis
+                {t.cta.freeBadge}
               </span>
 
               <h2 className="mb-4 max-w-md text-3xl font-extrabold leading-[1.05] tracking-[-0.03em] md:text-[40px]" style={{ color: "#ffffff" }}>
-                {title}
+                {finalTitle}
               </h2>
               <p className="mb-8 max-w-md text-sm leading-relaxed text-white/90 md:text-base">
-                {text}
+                {finalText}
               </p>
 
               <div className="mb-7 space-y-2.5">
-                {[
-                  "Tanpa komitmen — bebas tanya",
-                  "Respon admin di bawah 10 menit",
-                  "Harga jelas di awal, tanpa biaya siluman",
-                ].map((t) => (
+                {t.cta.bullets.map((b) => (
                   <p
-                    key={t}
+                    key={b}
                     className="flex items-center gap-2 text-[13px] font-bold text-white/85"
                   >
                     <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/15">
                       <Check size={12} strokeWidth={3} aria-hidden="true" />
                     </span>
-                    {t}
+                    {b}
                   </p>
                 ))}
               </div>
@@ -84,7 +84,7 @@ export default function CtaSection({
                   className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-extrabold text-accent shadow-[0_10px_24px_-10px_rgba(0,86,145,0.6)] transition-all hover:scale-[1.03] active:scale-[0.97]"
                 >
                   <MessageCircle size={16} aria-hidden="true" />
-                  Chat Admin
+                  {t.cta.chatButton}
                 </a>
                 <a
                   href="tel:+62895327077214"
@@ -111,10 +111,10 @@ export default function CtaSection({
               </span>
               <div className="min-w-0 flex-1 leading-tight">
                 <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted">
-                  Lokasi Kantor
+                  {t.cta.locationLabel}
                 </p>
                 <p className="truncate text-[14px] font-extrabold tracking-tight text-heading">
-                  Cimahi, Jawa Barat
+                  {t.cta.locationValue}
                 </p>
               </div>
               <Link
@@ -123,7 +123,7 @@ export default function CtaSection({
                 rel="noopener noreferrer"
                 className="inline-flex shrink-0 items-center gap-1 rounded-full border border-line bg-white px-3 py-2 text-[12px] font-extrabold text-accent transition-colors hover:border-accent"
               >
-                Petunjuk Arah
+                {t.cta.directions}
                 <ArrowRight size={12} aria-hidden="true" />
               </Link>
             </div>

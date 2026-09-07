@@ -1,40 +1,55 @@
 "use client";
 
-import Link from "next/link";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { Globe } from "lucide-react";
 import { cn } from "@/lib/cn";
+import { useLocale, useT } from "@/lib/i18n/client";
+import { LOCALE_COOKIE, type Locale } from "@/lib/i18n/dict";
 
-type Props = {
-  isEn: boolean;
-  switchHref: string;
-  variant: "desktop" | "mobile";
-};
+type Props = { variant: "desktop" | "mobile" };
 
-export default function LocaleSwitcher({ isEn, switchHref, variant }: Props) {
+export default function LocaleSwitcher({ variant }: Props) {
+  const router = useRouter();
+  const locale = useLocale();
+  const t = useT();
+  const [pending, startTransition] = useTransition();
+  const isEn = locale === "en";
+  const next: Locale = isEn ? "id" : "en";
+
+  const switchLocale = () => {
+    document.cookie = `${LOCALE_COOKIE}=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
+    startTransition(() => router.refresh());
+  };
+
   if (variant === "desktop") {
     return (
-      <Link
-        href={switchHref}
-        aria-label={isEn ? "Switch to Indonesian" : "Switch to English"}
-        className="flex h-9 items-center gap-1.5 rounded-full border border-line bg-white px-3 text-xs font-extrabold uppercase tracking-[0.12em] text-body-text transition-all hover:border-accent hover:text-accent"
+      <button
+        type="button"
+        onClick={switchLocale}
+        disabled={pending}
+        aria-label={isEn ? t.localeSwitcher.ariaId : t.localeSwitcher.ariaEn}
+        className="flex h-9 items-center gap-1.5 rounded-full border border-line bg-white px-3 text-xs font-extrabold uppercase tracking-[0.12em] text-body-text transition-all hover:border-accent hover:text-accent disabled:opacity-60"
       >
         <Globe size={13} aria-hidden="true" />
         <span className={cn("transition-colors", isEn && "text-accent")}>EN</span>
         <span className="text-muted">/</span>
         <span className={cn("transition-colors", !isEn && "text-accent")}>ID</span>
-      </Link>
+      </button>
     );
   }
 
   return (
-    <Link
-      href={switchHref}
-      className="mt-2 flex items-center justify-center gap-2 rounded-full border border-line bg-white px-4 py-3 text-sm font-extrabold text-body-text hover:border-accent hover:text-accent"
+    <button
+      type="button"
+      onClick={switchLocale}
+      disabled={pending}
+      className="mt-2 flex items-center justify-center gap-2 rounded-full border border-line bg-white px-4 py-3 text-sm font-extrabold text-body-text hover:border-accent hover:text-accent disabled:opacity-60"
     >
       <Globe size={14} aria-hidden="true" />
       <span className={cn(isEn ? "text-accent" : "text-muted")}>English</span>
       <span className="text-muted">/</span>
       <span className={cn(!isEn ? "text-accent" : "text-muted")}>Bahasa Indonesia</span>
-    </Link>
+    </button>
   );
 }

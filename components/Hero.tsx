@@ -4,13 +4,21 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowRight, CarFront, Check, MessageCircle, ShieldCheck, Sparkles, Wallet } from "lucide-react";
-import { SERVICE_AREAS, SITE_NAME } from "@/lib/constants";
+import { SERVICE_AREAS } from "@/lib/constants";
 import { waGeneralLink } from "@/lib/whatsapp";
+import { useT, format } from "@/lib/i18n/client";
 
 const EASE = [0.4, 0, 0.2, 1] as const;
 
 export default function Hero() {
   const reduce = useReducedMotion();
+  const t = useT();
+
+  const chips = [
+    { Icon: ShieldCheck, label: t.hero.chips[0] },
+    { Icon: Sparkles, label: t.hero.chips[1] },
+    { Icon: Check, label: t.hero.chips[2] },
+  ];
 
   return (
     <section
@@ -34,19 +42,19 @@ export default function Hero() {
         >
           <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-primary shadow-card">
             <span className="flex h-1.5 w-1.5 rounded-full bg-success" />
-            {SERVICE_AREAS.join(" · ")} &mdash; buka 24/7
+            {format(t.hero.statusBadge, { areas: SERVICE_AREAS.join(" · ") })}
           </span>
 
           <h1 className="text-[clamp(38px,6vw,68px)] font-extrabold leading-[0.98] tracking-[-0.04em] text-heading">
-            Perjalanan Nyaman,
+            {t.hero.headline1}
             <br />
-            Bersama
+            {t.hero.headline2}
             <br />
-            <span className="text-accent">Mahessa Trans</span>
+            <span className="text-accent">{t.hero.headlineAccent}</span>
           </h1>
 
           <p className="mt-6 max-w-xl text-[15px] leading-relaxed text-body-text md:text-base">
-            Nikmati perjalanan bebas ribet dengan armada terawat dan sopir profesional. Dari city car harian hingga Hiace untuk rombongan — tinggal duduk tenang, semua kami urus.
+            {t.hero.sub}
           </p>
 
           <div className="mt-7 flex flex-wrap items-center gap-3">
@@ -54,7 +62,7 @@ export default function Hero() {
               href="#armada"
               className="inline-flex items-center gap-2 rounded-full bg-accent px-5 py-3 text-sm font-extrabold text-white shadow-[0_10px_24px_-10px_rgba(0,86,145,0.55)] transition-all hover:scale-[1.03] hover:bg-accent-hover active:scale-[0.97]"
             >
-              Lihat Armada
+              {t.hero.ctaPrimary}
               <ArrowRight size={16} aria-hidden="true" />
             </a>
             <a
@@ -64,24 +72,20 @@ export default function Hero() {
               className="inline-flex items-center gap-2 rounded-full border-2 border-line bg-white px-5 py-3 text-sm font-extrabold text-heading transition-all hover:border-accent hover:text-accent"
             >
               <MessageCircle size={16} aria-hidden="true" />
-              Cek Lokasi
+              {t.hero.ctaSecondary}
             </a>
           </div>
 
           <div className="mt-8 grid grid-cols-3 gap-2.5 sm:flex sm:flex-wrap sm:items-center sm:gap-x-6 sm:gap-y-3">
-            {[
-              { Icon: ShieldCheck, t: "Driver Profesional" },
-              { Icon: Sparkles, t: "Unit Bersih & Terawat" },
-              { Icon: Check, t: "Booking 24/7" },
-            ].map(({ Icon, t }) => (
+            {chips.map(({ Icon, label }) => (
               <span
-                key={t}
+                key={label}
                 className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-line bg-white px-2.5 py-3 text-center text-[11px] font-extrabold leading-tight text-body-text shadow-sm sm:inline-flex sm:flex-row sm:border-0 sm:bg-transparent sm:p-0 sm:text-left sm:text-[13px] sm:shadow-none"
               >
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-accent/10 text-accent sm:h-6 sm:w-6">
                   <Icon size={13} strokeWidth={2.5} aria-hidden="true" />
                 </span>
-                {t}
+                {label}
               </span>
             ))}
           </div>
@@ -98,7 +102,7 @@ export default function Hero() {
             <div className="relative overflow-hidden rounded-[32px] border border-line bg-surface shadow-elevated">
               <Image
                 src="https://rxhibmwhkjpfwirzvojt.supabase.co/storage/v1/object/public/vehicles/toyota-hiace-premio/toyota-hiace-premio.webp"
-                alt={`${SITE_NAME} - Hiace Premio`}
+                alt={`${t.site.name} - Hiace Premio`}
                 width={1200}
                 height={800}
                 priority
@@ -119,11 +123,11 @@ export default function Hero() {
               </span>
               <div className="leading-tight">
                 <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-muted sm:text-[10px]">
-                  Mulai Dari
+                  {t.hero.priceLabel}
                 </p>
                 <p className="text-[14px] font-extrabold tracking-tight text-accent sm:text-[18px]">
-                  Rp650rb
-                  <span className="ml-1 text-[10px] font-bold text-muted sm:text-[11px]">/ 12 jam</span>
+                  {t.hero.priceValue}
+                  <span className="ml-1 text-[10px] font-bold text-muted sm:text-[11px]">{t.hero.priceUnit}</span>
                 </p>
               </div>
             </motion.div>
@@ -139,10 +143,10 @@ export default function Hero() {
               </span>
               <div className="leading-tight">
                 <p className="text-[9px] font-bold uppercase tracking-[0.18em] text-muted sm:text-[10px]">
-                  Armada
+                  {t.hero.fleetLabel}
                 </p>
                 <p className="text-[12px] font-extrabold tracking-tight text-heading sm:text-[14px]">
-                  12+ Unit Tersedia
+                  {t.hero.fleetValue}
                 </p>
               </div>
             </motion.div>
