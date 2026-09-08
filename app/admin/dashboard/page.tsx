@@ -93,6 +93,7 @@ export default function DashboardPage() {
   });
   const [activities, setActivities] = useState<ActivityLog[]>([]);
   const [chartData, setChartData] = useState<{ day: string; count: number }[]>([]);
+  const [attention, setAttention] = useState<{ drafts: number; noImgV: number; noImgP: number; freeV: number; freeP: number; freeA: number } | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -141,6 +142,25 @@ export default function DashboardPage() {
         tally('gallery_items'),
       ]);
     setEntityStats({ vehicles, packages, articles, testimonials, faq, gallery });
+    try {
+      const [vNoImg, pNoImg] = await Promise.all([
+        supabase.from('vehicles').select('id', { count: 'exact', head: true }).is('image_url', null),
+        supabase.from('packages').select('id', { count: 'exact', head: true }).is('cover_image_url', null),
+      ]);
+      const [vFree, pFree, aDraft] = await Promise.all([
+        supabase.from('vehicles').select('id', { count: 'exact', head: true }).eq('is_active', true).eq('is_featured', false),
+        supabase.from('packages').select('id', { count: 'exact', head: true }).eq('is_active', true).eq('is_featured', false),
+        supabase.from('articles').select('id', { count: 'exact', head: true }).eq('status', 'draft'),
+      ]);
+      setAttention({
+        drafts: aDraft.count ?? 0,
+        noImgV: vNoImg.count ?? 0,
+        noImgP: pNoImg.count ?? 0,
+        freeV: vFree.count ?? 0,
+        freeP: pFree.count ?? 0,
+        freeA: 10 - (articles as any).featured,
+      });
+    } catch {}
   };
 
   const loadActivity = async () => {
@@ -154,6 +174,8 @@ export default function DashboardPage() {
     const since = new Date();
     since.setDate(since.getDate() - 6);
     since.setHours(0, 0, 0, 0);
+    const toKey = (d: Date) =>
+      `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     const { data: all } = await supabase
       .from('activity_logs')
       .select('created_at')
@@ -162,10 +184,10 @@ export default function DashboardPage() {
     for (let i = 0; i < 7; i++) {
       const d = new Date(since);
       d.setDate(since.getDate() + i);
-      buckets[d.toISOString().slice(0, 10)] = 0;
+      buckets[toKey(d)] = 0;
     }
     (all || []).forEach((r: any) => {
-      const k = r.created_at.slice(0, 10);
+      const k = toKey(new Date(r.created_at));
       if (k in buckets) buckets[k] += 1;
     });
     setChartData(
@@ -274,6 +296,19 @@ export default function DashboardPage() {
           })}
         </div>
       </section>
+
+      {/* Perlu Perhatian */}
+      {attention && (attention.drafts > 0 || attention.noImgV > 0 || attention.noImgP > 0) && (
+        <section className="mb-6 sm:mb-8 rounded-2xl border border-warning/30 bg-warning/[0.06] p-4 sm:p-5">
+          <p className="font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-warning mb-2">Perlu Perhatian</p>
+          <ul className="space-y-1.5 text-sm">
+            {attention.drafts > 0 && <li>• {attention.drafts} artikel masih <Link href="/admin/dashboard/artikel" className="font-bold text-accent underline">draft</Link> — publish agar masuk sitemap & artikel publik</li>}
+            {attention.noImgV > 0 && <li>• {attention.noImgV} armada tanpa foto — <Link href="/admin/dashboard/armada" className="font-bold text-accent underline">tambah gambar</Link> biar card tidak placeholder</li>}
+            {attention.noImgP > 0 && <li>• {attention.noImgP} paket tanpa cover — <Link href="/admin/dashboard/paket" className="font-bold text-accent underline">upload cover</Link></li>}
+            {(attention.freeV > 6 || attention.freeP > 6) && <li>• Masih ada slot beranda: armada {Math.max(0, 10 - entityStats.vehicles.featured)} + paket {Math.max(0, 10 - entityStats.packages.featured)} — isi agar homepage penuh</li>}
+          </ul>
+        </section>
+      )}
 
       {/* Quick Actions */}
       <section className="mb-6 sm:mb-8">
