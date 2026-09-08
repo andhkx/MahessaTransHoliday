@@ -1,9 +1,9 @@
 export const BATCH_B = [
   {
-    title: "Tarif Charter Hiace Bandung 2025: Update Harga & Perbandingan",
-    slug: "tarif-charter-hiace-bandung-2025",
-    excerpt: "Tarif charter Hiace Bandung 2025 update. Hiace Premio vs Commuter, harga all-in, rute favorit & tips irit untuk rombongan.",
-    content: `Mencari tarif charter Hiace Bandung yang transparan tanpa biaya tersembunyi memang butuh ketelitian, apalagi di tahun 2025 di mana permintaan sewa Hiace melonjak 30 persen setiap musim liburan dan banyak operator dadakan muncul dengan harga miring namun penuh jebakan. Keluhan paling sering adalah charge tambahan mendadak untuk BBM, tol Cisumdawu atau Pasteur, parkir di destinasi wisata, hingga uang makan driver yang tiba-tiba diminta di tengah perjalanan. Padahal dengan pemahaman perbedaan tipe armada dan sistem all-in versus lepas, Anda bisa menghemat hingga Rp400.000 per hari. Artikel ini merangkum update tarif 2025, perbandingan Hiace Premio vs Commuter secara jujur, serta strategi irit untuk rombongan 14-19 seat dari Bandung. Untuk quotation tertulis yang transparan dan kalkulasi sharing cost per orang, hubungi langsung [WhatsApp Mahessa](https://wa.me/62895327077214) dan tim akan balas dalam 5 menit.
+    title: "Tarif Charter Hiace Bandung 2026: Update Harga & Perbandingan",
+    slug: "tarif-charter-hiace-bandung-2026",
+    excerpt: "Tarif charter Hiace Bandung 2026 update. Hiace Premio vs Commuter, harga all-in, rute favorit & tips irit untuk rombongan.",
+    content: `Mencari tarif charter Hiace Bandung yang transparan tanpa biaya tersembunyi memang butuh ketelitian, apalagi di tahun 2026 di mana permintaan sewa Hiace melonjak 30 persen setiap musim liburan dan banyak operator dadakan muncul dengan harga miring namun penuh jebakan. Keluhan paling sering adalah charge tambahan mendadak untuk BBM, tol Cisumdawu atau Pasteur, parkir di destinasi wisata, hingga uang makan driver yang tiba-tiba diminta di tengah perjalanan. Padahal dengan pemahaman perbedaan tipe armada dan sistem all-in versus lepas, Anda bisa menghemat hingga Rp400.000 per hari. Artikel ini merangkum update tarif 2026, perbandingan Hiace Premio vs Commuter secara jujur, serta strategi irit untuk rombongan 14-19 seat dari Bandung. Untuk quotation tertulis yang transparan dan kalkulasi sharing cost per orang, hubungi langsung [WhatsApp Mahessa](https://wa.me/62895327077214) dan tim akan balas dalam 5 menit.
 
 ## Hiace Premio vs Commuter: Mana yang Paling Worth It?
 
@@ -15,15 +15,15 @@ Toyota Hiace Premio adalah generasi terbaru yang menjadi favorit keluarga dan ka
 
 Hiace Commuter adalah tipe sebelumnya yang masih banyak dipakai operator karena harga sewa lebih miring. Kapasitas **14-15 seat** dengan konfigurasi 2-3-3-3 yang sedikit lebih sempit di bahu. Mesin bensin **2.700cc** cukup untuk dalam kota namun terasa kurang bertenaga di tanjakan Tangkuban Perahu. Perbedaan paling terasa adalah **AC single blower** di depan saja, sehingga penumpang baris 4-5 bisa kepanasan saat macet siang di Pasteur. Suspensi standar lebih keras dan kabin kurang kedap dibanding Premio. Untuk [charter Hiace Commuter](/armada) tarifnya **Rp900.000 per hari** all-in 12 jam, selisih **Rp400.000** dibanding Premio. Cocok untuk rombongan yang prioritasnya tekan budget seperti pengajian rutin, antar jemput karyawan Soreang-Cimahi, atau study tour sekolah SMP dengan durasi **±2 jam** saja. Jika perjalanan di atas 3 jam dan membawa lansia atau balita, Premio tetap jauh lebih worth it demi kenyamanan.
 
-## Update Tarif Charter Hiace Bandung 2025 Lengkap
+## Update Tarif Charter Hiace Bandung 2026 Lengkap
 
 ### Tarif Harian Dalam Kota Bandung
 
-Untuk pemakaian dalam kota seperti city tour Braga-Dago, wedding di Gedung Sate, atau antar jemput Bandara Husein dan Kertajati, berikut tarif update per Januari 2025. Tarif **Hiace Premio 14-seat Rp1,3jt per 12 jam**, **Hiace Commuter 14-seat Rp900.000 per 12 jam**, **Elf Long 19-seat Rp1,4jt per 12 jam**, dan **Innova Reborn 7-seat Rp700.000 per 12 jam**. Semua sudah termasuk driver berpengalaman, BBM dalam radius 30 km, dan parkir 1 lokasi. Jemput di radius **10 km** dari Alun-alun Bandung gratis, tambahan **Rp50.000-Rp100.000** untuk Lembang, Cimahi, Padalarang, atau Cileunyi. Overtime setelah 12 jam **Rp50.000 per jam** untuk Premio dan **Rp40.000 per jam** Commuter. Paket **all-in** berarti BBM, tol dalam kota, parkir, dan makan driver sudah termasuk, sedangkan paket **lepas** hanya sewa mobil plus driver, BBM dan tol bayar sendiri. Selalu minta quotation tertulis via WhatsApp agar jelas komponennya sebelum transfer DP.
+Untuk pemakaian dalam kota seperti city tour Braga-Dago, wedding di Gedung Sate, atau antar jemput Bandara Husein dan Kertajati, berikut tarif update per Januari 2026. Tarif **Hiace Premio 14-seat Rp1,3jt per 12 jam**, **Hiace Commuter 14-seat Rp900.000 per 12 jam**, **Elf Long 19-seat Rp1,4jt per 12 jam**, dan **Innova Reborn 7-seat Rp700.000 per 12 jam**. Semua sudah termasuk driver berpengalaman, BBM dalam radius 30 km, dan parkir 1 lokasi. Jemput di radius **10 km** dari Alun-alun Bandung gratis, tambahan **Rp50.000-Rp100.000** untuk Lembang, Cimahi, Padalarang, atau Cileunyi. Overtime setelah 12 jam **Rp50.000 per jam** untuk Premio dan **Rp40.000 per jam** Commuter. Paket **all-in** berarti BBM, tol dalam kota, parkir, dan makan driver sudah termasuk, sedangkan paket **lepas** hanya sewa mobil plus driver, BBM dan tol bayar sendiri. Selalu minta quotation tertulis via WhatsApp agar jelas komponennya sebelum transfer DP.
 
 ### Tarif Rute Luar Kota Favorit dari Bandung
 
-Untuk luar kota, tarif paket harian lebih hemat dibanding hitung kilometer. Rujukan 2025: **Bandung-Lembang PP 8 jam Rp1,3jt** Premio, **Bandung-Ciwidey PP 12 jam Rp1,5jt** Premio atau **Rp1,1jt** Commuter, **Bandung-Pangandaran 3 hari 2 malam Rp3,8jt** all-in termasuk tol Cileunyi dan BBM PP, **Bandung-Bromo 3 hari 2 malam Rp6,5jt** all-in via Tol Trans Jawa, **Bandung-Jakarta PP 12 jam Rp1,8jt** Premio. Contoh sharing cost: Hiace Premio Rp1,3jt dibagi 14 orang hanya **Rp93.000 per orang**, jauh lebih murah daripada patungan Innova 2 unit. Untuk tol, siapkan **Rp30.000** untuk Cisumdawu ke Kertajati atau **Rp150.000** untuk Pasteur-Jakarta. Parkir di destinasi seperti Farmhouse **Rp20.000**, Tangkuban Perahu **Rp30.000** untuk Hiace. Pesan via [form booking online](/kontak) untuk dapat diskon weekday **10 persen**.
+Untuk luar kota, tarif paket harian lebih hemat dibanding hitung kilometer. Rujukan 2026: **Bandung-Lembang PP 8 jam Rp1,3jt** Premio, **Bandung-Ciwidey PP 12 jam Rp1,5jt** Premio atau **Rp1,1jt** Commuter, **Bandung-Pangandaran 3 hari 2 malam Rp3,8jt** all-in termasuk tol Cileunyi dan BBM PP, **Bandung-Bromo 3 hari 2 malam Rp6,5jt** all-in via Tol Trans Jawa, **Bandung-Jakarta PP 12 jam Rp1,8jt** Premio. Contoh sharing cost: Hiace Premio Rp1,3jt dibagi 14 orang hanya **Rp93.000 per orang**, jauh lebih murah daripada patungan Innova 2 unit. Untuk tol, siapkan **Rp30.000** untuk Cisumdawu ke Kertajati atau **Rp150.000** untuk Pasteur-Jakarta. Parkir di destinasi seperti Farmhouse **Rp20.000**, Tangkuban Perahu **Rp30.000** untuk Hiace. Pesan via [form booking online](/kontak) untuk dapat diskon weekday **10 persen**.
 
 ## All-in vs Lepas: Hitung yang Paling Untung
 
@@ -50,19 +50,19 @@ Selisih harga broker vs operator asli bisa **Rp300.000 per hari**. Ciri operator
 **Apa beda all-in dan lepas charter Hiace Bandung?**
 All-in sudah termasuk driver, BBM, tol, dan parkir dalam batas wajar **150 km per hari**, jadi tanpa biaya tambahan. Lepas hanya mobil plus driver, BBM dan tol bayar sendiri sehingga butuh hitung manual.
 
-**Berapa tarif Hiace Premio Bandung 2025 per hari?**
-Update 2025, Hiace Premio **Rp1,3jt per 12 jam** all-in dalam kota termasuk driver dan BBM radius 30 km. Luar kota seperti Ciwidey **Rp1,5jt**, Pangandaran 3 hari **Rp3,8jt** all-in.
+**Berapa tarif Hiace Premio Bandung 2026 per hari?**
+Update 2026, Hiace Premio **Rp1,3jt per 12 jam** all-in dalam kota termasuk driver dan BBM radius 30 km. Luar kota seperti Ciwidey **Rp1,5jt**, Pangandaran 3 hari **Rp3,8jt** all-in.
 
 **Tips hemat sewa Hiace untuk rombongan 14 orang?**
 Berangkat weekday **Senin-Kamis** dapat diskon **10 persen**, booking **H-7**, dan bagi rata **Rp93.000 per orang** untuk Premio. Bandingkan harga di [temukan kendaraan](/temukan) agar dapat armada termurah.
 
 ## Kesimpulan
 
-Tarif charter Hiace Bandung 2025 berkisar **Rp900.000 untuk Commuter** hingga **Rp1,3jt untuk Premio per hari**, dengan selisih kenyamanan yang signifikan untuk perjalanan di atas 3 jam. Pilih all-in jika ingin praktis tanpa hitung BBM dan tol, pilih lepas hanya untuk rute sangat pendek di dalam kota. Kunci hemat adalah berangkat weekday, booking H-7, dan berbagi cost hingga **Rp93.000 per orang**. Untuk penawaran tertulis, foto unit terbaru, dan simulasi rute Lembang, Ciwidey, atau Pangandaran, cek [daftar armada](/armada) atau konsultasi via [kontak Mahessa](/kontak) agar liburan rombongan Anda lancar tanpa kejutan biaya.
+Tarif charter Hiace Bandung 2026 berkisar **Rp900.000 untuk Commuter** hingga **Rp1,3jt untuk Premio per hari**, dengan selisih kenyamanan yang signifikan untuk perjalanan di atas 3 jam. Pilih all-in jika ingin praktis tanpa hitung BBM dan tol, pilih lepas hanya untuk rute sangat pendek di dalam kota. Kunci hemat adalah berangkat weekday, booking H-7, dan berbagi cost hingga **Rp93.000 per orang**. Untuk penawaran tertulis, foto unit terbaru, dan simulasi rute Lembang, Ciwidey, atau Pangandaran, cek [daftar armada](/armada) atau konsultasi via [kontak Mahessa](/kontak) agar liburan rombongan Anda lancar tanpa kejutan biaya.
 `,
     category: "panduan",
-    meta_title: "Tarif Charter Hiace Bandung 2025 | Update Harga",
-    meta_description: "Tarif charter Hiace Bandung 2025 update. Premio vs Commuter, All-in vs lepas. Plus tips irit untuk rombongan 14-19 seat.",
+    meta_title: "Tarif Charter Hiace Bandung 2026 | Update Harga",
+    meta_description: "Tarif charter Hiace Bandung 2026 update. Premio vs Commuter, All-in vs lepas. Plus tips irit untuk rombongan 14-19 seat.",
     is_featured: false,
     status: "published",
   },
@@ -137,9 +137,9 @@ Itinerary Lembang 1 hari Farmhouse-Floating Market-Tangkuban Perahu sangat efisi
     title: "Paket Gathering Perusahaan Bandung: Outing Kantor Murah & Seru",
     slug: "paket-gathering-perusahaan-bandung",
     excerpt: "Paket gathering perusahaan Bandung untuk 50-200 orang. Outing kantor seru & murah, itinerary 1-2 hari, sewa Hiace termasuk.",
-    content: `Gathering perusahaan di Bandung kini jadi agenda wajib untuk recharge tim setelah kejar target kuartal, dan kota ini memang paling ideal karena pilihan venue melimpah dari Lembang yang sejuk hingga Ciwidey yang asri dalam jarak **±1-2 jam** dari pusat kota. Tantangan HRD biasanya adalah menyatukan 50-200 karyawan dengan budget terbatas namun tetap ingin kesan seru dan berkesan, bukan sekadar makan-makan formal. Artikel ini membahas paket gathering Bandung 2025 yang terbukti murah meriah, itinerary 1-2 hari yang tidak melelahkan, serta hitungan sewa Hiace yang bikin cost per orang turun drastis. Semua referensi harga update Januari 2025 dan sudah termasuk venue, makan, hingga dokumentasi. Untuk proposal PDF dan survey venue gratis, tim [Mahessa Trans Holiday](/paket) siap bantu via [WhatsApp](https://wa.me/62895327077214) dengan respon H+1.
+    content: `Gathering perusahaan di Bandung kini jadi agenda wajib untuk recharge tim setelah kejar target kuartal, dan kota ini memang paling ideal karena pilihan venue melimpah dari Lembang yang sejuk hingga Ciwidey yang asri dalam jarak **±1-2 jam** dari pusat kota. Tantangan HRD biasanya adalah menyatukan 50-200 karyawan dengan budget terbatas namun tetap ingin kesan seru dan berkesan, bukan sekadar makan-makan formal. Artikel ini membahas paket gathering Bandung 2026 yang terbukti murah meriah, itinerary 1-2 hari yang tidak melelahkan, serta hitungan sewa Hiace yang bikin cost per orang turun drastis. Semua referensi harga update Januari 2026 dan sudah termasuk venue, makan, hingga dokumentasi. Untuk proposal PDF dan survey venue gratis, tim [Mahessa Trans Holiday](/paket) siap bantu via [WhatsApp](https://wa.me/62895327077214) dengan respon H+1.
 
-## Konsep Gathering Paling Diminati 2025
+## Konsep Gathering Paling Diminati 2026
 
 ### Outbound dan Team Building di Lembang
 
@@ -192,11 +192,11 @@ Ya, paket Mahessa sudah termasuk Hiace Premio **Rp1,3jt per unit per hari** plus
 
 ## Kesimpulan
 
-Paket gathering perusahaan Bandung 2025 mulai **Rp273.000 per orang** untuk 100 orang 1 hari di Lembang hingga **Rp580.000 per orang** untuk 2H1M Ciwidey 200 orang, sudah termasuk Hiace, venue, makan, dan outbound. Kunci hemat adalah ambil weekday, booking H-30, dan pilih kombinasi Hiace-Elf sesuai jumlah peserta. Dengan venue hutan pinus Grafika Cikole atau danau Kawah Putih, gathering 50-200 orang tetap seru tanpa over budget. Untuk proposal custom, survey venue gratis, dan simulasi armada, hubungi [Paket Gathering Mahessa](/paket) atau via [kontak](/kontak) agar outing kantor tahun ini jadi momen bonding terbaik tim Anda.
+Paket gathering perusahaan Bandung 2026 mulai **Rp273.000 per orang** untuk 100 orang 1 hari di Lembang hingga **Rp580.000 per orang** untuk 2H1M Ciwidey 200 orang, sudah termasuk Hiace, venue, makan, dan outbound. Kunci hemat adalah ambil weekday, booking H-30, dan pilih kombinasi Hiace-Elf sesuai jumlah peserta. Dengan venue hutan pinus Grafika Cikole atau danau Kawah Putih, gathering 50-200 orang tetap seru tanpa over budget. Untuk proposal custom, survey venue gratis, dan simulasi armada, hubungi [Paket Gathering Mahessa](/paket) atau via [kontak](/kontak) agar outing kantor tahun ini jadi momen bonding terbaik tim Anda.
 `,
     category: "tips",
     meta_title: "Paket Gathering Bandung: Outing Kantor Seru & Murah",
-    meta_description: "Paket gathering perusahaan Bandung 2025. Outing kantor seru & murah untuk 50-200 orang, lengkap dengan Hiace & itinerary.",
+    meta_description: "Paket gathering perusahaan Bandung 2026. Outing kantor seru & murah untuk 50-200 orang, lengkap dengan Hiace & itinerary.",
     is_featured: true,
     status: "published",
   },
@@ -204,7 +204,7 @@ Paket gathering perusahaan Bandung 2025 mulai **Rp273.000 per orang** untuk 100 
     title: "Wedding Car Bandung: Pilih Alphard, Innova, atau Hiace?",
     slug: "wedding-car-bandung-pilih-alphard-innova-atau-hiace",
     excerpt: "Wedding car Bandung: perbandingan Alphard, Innova Reborn, Hiace Premio. Plus tips dekorasi, harga sewa, dan rekomendasi pengantin.",
-    content: `Memilih wedding car di Bandung bukan sekadar soal gaya di foto, tapi juga kenyamanan pengantin yang akan duduk berjam-jam, kapasitas keluarga inti, serta akses venue yang kadang di gang sempit Braga atau tanjakan Lembang. Banyak pasangan bingung antara Alphard yang mewah, Innova Reborn yang gagah, atau Hiace Premio yang bisa bawa rombongan. Salah pilih bisa bikin pengantin kepanasan karena AC kurang dingin atau dekorasi bunga terhalang. Artikel ini membandingkan tiga pilihan populer secara jujur dari sisi harga 2025, kapasitas, dan kesan di pelaminan, plus tips dekorasi yang bikin mobil terlihat mahal tanpa over budget. Untuk cek unit ready dan paket dekorasi, lihat [armada wedding Bandung](/armada) atau konsultasi via [WhatsApp](https://wa.me/62895327077214) untuk dapat foto unit terbaru.
+    content: `Memilih wedding car di Bandung bukan sekadar soal gaya di foto, tapi juga kenyamanan pengantin yang akan duduk berjam-jam, kapasitas keluarga inti, serta akses venue yang kadang di gang sempit Braga atau tanjakan Lembang. Banyak pasangan bingung antara Alphard yang mewah, Innova Reborn yang gagah, atau Hiace Premio yang bisa bawa rombongan. Salah pilih bisa bikin pengantin kepanasan karena AC kurang dingin atau dekorasi bunga terhalang. Artikel ini membandingkan tiga pilihan populer secara jujur dari sisi harga 2026, kapasitas, dan kesan di pelaminan, plus tips dekorasi yang bikin mobil terlihat mahal tanpa over budget. Untuk cek unit ready dan paket dekorasi, lihat [armada wedding Bandung](/armada) atau konsultasi via [WhatsApp](https://wa.me/62895327077214) untuk dapat foto unit terbaru.
 
 ## Alphard — Gengsi Maksimal untuk Pengantin
 
@@ -238,7 +238,7 @@ Hiace sering dianggap kurang wedding, padahal dengan dekorasi tepat tetap elegan
 
 ## Perbandingan Harga dan Rekomendasi Paket
 
-### Tabel Harga Wedding Car Bandung 2025
+### Tabel Harga Wedding Car Bandung 2026
 
 Rangkuman tarif wedding 12 jam all-in: **Avanza Rp450.000** untuk 4 orang, **Innova Reborn Rp700.000** untuk 7 orang, **Hiace Premio Rp1,3jt** untuk 14 orang, **Alphard Rp2,5jt** untuk 7 orang premium, **Elf Long Rp1,4jt** untuk 19 orang. Paket hemat: **1 Alphard + 1 Hiace Rp3,8jt** untuk pengantin plus 14 keluarga. Paket ekonomis: **2 Innova Rp1,4jt** untuk pengantin dan keluarga inti 14 orang. Paket besar: **1 Alphard + 2 Hiace Rp5,1jt** untuk 35 orang. Semua sudah termasuk dekorasi basic, BBM, dan driver berseragam. Overtime **Rp50.000 per jam** untuk Hiace dan **Rp100.000** Alphard. Pesan H-30 di musim nikah, DP **30 persen** via transfer. Untuk [konsultasi wedding](/kontak) dapat simulasi foto mobil di venue Anda.
 
@@ -271,7 +271,7 @@ Pilih Alphard **Rp2,5jt** jika prioritas gengsi dan foto mewah, Innova **Rp700.0
     title: "10 Tempat Wisata Ciwidey Terbaik untuk Liburan Keluarga",
     slug: "10-tempat-wisata-ciwidey-terbaik",
     excerpt: "10 tempat wisata Ciwidey terbaik untuk liburan keluarga. Kawah Putih, Ranca Upas, Glamping Lakeside plus aktivitas anak.",
-    content: `Ciwidey di Bandung Selatan adalah surga liburan keluarga dengan jarak **50 km** dari pusat kota dan waktu tempuh **±2 jam** via Tol Soroja, menawarkan kombinasi kawah putih tosca, penangkaran rusa jinak, danau di kebun teh, hingga pemandian air panas dalam satu kawasan. Suhu sejuk **18-22 derajat** dan udara bersih membuat anak balita betah seharian tanpa rewel kepanasan. Artikel ini merangkum 10 tempat terbaik yang sudah dikurasi untuk keluarga dengan anak usia 3-12 tahun, lengkap dengan harga tiket 2025, jam buka, dan tips armada agar perjalanan berkelok Soreang-Ciwidey tetap nyaman. Semua destinasi bisa ditempuh dengan [sewa Hiace Premio](/armada) yang bagasinya muat stroller dan bekal. Untuk itinerary 1 hari yang efisien, konsultasi via [WhatsApp](https://wa.me/62895327077214) agar dapat rute tanpa putar balik.
+    content: `Ciwidey di Bandung Selatan adalah surga liburan keluarga dengan jarak **50 km** dari pusat kota dan waktu tempuh **±2 jam** via Tol Soroja, menawarkan kombinasi kawah putih tosca, penangkaran rusa jinak, danau di kebun teh, hingga pemandian air panas dalam satu kawasan. Suhu sejuk **18-22 derajat** dan udara bersih membuat anak balita betah seharian tanpa rewel kepanasan. Artikel ini merangkum 10 tempat terbaik yang sudah dikurasi untuk keluarga dengan anak usia 3-12 tahun, lengkap dengan harga tiket 2026, jam buka, dan tips armada agar perjalanan berkelok Soreang-Ciwidey tetap nyaman. Semua destinasi bisa ditempuh dengan [sewa Hiace Premio](/armada) yang bagasinya muat stroller dan bekal. Untuk itinerary 1 hari yang efisien, konsultasi via [WhatsApp](https://wa.me/62895327077214) agar dapat rute tanpa putar balik.
 
 ## Kawah Putih dan Ranca Upas: Ikon Wajib Keluarga
 
@@ -329,7 +329,7 @@ Untuk 6 orang, **Innova Reborn Rp700.000 per hari** nyaman dengan bagasi strolle
 
 ## FAQ
 
-**Berapa tiket Kawah Putih Ciwidey 2025 untuk keluarga?**
+**Berapa tiket Kawah Putih Ciwidey 2026 untuk keluarga?**
 Tiket **Rp35.000 weekend** dan **Rp25.000 weekday** per orang, ontang-anting **Rp15.000 PP**, parkir Hiace **Rp30.000**. Anak di bawah 5 tahun gratis dan buka **07.00-17.00**.
 
 **Apakah Ciwidey cocok untuk liburan balita 3 tahun?**

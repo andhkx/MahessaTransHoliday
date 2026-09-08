@@ -10,6 +10,8 @@ import { Calendar, Eye, FileText, ArrowLeft, Share2, MessageCircle, ArrowUpRight
 import { waGeneralLink } from "@/lib/whatsapp";
 import { getLocale, getDict } from "@/lib/i18n/server";
 import { hreflang } from "@/lib/i18n/seo";
+import ArticleShare from "@/components/ArticleShare";
+import { createClient } from "@supabase/supabase-js";
 
 
 export const dynamic = 'force-dynamic';
@@ -45,6 +47,14 @@ export default async function ArticleDetailPage({
     console.error(`[artikel/[slug]] ${tArt.notFound}: "${slug}"`);
     notFound();
   }
+
+  try {
+    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    await supabase.rpc("increment_article_view", { p_slug: article.slug });
+    (article as any).view_count = (article.view_count ?? 0) + 1;
+  } catch {}
 
   const latest = await getLatestArticles(5);
   const related = latest.filter((a) => a.id !== article.id).slice(0, 4);
@@ -141,27 +151,19 @@ export default async function ArticleDetailPage({
                 {article.category}
               </span>
             )}
-            <span className="ml-auto flex items-center gap-2">
-              <span className="hidden sm:inline">{tArt.shareLabel}</span>
-              <a
-                href={`https://wa.me/?text=${encodeURIComponent(shareText + " " + shareUrl)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={tArt.shareWaLabel}
-                className="flex h-7 w-7 items-center justify-center rounded-full border border-line text-muted transition-all hover:border-accent hover:bg-accent hover:text-white"
-              >
-                <MessageCircle size={13} aria-hidden="true" />
-              </a>
-              <a
-                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${shareUrl}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={tArt.shareXLabel}
-                className="flex h-7 w-7 items-center justify-center rounded-full border border-line text-muted transition-all hover:border-accent hover:bg-accent hover:text-white text-[11px] font-extrabold"
-              >
-                X
-              </a>
-            </span>
+            <ArticleShare
+              url={shareUrl}
+              text={shareText}
+              labels={{
+                wa: tArt.shareWaLabel,
+                x: tArt.shareXLabel,
+                fb: isEn ? "Share to Facebook" : "Bagikan ke Facebook",
+                ig: isEn ? "Copy for Instagram" : "Salin untuk Instagram",
+                copy: isEn ? "Copy link" : "Salin tautan",
+                copied: isEn ? "Copied!" : "Tersalin!",
+                share: tArt.shareLabel,
+              }}
+            />
           </div>
         </header>
 

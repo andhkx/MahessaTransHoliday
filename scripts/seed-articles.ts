@@ -22,11 +22,11 @@ export type Article = {
 export const SEED_ARTICLES: Article[] = [
   // ---- 1: 10 Destinasi Wisata Lembang Bandung ----
   {
-    title: '10 Destinasi Wisata Lembang Bandung Wajib Dikunjungi 2025',
-    slug: '10-destinasi-wisata-lembang-bandung-2025',
+    title: '10 Destinasi Wisata Lembang Bandung Wajib Dikunjungi 2026',
+    slug: '10-destinasi-wisata-lembang-bandung-2026',
     excerpt:
       'Panduan lengkap 10 destinasi wisata Lembang Bandung paling hits: Farmhouse, Floating Market, Tangkuban Peratu, harga tiket, jam buka, dan paket transport dari Cimahi.',
-    content: `Lembang selalu masuk top-of-mind kalau bicara wisata Bandung. Udah belasan tahun jadi tujuan utama keluarga dari Jabodetabek, dan di 2025 deretan destinasi di Lembang makin lengkap — dari farm aesthetic sampai cafe view gunung. Artikel ini merangkum 10 destinasi wisata Lembang Bandung yang wajib kamu masukin itinerary 2025, lengkap dengan estimasi harga tiket, jam operasional, dan tips transport dari Cimahi atau Bandung kota.
+    content: `Lembang selalu masuk top-of-mind kalau bicara wisata Bandung. Udah belasan tahun jadi tujuan utama keluarga dari Jabodetabek, dan di 2026 deretan destinasi di Lembang makin lengkap — dari farm aesthetic sampai cafe view gunung. Artikel ini merangkum 10 destinasi wisata Lembang Bandung yang wajib kamu masukin itinerary 2026, lengkap dengan estimasi harga tiket, jam operasional, dan tips transport dari Cimahi atau Bandung kota.
 
 Lembang itu sejatinya kawasan dataran tinggi di Bandung Utara, ketinggian rata-rata 1.200 mdpl, jadi udaranya adem dan view-nya selalu diselimuti kabut tipis di pagi hari. Lokasinya cuma 30–45 menit dari Cimahi dan sekitar 1 jam dari pusat kota Bandung via Jalan Setiabudi. Karena itu Lembang jadi opsi one-day trip favorit: pagi naik, sore udah pulang. Aktivitas di Lembang terbagi jadi tiga kategori: wisata alam, wisata rekreasi keluarga, dan wisata kuliner plus outbound. Yang perlu diingat, weekend Lembang itu padat. Kalau mau santai, berangkat weekday atau sebelum jam 9 pagi. Cuaca Lembang adem sepanjang tahun dengan suhu 18–24°C, bawain jaket tipis atau hoodie.
 
@@ -118,9 +118,9 @@ A: Ada. Cek [paket Lembang 1 hari](/paket) kami yang sudah include transport + t
 
 Lembang tetap jadi primadona wisata Bandung Utara. Dengan 10 destinasi di atas, kamu bisa mix itinerary 1–2 hari sesuai budget. Yang penting booking transport lebih awal supaya ga kehabisan armada di high season.`,
     category: 'destinasi',
-    meta_title: '10 Destinasi Wisata Lembang Bandung Wajib 2025',
+    meta_title: '10 Destinasi Wisata Lembang Bandung Wajib 2026',
     meta_description:
-      'Cek 10 destinasi wisata Lembang Bandung paling hits 2025: Farmhouse, Floating Market, Tangkuban Peratu, harga tiket, dan paket transport dari Cimahi. Booking sekarang!',
+      'Cek 10 destinasi wisata Lembang Bandung paling hits 2026: Farmhouse, Floating Market, Tangkuban Peratu, harga tiket, dan paket transport dari Cimahi. Booking sekarang!',
     is_featured: true,
     status: 'published',
   },
@@ -572,7 +572,7 @@ Bromo dari Bandung via Hiace sangat doable dalam 3 hari 2 malam. Budget ±Rp2jt/
     title: 'Antar Jemput Bandara Kertajati dari Cimahi & Bandung: Tarif & Tips',
     slug: 'antar-jemput-bandara-kertajati-dari-cimahi-bandung',
     excerpt:
-      'Tarif antar jemput Bandara Kertajati dari Cimahi & Bandung 2025: Innova Rp1.3jt, Hiace Rp1.5jt, Elf Rp2jt. Plus tips jadwal pesawat dan booking online.',
+      'Tarif antar jemput Bandara Kertajati dari Cimahi & Bandung 2026: Innova Rp1.3jt, Hiace Rp1.5jt, Elf Rp2jt. Plus tips jadwal pesawat dan booking online.',
     content: `Bandara Internasional Kertajati (KJT) di Majalengka adalah bandara utama Jawa Barat selain Soekarno-Hatta. Lokasinya ±120 km dari Cimahi atau Bandung, waktu tempuh 2–2.5 jam via Tol Cisumdawu. Karena jaraknya, opsi antar jemput sangat strategis dibanding naik kereta atau bus yang masih terbatas.
 
 Artikel ini merangkum tarif, armada, dan tips booking antar jemput Bandara Kertajati dari Cimahi dan Bandung. Booking via [form kontak](/kontak) atau WhatsApp [62895327077214](https://wa.me/62895327077214).
@@ -694,26 +694,26 @@ Sebagai penutup tambahan untuk antar jemput Bandara Kertajati. Pertama, untuk pe
 
 Untuk booking: weekday H-7, weekend/high season H-14 disarankan. Cek [antar jemput Kertajati](/artikel/antar-jemput-bandara-kertajati-dari-cimahi-bandung) untuk detail tarif. Sopir bantu muat dan turun bagasi, handling profesional untuk koper besar.
 
-Untuk paket antar jemput yang lebih lengkap, cek juga layanan [paket wisata lainnya](/paket) kami. Sopir kami sudah hafal titik jemput dan drop di sekitar Cimahi, Bandung kota, Padalarang, hingga Lembang. Untuk group umrah yang jadwalnya mepet dengan penerbangan, kami juga bisa handle penjemputan dini hari (surcharge 20% jam 22.00–05.00). Selalu konfirmasi jadwal H-1 via WhatsApp untuk memastikan tidak ada perubahan flight yang terlewat. Untuk paket Kertajati 2025 dengan harga update, hubungi kami untuk penawaran terbaik.
+Untuk paket antar jemput yang lebih lengkap, cek juga layanan [paket wisata lainnya](/paket) kami. Sopir kami sudah hafal titik jemput dan drop di sekitar Cimahi, Bandung kota, Padalarang, hingga Lembang. Untuk group umrah yang jadwalnya mepet dengan penerbangan, kami juga bisa handle penjemputan dini hari (surcharge 20% jam 22.00–05.00). Selalu konfirmasi jadwal H-1 via WhatsApp untuk memastikan tidak ada perubahan flight yang terlewat. Untuk paket Kertajati 2026 dengan harga update, hubungi kami untuk penawaran terbaik.
 
 ## Kesimpulan
 
 Antar jemput Bandara Kertajati dari Cimahi/Bandung paling nyaman dengan Innova Reborn atau Hiace Premio. Booking via WhatsApp [62895327077214](https://wa.me/62895327077214) untuk dapat jadwal sesuai flight.`,
     category: 'panduan',
-    meta_title: 'Antar Jemput Bandara Kertajati dari Cimahi & Bandung 2025',
+    meta_title: 'Antar Jemput Bandara Kertajati dari Cimahi & Bandung 2026',
     meta_description:
-      'Tarif antar jemput Bandara Kertajati dari Cimahi & Bandung 2025: Innova Rp1.3jt, Hiace Rp1.5jt. Booking online via WA, armada lengkap, 24 jam. Cek sekarang!',
+      'Tarif antar jemput Bandara Kertajati dari Cimahi & Bandung 2026: Innova Rp1.3jt, Hiace Rp1.5jt. Booking online via WA, armada lengkap, 24 jam. Cek sekarang!',
     is_featured: true,
     status: 'published',
   },
 
-  // ---- 6: Tarif Charter Hiace Bandung 2025 ----
+  // ---- 6: Tarif Charter Hiace Bandung 2026 ----
   {
-    title: 'Tarif Charter Hiace Bandung 2025: Update Harga & Perbandingan',
-    slug: 'tarif-charter-hiace-bandung-2025',
+    title: 'Tarif Charter Hiace Bandung 2026: Update Harga & Perbandingan',
+    slug: 'tarif-charter-hiace-bandung-2026',
     excerpt:
-      'Tarif charter Hiace Bandung 2025 update: Hiace Commuter Rp1.3jt, Premio Rp1.5jt/12 jam, Elf Rp1.8jt. Plus perbandingan dengan Innova dan tips hemat charter.',
-    content: `Charter Hiace di Bandung untuk 2025 berkisar Rp1.3jt sampai Rp1.8jt per hari, tergantung tipe dan durasi. Buat kamu yang mau trip group atau family gathering, artikel ini merangkum tarif terbaru, perbandingan dengan Innova, dan tips supaya dapat harga terbaik.
+      'Tarif charter Hiace Bandung 2026 update: Hiace Commuter Rp1.3jt, Premio Rp1.5jt/12 jam, Elf Rp1.8jt. Plus perbandingan dengan Innova dan tips hemat charter.',
+    content: `Charter Hiace di Bandung untuk 2026 berkisar Rp1.3jt sampai Rp1.8jt per hari, tergantung tipe dan durasi. Buat kamu yang mau trip group atau family gathering, artikel ini merangkum tarif terbaru, perbandingan dengan Innova, dan tips supaya dapat harga terbaik.
 
 Booking via [form kontak](/kontak) atau langsung WhatsApp [62895327077214](https://wa.me/62895327077214).
 
@@ -853,11 +853,11 @@ A: Ya, sopir kami sudah berpengalaman 5+ tahun dengan semua rute di Bandung Raya
 **Q: Bisa ubah rute di tengah jalan?**
 A: Bisa, selama masih dalam jam paket. Kalau lewat, ada charge overtime Rp50.000/jam.
 
-Sebagai penutup tambahan untuk charter HiaceSebagai penutup tambahan untuk tarif charter Hiace Bandung 2025. Pertama, untuk booking Hiace: bandingkan harga dan layanan, pastikan izin resmi dan armada sendiri (bukan broker), baca testimoni pelanggan. Kedua, Hiace Luxury interior premium tersedia untuk VIP trip dengan audio entertainment dan mini bar. Ketiga, long trip (Bromo, Pangandaran): pilih full coverage asuransi (deductible Rp500rb–1jt). Keempat, untuk cargo: Hiace Commuter muat 1–2 ton lebih murah dari truk kecil. Kelima, untuk rute populer: Cimahi→Lembang 30 menit half-day charter, Cimahi→Ciwidey 1.5–2 jam full-day, Bandung→Pangandaran 6–7 jam overnight, Bandung→Bromo 12–14 jam 3 hari.
+Sebagai penutup tambahan untuk charter HiaceSebagai penutup tambahan untuk tarif charter Hiace Bandung 2026. Pertama, untuk booking Hiace: bandingkan harga dan layanan, pastikan izin resmi dan armada sendiri (bukan broker), baca testimoni pelanggan. Kedua, Hiace Luxury interior premium tersedia untuk VIP trip dengan audio entertainment dan mini bar. Ketiga, long trip (Bromo, Pangandaran): pilih full coverage asuransi (deductible Rp500rb–1jt). Keempat, untuk cargo: Hiace Commuter muat 1–2 ton lebih murah dari truk kecil. Kelima, untuk rute populer: Cimahi→Lembang 30 menit half-day charter, Cimahi→Ciwidey 1.5–2 jam full-day, Bandung→Pangandaran 6–7 jam overnight, Bandung→Bromo 12–14 jam 3 hari.
 
 Untuk konsultasi gratis: WhatsApp kami atau gunakan [Vehicle Finder](/temukan) — info tanggal, lokasi, jumlah peserta, destinasi, durasi, budget untuk rekomendasi akurat. Paket bundling (armada+hotel+makan+tiket) diskon 10–15% worth untuk group gathering.
 
- di Bandung 2025. Pertama, untuk booking Hiace: bandingkan harga dan layanan dari beberapa operator, pastikan punya izin resmi dan armada sendiri (bukan broker), baca testimoni pelanggan sebelumnya. Kedua, Hiace Luxury dengan interior premium tersedia untuk VIP trip. Ketiga, untuk long trip (Bromo, Pangandaran): pilih paket full coverage asuransi. KeempatUntuk konsultasi lebih lanjut, gunakan [Vehicle Finder](/temukan) kami — jawab beberapa pertanyaan tentang jumlah penumpang dan budget untuk rekomendasi otomatis. Atau langsung hubungi WhatsApp untuk diskusi kebutuhan trip kamu. Sopir kami hafal rute Bandung Raya dan siap kasih rekomendasi spot makan atau rest area terbaik selama perjalanan. Untuk paket wisata dengan Hiace yang lebih lengkap, cek [paket kami](/paket) untuk bundling transport+hotel+makan+tiket.
+ di Bandung 2026. Pertama, untuk booking Hiace: bandingkan harga dan layanan dari beberapa operator, pastikan punya izin resmi dan armada sendiri (bukan broker), baca testimoni pelanggan sebelumnya. Kedua, Hiace Luxury dengan interior premium tersedia untuk VIP trip. Ketiga, untuk long trip (Bromo, Pangandaran): pilih paket full coverage asuransi. KeempatUntuk konsultasi lebih lanjut, gunakan [Vehicle Finder](/temukan) kami — jawab beberapa pertanyaan tentang jumlah penumpang dan budget untuk rekomendasi otomatis. Atau langsung hubungi WhatsApp untuk diskusi kebutuhan trip kamu. Sopir kami hafal rute Bandung Raya dan siap kasih rekomendasi spot makan atau rest area terbaik selama perjalanan. Untuk paket wisata dengan Hiace yang lebih lengkap, cek [paket kami](/paket) untuk bundling transport+hotel+makan+tiket.
 
 , untuk cargo: Hiace Commuter bisa muat 1–2 ton (lebih murah dari truk kecil).
 
@@ -867,11 +867,11 @@ Untuk armada Hiace yang lebih spesifik, berikut detail: Commuter 14-seat AC doub
 
 ## Kesimpulan
 
-Charter Hiace Commuter Rp1.3jt atau Premio Rp1.5jt adalah harga standar Bandung 2025. Booking via WhatsApp [62895327077214](https://wa.me/62895327077214) atau [form kontak](/kontak) untuk jadwal sesuai kebutuhan.`,
+Charter Hiace Commuter Rp1.3jt atau Premio Rp1.5jt adalah harga standar Bandung 2026. Booking via WhatsApp [62895327077214](https://wa.me/62895327077214) atau [form kontak](/kontak) untuk jadwal sesuai kebutuhan.`,
     category: 'panduan',
-    meta_title: 'Tarif Charter Hiace Bandung 2025: Update & Perbandingan',
+    meta_title: 'Tarif Charter Hiace Bandung 2026: Update & Perbandingan',
     meta_description:
-      'Tarif charter Hiace Bandung 2025: Commuter Rp1.3jt, Premio Rp1.5jt/12 jam. Plus perbandingan Innova, tips hemat, rute populer. Booking via WA Mahessa Trans!',
+      'Tarif charter Hiace Bandung 2026: Commuter Rp1.3jt, Premio Rp1.5jt/12 jam. Plus perbandingan Innova, tips hemat, rute populer. Booking via WA Mahessa Trans!',
     is_featured: false,
     status: 'published',
   },
@@ -1198,7 +1198,7 @@ Beberapa variasi gathering populer: adventure (outbound + paintball), culinary (
 
 Gathering itu investasi tim yang penting. Pilih paket sesuai budget dan karakter tim. Untuk paket custom, diskusi langsung via WhatsApp [62895327077214](https://wa.me/62895327077214) atau [form kontak](/kontak).`,
     category: 'tips',
-    meta_title: 'Paket Gathering Perusahaan Bandung Murah 2025',
+    meta_title: 'Paket Gathering Perusahaan Bandung Murah 2026',
     meta_description:
       'Paket gathering perusahaan Bandung mulai Rp350rb/orang: Lembang, Ciwidey, Pangandaran, Hiace, outbound, dokumentasi. 5 paket siap untuk 15-100 orang. Booking WA!',
     is_featured: true,
@@ -1301,9 +1301,9 @@ Kalau kamu pakai WO, pastikan mereka infoin jadwal dan rute detail ke kami.
 
 ## FAQ
 
-## Trend Wedding 2025
+## Trend Wedding 2026
 
-Beberapa tren wedding 2025 yang juga mempengaruhi pemilihan wedding car: intimate wedding (50–80 tamu), outdoor venue (villa, garden, beach), deco minimalis (sage, gold, dusty pink), dokumentasi cinematic (video 4K dengan angle drone), dan sustainable wedding (dekorasi reusable, souvenir fungsional).
+Beberapa tren wedding 2026 yang juga mempengaruhi pemilihan wedding car: intimate wedding (50–80 tamu), outdoor venue (villa, garden, beach), deco minimalis (sage, gold, dusty pink), dokumentasi cinematic (video 4K dengan angle drone), dan sustainable wedding (dekorasi reusable, souvenir fungsional).
 
 ### Wedding Car vs Wedding Organizer
 
@@ -1317,9 +1317,9 @@ Selalu siapkan backup plan untuk hal-hal teknis: hujan (payung besar atau dekora
 
 Beberapa hal teknis yang sering ditanyakan customer. Pertama, untuk wedding car, sopir kami sudah dilatih untuk acara pernikahan — tahu adat, tahu rute, dan tampil rapi. Kedua, semua wedding car sudah termasuk dekorasi standar (pita putih + bunga sederhana). Ketiga, untuk wedding adat Jawa, ada tambahan dekorasi khusus seperti janur dan payung. Keempat, kami bisa handle multi-arah (antar jemput dari rumah ke venue, lalu ke resepsi, lalu kembali).
 
-### Wedding Trends 2025
+### Wedding Trends 2026
 
-Beberapa tren wedding car Bandung 2025: dekorasi warna sage green dan gold, Alphard putih sebagai pilihan utama, Hiace Premio sebagai VIP family transport, dan dokumentasi video cinematic dari dalam mobil. Kalau kamu mau wedding yang Instagram-able, Alphard putih dengan dekorasi minimalis masih jadi favorit.
+Beberapa tren wedding car Bandung 2026: dekorasi warna sage green dan gold, Alphard putih sebagai pilihan utama, Hiace Premio sebagai VIP family transport, dan dokumentasi video cinematic dari dalam mobil. Kalau kamu mau wedding yang Instagram-able, Alphard putih dengan dekorasi minimalis masih jadi favorit.
 
 ### Pilih 1 Alphard atau Lebih?
 
@@ -1383,7 +1383,7 @@ Pilih wedding car sesuai tema, keluarga, dan budget. Alphard untuk kesan premium
     title: '10 Tempat Wisata Ciwidey Terbaik untuk Liburan Keluarga',
     slug: '10-tempat-wisata-ciwidey-terbaik',
     excerpt:
-      '10 tempat wisata Ciwidey terbaik 2025: Kawah Putih, Ranca Upas, Situ Cileunca, Glamping, Cimanggu. Lengkap dengan harga, rute, dan paket Hiace dari Cimahi.',
+      '10 tempat wisata Ciwidey terbaik 2026: Kawah Putih, Ranca Upas, Situ Cileunca, Glamping, Cimanggu. Lengkap dengan harga, rute, dan paket Hiace dari Cimahi.',
     content: `Ciwidey adalah kawasan Bandung Selatan yang lengkap: kawah, danau, agrowisata, dan glamping dalam satu area. Buat Family Gathering atau liburan keluarga, Ciwidey selalu jadi top 3 destinasi dari Cimahi atau Bandung. Artikel ini merangkum 10 tempat wisata Ciwidey terbaik, lengkap dengan harga tiket dan tips transport.
 
 Booking paket Ciwidey via [katalog paket](/paket) atau WhatsApp [62895327077214](https://wa.me/62895327077214).
@@ -1519,7 +1519,7 @@ Ciwidey punya paket lengkap untuk liburan keluarga. Pilih 3–5 destinasi utama 
     category: 'destinasi',
     meta_title: '10 Tempat Wisata Ciwidey Terbaik untuk Liburan Keluarga',
     meta_description:
-      '10 tempat wisata Ciwidey terbaik 2025: Kawah Putih, Ranca Upas, Situ Cileunca, Glamping Lakeside. Lengkap dengan harga, rute, dan paket Hiace dari Cimahi!',
+      '10 tempat wisata Ciwidey terbaik 2026: Kawah Putih, Ranca Upas, Situ Cileunca, Glamping Lakeside. Lengkap dengan harga, rute, dan paket Hiace dari Cimahi!',
     is_featured: false,
     status: 'published',
   },
@@ -1795,7 +1795,7 @@ Kertajati dari Padalarang bisa 2.5–3 jam via Tol Cisumdawu. Cocok untuk lanjut
 
 ## Tarif Whoosh
 
-Update 2025:
+Update 2026:
 
 | Rute | Tarif Reguler | Peak |
 |---|---|---|
@@ -2115,7 +2115,7 @@ Study tour Bandung 3 hari 2 malam ideal untuk siswa SMP/SMA. Pilih destinasi edu
     title: 'Family Gathering Bandung: 10 Ide Lokasi Outing Seru',
     slug: 'family-gathering-bandung-10-ide-lokasi-outing',
     excerpt:
-      '10 ide lokasi outing family gathering Bandung 2025: Lembang, Ciwidey, Pangandaran, outbound, villa, BBQ. Lengkap dengan tips pilih lokasi untuk semua umur.',
+      '10 ide lokasi outing family gathering Bandung 2026: Lembang, Ciwidey, Pangandaran, outbound, villa, BBQ. Lengkap dengan tips pilih lokasi untuk semua umur.',
     content: `Family gathering itu momen yang ditunggu-tunggu. Tapi menentukan lokasi yang cocok untuk semua umur (dari bayi sampai kakek-nenek) kadang tricky. Artikel ini kasih 10 ide lokasi family gathering Bandung plus tips supaya acaranya sukses dan berkesan untuk semua generasi.
 
 Butuh paket lengkap? Cek [paket gathering kami](/paket) atau diskusi via WhatsApp [62895327077214](https://wa.me/62895327077214).
@@ -2291,7 +2291,7 @@ Family gathering Bandung bisa di banyak lokasi. Pilih yang sesuai karakter kelua
     category: 'tips',
     meta_title: 'Family Gathering Bandung: 10 Ide Lokasi Outing Seru',
     meta_description:
-      '10 ide lokasi family gathering Bandung 2025: villa, glamping, outbound, pantai. Lengkap dengan tips pilih lokasi untuk semua umur dan paket all-in dari Rp300rb!',
+      '10 ide lokasi family gathering Bandung 2026: villa, glamping, outbound, pantai. Lengkap dengan tips pilih lokasi untuk semua umur dan paket all-in dari Rp300rb!',
     is_featured: false,
     status: 'published',
   },
@@ -2693,11 +2693,11 @@ Garut 2D1N ideal untuk family atau group kecil yang mau mix gunung + waterpark +
 
   // ---- 17: Tips Liburan Akhir Tahun ----
   {
-    title: 'Tips Liburan Akhir Tahun di Bandung: High Season 2025',
-    slug: 'tips-liburan-akhir-tahun-bandung-2025',
+    title: 'Tips Liburan Akhir Tahun di Bandung: High Season 2026',
+    slug: 'tips-liburan-akhir-tahun-bandung-2026',
     excerpt:
-      'Tips liburan akhir tahun di Bandung 2025: high season price, booking armada jauh hari, rute alternatif, destinasi low-season, dan trik hindari macet libur Nataru.',
-    content: `Libur Natal dan Tahun Baru (Nataru) adalah high season Bandung. Harga naik 30–100%, hotel sold out, dan jalanan macet parah. Tapi dengan planning yang tepat, kamu tetap bisa liburan tanpa stress. Artikel ini kasih tips lengkap liburan akhir tahun di Bandung 2025.
+      'Tips liburan akhir tahun di Bandung 2026: high season price, booking armada jauh hari, rute alternatif, destinasi low-season, dan trik hindari macet libur Nataru.',
+    content: `Libur Natal dan Tahun Baru (Nataru) adalah high season Bandung. Harga naik 30–100%, hotel sold out, dan jalanan macet parah. Tapi dengan planning yang tepat, kamu tetap bisa liburan tanpa stress. Artikel ini kasih tips lengkap liburan akhir tahun di Bandung 2026.
 
 Booking armada untuk Nataru sebaiknya 1 bulan sebelumnya. Hubungi kami via [form kontak](/kontak) atau WhatsApp [62895327077214](https://wa.me/62895327077214).
 
@@ -2831,9 +2831,9 @@ Alternatif Nataru: staycation di kota sendiri atau kota tetangga. Bandung punya 
 
 Buat kamu yang mau hindari keramaian Nataru, beberapa destinasi alternatif: Pangandaran (lebih ramai, tapi masih manageable dibanding Lembang), Sumedang (hidden gem), Tasikmalaya (kurang dikenal tapi banyak destinasi menarik), dan Kuningan (pegunungan dan agrowisata).
 
-### Prediksi Nataru 2025
+### Prediksi Nataru 2026
 
-Berdasarkan tren tahun-tahun sebelumnya, Nataru 2025 diprediksi lebih ramai dari 2024 karena libur panjang dan euforia pasca-pandemi. Booking jauh-jauh hari sangat disarankan — Oktober sudah mulai laris untuk Natal dan Tahun Baru.
+Berdasarkan tren tahun-tahun sebelumnya, Nataru 2026 diprediksi lebih ramai dari 2024 karena libur panjang dan euforia pasca-pandemi. Booking jauh-jauh hari sangat disarankan — Oktober sudah mulai laris untuk Natal dan Tahun Baru.
 
 ### Backup Plan untuk Liburan
 
@@ -2859,7 +2859,7 @@ Ketujuh, untuk dokumentasi Nataru, bawain powerbank karena smartphone sering dip
 A: 15–30% untuk armada. 30–50% untuk hotel.
 
 **Q: Booking dari sekarang cukup?**
-A: Untuk Nataru 2025, mumpung masih awal. Booking Hiace 1 bulan sebelumnya recommended.
+A: Untuk Nataru 2026, mumpung masih awal. Booking Hiace 1 bulan sebelumnya recommended.
 
 **Q: Bisa cancel booking?**
 Paket kami mendukung refund cancel H-7 full refund, H-3 50%, H-1 no refund.
@@ -2883,7 +2883,7 @@ Untuk kombinasi 2 hari: hari1 city tour, hari2 Lembang via [itinerary Lembang](/
 
 Untuk variasi Nataru, beberapa alternatif selain Lembang dan Ciwidey: Pangandaran, Sumedang, Tasikmalaya, Kuningan, atau staycation di Bandung kota. Pilih sesuai karakter dan budget.
 
-Sebagai penutup tambahan untuk liburan Nataru di Bandung. Pertama, prediksi Nataru 2025 lebih ramai dari 2024 karena libur panjang dan euforia pasca-pandemi — booking Oktober sudah mulai laris. Kedua, pola perjalanan Nataru: H-2 lebih awal murah, H-1 peak paling mahal, H-Day jarang sold out. Ketiga, tips hemat: 2–3 bulan sebelumnya harga normal, hindari peak H-1–H+1, pilih destinasi tidak mainstream, manfaatkan early bird. Keempat, staycation Bandung: Trans Studio Hotel, GH Universal, Padma Hotel, Hilton — weekday Nataru relatif kosong, lebih affordable.
+Sebagai penutup tambahan untuk liburan Nataru di Bandung. Pertama, prediksi Nataru 2026 lebih ramai dari 2024 karena libur panjang dan euforia pasca-pandemi — booking Oktober sudah mulai laris. Kedua, pola perjalanan Nataru: H-2 lebih awal murah, H-1 peak paling mahal, H-Day jarang sold out. Ketiga, tips hemat: 2–3 bulan sebelumnya harga normal, hindari peak H-1–H+1, pilih destinasi tidak mainstream, manfaatkan early bird. Keempat, staycation Bandung: Trans Studio Hotel, GH Universal, Padma Hotel, Hilton — weekday Nataru relatif kosong, lebih affordable.
 
 Kelima, backup plan: alternatif destinasi (jika penuh), tanggal (jika penuh), kegiatan (indoor jika hujan). Keenam, paket bundling kami diskon 10–15%. Ketujuh, dokumentasi Nataru: bawain powerbank.
 
@@ -2891,9 +2891,9 @@ Kelima, backup plan: alternatif destinasi (jika penuh), tanggal (jika penuh), ke
 
 Nataru itu ramai tapi bisa enjoyed dengan planning yang baik. Booking lebih awal, pilih destinasi wisely, dan punya backup plan untuk hujan. Diskusikan paket Nataru via WhatsApp [62895327077214](https://wa.me/62895327077214).`,
     category: 'panduan',
-    meta_title: 'Tips Liburan Akhir Tahun Bandung: High Season 2025',
+    meta_title: 'Tips Liburan Akhir Tahun Bandung: High Season 2026',
     meta_description:
-      'Tips liburan akhir tahun Bandung 2025: booking armada jauh hari, hindari macet, destinasi alternatif, dan trik survive high season. Plan Nataru sekarang!',
+      'Tips liburan akhir tahun Bandung 2026: booking armada jauh hari, hindari macet, destinasi alternatif, dan trik survive high season. Plan Nataru sekarang!',
     is_featured: false,
     status: 'published',
   },
@@ -3257,7 +3257,7 @@ Honeymoon biasa (Rp3–5jt/pasang) sudah sangat berkesan dengan villa atau glamp
 
 ### Surprise untuk Pasangan
 
-Salah satu tren honeymoon 2025: surprise dari keluarga atau teman. Keluarga bisa koordinir surprise setup di villa: dekorasi kamar dengan bunga dan lilin, kue surprise, atau scrapbook kenangan. Sangat berkesan dan personal.
+Salah satu tren honeymoon 2026: surprise dari keluarga atau teman. Keluarga bisa koordinir surprise setup di villa: dekorasi kamar dengan bunga dan lilin, kue surprise, atau scrapbook kenangan. Sangat berkesan dan personal.
 
 ### Honeymoon ke Bali atau Bandung?
 
@@ -3446,7 +3446,7 @@ Innova Reborn bisa juga untuk wedding car dengan dekorasi standar (pita + bunga 
 
 ### Kesimpulan tentang Innova Reborn
 
-Innova Reborn tetap jadi pilihan utama rental di Bandung karena tarif kompetitif, kapasitas 6 orang ideal, bagasi cukup luas, dan spare part mudah. Untuk 2025, masih sangat worth dipertimbangkan untuk trip keluarga atau bisnis.
+Innova Reborn tetap jadi pilihan utama rental di Bandung karena tarif kompetitif, kapasitas 6 orang ideal, bagasi cukup luas, dan spare part mudah. Untuk 2026, masih sangat worth dipertimbangkan untuk trip keluarga atau bisnis.
 
 ### Asuransi dan Proteksi Innova Reborn
 
@@ -3478,7 +3478,7 @@ Setelah beberapa tahun, banyak user berpindah ke Innova Zenix (model lebih baru 
 
 ## FAQ
 
-**Q: Innova Reborn masih worth di 2025?**
+**Q: Innova Reborn masih worth di 2026?**
 A: Sangat worth. Reborn masih jadi pilihan utama untuk MPV 6-seat.
 
 **Q: Bisa bawa barang banyak?**

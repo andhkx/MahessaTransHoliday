@@ -1,9 +1,9 @@
 export const BATCH_A = [
   {
-    title: "10 Destinasi Wisata Lembang Bandung Wajib Dikunjungi 2025",
-    slug: "10-destinasi-wisata-lembang-bandung-2025",
-    excerpt: "10 destinasi wisata Lembang Bandung terpopuler 2025. Mulai dari Farmhouse, Floating Market, hingga Tangkuban Perahu. Lengkap dengan tips rute & sewa mobil.",
-    content: `Lembang adalah kawasan wisata favorit di Bandung Utara dengan kombinasi udara sejuk pegunungan, spot foto aesthetic, dan wahana keluarga lengkap. Berada di ketinggian 1.300 mdpl dengan suhu 18-22 derajat Celcius, kawasan ini hanya berjarak 20 km dari pusat kota Bandung dengan waktu tempuh 45-90 menit via Jalan Setiabudhi atau Tol Pasteur. Setiap akhir pekan Lembang dipadati ribuan wisatawan dari Jakarta dan sekitarnya yang ingin short escape tanpa penerbangan. Artikel ini merangkum 10 destinasi Lembang terbaik yang wajib masuk itinerary 2025, lengkap dengan harga tiket, jam operasional, dan rekomendasi armada sewa untuk liburan hemat bersama keluarga atau rombongan kantor.
+    title: "10 Destinasi Wisata Lembang Bandung Wajib Dikunjungi 2026",
+    slug: "10-destinasi-wisata-lembang-bandung-2026",
+    excerpt: "10 destinasi wisata Lembang Bandung terpopuler 2026. Mulai dari Farmhouse, Floating Market, hingga Tangkuban Perahu. Lengkap dengan tips rute & sewa mobil.",
+    content: `Lembang adalah kawasan wisata favorit di Bandung Utara dengan kombinasi udara sejuk pegunungan, spot foto aesthetic, dan wahana keluarga lengkap. Berada di ketinggian 1.300 mdpl dengan suhu 18-22 derajat Celcius, kawasan ini hanya berjarak 20 km dari pusat kota Bandung dengan waktu tempuh 45-90 menit via Jalan Setiabudhi atau Tol Pasteur. Setiap akhir pekan Lembang dipadati ribuan wisatawan dari Jakarta dan sekitarnya yang ingin short escape tanpa penerbangan. Artikel ini merangkum 10 destinasi Lembang terbaik yang wajib masuk itinerary 2026, lengkap dengan harga tiket, jam operasional, dan rekomendasi armada sewa untuk liburan hemat bersama keluarga atau rombongan kantor.
 
 ## Wisata Ikonik Lembang: Farmhouse, Floating Market & Dusun Bambu
 
@@ -80,10 +80,10 @@ Avanza atau **Innova Reborn** cukup untuk 4 sampai 7 orang dengan rute tanjakan 
 
 ## Kesimpulan
 
-Lembang adalah paket lengkap untuk liburan keluarga, pasangan, maupun gathering kantor dengan kombinasi wisata alam, kuliner, dan wahana anak dalam satu kawasan. Dengan mengunjungi 10 destinasi di atas, Anda bisa menyusun itinerary **1 sampai 2 hari** yang padat namun tetap santai tanpa terburu-buru. Untuk kenyamanan perjalanan, transparansi harga, dan bantuan susun itinerary sesuai budget, gunakan [layanan sewa mobil Bandung](/kontak) atau hubungi WhatsApp [wa.me/62895327077214](https://wa.me/62895327077214) untuk konsultasi gratis. Tim **Mahessa Trans Holiday** siap membantu merekomendasikan rute terbaik, jam keberangkatan ideal, dan pilihan armada yang paling sesuai agar momen liburan Anda di Lembang 2025 menjadi pengalaman tak terlupakan bersama orang terkasih.`,
+Lembang adalah paket lengkap untuk liburan keluarga, pasangan, maupun gathering kantor dengan kombinasi wisata alam, kuliner, dan wahana anak dalam satu kawasan. Dengan mengunjungi 10 destinasi di atas, Anda bisa menyusun itinerary **1 sampai 2 hari** yang padat namun tetap santai tanpa terburu-buru. Untuk kenyamanan perjalanan, transparansi harga, dan bantuan susun itinerary sesuai budget, gunakan [layanan sewa mobil Bandung](/kontak) atau hubungi WhatsApp [wa.me/62895327077214](https://wa.me/62895327077214) untuk konsultasi gratis. Tim **Mahessa Trans Holiday** siap membantu merekomendasikan rute terbaik, jam keberangkatan ideal, dan pilihan armada yang paling sesuai agar momen liburan Anda di Lembang 2026 menjadi pengalaman tak terlupakan bersama orang terkasih.`,
     category: "destinasi",
-    meta_title: "10 Wisata Lembang Bandung Terbaik 2025 | Mahessa",
-    meta_description: "10 destinasi wisata Lembang Bandung terpopuler 2025. Dari Farmhouse hingga Tangkuban Perahu, lengkap tips & rute. Chat WhatsApp sekarang!",
+    meta_title: "10 Wisata Lembang Bandung Terbaik 2026 | Mahessa",
+    meta_description: "10 destinasi wisata Lembang Bandung terpopuler 2026. Dari Farmhouse hingga Tangkuban Perahu, lengkap tips & rute. Chat WhatsApp sekarang!",
     is_featured: true,
     status: "published"
   },
@@ -353,8 +353,8 @@ Gunung Bromo adalah destinasi wajib seumur hidup yang bisa dicapai dari Bandung 
   {
     title: "Antar Jemput Bandara Kertajati dari Cimahi & Bandung: Tarif & Tips",
     slug: "antar-jemput-bandara-kertajati-dari-cimahi-bandung",
-    excerpt: "Antar jemput Bandara Kertajati dari Cimahi & Bandung. Info tarif, durasi, dan tips booking mobil Hiace atau Innova 2025.",
-    content: `Bandara Kertajati (KJT) di Majalengka adalah bandara terbesar Jabar yang melayani penerbangan internasional dan domestik dengan tiket **20-30% lebih murah** dibanding Soekarno-Hatta. Berjarak **±120 km** dari Bandung dan **±100 km** dari Cimahi, ditempuh **2-2,5 jam** via Tol Cisumdawu. Belum ada transport umum andal, sehingga **antar jemput charter** jadi solusi paling praktis. Artikel ini membahas rute, armada, tarif 2025, dan tips booking.
+    excerpt: "Antar jemput Bandara Kertajati dari Cimahi & Bandung. Info tarif, durasi, dan tips booking mobil Hiace atau Innova 2026.",
+    content: `Bandara Kertajati (KJT) di Majalengka adalah bandara terbesar Jabar yang melayani penerbangan internasional dan domestik dengan tiket **20-30% lebih murah** dibanding Soekarno-Hatta. Berjarak **±120 km** dari Bandung dan **±100 km** dari Cimahi, ditempuh **2-2,5 jam** via Tol Cisumdawu. Belum ada transport umum andal, sehingga **antar jemput charter** jadi solusi paling praktis. Artikel ini membahas rute, armada, tarif 2026, dan tips booking.
 
 ## Rute Tercepat dan Estimasi Durasi Perjalanan
 
@@ -394,11 +394,11 @@ Cocok untuk rombongan ziarah, study tour, gathering kantor, atau keluarga besar 
 
 Untuk penumpang solo, pasangan, atau grup kecil **3 sampai 4 orang** yang ingin menekan budget, **Avanza atau Xenia** bisa menjadi pilihan paling hemat. Kapasitas **3 sampai 4 penumpang** dengan bagasi terbatas untuk **3 sampai 4 koper sedang**. Keunggulan Avanza adalah konsumsi BBM sangat irit **1 liter untuk 13 km** dan tarif charter paling murah mulai **Rp450.000 one-way** sudah termasuk driver dan BBM. Cocok untuk backpacker, mahasiswa, atau pekerja migran yang sering membawa koper kecil dan ingin perjalanan privat tanpa berbagi dengan penumpang lain seperti di travel reguler. Meski lebih kecil, Avanza tetap nyaman untuk perjalanan **2 jam** via Tol Cisumdawu dengan AC yang cukup dingin.
 
-## Estimasi Tarif Lengkap 2025
+## Estimasi Tarif Lengkap 2026
 
 ### Tabel Tarif One-Way Bandung dan Cimahi ke Kertajati
 
-Berikut tabel tarif terbaru 2025 untuk layanan antar jemput charter dari Bandung dan Cimahi ke Bandara Kertajati:
+Berikut tabel tarif terbaru 2026 untuk layanan antar jemput charter dari Bandung dan Cimahi ke Bandara Kertajati:
 
 - **Avanza atau Xenia** kapasitas 3 sampai 4 orang: **Rp450.000 one-way** termasuk driver dan BBM, belum termasuk tol dan parkir
 - **Innova Reborn** kapasitas 4 sampai 7 orang: **Rp600.000 one-way** termasuk driver dan BBM, belum termasuk tol dan parkir
@@ -462,8 +462,8 @@ Bisa. Area jemput yang dilayani mencakup **Cimahi, Bandung Kota, Kabupaten Bandu
 
 Antar jemput Bandara Kertajati dari Cimahi dan Bandung paling praktis dan nyaman menggunakan layanan **charter privat** yang bisa menyesuaikan jadwal penerbangan Anda tanpa terikat jadwal shuttle. Pilih armada sesuai jumlah penumpang dan banyaknya bagasi: **Avanza** untuk solo traveler hemat, **Innova Reborn** untuk keluarga 4 sampai 7 orang, dan **Hiace Premio 14-seat** untuk rombongan besar 8 sampai 14 orang yang ingin patungan lebih murah. Selalu booking jauh-jauh hari, pilih operator resmi dengan armada sendiri dan review baik, serta pahami kebijakan pembatalan agar tidak rugi jika jadwal pesawat berubah. Hubungi [WhatsApp Mahessa](https://wa.me/62895327077214) atau [form booking](/kontak) untuk harga terbaik. Cek [pilihan armada](/armada) sesuai budget.`,
     category: "panduan",
-    meta_title: "Antar Jemput Kertajati dari Bandung | Tarif 2025",
-    meta_description: "Antar jemput Bandara Kertajati dari Cimahi & Bandung. Tarif, jadwal, dan tips booking Hiace/Innova 2025.",
+    meta_title: "Antar Jemput Kertajati dari Bandung | Tarif 2026",
+    meta_description: "Antar jemput Bandara Kertajati dari Cimahi & Bandung. Tarif, jadwal, dan tips booking Hiace/Innova 2026.",
     is_featured: true,
     status: "published"
   }

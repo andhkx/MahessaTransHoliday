@@ -51,9 +51,9 @@ Garut adalah destinasi 2H1M paling lengkap dari Bandung dengan paket gunung, air
     status: "published"
   },
   {
-    title: "Tips Liburan Akhir Tahun di Bandung: High Season 2025",
-    slug: "tips-liburan-akhir-tahun-bandung-2025",
-    excerpt: "Tips liburan akhir tahun di Bandung high season 2025. Booking lebih awal, hindari kemacetan, dan destinasi alternatif.",
+    title: "Tips Liburan Akhir Tahun di Bandung: High Season 2026",
+    slug: "tips-liburan-akhir-tahun-bandung-2026",
+    excerpt: "Tips liburan akhir tahun di Bandung high season 2026. Booking lebih awal, hindari kemacetan, dan destinasi alternatif.",
     content: `Libur akhir tahun 20 Desember sampai 5 Januari adalah high season paling padat di Bandung dengan lonjakan wisatawan 300% dari Jakarta, Bekasi, dan Karawang yang memenuhi Lembang, Ciwidey, dan pusat kota selama dua minggu penuh. Hotel bintang 3 yang biasanya Rp500.000 bisa naik ke Rp900.000-Rp1,2jt per malam, tiket masuk naik 15-20%, dan kemacetan di Setiabudhi-Lembang bisa 3 jam untuk jarak 10 km. Tanpa persiapan matang, liburan yang seharusnya healing justru jadi stres di jalan. Artikel ini merangkum tips praktis dari pengalaman menangani ratusan grup akhir tahun, mulai strategi booking, pemilihan jam berangkat, hingga destinasi alternatif yang tetap indah namun jauh lebih sepi.
 
 ## Booking Lebih Awal: Hotel, Armada, dan Tiket Wisata
@@ -97,7 +97,7 @@ Libur akhir tahun di Bandung tetap menyenangkan jika booking H-30, berangkat pag
 `,
     category: "panduan",
     meta_title: "Tips Liburan Akhir Tahun Bandung High Season",
-    meta_description: "Tips liburan akhir tahun di Bandung high season 2025. Booking lebih awal, alternatif destinasi, dan hindari kemacetan.",
+    meta_description: "Tips liburan akhir tahun di Bandung high season 2026. Booking lebih awal, alternatif destinasi, dan hindari kemacetan.",
     is_featured: false,
     status: "published"
   },
@@ -206,8 +206,8 @@ Bandung menawarkan 5 destinasi honeymoon lengkap dari glamping hutan pinus Lemba
   {
     title: "Sewa Innova Reborn Bandung: Kenapa Masih Jadi Favorit?",
     slug: "sewa-innova-reborn-bandung-kenapa-masih-favorit",
-    excerpt: "Sewa Innova Reborn Bandung: kenapa masih jadi favorit di 2025? Dibanding Zenix, Avanza, dan Hiace. Plus harga & tips booking.",
-    content: `Di tengah gempuran Innova Zenix hybrid yang lebih baru dan Hiace yang lebih besar, Innova Reborn diesel 2021-2023 masih menjadi armada paling laris di Bandung dengan occupancy 85% setiap weekend. Alasannya sederhana: kombinasi tenaga diesel 2.400cc, kabin 7-8 seat yang pas untuk keluarga, dan harga sewa Rp750.000 per hari yang 40% lebih murah dari Zenix namun jauh lebih nyaman dari Avanza. Banyak pelanggan yang sudah coba Zenix justru kembali ke Reborn karena karakter diesel yang bandel di tanjakan Lembang-Ciwidey-Pangalengan. Artikel ini mengupas tuntas kenapa Reborn masih favorit 2025, perbandingan head-to-head dengan kompetitor, dan tips booking agar dapat unit terawat.
+    excerpt: "Sewa Innova Reborn Bandung: kenapa masih jadi favorit di 2026? Dibanding Zenix, Avanza, dan Hiace. Plus harga & tips booking.",
+    content: `Di tengah gempuran Innova Zenix hybrid yang lebih baru dan Hiace yang lebih besar, Innova Reborn diesel 2021-2023 masih menjadi armada paling laris di Bandung dengan occupancy 85% setiap weekend. Alasannya sederhana: kombinasi tenaga diesel 2.400cc, kabin 7-8 seat yang pas untuk keluarga, dan harga sewa Rp750.000 per hari yang 40% lebih murah dari Zenix namun jauh lebih nyaman dari Avanza. Banyak pelanggan yang sudah coba Zenix justru kembali ke Reborn karena karakter diesel yang bandel di tanjakan Lembang-Ciwidey-Pangalengan. Artikel ini mengupas tuntas kenapa Reborn masih favorit 2026, perbandingan head-to-head dengan kompetitor, dan tips booking agar dapat unit terawat.
 
 ## Performa Mesin Diesel yang Bandel di Tanjakan Bandung
 
@@ -229,9 +229,9 @@ Interior Reborn tipe G dan V sudah dilengkapi **head unit 8 inch** dengan Blueto
 
 **Vs Hiace Premio Rp1.1jt per hari**: Hiace menang untuk 8-14 orang dengan kabin lega dan bagasi raksasa, namun untuk 6-7 orang Hiace kebesaran, tarif lebih mahal **Rp350.000**, dan sulit parkir di Braga atau Ciwalk yang sempit. Reborn lincah di kota, parkir mudah **Rp15.000** di mall, dan radius putar 5,4 meter vs Hiace 6,2 meter. Jadi pilih Hiace jika **8 orang ke atas**, Reborn jika **5-7 orang**. Cek perbandingan lengkap via [temukan kendaraan](/temukan) atau lihat [armada Bandung](/armada) untuk foto interior head-to-head.
 
-## Harga Sewa 2025 dan Tips Booking Agar Dapat Unit Terawat
+## Harga Sewa 2026 dan Tips Booking Agar Dapat Unit Terawat
 
-Harga sewa Innova Reborn Bandung 2025: **Rp750.000 per hari** untuk dalam kota 12 jam termasuk driver, BBM, dan tol dalam kota **Rp30.000**; **Rp850.000** untuk luar kota Lembang-Ciwidey 12 jam; **Rp1,3jt** untuk 2 hari 1 malam termasuk driver menginap **Rp150.000**. Harga belum termasuk parkir **Rp20.000-Rp50.000** dan tiket masuk. Untuk lepas kunci, **Rp500.000 per hari** dengan syarat KTP, SIM A, dan deposit **Rp1jt**. Tarif naik **15%** di high season akhir tahun dan lebaran, jadi booking **H-14** dengan DP 30% kunci harga normal.
+Harga sewa Innova Reborn Bandung 2026: **Rp750.000 per hari** untuk dalam kota 12 jam termasuk driver, BBM, dan tol dalam kota **Rp30.000**; **Rp850.000** untuk luar kota Lembang-Ciwidey 12 jam; **Rp1,3jt** untuk 2 hari 1 malam termasuk driver menginap **Rp150.000**. Harga belum termasuk parkir **Rp20.000-Rp50.000** dan tiket masuk. Untuk lepas kunci, **Rp500.000 per hari** dengan syarat KTP, SIM A, dan deposit **Rp1jt**. Tarif naik **15%** di high season akhir tahun dan lebaran, jadi booking **H-14** dengan DP 30% kunci harga normal.
 
 Tips dapat unit terawat: pertama, minta **foto odometer dan interior** sebelum DP, pilih unit **<80.000 km** dan tahun **2021 ke atas** yang masih wangi. Kedua, cek **ban** masih tebal dan **AC** dingin di semua baris saat serah terima, jangan sungkan test drive 5 menit. Ketiga, pilih operator armada sendiri bukan broker, ciri punya **bengkel dan STNK atas nama PT** serta review Google >4.7. Keempat, request **driver berpengalaman jalur Bandung** yang hafal jalan tikus anti-macet Lembang-Ciwidey dan tidak ngebut di turunan. Mahessa Trans Holiday merawat Reborn tiap 10.000 km di bengkel resmi Toyota dengan oli TMO dan filter original, sehingga unit selalu prima untuk trip jauh. Konsultasi gratis via [kontak sewa Innova](/kontak) untuk cek ketersediaan unit dan promo weekend.
 
@@ -248,11 +248,11 @@ Pilih Zenix jika prioritas gengsi corporate, kabin senyap hybrid, dan rute tol d
 
 ## Kesimpulan
 
-Innova Reborn tetap favorit 2025 karena sweet spot sempurna antara tenaga diesel bandel di tanjakan, kabin 7-seat lega untuk keluarga, dan harga Rp750.000 yang jauh lebih hemat dari Zenix namun jauh lebih nyaman dari Avanza. Untuk 5-7 orang, Reborn adalah jawaban paling rasional tanpa perlu konvoi atau sewa Hiace kebesaran. Kunci dapat unit terawat adalah booking H-14, minta foto odometer, dan pilih operator armada sendiri dengan service resmi. Cek [sewa Innova Reborn](/armada) atau bandingkan via [temukan kendaraan](/temukan) untuk buktikan sendiri kenapa ribuan keluarga Bandung masih setia dengan Reborn setiap weekend.
+Innova Reborn tetap favorit 2026 karena sweet spot sempurna antara tenaga diesel bandel di tanjakan, kabin 7-seat lega untuk keluarga, dan harga Rp750.000 yang jauh lebih hemat dari Zenix namun jauh lebih nyaman dari Avanza. Untuk 5-7 orang, Reborn adalah jawaban paling rasional tanpa perlu konvoi atau sewa Hiace kebesaran. Kunci dapat unit terawat adalah booking H-14, minta foto odometer, dan pilih operator armada sendiri dengan service resmi. Cek [sewa Innova Reborn](/armada) atau bandingkan via [temukan kendaraan](/temukan) untuk buktikan sendiri kenapa ribuan keluarga Bandung masih setia dengan Reborn setiap weekend.
 `,
     category: "panduan",
     meta_title: "Sewa Innova Reborn Bandung: Kenapa Favorit?",
-    meta_description: "Sewa Innova Reborn Bandung: kenapa masih jadi favorit 2025? Dibanding Zenix, Avanza, dan Hiace. Plus harga & tips.",
+    meta_description: "Sewa Innova Reborn Bandung: kenapa masih jadi favorit 2026? Dibanding Zenix, Avanza, dan Hiace. Plus harga & tips.",
     is_featured: false,
     status: "published"
   }

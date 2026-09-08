@@ -43,6 +43,17 @@ export default function LoginPage() {
       setCaptchaToken(null);
       setLoading(false);
     } else {
+      try {
+        const { data: { user: u } } = await supabase.auth.getUser();
+        await supabase.from('activity_logs').insert({
+          user_email: u?.email || email,
+          user_id: u?.id ?? null,
+          action: 'login',
+          entity_type: 'auth',
+          description: `Login: ${u?.email || email}`,
+          metadata: {},
+        });
+      } catch {}
       router.push('/admin/dashboard');
     }
   };
