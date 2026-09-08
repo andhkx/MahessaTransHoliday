@@ -34,6 +34,7 @@ export default function ArtikelEdit() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [featuredCount, setFeaturedCount] = useState<number | null>(null);
   const supabase = createClient();
 
   useEffect(() => {
@@ -43,6 +44,11 @@ export default function ArtikelEdit() {
     }
     loadArticle();
   }, [id]);
+
+  useEffect(() => {
+    if (article?.is_featured) return;
+    supabase.from('articles').select('id', { count: 'exact', head: true }).eq('is_featured', true).then(({ count }) => setFeaturedCount(count ?? 0));
+  }, [article?.is_featured]);
 
   const loadArticle = async () => {
     setLoading(true);
@@ -70,6 +76,13 @@ export default function ArtikelEdit() {
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!article) return;
+    if (article.is_featured) {
+      const { data: cur } = await supabase.from('articles').select('is_featured').eq('id', id).single();
+      if (!cur?.is_featured) {
+        const { count } = await supabase.from('articles').select('id', { count: 'exact', head: true }).eq('is_featured', true);
+        if ((count ?? 0) >= 10) { setError('Batas beranda penuh (10/10). Nonaktifkan salah satu artikel beranda dulu.'); return; }
+      }
+    }
     setSaving(true);
     setError(null);
     setSuccess(false);
@@ -242,18 +255,22 @@ export default function ArtikelEdit() {
             />
           </div>
 
+          {featuredCount !== null && featuredCount >= 10 && !article.is_featured && (
+            <div className="rounded-xl border border-warning/30 bg-warning/10 p-3 text-sm text-warning">Batas beranda penuh ({featuredCount}/10). Matikan salah satu artikel beranda dulu.</div>
+          )}
           <div className="flex items-start gap-3 rounded-xl border border-line bg-wa-surface/40 p-4">
             <input
               id="edit_is_featured"
               type="checkbox"
               checked={article.is_featured ?? false}
+              disabled={featuredCount !== null && featuredCount >= 10 && !article.is_featured}
               onChange={(e) => setArticle({ ...article, is_featured: e.target.checked })}
-              className="mt-1 h-5 w-5 rounded border-line text-accent focus:ring-accent"
+              className="mt-1 h-5 w-5 rounded border-line text-accent focus:ring-accent disabled:opacity-50"
             />
             <label htmlFor="edit_is_featured" className="flex-1 cursor-pointer">
-              <span className="block text-sm font-extrabold text-heading">Tampilkan di Beranda</span>
+              <span className="block text-sm font-extrabold text-heading">Tampilkan di Beranda ({featuredCount ?? '?'}/10)</span>
               <span className="block text-xs leading-relaxed text-muted">
-                Centang untuk memunculkan artikel ini di section &quot;Tips &amp; Panduan&quot; di homepage publik.
+                Centang untuk memunculkan artikel ini di section &quot;Tips &amp; Panduan&quot; di homepage publik. Maks 10 artikel tampil.
               </span>
             </label>
           </div>

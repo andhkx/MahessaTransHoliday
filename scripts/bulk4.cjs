@@ -1,0 +1,18 @@
+const fs=require('fs'),p=require('path'),f=p.join(process.cwd(),'scripts','seed-articles.ts');let s=fs.readFileSync(f,'utf8');
+const idxs=[...s.matchAll(/\n## Kesimpulan\n/g)].map(m=>m.index);
+const exps={
+5: `\nUntuk armada Hiace yang lebih spesifik, berikut detail: Commuter 14-seat AC double blower bagasi luas cocok 8–12 orang, Premio 14-seat captain seat premium untuk corporate/honeymoon long trip, Luxury full executive seat+audio+mini bar untuk VIP. Tarif sudah include sopir, BBM dalam kota, parkir. Tidak include tol, makan sopir ±Rp50.000/hari, tiket wisata, penginapan sopir overnight. Untuk rute menanjak seperti Papandayan, Hiace diesel lebih stabil.\n\n`,
+10: `\nUntuk itinerary backpacker yang lebih terstruktur, kamu bisa kombinasikan Pangandaran dengan Batu Karas untuk surfing class (±Rp100.000/2 jam) atau turtle watching di Pantai Barat. Untuk yang punya waktu lebih, tambah 1 hari untuk eksplor Green Canyon lebih dalam atau snorkeling di Pulau Pasir Putih. Beberapa travel menawarkan paket backpacker sharing yang lebih murah dari charter private. Cek grup Facebook Backpacker Bandung untuk rideshare atau travel sharing.\n\n`,
+12: `\nUntuk paket study tour yang mau tambah observatorium Bosscha ITB, booking 1 bulan sebelumnya wajib karena kuota terbatas. Cocok untuk pelajaran astronomi dan fisika. Beberapa sekolah menambahkan workshop pembuatan telur asin atau kunjungan ke pabrik tahu Lembang sebagai bagian dari study tour entrepreneurship. Untuk dokumentasi, vendor kami bisa handle foto+video 4 jam dengan rate partner.\n\n`,
+13: `\nUntuk paket family gathering dengan budget terbatas, gathering outdoor di villa dengan self-catering bisa Rp300rb/orang, atau glamping dengan paket hemat. Beberapa catering bisa customize menu: tidak pedas, lembut, bubur/nasi tim untuk anak, opsi vegetarian dan halal. Untuk sound system dan dekorasi tema, tambahan ±Rp500rb–1jt tergantung lokasi. Selalu siapkan P3K dan kontak rumah sakit rujukan.\n\n`,
+15: `\nUntuk paket Garut yang lebih lengkap, sopir kami juga bisa rekomendasi warung makan terbaik: Rumah Makan Haji Acong (Sunda legendaris), Warung Nasi Ampera, Batagor R.E khas Garut. Semua sudah teruji waktu. Untuk oleh-oleh di Sentra Jalan Cimanuk: dodol, kerupuk Garut, batik, kopi Garut. Untuk penginapan, hotel dengan private hot spring tarif mulai Rp500rb/malam sangat recommended untuk honeymoon.\n\n`,
+17: `\nUntuk paket city tour dengan guide, beberapa titik heritage punya cerita menarik yang tidak ada di Google — guide lokal kami bisa jelaskan sejarah kolonial Braga, kisah Asia Afrika 1955, dan arsitektur Gedung Sate yang unik. Untuk oleh-oleh: Batagor langsung makan di tempat, Pisang Bolen Pasar Baru/Kartika Sari, Brownies Amanda frozen, Dodol Garut banyak dijual di Bandung. Untuk transportasi lokal selain charter, angkot St Hall–Dago/Cihampelas/Buah Batu/Setiabudi atau ojol Gojek/Grab.\n\n`,
+18: `\nUntuk paket honeymoon dengan dokumentasi, photographer honeymoon mulai Rp2.5jt/4 jam dengan angle cinematic dan drone. Beberapa pasangan memilih honeymoon combo Bandung+Bali atau Bandung+Lombok untuk variasi pantai dan gunung. Untuk villa privat, private pool dan jacuzzi lebih romantis dari shared facility. Booking weekday lebih murah dan privat — ambil cuti mid-week jika memungkinkan. Pilih villa dengan backup indoor untuk hujan.\n\n`,
+};
+let n=0;
+for(const [k,v] of Object.entries(exps)){
+  const i=Number(k),pos=idxs[i];
+  if(pos===undefined){console.error('miss',k);continue;}
+  s=s.slice(0,pos+1)+v.trimStart()+s.slice(pos+1);n++;
+}
+fs.writeFileSync(f,s);console.log('done',n);

@@ -69,7 +69,7 @@ export async function getLatestArticles(limit = 6): Promise<Article[]> {
   return data || [];
 }
 
-export async function getFeaturedArticles(limit = 4): Promise<Article[]> {
+export async function getFeaturedArticles(limit = 10): Promise<Article[]> {
   const supabase = getPublicClient();
   const { data, error } = await supabase
     .from('articles')

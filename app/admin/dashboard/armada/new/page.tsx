@@ -1,12 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import ImageUpload from '@/components/admin/ImageUpload';
 import MultiImageUpload from '@/components/admin/MultiImageUpload';
 import AdminForm from '@/components/admin/AdminForm';
 import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
+
+const MAX_FEATURED = 10;
 
 const CATEGORIES = ['entry', 'midrange', 'premium', 'luxury', 'group'] as const;
 const TRANSMISSIONS = ['Automatic', 'Manual', 'Automatic CVT'] as const;
@@ -57,11 +59,20 @@ export default function ArmadaCreate() {
   const [gallery, setGallery] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [featuredCount, setFeaturedCount] = useState<number | null>(null);
   const supabase = createClient();
   const router = useRouter();
 
+  useEffect(() => {
+    supabase.from('vehicles').select('id', { count: 'exact', head: true }).eq('is_featured', true).then(({ count }) => setFeaturedCount(count ?? 0));
+  }, []);
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (is_featured && featuredCount !== null && featuredCount >= MAX_FEATURED) {
+      setError(`Batas beranda penuh (${MAX_FEATURED}/10). Nonaktifkan salah satu armada beranda dulu.`);
+      return;
+    }
     setLoading(true);
     setError(null);
 
@@ -298,6 +309,11 @@ export default function ArmadaCreate() {
           label="Foto Interior & Detail"
         />
 
+        {featuredCount !== null && featuredCount >= MAX_FEATURED && !is_featured && (
+          <div className="rounded-xl border border-warning/30 bg-warning/10 p-3 text-sm text-warning">
+            Batas beranda penuh ({featuredCount}/10). Matikan salah satu armada beranda dulu untuk menambah.
+          </div>
+        )}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-line">
           <ToggleField
             label="Tampilkan di Website"
@@ -306,10 +322,11 @@ export default function ArmadaCreate() {
             onChange={setIsActive}
           />
           <ToggleField
-            label="Tampilkan di Beranda"
-            description="Armada muncul di section utama homepage"
+            label={`Tampilkan di Beranda (${featuredCount ?? '?'}/10)`}
+            description={featuredCount !== null && featuredCount >= MAX_FEATURED && !is_featured ? `Beranda penuh (${featuredCount}/10) — kurangi dulu` : 'Armada muncul di section utama homepage'}
             checked={is_featured}
             onChange={setIsFeatured}
+            disabled={featuredCount !== null && featuredCount >= MAX_FEATURED && !is_featured}
           />
         </div>
       </AdminForm>
@@ -322,17 +339,20 @@ function ToggleField({
   description,
   checked,
   onChange,
+  disabled,
 }: {
   label: string;
   description: string;
   checked: boolean;
   onChange: (c: boolean) => void;
+  disabled?: boolean;
 }) {
   return (
     <button
       type="button"
-      onClick={() => onChange(!checked)}
-      className="flex items-start gap-3 p-3 rounded-xl border border-line hover:bg-accent/5 hover:border-accent transition text-left"
+      disabled={disabled}
+      onClick={() => { if (!disabled) onChange(!checked); }}
+      className={`flex items-start gap-3 p-3 rounded-xl border transition text-left ${disabled ? 'border-line bg-surface opacity-60 cursor-not-allowed' : 'border-line hover:bg-accent/5 hover:border-accent'}`}
     >
       <div
         className={`flex h-5 w-9 items-center rounded-full p-0.5 transition ${

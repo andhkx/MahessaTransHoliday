@@ -1,0 +1,10 @@
+import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
+const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+console.log('url', url?.slice(0,30));
+console.log('key', key ? 'ok '+key.slice(0,10) : 'missing');
+const supabase = createClient(url, key);
+const { data, error } = await supabase.from('articles').select('slug,title').limit(3);
+console.log('select', error ? error.message : JSON.stringify(data));

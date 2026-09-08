@@ -89,7 +89,7 @@ export async function getFeaturedPackages(): Promise<TravelPackage[]> {
     .eq('is_active', true)
     .eq('is_featured', true)
     .order('price')
-    .limit(4);
+    .limit(10);
   let result: TravelPackage[] = (data || []).map(mapSupabasePackage);
   if (result.length === 0) {
     const { data: fallback } = await supabase
@@ -97,7 +97,7 @@ export async function getFeaturedPackages(): Promise<TravelPackage[]> {
       .select('*')
       .eq('is_active', true)
       .order('price')
-      .limit(4);
+      .limit(10);
     result = (fallback || []).map(mapSupabasePackage);
   }
   return result;

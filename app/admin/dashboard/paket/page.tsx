@@ -42,14 +42,15 @@ export default function PaketList() {
   const [error, setError] = useState<string | null>(null);
   const [selectedDestination, setSelectedDestination] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('active');
+  const [featuredFilter, setFeaturedFilter] = useState<'all' | 'featured'>('all');
   const [query, setQuery] = useState('');
-  const [sortBy, setSortBy] = useState<'name' | 'price'>('name');
-  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
+  const [sortBy, setSortBy] = useState<'created' | 'name' | 'price'>('created');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
   const supabase = createClient();
 
   useEffect(() => {
     fetchPackages();
-  }, [selectedDestination, statusFilter]);
+  }, [selectedDestination, statusFilter, featuredFilter]);
 
   const fetchPackages = async () => {
     setLoading(true);
@@ -58,12 +59,14 @@ export default function PaketList() {
         .from('packages')
         .select(
           'id,name,slug,destination,duration_text,price,badge,cover_image_url,is_active,is_featured'
-        )
-        .order('price');
+        );
 
       if (statusFilter === 'active') query = query.eq('is_active', true);
       if (statusFilter === 'inactive') query = query.eq('is_active', false);
+      if (featuredFilter === 'featured') query = query.eq('is_featured', true);
       if (selectedDestination !== 'all') query = query.eq('destination', selectedDestination);
+      if (sortBy === 'created') query = query.order('created_at', { ascending: sortDir === 'asc' });
+      else query = query.order(sortBy === 'name' ? 'name' : 'price', { ascending: sortDir === 'asc' });
 
       const { data, error } = await query;
       if (error) throw error;
@@ -86,6 +89,18 @@ export default function PaketList() {
     } catch (err: unknown) {
       alert(err instanceof Error ? err.message : String(err));
     }
+  };
+
+  const toggleFeatured = async (p: Package) => {
+    if (!p.is_featured) {
+      const { count } = await supabase.from('packages').select('id', { count: 'exact', head: true }).eq('is_featured', true);
+      if ((count ?? 0) >= 10) { alert('Batas beranda penuh (10/10). Nonaktifkan salah satu paket beranda dulu.'); return; }
+    }
+    try {
+      const { error } = await supabase.from('packages').update({ is_featured: !p.is_featured }).eq('id', p.id);
+      if (error) throw error;
+      await fetchPackages();
+    } catch (err: unknown) { alert(err instanceof Error ? err.message : String(err)); }
   };
 
   const handleDelete = async (p: Package) => {
@@ -176,6 +191,11 @@ export default function PaketList() {
                 </button>
               ))}
             </div>
+            <div className="flex items-center gap-1.5">
+              {(['all','featured'] as const).map(v=>(
+                <button key={v} onClick={()=>setFeaturedFilter(v)} className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition ${featuredFilter===v?'bg-accent text-white border-accent':'bg-white text-heading border-line hover:border-accent'}`}>{v==='all'?'Semua':'Beranda'}</button>
+              ))}
+            </div>
 
             <select
               value={selectedDestination}
@@ -204,6 +224,7 @@ export default function PaketList() {
               <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted">Urut</span>
               {(
                 [
+                  { value: 'created', label: 'Terbaru' },
                   { value: 'name', label: 'Nama' },
                   { value: 'price', label: 'Harga' },
                 ] as const
@@ -266,14 +287,17 @@ export default function PaketList() {
                       Durasi
                     </th>
                     <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
-                      Harga
-                    </th>
-                    <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
-                      Status
-                    </th>
-                    <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
-                      Aksi
-                    </th>
+                        Harga
+                      </th>
+                      <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
+                        Status
+                      </th>
+                      <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
+                        Beranda
+                      </th>
+                      <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
+                        Aksi
+                      </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line">
@@ -318,6 +342,11 @@ export default function PaketList() {
                           <Badge tone={p.is_active ? ACTIVE_TONE : INACTIVE_TONE}>
                             {p.is_active ? 'Aktif' : 'Nonaktif'}
                           </Badge>
+                        </button>
+                      </td>
+                      <td className="px-4 py-3">
+                        <button onClick={() => toggleFeatured(p)} className="cursor-pointer" title={p.is_featured ? 'Hapus dari beranda' : 'Tampilkan di beranda'}>
+                          <Badge tone={p.is_featured ? 'primary' : 'muted'}>{p.is_featured ? 'Beranda' : '—'}</Badge>
                         </button>
                       </td>
                       <td className="px-4 py-3">

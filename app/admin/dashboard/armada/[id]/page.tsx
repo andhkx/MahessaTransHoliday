@@ -8,6 +8,8 @@ import MultiImageUpload from '@/components/admin/MultiImageUpload';
 import { Check } from 'lucide-react';
 import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
 
+const MAX_FEATURED = 10;
+
 const CATEGORIES = ['entry', 'midrange', 'premium', 'luxury', 'group'] as const;
 const TRANSMISSIONS = ['Automatic', 'Manual', 'Automatic CVT'] as const;
 const FUEL_TYPES = ['Bensin', 'Diesel', 'Bensin Hybrid'] as const;
@@ -82,7 +84,13 @@ export default function ArmadaEdit() {
   const [features, setFeatures] = useState<string[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [gallery, setGallery] = useState<string[]>([]);
+  const [featuredCount, setFeaturedCount] = useState<number | null>(null);
   const supabase = createClient();
+
+  useEffect(() => {
+    if (vehicle?.is_featured) return;
+    supabase.from('vehicles').select('id', { count: 'exact', head: true }).eq('is_featured', true).then(({ count }) => setFeaturedCount(count ?? 0));
+  }, [vehicle?.is_featured]);
 
   useEffect(() => {
     if (!vehicleId) {
@@ -356,6 +364,9 @@ export default function ArmadaEdit() {
             label="Foto Interior & Detail"
           />
 
+          {featuredCount !== null && featuredCount >= MAX_FEATURED && !vehicle.is_featured && (
+            <div className="rounded-xl border border-warning/30 bg-warning/10 p-3 text-sm text-warning col-span-2">Batas beranda penuh ({featuredCount}/10). Matikan salah satu armada beranda dulu.</div>
+          )}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-line">
             <ToggleField
               label="Tampilkan di Website"
@@ -364,9 +375,10 @@ export default function ArmadaEdit() {
               onChange={(c) => setVehicle({ ...vehicle, is_active: c })}
             />
             <ToggleField
-              label="Tampilkan di Beranda"
-              description="Armada muncul di section utama homepage"
+              label={`Tampilkan di Beranda (${featuredCount ?? '?'}/10)`}
+              description={featuredCount !== null && featuredCount >= MAX_FEATURED && !vehicle.is_featured ? `Beranda penuh (${featuredCount}/10)` : 'Armada muncul di section utama homepage'}
               checked={vehicle.is_featured}
+              disabled={featuredCount !== null && featuredCount >= MAX_FEATURED && !vehicle.is_featured}
               onChange={(c) => setVehicle({ ...vehicle, is_featured: c })}
             />
           </div>
@@ -426,17 +438,20 @@ function ToggleField({
   description,
   checked,
   onChange,
+  disabled,
 }: {
   label: string;
   description: string;
   checked: boolean;
   onChange: (c: boolean) => void;
+  disabled?: boolean;
 }) {
   return (
     <button
       type="button"
-      onClick={() => onChange(!checked)}
-      className="flex items-start gap-3 p-3 rounded-xl border border-line hover:bg-accent/5 hover:border-accent transition text-left"
+      disabled={disabled}
+      onClick={() => { if (!disabled) onChange(!checked); }}
+      className={`flex items-start gap-3 p-3 rounded-xl border transition text-left ${disabled ? 'border-line bg-surface opacity-60 cursor-not-allowed' : 'border-line hover:bg-accent/5 hover:border-accent'}`}
     >
       <div
         className={`flex h-5 w-9 items-center rounded-full p-0.5 transition ${

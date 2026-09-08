@@ -20,9 +20,9 @@ import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
 import ActivityChart from '@/components/admin/ActivityChart';
 
 type EntityStats = {
-  vehicles: { total: number; active: number };
-  packages: { total: number; active: number };
-  articles: { total: number; active: number };
+  vehicles: { total: number; active: number; featured: number };
+  packages: { total: number; active: number; featured: number };
+  articles: { total: number; active: number; featured: number };
   testimonials: { total: number; active: number };
   faq: { total: number; active: number };
   gallery: { total: number; active: number };
@@ -84,9 +84,9 @@ export default function DashboardPage() {
   const [user, setUser] = useState<{ email?: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [entityStats, setEntityStats] = useState<EntityStats>({
-    vehicles: { total: 0, active: 0 },
-    packages: { total: 0, active: 0 },
-    articles: { total: 0, active: 0 },
+    vehicles: { total: 0, active: 0, featured: 0 },
+    packages: { total: 0, active: 0, featured: 0 },
+    articles: { total: 0, active: 0, featured: 0 },
     testimonials: { total: 0, active: 0 },
     faq: { total: 0, active: 0 },
     gallery: { total: 0, active: 0 },
@@ -117,13 +117,18 @@ export default function DashboardPage() {
     const tally = async (
       table: 'vehicles' | 'packages' | 'articles' | 'testimonials' | 'faq_items' | 'gallery_items'
     ) => {
-      const [totalRes, activeRes] = await Promise.all([
+      const withFeatured = table === 'vehicles' || table === 'packages' || table === 'articles';
+      const [totalRes, activeRes, featRes] = await Promise.all([
         supabase.from(table).select('id', { count: 'exact', head: true }),
         supabase.from(table).select('id', { count: 'exact', head: true }).eq('is_active', true),
+        withFeatured
+          ? supabase.from(table).select('id', { count: 'exact', head: true }).eq('is_featured', true)
+          : Promise.resolve({ count: 0 } as any),
       ]);
       return {
         total: totalRes.count || 0,
         active: activeRes.count || 0,
+        featured: (featRes as any)?.count || 0,
       };
     };
     const [vehicles, packages, articles, testimonials, faq, gallery] =
@@ -239,6 +244,37 @@ export default function DashboardPage() {
       title="Dashboard"
       stats={statsData}
     >
+      {/* Ringkasan Beranda */}
+      <section className="mb-6 sm:mb-8 bg-white rounded-2xl border border-line shadow-card p-4 sm:p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-primary mb-1">Tampil di Beranda</p>
+            <h3 className="text-lg font-extrabold text-heading">Ringkasan Beranda (maks 10)</h3>
+            <p className="text-xs text-muted mt-1">Yang tampil di homepage. Lebih dari 10 tidak akan ditampilkan semua.</p>
+          </div>
+          <Link href="/" target="_blank" className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-accent hover:underline">Lihat Beranda <ArrowRight size={12} /></Link>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {[
+            { label: 'Armada Beranda', value: entityStats.vehicles.featured, href: '/admin/dashboard/armada?filter=featured', icon: CarFront, tone: 'accent' as const },
+            { label: 'Paket Beranda', value: entityStats.packages.featured, href: '/admin/dashboard/paket?filter=featured', icon: MapPin, tone: 'success' as const },
+            { label: 'Artikel Beranda', value: entityStats.articles.featured, href: '/admin/dashboard/artikel?filter=featured', icon: FileText, tone: 'primary' as const },
+          ].map((c) => {
+            const Icon = c.icon;
+            const over = c.value > 10;
+            return (
+              <Link key={c.label} href={c.href} className={`p-4 rounded-2xl border ${over ? 'border-warning bg-warning/5' : 'border-line bg-gradient-to-br from-accent/[0.04] to-transparent'} hover:border-accent transition`}>
+                <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${toneToBg(c.tone)} mb-2`}><Icon size={16} /></div>
+                <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-muted">{c.label}</p>
+                <p className={`text-2xl font-extrabold mt-1 ${over ? 'text-warning' : 'text-heading'}`}>{c.value}<span className="text-sm font-bold text-muted">/10</span></p>
+                {over && <p className="text-[11px] text-warning mt-1">Melebihi batas — kurangi agar semua tampil</p>}
+                <p className="text-[11px] text-accent mt-1 flex items-center gap-1">Lihat yang di beranda <ArrowRight size={10} /></p>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
       {/* Quick Actions */}
       <section className="mb-6 sm:mb-8">
         <div className="flex items-center justify-between mb-4">

@@ -17,6 +17,8 @@ type Article = {
   view_count: number;
   published_at: string | null;
   cover_image_url: string | null;
+  is_featured: boolean;
+  created_at: string;
 };
 
 const statusStyle = (s: string) =>
@@ -28,16 +30,21 @@ export default function ArtikelList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<'all' | 'draft' | 'published' | 'archived'>('all');
+  const [filterBeranda, setFilterBeranda] = useState<'all' | 'featured'>('all');
+  const [sort, setSort] = useState<'terbaru' | 'judul' | 'views'>('terbaru');
+  const [query, setQuery] = useState('');
   const supabase = createClient();
 
   const fetchArticles = async () => {
     setLoading(true);
     try {
-      let query = supabase.from('articles').select('*').order('created_at', { ascending: false });
-      if (filterStatus !== 'all') {
-        query = query.eq('status', filterStatus);
-      }
-      const { data, error } = await query;
+      let q = supabase.from('articles').select('*');
+      if (filterStatus !== 'all') q = q.eq('status', filterStatus);
+      if (filterBeranda === 'featured') q = q.eq('is_featured', true);
+      if (sort === 'terbaru') q = q.order('created_at', { ascending: false });
+      else if (sort === 'judul') q = q.order('title', { ascending: true });
+      else q = q.order('view_count', { ascending: false });
+      const { data, error } = await q;
       if (error) throw error;
       setArticles(data || []);
     } catch (err: unknown) {
@@ -49,7 +56,19 @@ export default function ArtikelList() {
 
   useEffect(() => {
     fetchArticles();
-  }, [filterStatus]);
+  }, [filterStatus, filterBeranda, sort]);
+
+  const toggleFeatured = async (a: Article) => {
+    if (!a.is_featured) {
+      const { count } = await supabase.from('articles').select('id', { count: 'exact', head: true }).eq('is_featured', true);
+      if ((count ?? 0) >= 10) { alert('Batas beranda penuh (10/10). Nonaktifkan salah satu artikel beranda dulu.'); return; }
+    }
+    try {
+      const { error } = await supabase.from('articles').update({ is_featured: !a.is_featured }).eq('id', a.id);
+      if (error) throw error;
+      await fetchArticles();
+    } catch (err: unknown) { alert(err instanceof Error ? err.message : String(err)); }
+  };
 
   const handleDelete = async (id: string) => {
     if (!window.confirm('Yakin ingin menghapus artikel ini?')) return;
@@ -62,42 +81,53 @@ export default function ArtikelList() {
     }
   };
 
+  const filteredBySearch = (() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return articles;
+    return articles.filter(a => a.title.toLowerCase().includes(q) || a.slug.toLowerCase().includes(q) || (a.excerpt||'').toLowerCase().includes(q));
+  })();
+
   return (
     <AdminDashboardLayout title="Artikel">
       <div className="bg-white rounded-2xl border border-line shadow-card p-4 sm:p-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-4">
           <div>
             <h1 className="text-xl sm:text-2xl font-extrabold text-heading">Kelola Artikel</h1>
-            <p className="text-sm text-muted mt-1">Total {articles.length} artikel</p>
+            <p className="text-sm text-muted mt-1">{filteredBySearch.length} / {articles.length} artikel</p>
           </div>
-          <div className="flex items-center gap-3 flex-wrap">
-            <select
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value as 'all' | 'draft' | 'published' | 'archived')}
-              className="px-4 py-2.5 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15 w-full sm:w-auto"
-            >
-              <option value="all">Semua Status</option>
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-              <option value="archived">Archived</option>
-            </select>
-            <Link
-              href="/admin/dashboard/artikel/new"
-              className="flex items-center gap-2 bg-accent text-white px-4 py-2.5 rounded-xl font-extrabold hover:bg-accent-hover transition shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)] whitespace-nowrap"
-            >
-              <Plus size={18} /> Tulis Artikel
-            </Link>
+          <Link
+            href="/admin/dashboard/artikel/new"
+            className="flex items-center gap-2 bg-accent text-white px-4 py-2.5 rounded-xl font-extrabold hover:bg-accent-hover transition shadow-[0_8px_20px_-8px_rgba(0,86,145,0.45)] whitespace-nowrap"
+          >
+            <Plus size={18} /> Tulis Artikel
+          </Link>
+        </div>
+        <div className="flex flex-wrap items-center gap-2 mb-3">
+          <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value as any)} className="px-3 py-2 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15">
+            <option value="all">Semua Status</option><option value="draft">Draft</option><option value="published">Published</option><option value="archived">Archived</option>
+          </select>
+          <div className="flex items-center gap-1.5">
+            {(['all','featured'] as const).map(v=>(
+              <button key={v} onClick={()=>setFilterBeranda(v)} className={`px-3 py-2 rounded-xl text-xs font-bold border transition ${filterBeranda===v?'bg-accent text-white border-accent':'bg-white text-heading border-line hover:border-accent'}`}>{v==='all'?'Semua':'Beranda'}</button>
+            ))}
+          </div>
+          <select value={sort} onChange={(e)=>setSort(e.target.value as any)} className="px-3 py-2 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15">
+            <option value="terbaru">Terbaru</option><option value="judul">Judul A-Z</option><option value="views">Views Tertinggi</option>
+          </select>
+          <div className="relative flex-1 min-w-[160px]">
+            <input value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="Cari judul/slug..." className="w-full pl-9 pr-3 py-2 border border-line rounded-xl text-sm font-bold text-heading focus:border-accent focus:ring-2 focus:ring-accent/15" />
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted">⌕</span>
           </div>
         </div>
 
         {loading && <div className="p-8 text-center text-muted">Loading...</div>}
         {error && <div className="p-8 text-center text-error">{error}</div>}
 
-        {articles.length === 0 && !loading && !error && (
-          <p className="text-center text-muted py-8">Belum ada artikel yang tersedia.</p>
+        {filteredBySearch.length === 0 && !loading && !error && (
+          <p className="text-center text-muted py-8">Belum ada artikel. {query ? `Tidak ada yang cocok "${query}"` : ''}</p>
         )}
 
-        {articles.length > 0 && (
+        {filteredBySearch.length > 0 && (
           <>
             {/* Desktop Table */}
             <div className="hidden lg:block overflow-x-auto">
@@ -109,12 +139,13 @@ export default function ArtikelList() {
                     <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Kategori</th>
                     <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Status</th>
                     <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Tgl Publish</th>
+                    <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Beranda</th>
                     <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Views</th>
                     <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">Aksi</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line">
-                  {articles.map((a) => (
+                  {filteredBySearch.map((a) => (
                     <tr key={a.id} className="hover:bg-surface/50 transition">
                       <td className="px-4 py-3">
                         {a.cover_image_url ? (
@@ -126,7 +157,7 @@ export default function ArtikelList() {
                         )}
                       </td>
                       <td className="px-4 py-3">
-                        <div className="text-sm font-bold text-heading max-w-xs truncate">{a.title}</div>
+                        <div className="flex items-center gap-2 flex-wrap"><span className="text-sm font-bold text-heading max-w-xs truncate">{a.title}</span>{a.is_featured && <span className="px-2 py-0.5 rounded-full bg-primary/15 text-primary text-[10px] font-bold">Beranda</span>}</div>
                         <p className="text-xs text-muted font-mono mt-0.5">{a.slug}</p>
                       </td>
                       <td className="px-4 py-3">
@@ -141,6 +172,11 @@ export default function ArtikelList() {
                       </td>
                       <td className="px-4 py-3 text-sm text-muted">
                         {a.published_at ? new Date(a.published_at).toLocaleDateString('id-ID') : '-'}
+                      </td>
+                      <td className="px-4 py-3">
+                        <button onClick={() => toggleFeatured(a)} className="cursor-pointer" title={a.is_featured ? 'Hapus dari beranda' : 'Tampilkan di beranda'}>
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${a.is_featured ? 'bg-primary/15 text-primary' : 'bg-muted/15 text-muted'}`}>{a.is_featured ? 'Beranda' : '—'}</span>
+                        </button>
                       </td>
                       <td className="px-4 py-3 text-sm text-muted">{a.view_count}</td>
                       <td className="px-4 py-3">
@@ -167,7 +203,7 @@ export default function ArtikelList() {
 
             {/* Mobile Cards */}
             <div className="lg:hidden space-y-3">
-              {articles.map((a) => (
+              {filteredBySearch.map((a) => (
                 <Link
                   key={a.id}
                   href={`/admin/dashboard/artikel/${a.id}`}

@@ -97,7 +97,7 @@ export async function getFeaturedVehicles(): Promise<Vehicle[]> {
     .eq('is_active', true)
     .eq('is_featured', true)
     .order('price_per_day')
-    .limit(4);
+    .limit(10);
   let result: Vehicle[] = (data || []).map(mapSupabaseVehicle);
   if (result.length === 0) {
     const { data: fallback } = await supabase
@@ -105,7 +105,7 @@ export async function getFeaturedVehicles(): Promise<Vehicle[]> {
       .select('*')
       .eq('is_active', true)
       .order('price_per_day')
-      .limit(4);
+      .limit(10);
     result = (fallback || []).map(mapSupabaseVehicle);
   }
   return result;

@@ -47,11 +47,12 @@ export default function GaleriList() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('active');
   const [query, setQuery] = useState('');
+  const [sortBy, setSortBy] = useState<'terbaru' | 'terlama'>('terbaru');
   const supabase = createClient();
 
   useEffect(() => {
     fetchItems();
-  }, [selectedCategory, statusFilter]);
+  }, [selectedCategory, statusFilter, sortBy]);
 
   const fetchItems = async () => {
     setLoading(true);
@@ -59,8 +60,7 @@ export default function GaleriList() {
       let query = supabase
         .from('gallery_items')
         .select('*')
-        .order('display_order')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: sortBy === 'terlama' });
 
       if (statusFilter === 'active') query = query.eq('is_active', true);
       if (statusFilter === 'inactive') query = query.eq('is_active', false);
@@ -169,6 +169,12 @@ export default function GaleriList() {
                 </option>
               ))}
             </select>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            {(['terbaru','terlama'] as const).map(v=>(
+              <button key={v} onClick={()=>setSortBy(v)} className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition ${sortBy===v?'bg-accent text-white border-accent':'bg-white text-heading border-line hover:border-accent'}`}>{v==='terbaru'?'Terbaru':'Terlama'}</button>
+            ))}
           </div>
 
           <div className="relative flex-1 min-w-[200px]">

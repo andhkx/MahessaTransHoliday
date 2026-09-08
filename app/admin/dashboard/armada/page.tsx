@@ -45,14 +45,15 @@ export default function ArmadaList() {
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('active');
+  const [featuredFilter, setFeaturedFilter] = useState<'all' | 'featured'>('all');
   const [query, setQuery] = useState('');
-  const [sortBy, setSortBy] = useState<'name' | 'price' | 'created'>('name');
-  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc');
+  const [sortBy, setSortBy] = useState<'name' | 'price' | 'created'>('created');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
   const supabase = createClient();
 
   useEffect(() => {
     fetchVehicles();
-  }, [selectedCategory, statusFilter]);
+  }, [selectedCategory, statusFilter, featuredFilter]);
 
   const fetchVehicles = async () => {
     setLoading(true);
@@ -61,13 +62,15 @@ export default function ArmadaList() {
         .from('vehicles')
         .select(
           'id,name,slug,category,transmission,fuel_type,price_per_day,capacity,badge,image_url,is_active,is_featured,gallery'
-        )
-        .order('category')
-        .order('price_per_day');
+        );
 
       if (statusFilter === 'active') query = query.eq('is_active', true);
       if (statusFilter === 'inactive') query = query.eq('is_active', false);
+      if (featuredFilter === 'featured') query = query.eq('is_featured', true);
       if (selectedCategory !== 'all') query = query.eq('category', selectedCategory);
+      if (sortBy === 'created') query = query.order('created_at', { ascending: sortDir === 'asc' });
+      else if (sortBy === 'name') query = query.order('name', { ascending: sortDir === 'asc' });
+      else query = query.order('price_per_day', { ascending: sortDir === 'asc' });
 
       const { data, error } = await query;
       if (error) throw error;
@@ -90,6 +93,18 @@ export default function ArmadaList() {
     } catch (err: unknown) {
       alert(err instanceof Error ? err.message : String(err));
     }
+  };
+
+  const toggleFeatured = async (v: Vehicle) => {
+    if (!v.is_featured) {
+      const { count } = await supabase.from('vehicles').select('id', { count: 'exact', head: true }).eq('is_featured', true);
+      if ((count ?? 0) >= 10) { alert('Batas beranda penuh (10/10). Nonaktifkan salah satu armada beranda dulu.'); return; }
+    }
+    try {
+      const { error } = await supabase.from('vehicles').update({ is_featured: !v.is_featured }).eq('id', v.id);
+      if (error) throw error;
+      await fetchVehicles();
+    } catch (err: unknown) { alert(err instanceof Error ? err.message : String(err)); }
   };
 
   const handleDelete = async (v: Vehicle) => {
@@ -171,6 +186,11 @@ export default function ArmadaList() {
                   </button>
                 ))}
               </div>
+              <div className="flex items-center gap-1.5">
+                {(['all','featured'] as const).map(v=>(
+                  <button key={v} onClick={()=>setFeaturedFilter(v)} className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition ${featuredFilter===v?'bg-accent text-white border-accent':'bg-white text-heading border-line hover:border-accent'}`}>{v==='all'?'Semua':'Beranda'}</button>
+                ))}
+              </div>
 
               <select
                 value={selectedCategory}
@@ -199,6 +219,7 @@ export default function ArmadaList() {
               <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-muted">Urut</span>
               {(
                 [
+                  { value: 'created', label: 'Terbaru' },
                   { value: 'name', label: 'Nama' },
                   { value: 'price', label: 'Harga' },
                 ] as const
@@ -261,14 +282,17 @@ export default function ArmadaList() {
                       Transmisi
                     </th>
                     <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
-                      Harga
-                    </th>
-                    <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
-                      Status
-                    </th>
-                    <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
-                      Aksi
-                    </th>
+                        Harga
+                      </th>
+                      <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
+                        Status
+                      </th>
+                      <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
+                        Beranda
+                      </th>
+                      <th className="px-4 py-3 text-left text-[11px] font-bold uppercase tracking-[0.16em] text-muted">
+                        Aksi
+                      </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line">
@@ -314,6 +338,11 @@ export default function ArmadaList() {
                           <Badge tone={v.is_active ? ACTIVE_TONE : INACTIVE_TONE}>
                             {v.is_active ? 'Aktif' : 'Nonaktif'}
                           </Badge>
+                        </button>
+                      </td>
+                      <td className="px-4 py-3">
+                        <button onClick={() => toggleFeatured(v)} className="cursor-pointer" title={v.is_featured ? 'Hapus dari beranda' : 'Tampilkan di beranda'}>
+                          <Badge tone={v.is_featured ? 'primary' : 'muted'}>{v.is_featured ? 'Beranda' : '—'}</Badge>
                         </button>
                       </td>
                       <td className="px-4 py-3">

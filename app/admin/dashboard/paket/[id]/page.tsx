@@ -8,6 +8,8 @@ import ImageUpload from '@/components/admin/ImageUpload';
 import { Check } from 'lucide-react';
 import AdminDashboardLayout from '@/components/admin/AdminDashboardLayout';
 
+const MAX_FEATURED = 10;
+
 const DESTINATIONS = [
   'Bandung',
   'Garut',
@@ -91,7 +93,13 @@ export default function PaketEdit() {
   const [excluded, setExcluded] = useState<string[]>([]);
   const [suitableFor, setSuitableFor] = useState<string[]>([]);
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
+  const [featuredCount, setFeaturedCount] = useState<number | null>(null);
   const supabase = createClient();
+
+  useEffect(() => {
+    if (pkg?.is_featured) return;
+    supabase.from('packages').select('id', { count: 'exact', head: true }).eq('is_featured', true).then(({ count }) => setFeaturedCount(count ?? 0));
+  }, [pkg?.is_featured]);
 
   useEffect(() => {
     if (!id) {
@@ -409,6 +417,9 @@ export default function PaketEdit() {
             />
           </div>
 
+          {featuredCount !== null && featuredCount >= MAX_FEATURED && !pkg.is_featured && (
+            <div className="rounded-xl border border-warning/30 bg-warning/10 p-3 text-sm text-warning col-span-2">Batas beranda penuh ({featuredCount}/10). Matikan salah satu paket beranda dulu.</div>
+          )}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-line">
             <ToggleField
               label="Tampilkan di Website"
@@ -417,8 +428,8 @@ export default function PaketEdit() {
               onChange={(c) => setPkg({ ...pkg, is_active: c })}
             />
             <ToggleField
-              label="Tampilkan di Beranda"
-              description="Paket muncul di section utama homepage"
+              label={`Tampilkan di Beranda (${featuredCount ?? '?'}/10)`}
+              description={featuredCount !== null && featuredCount >= MAX_FEATURED && !pkg.is_featured ? `Beranda penuh (${featuredCount}/10)` : 'Paket muncul di section utama homepage'}
               checked={pkg.is_featured}
               onChange={(c) => setPkg({ ...pkg, is_featured: c })}
             />
@@ -483,17 +494,20 @@ function ToggleField({
   description,
   checked,
   onChange,
+  disabled,
 }: {
   label: string;
   description: string;
   checked: boolean;
   onChange: (c: boolean) => void;
+  disabled?: boolean;
 }) {
   return (
     <button
       type="button"
-      onClick={() => onChange(!checked)}
-      className="flex items-start gap-3 p-3 rounded-xl border border-line hover:bg-accent/5 hover:border-accent transition text-left"
+      disabled={disabled}
+      onClick={() => { if (!disabled) onChange(!checked); }}
+      className={`flex items-start gap-3 p-3 rounded-xl border transition text-left ${disabled ? 'border-line bg-surface opacity-60 cursor-not-allowed' : 'border-line hover:bg-accent/5 hover:border-accent'}`}
     >
       <div
         className={`flex h-5 w-9 items-center rounded-full p-0.5 transition ${
