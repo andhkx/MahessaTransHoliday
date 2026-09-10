@@ -84,7 +84,7 @@ export default async function PackageDetailPage({
     <>
       <JsonLd data={breadcrumbLd} />
 
-      <section className="mx-auto w-full max-w-[1300px] px-5 pb-10 pt-28 sm:px-8 md:px-12 md:pt-32">
+      <section className="detail-enter mx-auto w-full max-w-[1300px] px-5 pb-10 pt-28 sm:px-8 md:px-12 md:pt-32">
         <nav
           aria-label="Breadcrumb"
           className="mb-6 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-muted"
@@ -150,7 +150,7 @@ export default async function PackageDetailPage({
 
       <section
         id="detail-paket"
-        className="mx-auto w-full max-w-[1300px] px-5 py-10 sm:px-8 md:px-12"
+        className="detail-enter-2 mx-auto w-full max-w-[1300px] px-5 py-10 sm:px-8 md:px-12"
       >
         <div className="grid gap-10 lg:grid-cols-5 lg:gap-12">
           <div className="space-y-10 lg:col-span-3">

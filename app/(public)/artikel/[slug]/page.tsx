@@ -12,6 +12,7 @@ import { getLocale, getDict } from "@/lib/i18n/server";
 import { hreflang } from "@/lib/i18n/seo";
 import ArticleShare from "@/components/ArticleShare";
 import { createClient } from "@supabase/supabase-js";
+import { renderMarkdown } from "@/lib/markdown";
 
 
 export const dynamic = 'force-dynamic';
@@ -110,7 +111,7 @@ export default async function ArticleDetailPage({
       <JsonLd data={breadcrumbLd} />
       <JsonLd data={articleLd} />
 
-      <article className="mx-auto max-w-5xl px-5 py-28 sm:px-8 md:px-12 md:pt-32">
+      <article className="detail-enter mx-auto max-w-5xl px-5 py-28 sm:px-8 md:px-12 md:pt-32">
         <header className="mb-8 md:mb-10">
           <nav aria-label="Breadcrumb" className="mb-6 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-muted">
             <Link href="/" className="transition-colors hover:text-primary">{isEn ? "Home" : "Beranda"}</Link>
@@ -188,10 +189,7 @@ export default async function ArticleDetailPage({
           </figure>
         )}
 
-        <div
-          className="article-body"
-          dangerouslySetInnerHTML={{ __html: article.content || "" }}
-        />
+        <div className="article-body" dangerouslySetInnerHTML={{ __html: renderMarkdown(article.content || "") }} />
 
         <footer className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6">
           <Link
