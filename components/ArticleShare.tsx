@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MessageCircle, Link2, Check, Facebook, Instagram } from "lucide-react";
+import { MessageCircle, Link2, Check } from "lucide-react";
 
 export default function ArticleShare({
   url,
@@ -57,10 +57,10 @@ export default function ArticleShare({
         aria-label={labels.fb}
         className={`${btn} hover:!border-[#1877F2] hover:!bg-[#1877F2]`}
       >
-        <Facebook size={12} aria-hidden="true" />
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg>
       </a>
       <button type="button" onClick={doCopy} aria-label={labels.ig} className={`${btn} hover:!border-[#E4405F] hover:!bg-[#E4405F]`} title={labels.ig}>
-        <Instagram size={12} aria-hidden="true" />
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" /></svg>
       </button>
       <button
         type="button"
