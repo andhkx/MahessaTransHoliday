@@ -81,7 +81,7 @@ export default async function PackageDetailPage({
   };
 
   return (
-    <>
+    <div key={packageItem.slug}>
       <JsonLd data={breadcrumbLd} />
 
       <section className="detail-enter mx-auto w-full max-w-[1300px] px-5 pb-10 pt-28 sm:px-8 md:px-12 md:pt-32">
@@ -299,6 +299,6 @@ export default async function PackageDetailPage({
         title={isEn ? `Book ${packageItem.destination} package now` : `Pesan paket ${packageItem.destination} sekarang`}
         text={tPaket.ctaText}
       />
-    </>
+    </div>
   );
 }

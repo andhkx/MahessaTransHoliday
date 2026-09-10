@@ -57,7 +57,7 @@ export default async function ArticleDetailPage({
     (article as any).view_count = (article.view_count ?? 0) + 1;
   } catch {}
 
-  const latest = await getLatestArticles(5);
+  const [latest] = await Promise.all([getLatestArticles(5)]);
   const related = latest.filter((a) => a.id !== article.id).slice(0, 4);
 
   const breadcrumbLd = {
@@ -111,7 +111,7 @@ export default async function ArticleDetailPage({
       <JsonLd data={breadcrumbLd} />
       <JsonLd data={articleLd} />
 
-      <article className="detail-enter mx-auto max-w-5xl px-5 py-28 sm:px-8 md:px-12 md:pt-32">
+      <article key={article.slug} className="detail-enter mx-auto max-w-5xl px-5 py-28 sm:px-8 md:px-12 md:pt-32">
         <header className="mb-8 md:mb-10">
           <nav aria-label="Breadcrumb" className="mb-6 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-muted">
             <Link href="/" className="transition-colors hover:text-primary">{isEn ? "Home" : "Beranda"}</Link>

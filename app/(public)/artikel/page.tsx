@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { FileText } from "lucide-react";
 import PageHero from "@/components/PageHero";
+import ArtikelListClient from "./ArtikelListClient";
 import { getAllArticles } from "@/lib/data/supabase/articles";
 import { getLocale } from "@/lib/i18n/server";
 import { hreflang } from "@/lib/i18n/seo";
@@ -62,69 +60,7 @@ export default async function ArtikelPage() {
       />
 
       <section className="mx-auto w-full max-w-[1300px] px-5 py-12 sm:px-8 md:px-12 md:py-16">
-        {articles.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-line bg-white p-12 text-center">
-            <FileText size={32} className="mx-auto text-muted" />
-            <p className="mt-3 text-base font-extrabold text-heading">
-              {isEn ? "No articles yet." : "Belum ada artikel."}
-            </p>
-            <p className="mt-1 text-sm text-muted">
-              {isEn
-                ? "Our team is preparing fresh content. Check back soon."
-                : "Tim kami sedang menyiapkan konten terbaru. Cek lagi nanti."}
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {articles.map((a) => (
-              <Link
-                key={a.id}
-                href={`/artikel/${a.slug}`}
-                className="group overflow-hidden rounded-2xl border border-line bg-white shadow-card transition-all hover:-translate-y-1 hover:shadow-elevated"
-              >
-                <div className="relative aspect-[16/10] bg-surface">
-                  {a.cover_image_url ? (
-                    <Image
-                      src={a.cover_image_url}
-                      alt={a.title}
-                      fill
-                      unoptimized
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center text-muted">
-                      <FileText size={32} />
-                    </div>
-                  )}
-                </div>
-                <div className="p-5">
-                  {a.category && (
-                    <span className="mb-2 inline-block rounded-full bg-accent/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-accent">
-                      {a.category}
-                    </span>
-                  )}
-                  <h3 className="text-base font-extrabold text-heading group-hover:text-accent transition">
-                    {a.title}
-                  </h3>
-                  {a.excerpt && (
-                    <p className="mt-2 text-sm text-muted line-clamp-2">{a.excerpt}</p>
-                  )}
-                  <p className="mt-3 text-xs text-muted">
-                    {a.published_at
-                      ? new Date(a.published_at).toLocaleDateString(isEn ? "en-US" : "id-ID", {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        })
-                      : "—"}{" "}
-                    • {a.view_count} {isEn ? "views" : "views"}
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
+        <ArtikelListClient articles={articles} />
       </section>
     </>
   );

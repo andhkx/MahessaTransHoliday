@@ -77,7 +77,7 @@ export default async function VehicleDetailPage({
   };
 
   return (
-    <>
+    <div key={vehicle.slug}>
       <JsonLd data={breadcrumbLd} />
 
       <section className="detail-enter mx-auto w-full max-w-[1300px] px-5 pb-10 pt-28 sm:px-8 md:px-12 md:pt-32">
@@ -270,6 +270,6 @@ export default async function VehicleDetailPage({
         title={isEn ? `Book ${vehicle.name} now` : `Pesan ${vehicle.name} sekarang`}
         text={tArmada.ctaText}
       />
-    </>
+    </div>
   );
 }
