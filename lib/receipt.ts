@@ -183,11 +183,6 @@ export function receiptDetailRows(data: ReceiptFormData): ReceiptDetailRow[] {
   return rows;
 }
 
-/** Jumlah kolom grid sesuai isinya — supaya tabel tidak pernah setengah kosong. */
-export function receiptDetailCols(rowCount: number): 1 | 2 {
-  return rowCount <= 1 ? 1 : 2;
-}
-
 /**
  * Ambil pesan error yang bisa dibaca.
  * Supabase/PostgREST mengembalikan { code, message, details, hint } —
@@ -233,6 +228,88 @@ export function receiptErrorHint(message: string): string | null {
     return "Koneksi terputus. Periksa jaringan lalu ulangi.";
   }
   return null;
+}
+
+/** Baris kwitansi di database (dipakai form edit & riwayat). */
+export type ReceiptRecord = {
+  id: string;
+  receipt_number: string;
+  issue_date: string | null;
+  customer_name: string;
+  service_type: string;
+  vehicle_name: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  start_time: string | null;
+  end_time: string | null;
+  pickup_location: string | null;
+  destination: string | null;
+  duration_days: number;
+  price_per_day: number;
+  total_amount: number;
+  down_payment: number;
+  remaining_amount: number;
+  payment_status: PaymentStatus;
+  note: string | null;
+  bank_name: string | null;
+  bank_account: string | null;
+  bank_holder: string | null;
+  created_at: string;
+};
+
+/** Ubah baris DB -> state form (dipakai saat edit & melihat riwayat). */
+export function receiptRowToFormData(row: ReceiptRecord): ReceiptFormData {
+  return {
+    ...EMPTY_RECEIPT,
+    receiptNumber: row.receipt_number,
+    issueDate: row.issue_date ?? row.created_at.slice(0, 10),
+    customerName: row.customer_name,
+    serviceType: row.service_type,
+    vehicleName: row.vehicle_name ?? "",
+    startDate: row.start_date ?? "",
+    endDate: row.end_date ?? "",
+    startTime: row.start_time ?? "",
+    endTime: row.end_time ?? "",
+    pickupLocation: row.pickup_location ?? "",
+    destination: row.destination ?? "",
+    durationDays: row.duration_days,
+    pricePerDay: row.price_per_day,
+    downPayment: row.down_payment,
+    paymentStatus: row.payment_status,
+    note: row.note ?? "",
+    bankName: row.bank_name ?? DEFAULT_BANK.bankName,
+    bankAccount: row.bank_account ?? DEFAULT_BANK.bankAccount,
+    bankHolder: row.bank_holder ?? DEFAULT_BANK.bankHolder,
+  };
+}
+
+/** Payload insert/update Supabase dari state form. */
+export function receiptFormToPayload(
+  data: ReceiptFormData,
+  totals: { total: number; remaining: number },
+) {
+  return {
+    issue_date: data.issueDate || null,
+    customer_name: data.customerName.trim(),
+    service_type: data.serviceType,
+    vehicle_name: data.vehicleName.trim() || null,
+    start_date: data.startDate || null,
+    end_date: data.endDate || null,
+    start_time: data.startTime || null,
+    end_time: data.endTime || null,
+    pickup_location: data.pickupLocation.trim() || null,
+    destination: data.destination.trim() || null,
+    duration_days: data.durationDays,
+    price_per_day: data.pricePerDay,
+    total_amount: totals.total,
+    down_payment: data.downPayment,
+    remaining_amount: totals.remaining,
+    payment_status: data.paymentStatus,
+    note: data.note.trim() || null,
+    bank_name: data.bankName.trim() || null,
+    bank_account: data.bankAccount.trim() || null,
+    bank_holder: data.bankHolder.trim() || null,
+  };
 }
 
 /** Urutan angka saja dari nomor kwitansi: "KWT-2026-0007" -> "0007". */

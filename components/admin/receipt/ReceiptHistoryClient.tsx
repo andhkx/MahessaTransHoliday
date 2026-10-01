@@ -2,54 +2,27 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  ChevronDown,
   Eye,
   Inbox,
   Loader2,
+  Pencil,
   Search,
   Trash2,
   TriangleAlert,
 } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import ReceiptSheet from "./ReceiptSheet";
-import ReceiptPdfButton from "./ReceiptPdfButton";
+import ConfirmDelete from "@/components/admin/ConfirmDelete";
+import ReceiptPdfDownload from "./ReceiptPdfDownload";
+import ReceiptPreviewModal from "./ReceiptPreviewModal";
 import {
-  DEFAULT_BANK,
-  EMPTY_RECEIPT,
   PAYMENT_STATUS_LABEL,
   formatTanggalPendek,
-  receiptFileName,
+  receiptRowToFormData,
   rupiah,
   type PaymentStatus,
-  type ReceiptFormData,
+  type ReceiptRecord,
 } from "@/lib/receipt";
-
-type ReceiptRow = {
-  id: string;
-  receipt_number: string;
-  issue_date: string | null;
-  customer_name: string;
-  service_type: string;
-  vehicle_name: string | null;
-  start_date: string | null;
-  end_date: string | null;
-  start_time: string | null;
-  end_time: string | null;
-  pickup_location: string | null;
-  destination: string | null;
-  duration_days: number;
-  price_per_day: number;
-  total_amount: number;
-  down_payment: number;
-  remaining_amount: number;
-  payment_status: PaymentStatus;
-  note: string | null;
-  bank_name: string | null;
-  bank_account: string | null;
-  bank_holder: string | null;
-  created_at: string;
-};
 
 const STATUS_TONE: Record<PaymentStatus, string> = {
   unpaid: "bg-error/10 text-error border-error/25",
@@ -64,40 +37,16 @@ const FILTERS: { key: "all" | PaymentStatus; label: string }[] = [
   { key: "paid", label: PAYMENT_STATUS_LABEL.paid },
 ];
 
-function toFormData(row: ReceiptRow): ReceiptFormData {
-  return {
-    ...EMPTY_RECEIPT,
-    receiptNumber: row.receipt_number,
-    issueDate: row.issue_date ?? row.created_at.slice(0, 10),
-    customerName: row.customer_name,
-    serviceType: row.service_type,
-    vehicleName: row.vehicle_name ?? "",
-    startDate: row.start_date ?? "",
-    endDate: row.end_date ?? "",
-    startTime: row.start_time ?? "",
-    endTime: row.end_time ?? "",
-    pickupLocation: row.pickup_location ?? "",
-    destination: row.destination ?? "",
-    durationDays: row.duration_days,
-    pricePerDay: row.price_per_day,
-    downPayment: row.down_payment,
-    paymentStatus: row.payment_status,
-    note: row.note ?? "",
-    bankName: row.bank_name ?? DEFAULT_BANK.bankName,
-    bankAccount: row.bank_account ?? DEFAULT_BANK.bankAccount,
-    bankHolder: row.bank_holder ?? DEFAULT_BANK.bankHolder,
-  };
-}
-
 export default function ReceiptHistoryClient() {
   const supabase = createClient();
-  const [rows, setRows] = useState<ReceiptRow[]>([]);
+  const [rows, setRows] = useState<ReceiptRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<"all" | PaymentStatus>("all");
-  const [openId, setOpenId] = useState<string | null>(null);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [previewId, setPreviewId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<ReceiptRecord | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -113,7 +62,7 @@ export default function ReceiptHistoryClient() {
         setError(loadError.message || "Gagal memuat riwayat.");
         setRows([]);
       } else {
-        setRows((data ?? []) as ReceiptRow[]);
+        setRows((data ?? []) as ReceiptRecord[]);
       }
       setLoading(false);
     };
@@ -148,19 +97,21 @@ export default function ReceiptHistoryClient() {
     [rows],
   );
 
-  const handleDelete = async (row: ReceiptRow) => {
-    if (!window.confirm(`Hapus kwitansi ${row.receipt_number}? Tindakan ini tidak bisa dibatalkan.`)) {
-      return;
-    }
-    setDeletingId(row.id);
-    const { error: deleteError } = await supabase.from("receipts").delete().eq("id", row.id);
+  const previewRow = previewId ? rows.find((row) => row.id === previewId) ?? null : null;
+
+  const handleDelete = async () => {
+    const target = deleteTarget;
+    if (!target) return;
+    setDeleting(true);
+    const { error: deleteError } = await supabase.from("receipts").delete().eq("id", target.id);
     if (deleteError) {
       setError(deleteError.message || "Gagal menghapus kwitansi.");
     } else {
-      setRows((prev) => prev.filter((item) => item.id !== row.id));
-      if (openId === row.id) setOpenId(null);
+      setRows((prev) => prev.filter((item) => item.id !== target.id));
+      if (previewId === target.id) setPreviewId(null);
     }
-    setDeletingId(null);
+    setDeleting(false);
+    setDeleteTarget(null);
   };
 
   return (
@@ -258,121 +209,112 @@ export default function ReceiptHistoryClient() {
         </div>
       ) : (
         <ul className="space-y-3">
-          {filtered.map((row) => {
-            const isOpen = openId === row.id;
-            return (
-              <li
-                key={row.id}
-                className="overflow-hidden rounded-2xl border border-line bg-white shadow-card"
-              >
-                <div className="grid gap-3 p-4 sm:p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-6">
-                  <div className="min-w-0">
-                    {/* Nomor + badge: satu baris, wrap gracefully di layar sempit */}
-                    <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
-                      <span className="rounded-lg bg-accent/10 px-2 py-1 font-mono text-[11px] font-extrabold leading-none text-accent sm:text-xs">
-                        {row.receipt_number}
-                      </span>
-                      <span
-                        className={`rounded-full border px-2.5 py-1 text-[10px] font-extrabold uppercase leading-none tracking-[0.08em] ${STATUS_TONE[row.payment_status]}`}
-                      >
-                        {PAYMENT_STATUS_LABEL[row.payment_status]}
-                      </span>
-                    </div>
-
-                    {/* Nama: ruang penuh, boleh wrap, tidak dipotong */}
-                    <p className="mt-2 break-words text-[15px] font-extrabold leading-snug text-heading sm:text-base">
-                      {row.customer_name}
-                    </p>
-
-                    <p className="mt-1 break-words text-[11px] font-semibold leading-relaxed text-muted">
-                      {row.service_type}
-                      {row.vehicle_name ? ` · ${row.vehicle_name}` : ""}
-                      {row.destination ? ` · ${row.destination}` : ""} ·{" "}
-                      {formatTanggalPendek(row.issue_date ?? row.created_at)}
-                    </p>
+          {filtered.map((row) => (
+            <li
+              key={row.id}
+              className="overflow-hidden rounded-2xl border border-line bg-white shadow-card"
+            >
+              <div className="grid gap-3 p-4 sm:p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-6">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
+                    <span className="rounded-lg bg-accent/10 px-2 py-1 font-mono text-[11px] font-extrabold leading-none text-accent sm:text-xs">
+                      {row.receipt_number}
+                    </span>
+                    <span
+                      className={`rounded-full border px-2.5 py-1 text-[10px] font-extrabold uppercase leading-none tracking-[0.08em] ${STATUS_TONE[row.payment_status]}`}
+                    >
+                      {PAYMENT_STATUS_LABEL[row.payment_status]}
+                    </span>
                   </div>
 
-                  <div className="flex items-end justify-between gap-4 lg:flex-col lg:items-end lg:justify-center">
-                    <div className="text-left lg:text-right">
-                      <p className="text-lg font-extrabold leading-none tabular-nums text-heading">
-                        {rupiah(row.total_amount)}
-                      </p>
-                      {row.payment_status !== "paid" && (
-                        <p className="mt-1.5 text-[10px] font-extrabold uppercase tracking-[0.08em] text-warning">
-                          Sisa {rupiah(row.remaining_amount)}
-                        </p>
-                      )}
-                    </div>
+                  <p className="mt-2 break-words text-[15px] font-extrabold leading-snug text-heading sm:text-base">
+                    {row.customer_name}
+                  </p>
 
-                    <div className="receipt-no-print flex shrink-0 items-center gap-1.5">
-                      <ReceiptPdfButton
-                        data={toFormData(row)}
-                        label="PDF"
-                        className="inline-flex h-[34px] items-center gap-1.5 rounded-xl border border-line bg-white px-3 text-xs font-extrabold text-heading transition hover:border-accent hover:text-accent disabled:opacity-50"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setOpenId(isOpen ? null : row.id)}
-                        className="inline-flex h-[34px] items-center gap-1.5 rounded-xl border border-line bg-white px-3 text-xs font-extrabold text-heading transition hover:border-accent hover:text-accent"
-                        title="Lihat detail"
-                      >
-                        <Eye size={13} />
-                        <ChevronDown
-                          size={13}
-                          className={isOpen ? "rotate-180 transition" : "transition"}
-                        />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(row)}
-                        disabled={deletingId === row.id}
-                        className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-xl border border-line bg-white text-error transition hover:bg-error/10 disabled:opacity-50"
-                        title="Hapus kwitansi"
-                      >
-                        {deletingId === row.id ? (
-                          <Loader2 size={13} className="animate-spin" />
-                        ) : (
-                          <Trash2 size={13} />
-                        )}
-                      </button>
-                    </div>
-                  </div>
+                  <p className="mt-1 break-words text-[11px] font-semibold leading-relaxed text-muted">
+                    {row.service_type}
+                    {row.vehicle_name ? ` · ${row.vehicle_name}` : ""}
+                    {row.destination ? ` · ${row.destination}` : ""} ·{" "}
+                    {formatTanggalPendek(row.issue_date ?? row.created_at)}
+                  </p>
                 </div>
 
-                {isOpen && (
-                  <div className="border-t border-line bg-surface/30 p-4 sm:p-5">
-                    <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_260px]">
-                      <div className="receipt-scroll overflow-x-auto rounded-xl border border-line bg-white p-3">
-                        <ReceiptSheet data={toFormData(row)} />
-                      </div>
-
-                      <div className="space-y-3">
-                        <div className="rounded-xl border border-line bg-white p-4">
-                          <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-muted">
-                            Berkas
-                          </p>
-                          <p className="mt-1 break-all font-mono text-[11px] font-bold text-heading">
-                            {receiptFileName(toFormData(row))}
-                          </p>
-                        </div>
-                        <ReceiptPdfButton
-                          data={toFormData(row)}
-                          label="Unduh PDF"
-                          className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-accent px-4 py-2.5 text-xs font-extrabold text-white transition hover:bg-accent-hover disabled:opacity-50"
-                        />
-                        <div className="rounded-xl border border-line bg-white p-4 text-[11px] font-semibold leading-relaxed text-muted">
-                          Nomor kwitansi bersifat permanen. Menghapus baris ini tidak membatalkan
-                          nomor yang sudah dipakai.
-                        </div>
-                      </div>
-                    </div>
+                <div className="flex items-end justify-between gap-4 lg:flex-col lg:items-end lg:justify-center">
+                  <div className="text-left lg:text-right">
+                    <p className="text-lg font-extrabold leading-none tabular-nums text-heading">
+                      {rupiah(row.total_amount)}
+                    </p>
+                    {row.payment_status !== "paid" && (
+                      <p className="mt-1.5 text-[10px] font-extrabold uppercase tracking-[0.08em] text-warning">
+                        Sisa {rupiah(row.remaining_amount)}
+                      </p>
+                    )}
                   </div>
-                )}
-              </li>
-            );
-          })}
+
+                  <div className="receipt-no-print flex shrink-0 items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewId(row.id)}
+                      className="inline-flex h-[34px] items-center gap-1.5 rounded-xl border border-line bg-white px-3 text-xs font-extrabold text-heading transition hover:border-accent hover:text-accent"
+                      title="Lihat pratinjau"
+                    >
+                      <Eye size={13} /> <span className="hidden sm:inline">Lihat</span>
+                    </button>
+
+                    <ReceiptPdfDownload
+                      data={receiptRowToFormData(row)}
+                      label="PDF"
+                      className="inline-flex h-[34px] items-center gap-1.5 rounded-xl border border-line bg-white px-3 text-xs font-extrabold text-heading transition hover:border-accent hover:text-accent disabled:opacity-50"
+                    />
+
+                    <Link
+                      href={`/admin/dashboard/kwitansi?edit=${row.id}`}
+                      className="inline-flex h-[34px] items-center gap-1.5 rounded-xl border border-line bg-white px-3 text-xs font-extrabold text-heading transition hover:border-accent hover:text-accent"
+                      title="Edit kwitansi"
+                    >
+                      <Pencil size={13} /> <span className="hidden sm:inline">Edit</span>
+                    </Link>
+
+                    <button
+                      type="button"
+                      onClick={() => setDeleteTarget(row)}
+                      className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-xl border border-line bg-white text-error transition hover:bg-error/10"
+                      title="Hapus kwitansi"
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </li>
+          ))}
         </ul>
       )}
+
+      {/* Pratinjau popup */}
+      <ReceiptPreviewModal data={previewRow ? receiptRowToFormData(previewRow) : null} onClose={() => setPreviewId(null)} />
+
+      {/* Konfirmasi hapus */}
+      <ConfirmDelete
+        open={Boolean(deleteTarget)}
+        icon={Trash2}
+        title="Hapus Kwitansi"
+        confirmText={deleting ? "Menghapus..." : "Ya, Hapus"}
+        onCancel={() => setDeleteTarget(null)}
+        onConfirm={handleDelete}
+        text={
+          deleteTarget ? (
+            <p>
+              Apakah Anda yakin menghapus kwitansi{" "}
+              <span className="font-extrabold text-heading">
+                ({deleteTarget.receipt_number})
+              </span>{" "}
+              atas nama <span className="font-extrabold text-heading">{deleteTarget.customer_name}</span>
+              ? Nomor ini tidak akan dipakai ulang untuk kwitansi baru.
+            </p>
+          ) : null
+        }
+      />
     </div>
   );
 }
