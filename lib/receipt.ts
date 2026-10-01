@@ -184,11 +184,8 @@ export function receiptDetailRows(data: ReceiptFormData): ReceiptDetailRow[] {
 }
 
 /** Jumlah kolom grid sesuai isinya — supaya tabel tidak pernah setengah kosong. */
-export function receiptDetailCols(rowCount: number): 1 | 2 | 3 {
-  if (rowCount <= 1) return 1;
-  if (rowCount === 2) return 2;
-  if (rowCount === 3) return 3;
-  return 2;
+export function receiptDetailCols(rowCount: number): 1 | 2 {
+  return rowCount <= 1 ? 1 : 2;
 }
 
 /**
@@ -238,12 +235,13 @@ export function receiptErrorHint(message: string): string | null {
   return null;
 }
 
-/** Nama file unik untuk hasil unduhan. */
-export function receiptFileName(data: ReceiptFormData, ext: "pdf" | "png"): string {
-  const slug = (data.customerName || "pelanggan")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-    .slice(0, 40) || "pelanggan";
-  return `${data.receiptNumber || "KWT-draft"}-${slug}.${ext}`;
+/** Urutan angka saja dari nomor kwitansi: "KWT-2026-0007" -> "0007". */
+export function receiptSequence(receiptNumber: string): string {
+  const last = receiptNumber.split("-").pop() ?? "";
+  return /^\d+$/.test(last) ? last : "0000";
+}
+
+/** Nama file hasil unduhan: "Kwitansi-0001-MahessaTransHoliday.pdf" */
+export function receiptFileName(data: ReceiptFormData): string {
+  return `Kwitansi-${receiptSequence(data.receiptNumber)}-MahessaTransHoliday.pdf`;
 }

@@ -1,9 +1,9 @@
+import { forwardRef } from "react";
 import {
   EMPTY_RECEIPT,
   formatRute,
   formatTanggalPanjang,
   PAYMENT_STATUS_LABEL,
-  receiptDetailCols,
   receiptDetailRows,
   receiptRemaining,
   receiptTotal,
@@ -62,35 +62,52 @@ function InfoBlock({ label, children }: { label: string; children: React.ReactNo
   );
 }
 
-/** Sel detail: label di atas, nilai di bawah. Menyesuaikan jumlah kolom
- *  sehingga 1/2/3 isian tetap penuh dan tidak ada sel kosong. */
-function DetailCell({ label, value }: { label: string; value: string }) {
+/**
+ * Detail itinerary: 2 item per baris (kiri-kanan), label kiri nilai kanan.
+ * Item ganjil di baris terakhir melebar penuh supaya tidak ada rongga kosong.
+ * Nilai memakai `break-words` supaya rute panjang seperti "ST KCIC Padalarang"
+ * tetap rapi dan tidak memotong kolom lain.
+ */
+function DetailGrid({ rows }: { rows: { label: string; value: string }[] }) {
+  const lastIsOdd = rows.length % 2 === 1;
   return (
-    <div className="rounded-[2mm] bg-[#f2f8fc] px-[3mm] py-[2.4mm]">
-      <p
-        className="text-[7pt] font-extrabold uppercase tracking-[0.14em]"
-        style={{ color: INK_SOFT }}
-      >
-        {label}
-      </p>
-      <p className="mt-[0.8mm] text-[10pt] font-extrabold leading-tight" style={{ color: BLUE_DEEP }}>
-        {value}
-      </p>
+    <div className="mt-[4mm] grid grid-cols-2 gap-x-[10mm] gap-y-[2.6mm]">
+      {rows.map((row, index) => (
+        <div
+          key={row.label}
+          className={`flex items-baseline justify-between gap-[4mm] border-b border-dashed pb-[1.4mm] ${
+            lastIsOdd && index === rows.length - 1 ? "col-span-2" : ""
+          }`}
+          style={{ borderColor: HAIRLINE }}
+        >
+          <span
+            className="shrink-0 text-[7pt] font-extrabold uppercase tracking-[0.14em]"
+            style={{ color: INK_SOFT }}
+          >
+            {row.label}
+          </span>
+          <span
+            className="min-w-0 break-words text-right text-[9.5pt] font-extrabold leading-snug"
+            style={{ color: BLUE_DEEP }}
+          >
+            {row.value}
+          </span>
+        </div>
+      ))}
     </div>
   );
 }
 
-export default function ReceiptSheet({ data }: { data: ReceiptFormData }) {
+const ReceiptSheet = forwardRef<HTMLDivElement, { data: ReceiptFormData }>(
+  function ReceiptSheet({ data }, ref) {
   const d = { ...EMPTY_RECEIPT, ...data };
   const total = receiptTotal(d);
   const remaining = receiptRemaining(d);
   const rows = receiptDetailRows(d);
-  const cols = receiptDetailCols(rows.length);
-  const colClass =
-    cols === 1 ? "grid-cols-1" : cols === 3 ? "grid-cols-3" : "grid-cols-2";
 
   return (
     <div
+      ref={ref}
       className="receipt-sheet relative mx-auto flex w-[210mm] min-h-[297mm] flex-col bg-white shadow-[0_18px_50px_-24px_rgba(0,74,124,0.45)]"
       style={{ color: INK }}
     >
@@ -220,12 +237,7 @@ export default function ReceiptSheet({ data }: { data: ReceiptFormData }) {
                     </p>
                   )}
 
-                  {/* Jumlah kolom mengikuti isian: 1→1, 2→2, 3→3, 4→2x2 */}
-                  <div className={`mt-[3.5mm] grid gap-[3mm] ${colClass}`}>
-                    {rows.map((row) => (
-                      <DetailCell key={row.label} label={row.label} value={row.value} />
-                    ))}
-                  </div>
+                  <DetailGrid rows={rows} />
                 </td>
                 <td
                   className="border-b py-[4.5mm] text-right align-top text-[10pt] font-extrabold"
@@ -396,5 +408,8 @@ export default function ReceiptSheet({ data }: { data: ReceiptFormData }) {
         </div>
       </div>
     </div>
-  );
-}
+    );
+  },
+);
+
+export default ReceiptSheet;

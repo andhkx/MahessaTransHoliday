@@ -122,16 +122,16 @@ export default function ReceiptSheetMobile({ data }: { data: ReceiptFormData }) 
               <p className="mt-0.5 text-xs font-bold text-[#005691]">{d.vehicleName}</p>
             )}
 
-            <div className="mt-3 flex flex-col gap-2">
+            <div className="mt-3 flex flex-col gap-2.5">
               {rows.map((row) => (
                 <div
                   key={row.label}
-                  className="flex items-center justify-between gap-3 rounded-lg bg-[#f2f8fc] px-3 py-2"
+                  className="flex items-baseline justify-between gap-3 border-b border-dashed border-line pb-1.5"
                 >
                   <span className="shrink-0 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#7d93a6]">
                     {row.label}
                   </span>
-                  <span className="text-right text-xs font-extrabold text-[#003f6b]">
+                  <span className="min-w-0 break-words text-right text-xs font-extrabold leading-snug text-[#003f6b]">
                     {row.value}
                   </span>
                 </div>

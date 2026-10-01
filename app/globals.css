@@ -387,6 +387,14 @@ section[id] {
     overflow: visible !important;
   }
 
+  /* Paksa browser mencetak warna latar & garis, bukan hanya teks.
+     Tanpa ini header biru + badge + total ikut jadi putih. */
+  .receipt-sheet,
+  .receipt-sheet * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
   /* Hasil cetak SELALU memakai versi A4, apa pun toggle pratinjau */
   .receipt-view-mobile,
   .receipt-sheet-mobile {

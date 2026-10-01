@@ -1,25 +1,25 @@
 import type { Metadata } from "next";
 import AdminDashboardLayout from "@/components/admin/AdminDashboardLayout";
 import KwitansiTabs from "@/components/admin/receipt/KwitansiTabs";
-import ReceiptFormClient from "@/components/admin/receipt/ReceiptFormClient";
+import ReceiptHistoryClient from "@/components/admin/receipt/ReceiptHistoryClient";
 
 export const metadata: Metadata = {
-  title: "Kwitansi | Mahessa Admin",
+  title: "Riwayat Kwitansi | Mahessa Admin",
   robots: { index: false, follow: false },
 };
 
 export const dynamic = "force-dynamic";
 
-export default function KwitansiPage() {
+export default function RiwayatKwitansiPage() {
   return (
     <AdminDashboardLayout
       eyebrow="Dokumen"
-      title="Kwitansi Sewa Mobil"
-      subtitle="Isi data di kiri, pratinjau di kanan. Nomor dibuat otomatis dan berurutan setiap kali disimpan, lalu bisa diunduh sebagai PDF dengan nama Kwitansi-0001-MahessaTransHoliday.pdf."
+      title="Riwayat Kwitansi"
+      subtitle="Semua kwitansi yang pernah dibuat, lengkap dengan nomor, pelanggan, total, dan status pembayaran. PDF bisa diunduh ulang kapan saja dengan format Kwitansi-0001-MahessaTransHoliday.pdf."
       hideStats
     >
       <KwitansiTabs />
-      <ReceiptFormClient />
+      <ReceiptHistoryClient />
     </AdminDashboardLayout>
   );
 }

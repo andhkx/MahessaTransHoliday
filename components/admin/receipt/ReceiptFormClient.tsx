@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useMemo, useRef, useState, useSyncExternalStore } from "react";
 import {
   AlertCircle,
   BadgeCheck,
   CalendarRange,
+  Download,
   FileText,
   Loader2,
   MapPin,
@@ -19,6 +20,7 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import ReceiptSheet from "./ReceiptSheet";
 import ReceiptSheetMobile from "./ReceiptSheetMobile";
+import { downloadReceiptPdf } from "@/lib/receipt-pdf";
 import {
   DEFAULT_BANK,
   DEFAULT_RECEIPT_NOTE,
@@ -29,6 +31,7 @@ import {
   describeReceiptError,
   parseRupiah,
   receiptErrorHint,
+  receiptFileName,
   receiptRemaining,
   receiptTotal,
   rupiah,
@@ -135,6 +138,24 @@ export default function ReceiptFormClient() {
   const [viewOverride, setViewOverride] = useState<"mobile" | "a4" | null>(null);
   const view = viewOverride ?? (isCompact ? "mobile" : "a4");
 
+  const a4Ref = useRef<HTMLDivElement>(null);
+  const [exporting, setExporting] = useState(false);
+  const [exportNote, setExportNote] = useState<string | null>(null);
+
+  const handleDownloadPdf = async () => {
+    const node = a4Ref.current;
+    if (!node || exporting) return;
+    setExporting(true);
+    setExportNote(null);
+    try {
+      await downloadReceiptPdf(form, node);
+    } catch (err: unknown) {
+      setExportNote(describeReceiptError(err));
+    } finally {
+      setExporting(false);
+    }
+  };
+
   const total = useMemo(() => receiptTotal(form), [form]);
   const remaining = useMemo(() => receiptRemaining(form), [form]);
 
@@ -195,6 +216,7 @@ export default function ReceiptFormClient() {
 
       const { error: insertError } = await supabase.from("receipts").insert({
         receipt_number: receiptNumber,
+        issue_date: form.issueDate || null,
         customer_name: form.customerName.trim(),
         service_type: form.serviceType,
         vehicle_name: form.vehicleName.trim() || null,
@@ -252,8 +274,23 @@ export default function ReceiptFormClient() {
             <BadgeCheck size={16} className="mt-0.5 shrink-0" />
             <span>
               Kwitansi <span className="font-mono font-extrabold">{form.receiptNumber}</span>{" "}
-              tersimpan. Klik &ldquo;Cetak / Simpan PDF&rdquo; untuk mengunduh.
+              tersimpan. Klik &ldquo;Unduh PDF&rdquo; untuk mengunduh{" "}
+              <span className="font-mono">{receiptFileName(form)}</span>.
             </span>
+          </div>
+        )}
+
+        {exportNote && (
+          <div className="space-y-1 rounded-2xl border border-warning/40 bg-warning/10 p-4">
+            <p className="text-xs font-bold leading-relaxed text-warning">
+              Gagal membuat PDF otomatis.
+            </p>
+            <p className="text-[11px] font-semibold leading-relaxed text-warning/90">
+              {exportNote}
+            </p>
+            <p className="text-[11px] font-semibold leading-relaxed text-warning/80">
+              Sementara itu tombol &ldquo;Cetak&rdquo; tetap bisa dipakai.
+            </p>
           </div>
         )}
 
@@ -486,14 +523,23 @@ export default function ReceiptFormClient() {
               type="button"
               onClick={() => window.print()}
               disabled={!form.receiptNumber}
-              title={
-                form.receiptNumber
-                  ? "Buka dialog print, pilih Save as PDF"
-                  : "Simpan kwitansi dulu untuk membuat nomor"
-              }
+              title="Cetak langsung dari printer (cadangan)"
               className="inline-flex items-center gap-1.5 rounded-xl border border-accent bg-white px-3.5 py-2.5 text-sm font-extrabold text-accent transition hover:bg-accent/10 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              <Printer size={15} /> Cetak / Simpan PDF
+              <Printer size={15} /> Cetak
+            </button>
+            <button
+              type="button"
+              onClick={handleDownloadPdf}
+              disabled={!form.receiptNumber || exporting}
+              title={
+                form.receiptNumber
+                  ? `Unduh ${receiptFileName(form)}`
+                  : "Simpan kwitansi dulu untuk membuat nomor"
+              }
+              className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-white px-3.5 py-2.5 text-sm font-extrabold text-heading transition hover:bg-surface disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <Download size={15} /> {exporting ? "Menyiapkan..." : "Unduh PDF"}
             </button>
             <button
               type="submit"
@@ -563,19 +609,30 @@ export default function ReceiptFormClient() {
           <ReceiptSheetMobile data={form} />
         </div>
 
-        {/* Tampilan A4: 1:1 dengan hasil cetak (scroll horizontal di layar kecil) */}
+        {/*
+          Tampilan A4 SELALU ada di DOM supaya bisa di-capture jadi PDF.
+          Saat mode HP, disembunyikan dengan `h-0 overflow-hidden` (bukan
+          `display:none`) supaya computed style tetap terbaca saat rasterisasi.
+        */}
         <div
-          className={`receipt-view-a4 receipt-scroll overflow-x-auto rounded-2xl border border-line bg-surface/40 p-3 sm:p-5 ${
-            view === "a4" ? "" : "hidden"
-          }`}
+          className={
+            view === "a4" ? "" : "pointer-events-none h-0 overflow-hidden opacity-0"
+          }
+          aria-hidden={view === "a4" ? undefined : true}
         >
-          <ReceiptSheet data={form} />
+          <div className="receipt-view-a4 receipt-scroll overflow-x-auto rounded-2xl border border-line bg-surface/40 p-3 sm:p-5">
+            <ReceiptSheet ref={a4Ref} data={form} />
+          </div>
         </div>
 
         <p className="receipt-no-print mt-3 text-[11px] leading-relaxed text-muted">
-          Tekan <span className="font-bold text-heading">&ldquo;Cetak / Simpan PDF&rdquo;</span>{" "}
-          lalu pilih <span className="font-bold text-heading">Save as PDF</span> di dialog print.
-          Hasil cetak selalu memakai versi A4, apa pun tampilan pratinjau.
+          Tekan{" "}
+          <span className="font-bold text-heading">&ldquo;Unduh PDF&rdquo;</span> untuk langsung
+          mengunduh file{" "}
+          <span className="font-mono font-bold text-heading">{receiptFileName(form)}</span>. Hasilnya
+          sama persis dengan pratinjau A4. Gunakan{" "}
+          <span className="font-bold text-heading">&ldquo;Cetak&rdquo;</span> hanya jika ingin
+          mencetak langsung dari printer.
         </p>
       </div>
     </div>
