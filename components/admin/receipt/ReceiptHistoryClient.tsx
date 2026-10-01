@@ -265,70 +265,77 @@ export default function ReceiptHistoryClient() {
                 key={row.id}
                 className="overflow-hidden rounded-2xl border border-line bg-white shadow-card"
               >
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 p-4 sm:p-5">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-mono text-xs font-extrabold text-accent">
+                <div className="grid gap-3 p-4 sm:p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-6">
+                  <div className="min-w-0">
+                    {/* Nomor + badge: satu baris, wrap gracefully di layar sempit */}
+                    <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5">
+                      <span className="rounded-lg bg-accent/10 px-2 py-1 font-mono text-[11px] font-extrabold leading-none text-accent sm:text-xs">
                         {row.receipt_number}
                       </span>
                       <span
-                        className={`rounded-full border px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-[0.08em] ${STATUS_TONE[row.payment_status]}`}
+                        className={`rounded-full border px-2.5 py-1 text-[10px] font-extrabold uppercase leading-none tracking-[0.08em] ${STATUS_TONE[row.payment_status]}`}
                       >
                         {PAYMENT_STATUS_LABEL[row.payment_status]}
                       </span>
                     </div>
-                    <p className="mt-1.5 truncate text-sm font-extrabold text-heading">
+
+                    {/* Nama: ruang penuh, boleh wrap, tidak dipotong */}
+                    <p className="mt-2 break-words text-[15px] font-extrabold leading-snug text-heading sm:text-base">
                       {row.customer_name}
                     </p>
-                    <p className="mt-0.5 truncate text-[11px] font-semibold text-muted">
+
+                    <p className="mt-1 break-words text-[11px] font-semibold leading-relaxed text-muted">
                       {row.service_type}
-                      {row.vehicle_name ? ` · ${row.vehicle_name}` : ""} ·{" "}
+                      {row.vehicle_name ? ` · ${row.vehicle_name}` : ""}
+                      {row.destination ? ` · ${row.destination}` : ""} ·{" "}
                       {formatTanggalPendek(row.issue_date ?? row.created_at)}
                     </p>
                   </div>
 
-                  <div className="text-right">
-                    <p className="text-base font-extrabold tabular-nums text-heading">
-                      {rupiah(row.total_amount)}
-                    </p>
-                    {row.payment_status !== "paid" && (
-                      <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-warning">
-                        Sisa {rupiah(row.remaining_amount)}
+                  <div className="flex items-end justify-between gap-4 lg:flex-col lg:items-end lg:justify-center">
+                    <div className="text-left lg:text-right">
+                      <p className="text-lg font-extrabold leading-none tabular-nums text-heading">
+                        {rupiah(row.total_amount)}
                       </p>
-                    )}
-                  </div>
-
-                  <div className="receipt-no-print flex shrink-0 items-center gap-1.5">
-                    <ReceiptPdfButton
-                      data={toFormData(row)}
-                      label="PDF"
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-white px-3 py-2 text-xs font-extrabold text-heading transition hover:border-accent hover:text-accent disabled:opacity-50"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setOpenId(isOpen ? null : row.id)}
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-line bg-white px-3 py-2 text-xs font-extrabold text-heading transition hover:border-accent hover:text-accent"
-                      title="Lihat detail"
-                    >
-                      <Eye size={13} />
-                      <ChevronDown
-                        size={13}
-                        className={isOpen ? "rotate-180 transition" : "transition"}
-                      />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(row)}
-                      disabled={deletingId === row.id}
-                      className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-xl border border-line bg-white text-error transition hover:bg-error/10 disabled:opacity-50"
-                      title="Hapus kwitansi"
-                    >
-                      {deletingId === row.id ? (
-                        <Loader2 size={13} className="animate-spin" />
-                      ) : (
-                        <Trash2 size={13} />
+                      {row.payment_status !== "paid" && (
+                        <p className="mt-1.5 text-[10px] font-extrabold uppercase tracking-[0.08em] text-warning">
+                          Sisa {rupiah(row.remaining_amount)}
+                        </p>
                       )}
-                    </button>
+                    </div>
+
+                    <div className="receipt-no-print flex shrink-0 items-center gap-1.5">
+                      <ReceiptPdfButton
+                        data={toFormData(row)}
+                        label="PDF"
+                        className="inline-flex h-[34px] items-center gap-1.5 rounded-xl border border-line bg-white px-3 text-xs font-extrabold text-heading transition hover:border-accent hover:text-accent disabled:opacity-50"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setOpenId(isOpen ? null : row.id)}
+                        className="inline-flex h-[34px] items-center gap-1.5 rounded-xl border border-line bg-white px-3 text-xs font-extrabold text-heading transition hover:border-accent hover:text-accent"
+                        title="Lihat detail"
+                      >
+                        <Eye size={13} />
+                        <ChevronDown
+                          size={13}
+                          className={isOpen ? "rotate-180 transition" : "transition"}
+                        />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(row)}
+                        disabled={deletingId === row.id}
+                        className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-xl border border-line bg-white text-error transition hover:bg-error/10 disabled:opacity-50"
+                        title="Hapus kwitansi"
+                      >
+                        {deletingId === row.id ? (
+                          <Loader2 size={13} className="animate-spin" />
+                        ) : (
+                          <Trash2 size={13} />
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
 

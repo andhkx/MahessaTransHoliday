@@ -16,7 +16,7 @@ export const DEFAULT_BANK = {
 };
 
 export const DEFAULT_RECEIPT_NOTE =
-  "Siswa pembayaran wajib dilunasi saat serah terima kendaraan.";
+  "Sisa pembayaran wajib dilunasi saat serah terima kendaraan.";
 
 export type ReceiptFormData = {
   receiptNumber: string;

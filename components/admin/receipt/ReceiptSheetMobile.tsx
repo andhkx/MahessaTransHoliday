@@ -155,50 +155,7 @@ export default function ReceiptSheetMobile({ data }: { data: ReceiptFormData }) 
           </div>
         </section>
 
-        {/* Total full width */}
-        <section className="flex items-center justify-between gap-3 rounded-xl bg-gradient-to-r from-[#0f83c9] via-[#00629f] to-[#00416f] px-4 py-4 text-white shadow-[0_6px_16px_-8px_rgba(0,86,145,0.5)]">
-          <div>
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/80">
-              Total Tagihan
-            </p>
-            <p className="mt-0.5 text-[10px] font-semibold text-white/70">
-              {rupiah(d.pricePerDay)} &times; {d.durationDays} hari
-            </p>
-          </div>
-          <p className="text-lg font-extrabold leading-none tabular-nums">{rupiah(total)}</p>
-        </section>
-
-        {/* Pembayaran */}
-        <section className="rounded-xl border border-line bg-[#f4f9fd] p-4">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#005691]">
-            Rincian Pembayaran
-          </p>
-          <dl className="mt-2.5 space-y-2">
-            <div className="flex items-center justify-between">
-              <dt className="text-xs font-semibold text-[#7d93a6]">Total Tagihan</dt>
-              <dd className="text-xs font-extrabold tabular-nums text-[#003f6b]">
-                {rupiah(total)}
-              </dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt className="text-xs font-semibold text-[#7d93a6]">DP / Dibayar</dt>
-              <dd className="text-xs font-extrabold tabular-nums text-[#003f6b]">
-                {rupiah(d.downPayment)}
-              </dd>
-            </div>
-            <div className="h-px bg-[#c8dcea]" />
-            <div className="flex items-center justify-between">
-              <dt className="text-xs font-extrabold uppercase tracking-[0.06em] text-[#003f6b]">
-                Sisa Pembayaran
-              </dt>
-              <dd className="text-base font-extrabold tabular-nums text-[#0a72b4]">
-                {rupiah(remaining)}
-              </dd>
-            </div>
-          </dl>
-        </section>
-
-        {/* Rekening */}
+        {/* Rekening Pembayaran — sebelum total */}
         <section className="rounded-xl border border-line p-4">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#005691]">
             Rekening Pembayaran
@@ -223,6 +180,49 @@ export default function ReceiptSheetMobile({ data }: { data: ReceiptFormData }) 
               </dd>
             </div>
           </dl>
+        </section>
+
+        {/* Total Tagihan — full width */}
+        <section className="flex items-center justify-between gap-3 rounded-xl bg-gradient-to-r from-[#0f83c9] via-[#00629f] to-[#00416f] px-4 py-4 text-white shadow-[0_6px_16px_-8px_rgba(0,86,145,0.5)]">
+          <div>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/80">
+              Total Tagihan
+            </p>
+            <p className="mt-0.5 text-[10px] font-semibold text-white/70">
+              {rupiah(d.pricePerDay)} &times; {d.durationDays} hari
+            </p>
+          </div>
+          <p className="text-lg font-extrabold leading-none tabular-nums">{rupiah(total)}</p>
+        </section>
+
+        {/* Rincian Pembayaran — paling bawah supaya pembayaran jelas terlihat */}
+        <section className="overflow-hidden rounded-xl border border-line">
+          <div className="grid grid-cols-2">
+            <div className="border-b border-line bg-[#f4f9fd] p-4">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#7d93a6]">
+                DP / Dibayar
+              </p>
+              <p className="mt-1 text-base font-extrabold tabular-nums text-[#003f6b]">
+                {rupiah(d.downPayment)}
+              </p>
+            </div>
+            <div className="border-b border-l border-line bg-[#0a72b4] p-4">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/80">
+                Sisa Pembayaran
+              </p>
+              <p className="mt-1 text-xl font-extrabold tabular-nums text-white">
+                {rupiah(remaining)}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center justify-between bg-white px-4 py-2.5">
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#7d93a6]">
+              Total Tagihan
+            </p>
+            <p className="text-xs font-extrabold tabular-nums text-[#003f6b]">
+              {rupiah(total)}
+            </p>
+          </div>
         </section>
 
         {/* Catatan */}

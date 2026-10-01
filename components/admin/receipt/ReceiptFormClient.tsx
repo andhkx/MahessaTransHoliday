@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useMemo, useRef, useState } from "react";
 import {
   AlertCircle,
   BadgeCheck,
@@ -109,14 +109,6 @@ function SectionCard({
   );
 }
 
-const COMPACT_QUERY = "(max-width: 1023px)";
-
-function subscribeCompact(onChange: () => void) {
-  const mq = window.matchMedia(COMPACT_QUERY);
-  mq.addEventListener("change", onChange);
-  return () => mq.removeEventListener("change", onChange);
-}
-
 export default function ReceiptFormClient() {
   const supabase = createClient();
   const [form, setForm] = useState<ReceiptFormData>(() => ({
@@ -128,19 +120,27 @@ export default function ReceiptFormClient() {
   const [hint, setHint] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
 
-  // Default pratinjau mengikuti perangkat (HP -> mobile, desktop -> A4),
-  // ikut berubah saat HP dirotasi. Override manual menang.
-  const isCompact = useSyncExternalStore(
-    subscribeCompact,
-    () => window.matchMedia(COMPACT_QUERY).matches,
-    () => false,
-  );
+  // Pratinjau default mengikuti ukuran layar, murni CSS (bukan JS) supaya
+  // tidak ada hydration mismatch. null = ikut perangkat.
   const [viewOverride, setViewOverride] = useState<"mobile" | "a4" | null>(null);
-  const view = viewOverride ?? (isCompact ? "mobile" : "a4");
+  const view = viewOverride;
 
   const a4Ref = useRef<HTMLDivElement>(null);
   const [exporting, setExporting] = useState(false);
   const [exportNote, setExportNote] = useState<string | null>(null);
+
+  /* Kolaps tanpa `display:none` supaya sheet tetap ter-render dan computed
+     style-nya terbaca saat rasterisasi PDF. */
+  const COLLAPSE =
+    "max-lg:h-0 max-lg:overflow-hidden max-lg:opacity-0 max-lg:pointer-events-none";
+  const mobileViewClass =
+    view === "a4" ? "hidden" : view === "mobile" ? "block" : "block lg:hidden";
+  const a4ViewClass =
+    view === "a4"
+      ? "block"
+      : view === "mobile"
+        ? "h-0 overflow-hidden opacity-0 pointer-events-none"
+        : `${COLLAPSE} lg:h-auto lg:overflow-visible lg:opacity-100`;
 
   const handleDownloadPdf = async () => {
     const node = a4Ref.current;
@@ -568,7 +568,7 @@ export default function ReceiptFormClient() {
               Pratinjau
             </p>
             <h2 className="text-sm font-extrabold text-heading">
-              {view === "a4" ? "Kuitansi A4 — hasil cetak" : "Kuitansi tampilan HP"}
+              {view === "a4" ? "Kuitansi A4 — hasil PDF" : "Kuitansi tampilan HP"}
             </h2>
           </div>
 
@@ -605,21 +605,16 @@ export default function ReceiptFormClient() {
         </div>
 
         {/* Tampilan HP: fluid, tanpa scroll horizontal */}
-        <div className={`receipt-view-mobile ${view === "mobile" ? "" : "hidden"}`}>
+        <div className={`receipt-view-mobile ${mobileViewClass}`}>
           <ReceiptSheetMobile data={form} />
         </div>
 
         {/*
           Tampilan A4 SELALU ada di DOM supaya bisa di-capture jadi PDF.
-          Saat mode HP, disembunyikan dengan `h-0 overflow-hidden` (bukan
-          `display:none`) supaya computed style tetap terbaca saat rasterisasi.
+          Saat tidak aktif, disembunyikan dengan collapse (bukan `display:none`)
+          supaya computed style tetap terbaca saat rasterisasi.
         */}
-        <div
-          className={
-            view === "a4" ? "" : "pointer-events-none h-0 overflow-hidden opacity-0"
-          }
-          aria-hidden={view === "a4" ? undefined : true}
-        >
+        <div className={a4ViewClass} aria-hidden={view === "a4" ? undefined : true}>
           <div className="receipt-view-a4 receipt-scroll overflow-x-auto rounded-2xl border border-line bg-surface/40 p-3 sm:p-5">
             <ReceiptSheet ref={a4Ref} data={form} />
           </div>

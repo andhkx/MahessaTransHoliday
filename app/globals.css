@@ -402,6 +402,9 @@ section[id] {
   }
   .receipt-view-a4 {
     display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+    opacity: 1 !important;
   }
 
   /* Sembunyikan seluruh chrome admin, hanya sheet yang tampil */
