@@ -18,6 +18,7 @@ import {
   ChevronDown,
   ExternalLink,
   Activity,
+  Receipt,
 } from 'lucide-react';
 import { cn } from '@/lib/cn';
 
@@ -34,6 +35,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Galeri', href: '/admin/dashboard/galeri', icon: ImageIcon },
   { label: 'Testimoni', href: '/admin/dashboard/testimoni', icon: Star },
   { label: 'FAQ', href: '/admin/dashboard/faq', icon: MessageCircle },
+  { label: 'Kwitansi', href: '/admin/dashboard/kwitansi', icon: Receipt },
   { label: 'Log', href: '/admin/dashboard/log', icon: Activity },
 ];
 
