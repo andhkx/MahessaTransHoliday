@@ -387,6 +387,15 @@ section[id] {
     overflow: visible !important;
   }
 
+  /* Hasil cetak SELALU memakai versi A4, apa pun toggle pratinjau */
+  .receipt-view-mobile,
+  .receipt-sheet-mobile {
+    display: none !important;
+  }
+  .receipt-view-a4 {
+    display: block !important;
+  }
+
   /* Sembunyikan seluruh chrome admin, hanya sheet yang tampil */
   body * {
     visibility: hidden !important;

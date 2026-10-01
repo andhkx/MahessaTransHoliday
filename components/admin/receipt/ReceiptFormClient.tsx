@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import {
   AlertCircle,
   BadgeCheck,
@@ -8,14 +8,17 @@ import {
   FileText,
   Loader2,
   MapPin,
+  Monitor,
   Printer,
   RotateCcw,
   Save,
+  Smartphone,
   User,
   Wallet,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import ReceiptSheet from "./ReceiptSheet";
+import ReceiptSheetMobile from "./ReceiptSheetMobile";
 import {
   DEFAULT_BANK,
   DEFAULT_RECEIPT_NOTE,
@@ -23,7 +26,9 @@ import {
   PAYMENT_STATUS_LABEL,
   RECEIPT_PREFIX,
   daysBetween,
+  describeReceiptError,
   parseRupiah,
+  receiptErrorHint,
   receiptRemaining,
   receiptTotal,
   rupiah,
@@ -101,6 +106,14 @@ function SectionCard({
   );
 }
 
+const COMPACT_QUERY = "(max-width: 1023px)";
+
+function subscribeCompact(onChange: () => void) {
+  const mq = window.matchMedia(COMPACT_QUERY);
+  mq.addEventListener("change", onChange);
+  return () => mq.removeEventListener("change", onChange);
+}
+
 export default function ReceiptFormClient() {
   const supabase = createClient();
   const [form, setForm] = useState<ReceiptFormData>(() => ({
@@ -109,7 +122,18 @@ export default function ReceiptFormClient() {
   }));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hint, setHint] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
+
+  // Default pratinjau mengikuti perangkat (HP -> mobile, desktop -> A4),
+  // ikut berubah saat HP dirotasi. Override manual menang.
+  const isCompact = useSyncExternalStore(
+    subscribeCompact,
+    () => window.matchMedia(COMPACT_QUERY).matches,
+    () => false,
+  );
+  const [viewOverride, setViewOverride] = useState<"mobile" | "a4" | null>(null);
+  const view = viewOverride ?? (isCompact ? "mobile" : "a4");
 
   const total = useMemo(() => receiptTotal(form), [form]);
   const remaining = useMemo(() => receiptRemaining(form), [form]);
@@ -118,6 +142,7 @@ export default function ReceiptFormClient() {
     setForm((prev) => ({ ...prev, [key]: value }));
     setSaved(false);
     setError(null);
+    setHint(null);
   };
 
   const setMoney = (key: "pricePerDay" | "downPayment", raw: string) => {
@@ -139,21 +164,25 @@ export default function ReceiptFormClient() {
     setForm({ ...EMPTY_RECEIPT, issueDate: todayIso() });
     setSaved(false);
     setError(null);
+    setHint(null);
   };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.customerName.trim()) {
       setError("Nama pelanggan wajib diisi.");
+      setHint(null);
       return;
     }
     if (form.durationDays < 1) {
       setError("Durasi minimal 1 hari.");
+      setHint(null);
       return;
     }
 
     setSaving(true);
     setError(null);
+    setHint(null);
     try {
       // Nomor dibuat server-side lewat counter atomik (unik, tanpa bentrok)
       const { data: number, error: numberError } = await supabase.rpc(
@@ -191,12 +220,10 @@ export default function ReceiptFormClient() {
       setForm((prev) => ({ ...prev, receiptNumber }));
       setSaved(true);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : String(err);
-      setError(
-        /does not exist|schema cache|next_document_number/i.test(message)
-          ? `${message} — pastikan migration 012_receipts.sql sudah dijalankan di Supabase SQL Editor.`
-          : message,
-      );
+      // Supabase/PostgREST error = object; String(err) jadi "[object Object]"
+      const message = describeReceiptError(err);
+      setError(message);
+      setHint(receiptErrorHint(message));
     } finally {
       setSaving(false);
     }
@@ -207,9 +234,16 @@ export default function ReceiptFormClient() {
       {/* ================= FORM ================= */}
       <form onSubmit={handleSave} className="receipt-no-print space-y-4">
         {error && (
-          <div className="flex items-start gap-2.5 rounded-2xl border border-error/30 bg-error/10 p-4 text-xs font-semibold leading-relaxed text-error">
-            <AlertCircle size={16} className="mt-0.5 shrink-0" />
-            <span>{error}</span>
+          <div className="space-y-2 rounded-2xl border border-error/30 bg-error/10 p-4">
+            <div className="flex items-start gap-2.5 text-xs font-bold leading-relaxed text-error">
+              <AlertCircle size={16} className="mt-0.5 shrink-0" />
+              <span className="min-w-0 break-words">{error}</span>
+            </div>
+            {hint && (
+              <p className="pl-[26px] text-[11px] font-semibold leading-relaxed text-error/85">
+                {hint}
+              </p>
+            )}
           </div>
         )}
 
@@ -480,24 +514,69 @@ export default function ReceiptFormClient() {
         </p>
       </form>
 
-      {/* ================= PREVIEW A4 ================= */}
+      {/* ================= PREVIEW ================= */}
       <div className="lg:sticky lg:top-24">
-        <div className="receipt-no-print mb-3 flex items-center justify-between gap-3">
+        <div className="receipt-no-print mb-3 flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-primary">
               Pratinjau
             </p>
             <h2 className="text-sm font-extrabold text-heading">
-              Kuitansi A4 &mdash; hasil cetak
+              {view === "a4" ? "Kuitansi A4 — hasil cetak" : "Kuitansi tampilan HP"}
             </h2>
           </div>
-          <span className="rounded-full border border-line bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-muted">
-            210 &times; 297 mm
-          </span>
+
+          <div className="flex items-center gap-2">
+            {/* Toggle tampilan sesuai perangkat */}
+            <div className="flex items-center gap-1 rounded-xl border border-line bg-white p-1">
+              <button
+                type="button"
+                onClick={() => setViewOverride("mobile")}
+                className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-extrabold transition ${
+                  view === "mobile"
+                    ? "bg-accent text-white shadow-[0_6px_14px_-6px_rgba(0,86,145,0.5)]"
+                    : "text-muted hover:text-accent"
+                }`}
+              >
+                <Smartphone size={13} /> HP
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewOverride("a4")}
+                className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-extrabold transition ${
+                  view === "a4"
+                    ? "bg-accent text-white shadow-[0_6px_14px_-6px_rgba(0,86,145,0.5)]"
+                    : "text-muted hover:text-accent"
+                }`}
+              >
+                <Monitor size={13} /> A4
+              </button>
+            </div>
+            <span className="hidden rounded-full border border-line bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.1em] text-muted sm:inline">
+              210 &times; 297 mm
+            </span>
+          </div>
         </div>
-        <div className="receipt-scroll overflow-x-auto rounded-2xl border border-line bg-surface/40 p-3 sm:p-5">
+
+        {/* Tampilan HP: fluid, tanpa scroll horizontal */}
+        <div className={`receipt-view-mobile ${view === "mobile" ? "" : "hidden"}`}>
+          <ReceiptSheetMobile data={form} />
+        </div>
+
+        {/* Tampilan A4: 1:1 dengan hasil cetak (scroll horizontal di layar kecil) */}
+        <div
+          className={`receipt-view-a4 receipt-scroll overflow-x-auto rounded-2xl border border-line bg-surface/40 p-3 sm:p-5 ${
+            view === "a4" ? "" : "hidden"
+          }`}
+        >
           <ReceiptSheet data={form} />
         </div>
+
+        <p className="receipt-no-print mt-3 text-[11px] leading-relaxed text-muted">
+          Tekan <span className="font-bold text-heading">&ldquo;Cetak / Simpan PDF&rdquo;</span>{" "}
+          lalu pilih <span className="font-bold text-heading">Save as PDF</span> di dialog print.
+          Hasil cetak selalu memakai versi A4, apa pun tampilan pratinjau.
+        </p>
       </div>
     </div>
   );

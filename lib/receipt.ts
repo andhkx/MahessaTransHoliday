@@ -158,6 +158,86 @@ export function formatRute(pickup: string, destination: string): string {
   return from || to || "-";
 }
 
+export type ReceiptDetailRow = { label: string; value: string };
+
+/** Baris detail yang benar-benar terisi (jam opsional boleh kosong). */
+export function receiptDetailRows(data: ReceiptFormData): ReceiptDetailRow[] {
+  const rows: ReceiptDetailRow[] = [
+    { label: "Rental", value: formatRentangTanggal(data.startDate, data.endDate) },
+    { label: "Durasi", value: `${data.durationDays} hari` },
+  ];
+
+  const rute = formatRute(data.pickupLocation, data.destination);
+  if (rute !== "-") rows.push({ label: "Rute", value: rute });
+
+  const jam =
+    data.startTime && data.endTime
+      ? `${data.startTime} – ${data.endTime}`
+      : data.startTime
+        ? `${data.startTime} – selesai`
+        : data.endTime
+          ? `mulai – ${data.endTime}`
+          : "";
+  if (jam) rows.push({ label: "Jam", value: jam });
+
+  return rows;
+}
+
+/** Jumlah kolom grid sesuai isinya — supaya tabel tidak pernah setengah kosong. */
+export function receiptDetailCols(rowCount: number): 1 | 2 | 3 {
+  if (rowCount <= 1) return 1;
+  if (rowCount === 2) return 2;
+  if (rowCount === 3) return 3;
+  return 2;
+}
+
+/**
+ * Ambil pesan error yang bisa dibaca.
+ * Supabase/PostgREST mengembalikan { code, message, details, hint } —
+ * `String(err)` saja menghasilkan "[object Object]".
+ */
+export function describeReceiptError(err: unknown): string {
+  if (err == null) return "Terjadi kesalahan yang tidak diketahui.";
+  if (typeof err === "string") return err.trim() || "Terjadi kesalahan.";
+
+  if (typeof err === "object") {
+    const e = err as Record<string, unknown>;
+    const parts = [e.message, e.details, e.hint, e.code]
+      .map((v) => (typeof v === "string" ? v.trim() : ""))
+      .filter(Boolean);
+    if (parts.length > 0) {
+      // hindari mengulang pesan yang identik dengan details
+      return Array.from(new Set(parts)).join(" — ");
+    }
+    try {
+      const json = JSON.stringify(err);
+      if (json && json !== "{}") return json;
+    } catch {
+      /* fallthrough */
+    }
+  }
+
+  const text = String(err);
+  return text === "[object Object]" ? "Terjadi kesalahan yang tidak diketahui." : text;
+}
+
+/** Petunjuk tindakan untuk error yang sering muncul. */
+export function receiptErrorHint(message: string): string | null {
+  if (/next_document_number|receipts|document_counters/i.test(message) && /does not exist|not found|schema cache|permission denied/i.test(message)) {
+    return "Jalankan migration 012_receipts.sql di Supabase → SQL Editor, lalu tunggu ~10 detik sebelum mencoba lagi.";
+  }
+  if (/duplicate key|receipt_number/i.test(message)) {
+    return "Nomor kwitansi sudah dipakai. Coba simpan ulang.";
+  }
+  if (/row-level security|RLS|permission denied/i.test(message)) {
+    return "Sesi admin mungkin habis. Keluar dan masuk kembali ke dashboard admin.";
+  }
+  if (/Failed to fetch|NetworkError|load failed/i.test(message)) {
+    return "Koneksi terputus. Periksa jaringan lalu ulangi.";
+  }
+  return null;
+}
+
 /** Nama file unik untuk hasil unduhan. */
 export function receiptFileName(data: ReceiptFormData, ext: "pdf" | "png"): string {
   const slug = (data.customerName || "pelanggan")

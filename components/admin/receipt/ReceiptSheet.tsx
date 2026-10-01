@@ -1,9 +1,10 @@
 import {
   EMPTY_RECEIPT,
-  formatRentangTanggal,
   formatRute,
   formatTanggalPanjang,
   PAYMENT_STATUS_LABEL,
+  receiptDetailCols,
+  receiptDetailRows,
   receiptRemaining,
   receiptTotal,
   rupiah,
@@ -17,11 +18,21 @@ import {
   WHATSAPP_DISPLAY,
 } from "@/lib/constants";
 
+/* Palet khusus dokumen: lebih terang dari palet website supaya
+   bacaan tidak “gelap” dan aksen biru lebih terasa. */
+const INK = "#4f6579";
+const INK_SOFT = "#7d93a6";
+const BLUE = "#005691";
+const BLUE_DEEP = "#003f6b";
+const BLUE_VIVID = "#0a72b4";
+const TINT = "#e6f0f7";
+const HAIRLINE = "#c8dcea";
+
 function StatusChip({ status }: { status: PaymentStatus }) {
   const map: Record<PaymentStatus, string> = {
-    unpaid: "border-white/45 bg-white/10 text-white",
-    partial: "border-[#ffd88a] bg-[#ffd88a]/20 text-[#ffe6b0]",
-    paid: "border-[#8ff0c0] bg-[#8ff0c0]/20 text-[#b9f7d8]",
+    unpaid: "border-white/50 bg-white/15 text-white",
+    partial: "border-[#ffd88a] bg-[#ffd88a]/25 text-[#ffe9bd]",
+    paid: "border-[#8ff0c0] bg-[#8ff0c0]/25 text-[#c3f9de]",
   };
   return (
     <span
@@ -32,30 +43,39 @@ function StatusChip({ status }: { status: PaymentStatus }) {
   );
 }
 
-function InfoBlock({
-  label,
-  children,
-}: {
-  label: string;
-  children: React.ReactNode;
-}) {
+function InfoBlock({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="text-[7.5pt] font-extrabold uppercase tracking-[0.18em] text-muted">
+      <p
+        className="text-[7.5pt] font-extrabold uppercase tracking-[0.18em]"
+        style={{ color: INK_SOFT }}
+      >
         {label}
       </p>
-      <div className="mt-[1.5mm] text-[11pt] font-bold text-heading">{children}</div>
+      <div
+        className="mt-[1.5mm] text-[11pt] font-extrabold leading-snug"
+        style={{ color: BLUE_DEEP }}
+      >
+        {children}
+      </div>
     </div>
   );
 }
 
-function DetailRow({ label, value }: { label: string; value: string }) {
+/** Sel detail: label di atas, nilai di bawah. Menyesuaikan jumlah kolom
+ *  sehingga 1/2/3 isian tetap penuh dan tidak ada sel kosong. */
+function DetailCell({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-baseline gap-[2mm]">
-      <span className="w-[24mm] shrink-0 text-[8pt] font-bold uppercase tracking-[0.1em] text-muted">
+    <div className="rounded-[2mm] bg-[#f2f8fc] px-[3mm] py-[2.4mm]">
+      <p
+        className="text-[7pt] font-extrabold uppercase tracking-[0.14em]"
+        style={{ color: INK_SOFT }}
+      >
         {label}
-      </span>
-      <span className="text-[10pt] font-semibold text-body-text">{value}</span>
+      </p>
+      <p className="mt-[0.8mm] text-[10pt] font-extrabold leading-tight" style={{ color: BLUE_DEEP }}>
+        {value}
+      </p>
     </div>
   );
 }
@@ -64,39 +84,36 @@ export default function ReceiptSheet({ data }: { data: ReceiptFormData }) {
   const d = { ...EMPTY_RECEIPT, ...data };
   const total = receiptTotal(d);
   const remaining = receiptRemaining(d);
-  const rentalDates = formatRentangTanggal(d.startDate, d.endDate);
-  const timeRange =
-    d.startTime && d.endTime ? `${d.startTime} – ${d.endTime}` : d.startTime || d.endTime || "-";
+  const rows = receiptDetailRows(d);
+  const cols = receiptDetailCols(rows.length);
+  const colClass =
+    cols === 1 ? "grid-cols-1" : cols === 3 ? "grid-cols-3" : "grid-cols-2";
 
   return (
-    <div className="receipt-sheet relative mx-auto flex w-[210mm] min-h-[297mm] flex-col bg-white text-body-text shadow-[0_18px_50px_-24px_rgba(0,74,124,0.45)]">
+    <div
+      className="receipt-sheet relative mx-auto flex w-[210mm] min-h-[297mm] flex-col bg-white shadow-[0_18px_50px_-24px_rgba(0,74,124,0.45)]"
+      style={{ color: INK }}
+    >
       {/* ============ HEADER ============ */}
-      <header className="relative overflow-hidden bg-gradient-to-br from-[#0a72b4] via-[#005691] to-[#003d69] px-[12mm] pb-[9mm] pt-[10mm] text-white">
+      <header className="relative overflow-hidden bg-gradient-to-br from-[#0f83c9] via-[#005691] to-[#003a63] px-[12mm] pb-[10mm] pt-[11mm] text-white">
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-[30mm] -top-[34mm] h-[80mm] w-[80mm] rounded-full bg-white/10 blur-2xl"
+          className="pointer-events-none absolute -right-[28mm] -top-[32mm] h-[78mm] w-[78mm] rounded-full bg-white/12 blur-2xl"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-[26mm] left-[40mm] h-[60mm] w-[60mm] rounded-full bg-[#8fd4ff]/15 blur-2xl"
+          className="pointer-events-none absolute -bottom-[24mm] left-[34mm] h-[58mm] w-[58mm] rounded-full bg-[#7fd0ff]/20 blur-2xl"
         />
 
         <div className="relative flex items-start justify-between gap-[8mm]">
-          {/* Brand: logo resmi di panel putih + wordmark */}
           <div className="flex items-center gap-[5mm]">
-            <div className="flex h-[19mm] w-[26mm] shrink-0 items-center justify-center rounded-[3mm] bg-white px-[2mm] shadow-[0_4px_12px_-4px_rgba(0,0,0,0.35)]">
+            <div className="flex h-[19mm] w-[27mm] shrink-0 items-center justify-center rounded-[3mm] bg-white px-[2mm] shadow-[0_4px_12px_-4px_rgba(0,0,0,0.4)]">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/logo_mahessa.webp"
-                alt={SITE_NAME}
-                className="h-auto w-full"
-              />
+              <img src="/images/logo_mahessa.webp" alt={SITE_NAME} className="h-auto w-full" />
             </div>
             <div>
-              <p className="text-[13pt] font-extrabold leading-tight tracking-[-0.01em]">
-                {SITE_NAME}
-              </p>
-              <p className="mt-[1mm] text-[8pt] font-semibold uppercase tracking-[0.2em] text-white/75">
+              <p className="text-[13.5pt] font-extrabold leading-tight">{SITE_NAME}</p>
+              <p className="mt-[1mm] text-[8pt] font-bold uppercase tracking-[0.22em] text-white/80">
                 Rental Mobil &amp; Wisata
               </p>
               <div className="mt-[2.5mm]">
@@ -105,19 +122,18 @@ export default function ReceiptSheet({ data }: { data: ReceiptFormData }) {
             </div>
           </div>
 
-          {/* Doc title */}
           <div className="shrink-0 text-right">
-            <p className="text-[8pt] font-bold uppercase tracking-[0.3em] text-white/70">
+            <p className="text-[8pt] font-bold uppercase tracking-[0.32em] text-white/80">
               Dokumen Resmi
             </p>
-            <h1 className="mt-[1mm] text-[26pt] font-extrabold leading-none tracking-[0.06em]">
+            <h1 className="mt-[1mm] text-[27pt] font-extrabold leading-none tracking-[0.06em]">
               KUITANSI
             </h1>
-            <div className="mt-[3mm] inline-block rounded-[2mm] border border-white/35 bg-white/10 px-[3.5mm] py-[1.6mm]">
-              <p className="text-[7pt] font-bold uppercase tracking-[0.18em] text-white/70">
+            <div className="mt-[3.5mm] inline-block rounded-[2mm] border border-white/40 bg-white/15 px-[3.5mm] py-[1.8mm]">
+              <p className="text-[7pt] font-bold uppercase tracking-[0.18em] text-white/80">
                 No. Kwitansi
               </p>
-              <p className="font-mono text-[11pt] font-extrabold tracking-tight">
+              <p className="font-mono text-[11.5pt] font-extrabold tracking-tight">
                 {d.receiptNumber || "KWT-0000-0000"}
               </p>
             </div>
@@ -126,80 +142,107 @@ export default function ReceiptSheet({ data }: { data: ReceiptFormData }) {
       </header>
 
       {/* ============ BODY ============ */}
-      <div className="flex flex-1 flex-col px-[12mm] pb-[10mm] pt-[8mm]">
-        {/* Meta row */}
-        <section className="grid grid-cols-[1.35fr_1fr] gap-[8mm] border-b border-line pb-[6mm]">
+      <div className="flex flex-1 flex-col px-[12mm] pb-[9mm] pt-[9mm]">
+        {/* Meta */}
+        <section
+          className="grid grid-cols-[1.3fr_1fr] gap-[8mm] rounded-[3mm] bg-[#f4f9fd] px-[5mm] py-[5mm]"
+        >
           <div className="space-y-[5mm]">
             <InfoBlock label="Diterimakan Kepada">
-              <p className="text-[15pt] font-extrabold leading-tight">
+              <p className="text-[16pt] font-extrabold leading-tight">
                 {d.customerName || "Nama Pelanggan"}
               </p>
             </InfoBlock>
-            <InfoBlock label="Jenis Layanan">
-              {d.serviceType || "Sewa Mobil Tanpa Driver"}
-            </InfoBlock>
+            <InfoBlock label="Jenis Layanan">{d.serviceType}</InfoBlock>
           </div>
-
           <div className="space-y-[5mm]">
             <InfoBlock label="Tanggal Kwitansi">
               {formatTanggalPanjang(d.issueDate)}
             </InfoBlock>
-            <InfoBlock label="Lokasi Perjalanan">
+            <InfoBlock label="Perjalanan">
               {formatRute(d.pickupLocation, d.destination)}
             </InfoBlock>
           </div>
         </section>
 
-        {/* Rincian table */}
+        {/* Rincian */}
         <section className="mt-[7mm]">
           <table className="w-full border-collapse">
             <thead>
-              <tr className="bg-[#eef5f9]">
-                <th className="w-[10mm] rounded-l-[2mm] border-y border-line py-[2.4mm] text-left text-[7.5pt] font-extrabold uppercase tracking-[0.12em] text-heading">
+              <tr style={{ background: TINT }}>
+                <th
+                  className="w-[10mm] rounded-l-[2mm] border-y py-[2.6mm] text-left text-[7.5pt] font-extrabold uppercase tracking-[0.12em]"
+                  style={{ borderColor: HAIRLINE, color: BLUE_DEEP }}
+                >
                   No
                 </th>
-                <th className="border-y border-line py-[2.4mm] text-left text-[7.5pt] font-extrabold uppercase tracking-[0.12em] text-heading">
+                <th
+                  className="border-y py-[2.6mm] text-left text-[7.5pt] font-extrabold uppercase tracking-[0.12em]"
+                  style={{ borderColor: HAIRLINE, color: BLUE_DEEP }}
+                >
                   Keterangan
                 </th>
-                <th className="w-[16mm] border-y border-line py-[2.4mm] text-right text-[7.5pt] font-extrabold uppercase tracking-[0.12em] text-heading">
+                <th
+                  className="w-[16mm] border-y py-[2.6mm] text-right text-[7.5pt] font-extrabold uppercase tracking-[0.12em]"
+                  style={{ borderColor: HAIRLINE, color: BLUE_DEEP }}
+                >
                   Qty
                 </th>
-                <th className="w-[26mm] border-y border-line py-[2.4mm] text-right text-[7.5pt] font-extrabold uppercase tracking-[0.12em] text-heading">
+                <th
+                  className="w-[26mm] border-y py-[2.6mm] text-right text-[7.5pt] font-extrabold uppercase tracking-[0.12em]"
+                  style={{ borderColor: HAIRLINE, color: BLUE_DEEP }}
+                >
                   Harga
                 </th>
-                <th className="w-[30mm] rounded-r-[2mm] border-y border-line py-[2.4mm] text-right text-[7.5pt] font-extrabold uppercase tracking-[0.12em] text-heading">
+                <th
+                  className="w-[30mm] rounded-r-[2mm] border-y py-[2.6mm] text-right text-[7.5pt] font-extrabold uppercase tracking-[0.12em]"
+                  style={{ borderColor: HAIRLINE, color: BLUE_DEEP }}
+                >
                   Jumlah
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td className="border-b border-line py-[4mm] text-[10pt] font-bold text-muted align-top">
+                <td
+                  className="border-b py-[4.5mm] align-top text-[10pt] font-bold"
+                  style={{ borderColor: HAIRLINE, color: INK_SOFT }}
+                >
                   1
                 </td>
-                <td className="border-b border-line py-[4mm] align-top">
-                  <p className="text-[11.5pt] font-extrabold leading-tight text-heading">
-                    {d.serviceType || "Sewa Mobil Tanpa Driver"}
+                <td className="border-b py-[4.5mm] align-top" style={{ borderColor: HAIRLINE }}>
+                  <p className="text-[12pt] font-extrabold leading-tight" style={{ color: BLUE_DEEP }}>
+                    {d.serviceType}
                   </p>
                   {d.vehicleName && (
-                    <p className="mt-[1mm] text-[10pt] font-bold text-body-text">
+                    <p className="mt-[1mm] text-[10pt] font-bold" style={{ color: BLUE }}>
                       {d.vehicleName}
                     </p>
                   )}
-                  <div className="mt-[3mm] grid grid-cols-2 gap-x-[6mm] gap-y-[1.8mm]">
-                    <DetailRow label="Rental" value={rentalDates} />
-                    <DetailRow label="Durasi" value={`${d.durationDays} hari`} />
-                    <DetailRow label="Rute" value={formatRute(d.pickupLocation, d.destination)} />
-                    <DetailRow label="Jam" value={timeRange} />
+
+                  {/* Jumlah kolom mengikuti isian: 1→1, 2→2, 3→3, 4→2x2 */}
+                  <div className={`mt-[3.5mm] grid gap-[3mm] ${colClass}`}>
+                    {rows.map((row) => (
+                      <DetailCell key={row.label} label={row.label} value={row.value} />
+                    ))}
                   </div>
                 </td>
-                <td className="border-b border-line py-[4mm] text-right align-top text-[10pt] font-bold">
+                <td
+                  className="border-b py-[4.5mm] text-right align-top text-[10pt] font-extrabold"
+                  style={{ borderColor: HAIRLINE }}
+                >
                   {d.durationDays} hari
                 </td>
-                <td className="border-b border-line py-[4mm] text-right align-top text-[10pt] font-bold tabular-nums">
+                <td
+                  className="border-b py-[4.5mm] text-right align-top text-[10pt] font-bold tabular-nums"
+                  style={{ borderColor: HAIRLINE }}
+                >
                   {rupiah(d.pricePerDay)}
                 </td>
-                <td className="border-b border-line py-[4mm] text-right align-top text-[10pt] font-extrabold tabular-nums text-heading">
+                <td
+                  className="border-b py-[4.5mm] text-right align-top text-[10.5pt] font-extrabold tabular-nums"
+                  style={{ borderColor: HAIRLINE, color: BLUE_DEEP }}
+                >
                   {rupiah(total)}
                 </td>
               </tr>
@@ -207,45 +250,58 @@ export default function ReceiptSheet({ data }: { data: ReceiptFormData }) {
           </table>
         </section>
 
-        {/* Total */}
-        <section className="mt-[4mm] flex justify-end">
-          <div className="w-[86mm] rounded-[3mm] bg-[#0a72b4] px-[5mm] py-[3.5mm] text-white">
-            <div className="flex items-center justify-between">
-              <span className="text-[8.5pt] font-extrabold uppercase tracking-[0.2em] text-white/80">
-                Total
-              </span>
-              <span className="text-[16pt] font-extrabold tabular-nums">
-                {rupiah(total)}
-              </span>
+        {/* TOTAL — full kiri ke kanan */}
+        <section className="mt-[5mm]">
+          <div className="flex w-full items-center justify-between gap-[6mm] rounded-[3mm] bg-gradient-to-r from-[#0f83c9] via-[#00629f] to-[#00416f] px-[6mm] py-[4.5mm] text-white shadow-[0_6px_16px_-8px_rgba(0,86,145,0.5)]">
+            <div>
+              <p className="text-[8.5pt] font-extrabold uppercase tracking-[0.24em] text-white/80">
+                Total Tagihan
+              </p>
+              <p className="mt-[0.8mm] text-[8pt] font-semibold text-white/70">
+                {rupiah(d.pricePerDay)} &times; {d.durationDays} hari
+              </p>
             </div>
+            <p className="text-[21pt] font-extrabold leading-none tabular-nums">
+              {rupiah(total)}
+            </p>
           </div>
         </section>
 
-        {/* Payment + bank */}
-        <section className="mt-[7mm] grid grid-cols-2 gap-[6mm]">
-          <div className="rounded-[3mm] border border-line bg-[#f7fafc] p-[5mm]">
-            <p className="text-[7.5pt] font-extrabold uppercase tracking-[0.18em] text-primary">
+        {/* Pembayaran + rekening */}
+        <section className="mt-[6mm] grid grid-cols-2 gap-[5mm]">
+          <div className="rounded-[3mm] border border-line bg-[#f4f9fd] p-[5mm]">
+            <p
+              className="text-[7.5pt] font-extrabold uppercase tracking-[0.18em]"
+              style={{ color: BLUE }}
+            >
               Rincian Pembayaran
             </p>
-            <dl className="mt-[3.5mm] space-y-[2.4mm]">
+            <dl className="mt-[3.5mm] space-y-[2.6mm]">
               <div className="flex items-baseline justify-between gap-[3mm]">
-                <dt className="text-[9pt] font-semibold text-muted">Total Tagihan</dt>
-                <dd className="text-[9.5pt] font-extrabold tabular-nums text-heading">
+                <dt className="text-[9pt] font-semibold" style={{ color: INK_SOFT }}>
+                  Total Tagihan
+                </dt>
+                <dd className="text-[9.5pt] font-extrabold tabular-nums" style={{ color: BLUE_DEEP }}>
                   {rupiah(total)}
                 </dd>
               </div>
               <div className="flex items-baseline justify-between gap-[3mm]">
-                <dt className="text-[9pt] font-semibold text-muted">DP / Dibayar</dt>
-                <dd className="text-[9.5pt] font-extrabold tabular-nums text-heading">
+                <dt className="text-[9pt] font-semibold" style={{ color: INK_SOFT }}>
+                  DP / Dibayar
+                </dt>
+                <dd className="text-[9.5pt] font-extrabold tabular-nums" style={{ color: BLUE_DEEP }}>
                   {rupiah(d.downPayment)}
                 </dd>
               </div>
-              <div className="h-px bg-line" />
+              <div className="h-px" style={{ background: HAIRLINE }} />
               <div className="flex items-baseline justify-between gap-[3mm]">
-                <dt className="text-[9pt] font-extrabold uppercase tracking-[0.08em] text-heading">
+                <dt
+                  className="text-[9pt] font-extrabold uppercase tracking-[0.06em]"
+                  style={{ color: BLUE_DEEP }}
+                >
                   Sisa Pembayaran
                 </dt>
-                <dd className="text-[12pt] font-extrabold tabular-nums text-primary">
+                <dd className="text-[13pt] font-extrabold tabular-nums" style={{ color: BLUE_VIVID }}>
                   {rupiah(remaining)}
                 </dd>
               </div>
@@ -253,25 +309,37 @@ export default function ReceiptSheet({ data }: { data: ReceiptFormData }) {
           </div>
 
           <div className="rounded-[3mm] border border-line bg-white p-[5mm]">
-            <p className="text-[7.5pt] font-extrabold uppercase tracking-[0.18em] text-primary">
+            <p
+              className="text-[7.5pt] font-extrabold uppercase tracking-[0.18em]"
+              style={{ color: BLUE }}
+            >
               Rekening Pembayaran
             </p>
-            <div className="mt-[3.5mm] space-y-[2.4mm]">
+            <div className="mt-[3.5mm] space-y-[2.6mm]">
               <div>
-                <p className="text-[8pt] font-semibold text-muted">Bank</p>
-                <p className="text-[9.5pt] font-extrabold text-heading">
+                <p className="text-[8pt] font-semibold" style={{ color: INK_SOFT }}>
+                  Bank
+                </p>
+                <p className="text-[9.5pt] font-extrabold" style={{ color: BLUE_DEEP }}>
                   {d.bankName || "-"}
                 </p>
               </div>
               <div>
-                <p className="text-[8pt] font-semibold text-muted">Nomor Rekening</p>
-                <p className="font-mono text-[13pt] font-extrabold tracking-[0.06em] text-heading">
+                <p className="text-[8pt] font-semibold" style={{ color: INK_SOFT }}>
+                  Nomor Rekening
+                </p>
+                <p
+                  className="font-mono text-[14pt] font-extrabold tracking-[0.06em]"
+                  style={{ color: BLUE_VIVID }}
+                >
                   {d.bankAccount || "-"}
                 </p>
               </div>
               <div>
-                <p className="text-[8pt] font-semibold text-muted">Atas Nama</p>
-                <p className="text-[9.5pt] font-extrabold text-heading">
+                <p className="text-[8pt] font-semibold" style={{ color: INK_SOFT }}>
+                  Atas Nama
+                </p>
+                <p className="text-[9.5pt] font-extrabold" style={{ color: BLUE_DEEP }}>
                   {d.bankHolder || "-"}
                 </p>
               </div>
@@ -279,44 +347,53 @@ export default function ReceiptSheet({ data }: { data: ReceiptFormData }) {
           </div>
         </section>
 
-        {/* Note */}
+        {/* Catatan */}
         {d.note && (
-          <section className="mt-[6mm] rounded-[3mm] border-l-[1.2mm] border-accent bg-[#eef5f9] px-[5mm] py-[3.5mm]">
-            <p className="text-[7.5pt] font-extrabold uppercase tracking-[0.18em] text-primary">
+          <section className="mt-[6mm] rounded-[3mm] border-l-[1.4mm] bg-[#f2f8fc] px-[5mm] py-[4mm]">
+            <p
+              className="text-[7.5pt] font-extrabold uppercase tracking-[0.18em]"
+              style={{ color: BLUE }}
+            >
               Catatan
             </p>
-            <p className="mt-[1.8mm] text-[9.5pt] font-semibold leading-relaxed text-body-text">
+            <p className="mt-[1.8mm] text-[9.5pt] font-semibold leading-relaxed" style={{ color: INK }}>
               {d.note}
             </p>
           </section>
         )}
 
-        {/* Signature */}
-        <section className="mt-auto grid grid-cols-2 gap-[12mm] pt-[10mm]">
-          <div className="text-center">
-            <p className="text-[8.5pt] font-bold uppercase tracking-[0.12em] text-muted">
-              Tanda Tangan Pelanggan
+        {/* Penutup — menggantikan blok tanda tangan yang dihapus */}
+        <div className="mt-auto pt-[8mm]">
+          <div
+            className="flex items-center justify-between gap-[5mm] rounded-[3mm] border border-dashed px-[5mm] py-[4mm]"
+            style={{ borderColor: HAIRLINE, background: TINT }}
+          >
+            <div>
+              <p className="text-[11pt] font-extrabold leading-tight" style={{ color: BLUE_DEEP }}>
+                Terima kasih sudah bepergian bersama kami
+              </p>
+              <p className="mt-[1mm] text-[8.5pt] font-semibold" style={{ color: INK_SOFT }}>
+                Simpan kwitansi ini sebagai bukti transaksi Anda.
+              </p>
+            </div>
+            <p
+              className="shrink-0 text-[8pt] font-extrabold uppercase tracking-[0.18em]"
+              style={{ color: BLUE }}
+            >
+              {SITE_NAME}
             </p>
-            <div className="mt-[16mm] border-b border-dashed border-line" />
-            <p className="mt-[1.5mm] text-[7.5pt] text-muted">{d.customerName || "-"}</p>
           </div>
-          <div className="text-center">
-            <p className="text-[8.5pt] font-bold uppercase tracking-[0.12em] text-muted">
-              Hormat Kami
-            </p>
-            <p className="mt-[1.5mm] text-[10pt] font-extrabold text-heading">{SITE_NAME}</p>
-            <div className="mt-[13mm] border-b border-dashed border-line" />
-            <p className="mt-[1.5mm] text-[7.5pt] text-muted">{d.bankHolder || "-"}</p>
-          </div>
-        </section>
 
-        {/* Footer */}
-        <footer className="mt-[8mm] flex flex-wrap items-center justify-between gap-x-[6mm] gap-y-[1.5mm] border-t border-line pt-[3.5mm]">
-          <p className="text-[7.5pt] font-semibold text-muted">
-            {SITE_URL.replace(/^https?:\/\//, "")} &middot; {EMAIL_ADDRESS}
-          </p>
-          <p className="text-[7.5pt] font-semibold text-muted">{WHATSAPP_DISPLAY}</p>
-        </footer>
+          <footer
+            className="mt-[5mm] flex flex-wrap items-center justify-between gap-x-[6mm] gap-y-[1.5mm] border-t pt-[3.5mm]"
+            style={{ borderColor: HAIRLINE, color: INK_SOFT }}
+          >
+            <p className="text-[7.5pt] font-semibold">
+              {SITE_URL.replace(/^https?:\/\//, "")} &middot; {EMAIL_ADDRESS}
+            </p>
+            <p className="text-[7.5pt] font-semibold">{WHATSAPP_DISPLAY}</p>
+          </footer>
+        </div>
       </div>
     </div>
   );
