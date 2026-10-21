@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import TestimonialCard from "./TestimonialCard";
 import { useLocale, useT } from "@/lib/i18n/client";
 
@@ -13,126 +13,72 @@ type Testimonial = {
 };
 
 export default function TestimonialCarousel({ testimonials }: { testimonials: Testimonial[] }) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
-  const animationFrameRef = useRef<number>(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const [offset, setOffset] = useState(0);
-  const [listWidth, setListWidth] = useState(0);
+  const [active, setActive] = useState(0);
   const locale = useLocale();
   const t = useT();
   const isEn = locale === "en";
 
   useEffect(() => {
-    if (listRef.current) {
-      const width = listRef.current.getBoundingClientRect().width;
-      setListWidth(width);
-    }
-  }, [testimonials]);
+    if (testimonials.length < 2) return;
+    const timer = window.setInterval(() => {
+      setActive((current) => (current + 1) % testimonials.length);
+    }, 7000);
+    return () => window.clearInterval(timer);
+  }, [testimonials.length]);
 
   useEffect(() => {
-    if (listWidth === 0 || testimonials.length === 0) return;
-
-    const targetVelocity = 40;
-    const hoverSpeed = 0;
-    let last = performance.now() / 1000;
-
-    const animate = (timestamp: number) => {
-      if (!trackRef.current) return;
-      const now = timestamp / 1000;
-      const delta = now - last;
-      last = now;
-
-      const velocity = isHovered ? hoverSpeed : targetVelocity;
-      const newOffset = offset + velocity * delta;
-      const wrappedOffset = newOffset % listWidth;
-
-      setOffset(wrappedOffset);
-      animationFrameRef.current = requestAnimationFrame(animate);
-    };
-
-    animationFrameRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      cancelAnimationFrame(animationFrameRef.current);
-    };
-  }, [isHovered, listWidth, offset, testimonials.length]);
+    setActive((current) => Math.min(current, Math.max(0, testimonials.length - 1)));
+  }, [testimonials.length]);
 
   if (testimonials.length === 0) {
     return (
-      <div className="border-y border-line bg-surface/60 py-16 md:py-24">
-        <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12 text-center">
-          <p className="text-sm text-muted">{isEn ? "No testimonials yet." : "Belum ada testimoni."}</p>
-        </div>
-      </div>
+      <section className="w-full overflow-hidden border-y border-line bg-surface/60 py-16 md:py-24">
+        <p className="text-center text-sm text-muted">{isEn ? "No testimonials yet." : "Belum ada testimoni."}</p>
+      </section>
     );
   }
 
+  const testimonial = testimonials[active];
+
   return (
-    <div
-      className="relative overflow-hidden border-y border-line bg-surface/60 py-16 md:py-24"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
-      <div className="mx-auto w-full max-w-[1300px] px-5 sm:px-8 md:px-12">
+    <section className="w-full overflow-hidden border-y border-line bg-surface/60 py-16 md:py-24">
+      <div className="mx-auto w-full max-w-[900px] px-5 sm:px-8 md:px-12">
         <div className="mb-10 text-center md:mb-12">
           <span className="mb-2 inline-block font-mono text-[11px] font-bold uppercase tracking-[0.25em] text-primary">
             {t.testimonial.eyebrow}
           </span>
           <h2 className="mb-3 text-2xl font-extrabold leading-[1.05] tracking-[-0.03em] text-heading sm:text-3xl md:text-4xl">
-            {isEn ? (
-              <>
-                What they say about{" "}
-                <span className="text-accent">Mahessa</span>
-              </>
-            ) : (
-              <>
-                Kata Mereka tentang{" "}
-                <span className="text-accent">Mahessa</span>
-              </>
-            )}
+            {isEn ? "What they say about" : "Kata Mereka tentang"} <span className="text-accent">Mahessa</span>
           </h2>
           <p className="mx-auto max-w-xl text-sm leading-relaxed text-body-text md:text-base">
             {t.testimonial.subtitle}
           </p>
         </div>
 
-        <div className="relative">
-          <div
-            ref={trackRef}
-            className="flex"
-            style={{
-              transform: `translateX(-${offset}px)`,
-              willChange: "transform"
-            }}
-          >
-            <div ref={listRef} className="flex items-stretch gap-5 flex-shrink-0">
-              {testimonials.map((t, i) => (
-                <TestimonialCard
-                  key={`a-${t.id}`}
-                  name={t.name}
-                  role={t.role}
-                  quote={t.quote}
-                  rating={t.rating}
-                  index={i}
-                />
-              ))}
-            </div>
-            <div className="flex items-stretch gap-5 flex-shrink-0" aria-hidden="true">
-              {testimonials.map((t, i) => (
-                <TestimonialCard
-                  key={`b-${t.id}`}
-                  name={t.name}
-                  role={t.role}
-                  quote={t.quote}
-                  rating={t.rating}
-                  index={i}
-                />
-              ))}
-            </div>
+        <div className="mx-auto w-full max-w-[620px] overflow-hidden">
+          <div key={testimonial.id} className="animate-[fade-in_500ms_ease-out]">
+            <TestimonialCard
+              name={testimonial.name}
+              role={testimonial.role}
+              quote={testimonial.quote}
+              rating={testimonial.rating}
+              index={active}
+            />
           </div>
         </div>
+
+        {testimonials.length > 1 && (
+          <div className="mt-6 flex items-center justify-center gap-2" aria-label="Indikator testimoni">
+            {testimonials.map((item, index) => (
+              <span
+                key={item.id}
+                aria-current={index === active ? "true" : undefined}
+                className={`h-1.5 rounded-full transition-all duration-300 ${index === active ? "w-8 bg-accent" : "w-1.5 bg-accent/25"}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
-    </div>
+    </section>
   );
 }

@@ -20,7 +20,7 @@ export default function TestimonialCard({
 }: TestimonialCardProps) {
   return (
     <article
-      className="flex h-full w-[min(320px,calc(100vw-40px))] shrink-0 flex-col gap-5 rounded-[18px] border border-line bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated"
+      className="flex h-full w-full min-w-0 flex-col gap-5 rounded-[18px] border border-line bg-white p-5 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-elevated sm:p-7"
     >
       <div className="flex items-start gap-4">
         <Avatar name={name} index={index} size={56} />
