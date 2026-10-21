@@ -41,10 +41,10 @@ export default function ServiceCards() {
         <ArrowRight size={13} aria-hidden="true" />
       </div>
 
-      <div className="relative -mx-5 md:mx-0">
+      <div className="relative min-w-0">
         <div
           ref={rowRef}
-          className="flex snap-x snap-mandatory snap-center gap-3 overflow-x-auto px-[calc(50vw-42vw)] pb-4 scrollbar-none md:snap-align-none md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:px-0 md:pb-0"
+          className="flex snap-x snap-mandatory snap-center gap-3 overflow-x-auto px-5 pb-4 scrollbar-none md:snap-align-none md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:px-0 md:pb-0"
         >
         {services.map((item, i) => {
           const Icon = ICONS[item.id] ?? CarFront;

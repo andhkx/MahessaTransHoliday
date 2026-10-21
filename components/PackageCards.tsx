@@ -34,13 +34,13 @@ export default function PackageCards({
   const selectable = !!onSelect;
 
   return (
-    <div className="relative md:mx-0">
+    <div className="relative min-w-0">
       <div
         ref={rowRef}
         className={cn(
           useCarousel
-            ? "flex snap-x snap-mandatory snap-center gap-3 overflow-x-auto px-[calc(50vw-130px)] pb-4 scrollbar-none md:snap-align-none md:grid md:grid-cols-2 md:gap-4 md:overflow-visible md:px-0 lg:grid-cols-4"
-            : "grid grid-cols-2 gap-3 px-0 sm:gap-4 md:grid-cols-2 lg:grid-cols-4",
+            ? "flex snap-x snap-mandatory snap-center gap-3 overflow-x-auto px-[calc((100vw-260px)/2)] pb-4 scrollbar-none md:snap-align-none md:grid md:grid-cols-2 md:gap-4 md:overflow-visible md:px-0 lg:grid-cols-4"
+            : "grid grid-cols-2 gap-3 px-5 sm:gap-4 md:grid-cols-2 md:px-0 lg:grid-cols-4",
         )}
       >
       {packages.map((p, i) => (
